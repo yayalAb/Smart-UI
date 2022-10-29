@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsManagementAPI", "LogisticsManagementAPI\LogisticsManagementAPI.csproj", "{CB4D0C65-E806-4F8E-A9E9-FA059FA0265D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "LogisticsManagementAPI\WebApi.csproj", "{CB4D0C65-E806-4F8E-A9E9-FA059FA0265D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8E746A5D-5BB2-49F1-BDAE-DDF0D28245EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8E746A5D-5BB2-49F1-BDAE-DDF0D28245EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{4B45AB25-C750-4E1A-88E4-47653F37E2B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{4B45AB25-C750-4E1A-88E4-47653F37E2B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{56F011FD-EFA2-4DD5-9A6C-77FFD31D8BA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{56F011FD-EFA2-4DD5-9A6C-77FFD31D8BA7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C47A1EBD-64F3-4820-96A7-C4354A0A7A26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB4D0C65-E806-4F8E-A9E9-FA059FA0265D} = {C47A1EBD-64F3-4820-96A7-C4354A0A7A26}
+		{8E746A5D-5BB2-49F1-BDAE-DDF0D28245EA} = {C47A1EBD-64F3-4820-96A7-C4354A0A7A26}
+		{4B45AB25-C750-4E1A-88E4-47653F37E2B6} = {C47A1EBD-64F3-4820-96A7-C4354A0A7A26}
+		{56F011FD-EFA2-4DD5-9A6C-77FFD31D8BA7} = {C47A1EBD-64F3-4820-96A7-C4354A0A7A26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {016059AA-D3B4-4044-9A25-430E1560F954}
