@@ -1,6 +1,7 @@
 using Application;
 using Application.Common.Interfaces;
 using Infrastructure;
+using Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Extensions;
 using WebApi.Services;
@@ -23,6 +24,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var initialiser = scope.ServiceProvider.GetRequiredService<AppDbContextInitializer>();
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
 }
 app.ConfigureCustomExceptionMiddleware();
 app.UseCors(x => x

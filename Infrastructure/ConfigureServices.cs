@@ -29,6 +29,7 @@ namespace Infrastructure
             //local config
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+            services.AddScoped<AppDbContextInitializer>();
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

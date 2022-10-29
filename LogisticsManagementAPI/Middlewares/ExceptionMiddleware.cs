@@ -34,6 +34,7 @@ namespace WebApi.Middlewares
             {
                 ValidationException => (int)HttpStatusCode.BadRequest,
                 NotFoundException => (int)HttpStatusCode.NotFound,
+                InvalidLoginException => (int)HttpStatusCode.BadRequest,    
                 AuthenticationException => (int)HttpStatusCode.Unauthorized,
                 _ => (int)HttpStatusCode.InternalServerError,
             };
