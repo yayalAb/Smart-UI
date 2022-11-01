@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Application.Common.Mappings
 {
-    internal class MappingProfile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
@@ -13,6 +13,8 @@ namespace Application.Common.Mappings
 
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
+            //TODO: add mapping configs here
+
             var mapFromType = typeof(IMapFrom<>);
 
             var mappingMethodName = nameof(IMapFrom<object>.Mapping);

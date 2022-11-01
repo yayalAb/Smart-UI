@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221101102424_add-role")]
+    partial class addrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,6 @@ namespace Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
@@ -52,13 +53,7 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("canDelete")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("canUpdate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("canView")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("canViewDetail")
+                    b.Property<bool>("canViewDetial")
                         .HasColumnType("bit");
 
                     b.Property<string>("page")
@@ -286,9 +281,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Infrastructure.Identity.ApplicationUser", null)
                         .WithMany("UserRoles")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

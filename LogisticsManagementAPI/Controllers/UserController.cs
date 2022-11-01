@@ -11,11 +11,8 @@ namespace WebApi.Controllers
         [Route("login")]
         public async Task<IActionResult> Post([FromBody] AuthenticateUserCommand command)
         {
-            string  tokenString = await Mediator.Send(command);
-            var response = new
-            {
-                tokenString = tokenString,
-            };
+           var response = await Mediator.Send(command);
+          
             return Ok(response);    
 
 

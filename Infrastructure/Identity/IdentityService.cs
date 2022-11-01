@@ -4,6 +4,7 @@ using Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,26 +15,30 @@ namespace Infrastructure.Identity
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<IdentityService> _logger;
         private readonly IConfiguration _configuration;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public IdentityService(UserManager<ApplicationUser> userManager, ILogger<IdentityService> logger, IConfiguration configuration)
         {
             _userManager = userManager;
+            _logger = logger;
             _configuration = configuration;
         }
-        public async Task<(Result result, string tokenString)> AuthenticateUser(string email, string password)
+        public async Task<(Result result, string tokenString ,IApplicationUser? user )> AuthenticateUser(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
+       
+        
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
 
                 var tokenString = await generateToken(user);
-                return (Result.Success(), tokenString);
+                return (Result.Success(), tokenString , user);
 
 
             }
             string[] errors = new string[] { "Invalid login" };
-            return (Result.Failure(errors), string.Empty);
+            return (Result.Failure(errors), string.Empty , null);
 
         }
 

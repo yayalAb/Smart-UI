@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Domain.Entities;
 using Infrastructure.Common.Extensions;
 using Infrastructure.Identity;
 using Infrastructure.Persistence.Interceptors;
@@ -22,6 +23,7 @@ namespace Infrastructure.Persistence
         }
 
         public DatabaseFacade database => Database;
+        public DbSet<UserRole> UserRoles => Set<UserRole>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
