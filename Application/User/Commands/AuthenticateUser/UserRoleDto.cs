@@ -12,6 +12,6 @@ namespace Application.User.Commands.AuthenticateUser
         public bool canDelete { get; set; } 
         public bool canView { get; set; } 
         public bool canViewDetail { get; set; } 
-        public bool canUpadate { get; set; }
+        public bool canUpdate { get; set; }
     }
 }
