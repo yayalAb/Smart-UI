@@ -1,10 +1,5 @@
 ﻿using Application.User.Commands.AuthenticateUser;
-using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Common.Models
 {
@@ -15,5 +10,6 @@ namespace Application.Common.Models
         public string id { get; set; }
         public IEnumerable<UserRoleDto> roles { get; set; }  
         public string groupId { get; set; }
+        public string userName { get; set; }
     }
 }

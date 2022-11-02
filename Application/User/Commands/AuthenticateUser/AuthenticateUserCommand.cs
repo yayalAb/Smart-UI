@@ -52,7 +52,8 @@ namespace Application.User.Commands.AuthenticateUser
                     id=user.Id ,
                     roles=roles ,
                     tokenString = response.tokenString ,    
-                    groupId = user.GroupId ,    
+                    groupId = user.GroupId ,
+                    userName = user.UserName ,
                 };
 
             }
