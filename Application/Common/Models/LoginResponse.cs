@@ -9,7 +9,7 @@ namespace Application.Common.Models
         public string fullName { get; set; }
         public string id { get; set; }
         public IEnumerable<UserRoleDto> roles { get; set; }  
-        public string groupId { get; set; }
+        public int userGroupId { get; set; }
         public string userName { get; set; }
     }
 }

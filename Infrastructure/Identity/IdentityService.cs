@@ -49,6 +49,34 @@ namespace Infrastructure.Identity
             return user.UserName;
         }
 
+        public async Task<(Result, string )> createUser(string fullName , string userName , string email , string password , int groupId)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if(existingUser != null)
+            {
+                return (Result.Failure(new string[] { "user with the given email already exists" }), string.Empty);
+            }
+            existingUser = await _userManager.FindByNameAsync(userName);
+            if(existingUser != null)
+            {
+                return (Result.Failure(new string[] { "username is already taken" }), string.Empty);
+            }
+            var newUser = new ApplicationUser()
+            {
+                FullName = fullName,
+                UserName = userName,
+                Email = email,
+                UserGroupId = groupId
+            };
+          
+           var  result =  await _userManager.CreateAsync(newUser , password);
+            if (!result.Succeeded)
+            {
+                return (result.ToApplicationResult(), string.Empty);
+            }
+            return (Result.Success(), newUser.Id) ;    
+        }
+
         private async Task<string> generateToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);

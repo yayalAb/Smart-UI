@@ -34,8 +34,9 @@ namespace Infrastructure
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = true;
                 options.User.RequireUniqueEmail = true;
 
             }).AddEntityFrameworkStores<AppDbContext>()

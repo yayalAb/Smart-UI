@@ -52,20 +52,41 @@ namespace Infrastructure.Persistence
 
         public async Task TrySeedAsync()
         {
+            // Adding Default userGroup
+            UserGroup defaultGroup = new UserGroup
+            {
+                Name = "AdminGroup"
+            };
+            if (!_context.UserGroups.Any(ug=>ug.Name == defaultGroup.Name))
+            {
+        
+                try
+                {
+                    await _context.UserGroups.AddAsync(defaultGroup);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"error creating default userGroup: {e}");
+                }
+
+            }
+
 
             // Default user
-          
+
             ApplicationUser administrator = new ApplicationUser
             {
                 Email = "admin@gmail.com",
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = "admin@gmail.com",
                 FullName = "admin admin",
-                GroupId = "adminGroup"
+                UserGroupId = defaultGroup.Id,
+                
             };
 
             //adding default user
-            var defaultPassword = "pass123";
+            var defaultPassword = "pass123#A";
             if (_userManager.Users.All(u => u.Email != administrator.Email))
             {
                 var result = await _userManager.CreateAsync(administrator, defaultPassword);
@@ -75,110 +96,8 @@ namespace Infrastructure.Persistence
                 }
                 await _context.SaveChangesAsync();
 
-               //adding default user roles
-                UserRole[] defaultRoles = {
-                new UserRole {
-                    title ="dashboard",
-                    page = "dashboard",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "bill of loading",
-                    page = "bill_of_loading",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "operation",
-                    page = "operation",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "shipping agent payment",
-                    page = "shipping_agent_payment",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "terminal port handling",
-                    page = "terminal_port_handling",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "container",
-                    page = "container",
-                    ApplicationUserId =administrator.Id
-                },
-                new UserRole
-                {
-                    title = "shipping agent",
-                    page = "shipping_agent",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "driver",
-                    page = "driver",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "truck",
-                    page = "truck",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "port",
-                    page = "port",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "company",
-                    page = "company",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "operation followup",
-                    page = "operation_followup",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "assign goods to container",
-                    page = "assign_goods_to_container",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "documentation",
-                    page = "documentation",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "users",
-                    page = "users",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "lookup",
-                    page = "lookup",
-                    ApplicationUserId =administrator.Id
-                } ,
-                new UserRole
-                {
-                    title = "settings",
-                    page = "settings",
-                    ApplicationUserId =administrator.Id
-                } ,
-            };
+                //adding default user roles
+               IEnumerable<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(administrator.Id);
                 try
                 {
                     await _context.AddRangeAsync(defaultRoles);

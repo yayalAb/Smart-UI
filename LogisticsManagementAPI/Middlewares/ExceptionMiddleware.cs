@@ -2,6 +2,7 @@
 using WebApi.Models;
 using System.Net;
 using System.Security.Authentication;
+using Newtonsoft.Json.Linq;
 
 namespace WebApi.Middlewares
 {
@@ -36,25 +37,38 @@ namespace WebApi.Middlewares
                 NotFoundException => (int)HttpStatusCode.NotFound,
                 InvalidLoginException => (int)HttpStatusCode.BadRequest,    
                 AuthenticationException => (int)HttpStatusCode.Unauthorized,
+                CantCreateUserException => (int)HttpStatusCode.BadRequest,    
                 _ => (int)HttpStatusCode.InternalServerError,
             };
             var message = exception.Message;
-            ValidationException? ex;
-            if ( exception is ValidationException)
+           
+
+            switch (exception)
             {
-                ex = exception as ValidationException;
+                case ValidationException:
+                    ValidationException? ex;
+                    ex = exception as ValidationException;
+                    if (ex != null)
+                    {
+                        var values = ex.Errors?.Values?.First();
 
-                if (ex != null)
-                {
-                    var values = ex.Errors?.Values?.First();
+                        values = values == null ? Array.Empty<string>() : values;
+                        var errors = String.Join(" , ", values);
+                        message = ex.Message + "\n" + errors;
 
-                    values = values == null ? Array.Empty<string>() : values;
-                    var errors = String.Join(" , ", values);
-                    message = ex.Message + "\n" + errors;
-                }
-
+                    }
+                    break;
+                case CantCreateUserException:
+                    CantCreateUserException? ex2;
+                    ex2 = exception as CantCreateUserException;
+                    if (ex2 != null)
+                    {
+                        var errors = String.Join(" , ", ex2.Errors);
+                        message = ex2.Message + "\n" + errors;
+                    }
+                    break;
             }
-
+          
             await context.Response.WriteAsync(new ErrorDetail()
             {
                 StatusCode = context.Response.StatusCode,

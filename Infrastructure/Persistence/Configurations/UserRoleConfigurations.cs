@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    internal class UserRoleConfigurations : IEntityTypeConfiguration<UserRole>
+    internal class UserRoleConfigurations : IEntityTypeConfiguration<AppUserRole>
     {
-        public void Configure(EntityTypeBuilder<UserRole> builder)
+        public void Configure(EntityTypeBuilder<AppUserRole> builder)
         {
             builder.HasOne<ApplicationUser>()
                 .WithMany(u => u.UserRoles).OnDelete(DeleteBehavior.Cascade);

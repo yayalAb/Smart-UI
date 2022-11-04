@@ -8,7 +8,10 @@ namespace Application.Common.Interfaces
     public interface IAppDbContext
     {
         DatabaseFacade database { get; }
-        DbSet<UserRole> UserRoles { get; }
+        DbSet<AppUserRole> AppUserRoles { get; }
+        DbSet<UserGroup> UserGroups { get; } 
+        Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
     }
 }

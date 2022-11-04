@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.User.Commands.AuthenticateUser
 {
-    public class UserRoleDto : IMapFrom<UserRole>
+    public class UserRoleDto : IMapFrom<AppUserRole>
     {
         public string page { get; set; }
         public string title { get; set; }

@@ -23,7 +23,9 @@ namespace Infrastructure.Persistence
         }
 
         public DatabaseFacade database => Database;
-        public DbSet<UserRole> UserRoles => Set<UserRole>();
+        public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
+
+        public DbSet<UserGroup> UserGroups => Set<UserGroup>(); 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

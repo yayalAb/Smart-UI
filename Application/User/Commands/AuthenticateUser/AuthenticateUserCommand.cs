@@ -43,7 +43,7 @@ namespace Application.User.Commands.AuthenticateUser
                 IApplicationUser user = response.user;
 
                // fetching user roles
-                IEnumerable<UserRoleDto> roles = _context.UserRoles
+                IEnumerable<UserRoleDto> roles = _context.AppUserRoles
                     .Where(r => r.ApplicationUserId.Equals(response.user.Id))
                     .ProjectTo<UserRoleDto>(_mapper.ConfigurationProvider);
                  
@@ -52,7 +52,7 @@ namespace Application.User.Commands.AuthenticateUser
                     id=user.Id ,
                     roles=roles ,
                     tokenString = response.tokenString ,    
-                    groupId = user.GroupId ,
+                    userGroupId = user.UserGroupId ,
                     userName = user.UserName ,
                 };
 

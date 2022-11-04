@@ -10,7 +10,9 @@ namespace Infrastructure.Identity
     public class ApplicationUser : IdentityUser, IApplicationUser
     {
         public string FullName { get; set; }
-        public string GroupId { get; set; }
-        public IEnumerable<UserRole> UserRoles { get ; set; }
+        public int UserGroupId { get; set; }
+        public UserGroup UserGroup { get; set; }
+        public IEnumerable<AppUserRole> UserRoles { get ; set; }
+       
     }
 }
