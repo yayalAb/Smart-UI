@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Configurations
         {
             builder.HasOne<ApplicationUser>()
                 .WithMany(u => u.UserRoles).OnDelete(DeleteBehavior.Cascade);
-      
+            
         }
     }
 }
