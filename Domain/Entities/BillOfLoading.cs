@@ -26,4 +26,5 @@ public class BillOfLoading {
     public int port_Id { get; set; }
     public int container_id { get; set; }
     
+    public Port port { get; set; }
 }

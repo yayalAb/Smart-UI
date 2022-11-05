@@ -6,4 +6,6 @@ public class Truck {
     public string type { get; set; }
     public float capacity { get; set; }
     public int imageId { get; set; }
+    
+    public Image truckImage { get; set; }
 }

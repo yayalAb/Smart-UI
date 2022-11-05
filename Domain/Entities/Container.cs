@@ -10,4 +10,8 @@ public class Container
     public DateTime manufacturedDate { set; get; }
     public DateTime addressId { set; get; }
     
+    public Address address { set; get; }
+    
+    public ICollection<BillOfLoading> bills { get; set; }
+    public ICollection<Good> goods { get; set; }
 }

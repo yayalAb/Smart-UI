@@ -6,4 +6,7 @@ public class ShippingAgent
     public string fullName { get; set; }
     public int imageId { get; set; }
     public int addressId { get; set; }
+    
+    public Image agentImage { get; set; }
+    public Address agentAddress { get; set; }
 }

@@ -12,4 +12,7 @@ public class ShippingAgentFee
     public string description { get; set; }
     public int operationId { get; set; }
     public int shippingAgentId { get; set; }
+    
+    public Operation operation { get; set; }
+    public ShippingAgent agent { get; set; }
 }

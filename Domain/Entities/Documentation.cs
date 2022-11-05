@@ -16,4 +16,6 @@ public class Documentation
     public string transportaionMethod { get; set; }
     public string source { get; set; }
     public string destination { get; set; }
+    
+    public Operation operation { get; set; }
 }

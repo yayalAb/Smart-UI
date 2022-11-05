@@ -14,4 +14,5 @@ public class Good
     public string goodcol { get; set; }
     public int containerId { get; set; }
     
+    public Container container { get; set; }
 }
