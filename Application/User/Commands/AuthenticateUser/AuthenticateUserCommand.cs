@@ -30,14 +30,11 @@ namespace Application.User.Commands.AuthenticateUser
         }
         public async Task<LoginResponse> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
+            try {
                 // authenticating user
                 var response = await _identityService.AuthenticateUser(request.Email, request.Password);
 
-                if (!response.result.Succeeded)
-                {
-
+                if (!response.result.Succeeded) {
                     throw new InvalidLoginException(string.Join(",", response.result.Errors));
                 }
                 IApplicationUser user = response.user;
@@ -56,10 +53,7 @@ namespace Application.User.Commands.AuthenticateUser
                     userName = user.UserName ,
                 };
 
-            }
-            catch (Exception)
-            {
-
+            } catch (Exception) {
                 throw;
             }
            
