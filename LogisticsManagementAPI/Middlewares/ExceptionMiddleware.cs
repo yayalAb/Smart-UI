@@ -23,7 +23,10 @@ namespace WebApi.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong: {ex}");
+
+                 _logger.LogError($"Something went wrong: {ex}");
+                
+
                 await HandleExceptionAsync(httpContext, ex);
             }
         }

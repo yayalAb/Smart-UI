@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.User.Commands.AuthenticateUser;
+using Application.User.Commands.CreateUser.Commands;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 
@@ -23,8 +25,14 @@ namespace Application.Common.Behaviours
             catch (Exception ex)
             {
                 var requestName = typeof(TRequest).Name;
+                //hide sensetive data
+                if (request.GetType().Equals(typeof(AuthenticateUserCommand)) || request.GetType().Equals(typeof(CreateUserCommand)))
+                {
+                    request = default;
 
-                _logger.LogError(ex, "CleanArchitecture Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+                }
+              
+                _logger.LogError(ex, "GhionApi Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
 
                 throw;
             }

@@ -2,13 +2,22 @@ using Application;
 using Application.Common.Interfaces;
 using Infrastructure;
 using Infrastructure.Persistence;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using WebApi.Extensions;
 using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//-- serilog config
+var Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(Logger);  
+
+//-----//
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
