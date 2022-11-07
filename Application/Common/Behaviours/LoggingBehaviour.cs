@@ -37,8 +37,8 @@ namespace Application.Common.Behaviours
                 request = default;
 
             }
-            _logger.LogInformation("GhionApi Request: {Name} {@UserId} {@UserName} {@Request}",
-                                 requestName, userId, userName, request);
+            _logger.LogInformation("GhionApi Request: {Name} {@UserId} {@UserName} {@Request} {@Time}",
+                                 requestName, userId, userName, request , DateTime.Now);
 
 
 

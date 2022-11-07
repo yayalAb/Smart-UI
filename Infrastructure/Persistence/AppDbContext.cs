@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence
         private readonly IMediator _mediator;
         private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options , IMediator mediator , AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options , IMediator mediator , AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor ) : base(options)
         {
             _mediator = mediator;
            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
@@ -25,7 +25,9 @@ namespace Infrastructure.Persistence
         public DatabaseFacade database => Database;
         public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
 
-        public DbSet<UserGroup> UserGroups => Set<UserGroup>(); 
+        public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+
+        public DbSet<Lookup> Lookups => Set<Lookup>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,6 +44,7 @@ namespace Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _mediator.DispatchDomainEvents(this);
+            
 
             return await base.SaveChangesAsync(cancellationToken);
         }

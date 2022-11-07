@@ -33,7 +33,7 @@ namespace WebApi.Controllers
                 Id = response
             };
 
-            return Ok(responseObj);
+            return StatusCode(StatusCodes.Status201Created, responseObj);
 
 
         }

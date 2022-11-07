@@ -6,13 +6,13 @@ namespace Domain.Entities
 {
     public class AppUserRole : BaseAuditableEntity
     {
-        public string page { get; set; }    
-        public string title { get; set; }
-        public bool canAdd { get; set; } = true;
-        public bool canDelete { get; set; } = true;
-        public bool canViewDetail { get; set; } = true;
-        public bool canView { get; set; } = true;
-        public bool canUpdate { get; set; } = true; 
+        public string Page { get; set; }    
+        public string Title { get; set; }
+        public bool CanAdd { get; set; } = true;
+        public bool CanDelete { get; set; } = true;
+        public bool CanViewDetail { get; set; } = true;
+        public bool CanView { get; set; } = true;
+        public bool CanUpdate { get; set; } = true; 
         public string ApplicationUserId { get; set; }
       
 
@@ -26,8 +26,8 @@ namespace Domain.Entities
                 var pageName = page;
                 defaultRoles.Add(new AppUserRole
                 {
-                    title = pageTitle,
-                    page = pageName,
+                    Title = pageTitle,
+                    Page = pageName,
                     ApplicationUserId = userId
                 });
             }
@@ -38,13 +38,13 @@ namespace Domain.Entities
             foreach (string page in Enum.GetNames(typeof(Page)))
             {
                 // if userRole with the page is not found fill it with default one
-                if (!userRoles.Any(r => r.page.ToLower() == page.ToLower()))
+                if (!userRoles.Any(r => r.Page.ToLower() == page.ToLower()))
                 {
                     string title = page.Replace("_", " ");
                     userRoles.Add(new AppUserRole
                     {
-                        title = title,
-                        page = page,
+                        Title = title,
+                        Page = page,
 
                     });
 
