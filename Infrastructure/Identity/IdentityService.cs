@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -77,6 +79,52 @@ namespace Infrastructure.Identity
             return (Result.Success(), newUser.Id) ;    
         }
 
+        public async Task<(Result,string)> ForgotPassword(string email)
+        {
+           var user = await _userManager.FindByEmailAsync (email);
+            if(user == null)
+            {
+                return (Result.Failure(new string[] { "could not find user with the given email" }), string.Empty);
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            
+            return (Result.Success(), token);
+        }
+        public async Task<Result > ResetPassword(string email , string password , string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return Result.Failure(new string[] { "user not found" });
+            }
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, token, password);
+            if (!resetPassResult.Succeeded)
+            {
+                var errors = resetPassResult.Errors.Select(e => e.Description);
+                return Result.Failure(errors);
+            }
+            return Result.Success();
+        }
+
+
+
+
+        public async Task<Result> ChangePassword(string email, string oldPassword, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                return Result.Failure(new string[] { "could not find user with the given email" });
+            }
+          var response =   await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (!response.Succeeded)
+            {
+                return Result.Failure(new string[] { "change password failed " });
+            }
+            return Result.Success();
+        }
+
+
         private async Task<string> generateToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -106,5 +154,6 @@ namespace Infrastructure.Identity
             return tokenString;
         }
 
+      
     }
 }
