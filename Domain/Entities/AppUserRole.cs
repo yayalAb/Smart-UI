@@ -16,7 +16,7 @@ namespace Domain.Entities
         public string ApplicationUserId { get; set; }
       
 
-        public static IEnumerable<AppUserRole> createDefaultRoles(string userId)
+        public static List<AppUserRole> createDefaultRoles(string userId)
         {
             
             List<AppUserRole> defaultRoles = new List<AppUserRole>();
@@ -32,6 +32,26 @@ namespace Domain.Entities
                 });
             }
             return defaultRoles;
+        }
+        public static List<AppUserRole> fillUndefinedRoles(List<AppUserRole> userRoles)
+        {
+            foreach (string page in Enum.GetNames(typeof(Page)))
+            {
+                // if userRole with the page is not found fill it with default one
+                if (!userRoles.Any(r => r.page.ToLower() == page.ToLower()))
+                {
+                    string title = page.Replace("_", " ");
+                    userRoles.Add(new AppUserRole
+                    {
+                        title = title,
+                        page = page,
+
+                    });
+
+                }
+            }
+  
+            return userRoles;
         }
        
     }

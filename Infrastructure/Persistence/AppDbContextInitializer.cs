@@ -97,7 +97,7 @@ namespace Infrastructure.Persistence
                 await _context.SaveChangesAsync();
 
                 //adding default user roles
-               IEnumerable<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(administrator.Id);
+               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(administrator.Id);
                 try
                 {
                     await _context.AddRangeAsync(defaultRoles);

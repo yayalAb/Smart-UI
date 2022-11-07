@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.User.Commands.AuthenticateUser;
+using AutoMapper;
+using Domain.Entities;
 using System.Reflection;
 
 
@@ -14,6 +16,7 @@ namespace Application.Common.Mappings
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
             //TODO: add mapping configs here
+            CreateMap<UserRoleDto, AppUserRole>().ReverseMap();
 
             var mapFromType = typeof(IMapFrom<>);
 
