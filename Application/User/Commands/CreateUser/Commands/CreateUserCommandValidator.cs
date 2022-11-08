@@ -9,8 +9,7 @@ namespace Application.User.Commands.CreateUser.Commands
     {
         private readonly IAppDbContext _context;
 
-        public CreateUserCommandValidator( IAppDbContext context)
-        {
+        public CreateUserCommandValidator( IAppDbContext context) {
 
             _context = context;
 
@@ -28,8 +27,7 @@ namespace Application.User.Commands.CreateUser.Commands
             RuleFor(u => u.Password)
                 .NotNull()
                 .NotEmpty()
-                .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$").WithMessage("password must be atleast 6 digit long and must contain atlist one number one number and 1 special character")
-                ;
+                .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$").WithMessage("password must be at least 6 digit long and must contain at least one number one number and 1 special character");
             RuleFor(u => u.GroupId)
                 .NotNull()
                 .NotEmpty()
@@ -37,8 +35,7 @@ namespace Application.User.Commands.CreateUser.Commands
            
         }
 
-        private bool BeFoundInDb(int groupId)
-        {
+        private bool BeFoundInDb(int groupId) {
             return  _context.UserGroups.Find(groupId) != null;
         }
     }

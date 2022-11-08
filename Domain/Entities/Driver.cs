@@ -1,14 +1,24 @@
 namespace Domain.Entities;
 
 public class Driver {
+
+    public Driver() {
+        Operations = new HashSet<Operation>();
+    }
+
     public int Id { get; set; }
-    public string fullName { get; set; }
-    public string liceneceNumber { get; set; }
-    public int addressId { get; set; }
-    public int imageId { get; set; }
-    public int truckId { get; set; }
+    public string Fullname { get; set; } = null!;
+    public string LicenceNumber { get; set; } = null!;
+    public int AddressId { get; set; }
+    public int ImageId { get; set; }
+    public int TruckId { get; set; }
     
-    public Address driverAddress { get; set; }
-    public Truck driverTruck { get; set; }
-    public Image profileImage { get; set; }
+    //has one
+    public virtual Address Address { get; set; }
+    public virtual Truck Truck { get; set; }
+    public virtual Image Image { get; set; } = null!;
+    
+    //has many
+    public virtual ICollection<Operation> Operations { get; set; }
+
 }

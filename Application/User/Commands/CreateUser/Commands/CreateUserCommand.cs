@@ -5,8 +5,8 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.User.Commands.CreateUser.Commands
-{
+namespace Application.User.Commands.CreateUser.Commands {
+    
     public record CreateUserCommand : IRequest<string>
     {
         public string FullName { get; init; }
@@ -29,11 +29,10 @@ namespace Application.User.Commands.CreateUser.Commands
             _context = context;
            _logger = logger;
         }
-        public async  Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-           IEnumerable<AppUserRole> userRoles = request.UserRoles;
+        public async  Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken) {
+            IEnumerable<AppUserRole> userRoles = request.UserRoles;
 
-           using var transaction = _context.database.BeginTransaction();
+            using var transaction = _context.database.BeginTransaction();
             var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, request.GroupId);
            
             if (!response.result.Succeeded)

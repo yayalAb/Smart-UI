@@ -2,16 +2,23 @@ namespace Domain.Entities;
 
 public class Container
 {
-    public int Id { set; get; }
-    public string containerNumber { set; get; }
-    public float size { set; get; }
-    public string owner { set; get; }
-    public string loacation { set; get; }
-    public DateTime manufacturedDate { set; get; }
-    public DateTime addressId { set; get; }
+
+    public Container()
+    {
+        BillOfLoadings = new HashSet<BillOfLoading>();
+        Goods = new HashSet<Good>();
+    }
+
+    public int Id { get; set; }
+    public string ContianerNumber { get; set; } = null!;
+    public float Size { get; set; }
+    public string? Owner { get; set; }
+    public string? Loacation { get; set; }
+    public DateTime? ManufacturedDate { get; set; }
+    public int AddressId { get; set; }
     
-    public Address address { set; get; }
+    public virtual Address Address { set; get; } = null!;
     
-    public ICollection<BillOfLoading> bills { get; set; }
-    public ICollection<Good> goods { get; set; }
+    public virtual ICollection<BillOfLoading> BillOfLoadings { get; set; }
+    public virtual ICollection<Good> Goods { get; set; }
 }
