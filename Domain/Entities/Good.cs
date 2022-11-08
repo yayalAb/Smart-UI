@@ -1,18 +1,19 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Good
+public class Good : BaseAuditableEntity
 {
     public int Id { get; set; }
-    public string description { get; set; }
-    public string HSCode { get; set; }
-    public string manufacturer { get; set; }
-    public string CBM { get; set; }
-    public float weight { get; set; }
-    public float quantity { get; set; }
-    public float unitPrice { get; set; }
-    public float unitOfMeasurnment { get; set; }
-    public string goodcol { get; set; }
-    public int containerId { get; set; }
+    public string? Description { get; set; }
+    public string? HSCode { get; set; }
+    public string? Manufacturer { get; set; }
+    public string? CBM { get; set; }
+    public float? Weight { get; set; }
+    public float? Quantity { get; set; }
+    public float? UnitPrice { get; set; }
+    public string? UnitOfMeasurnment { get; set; }
+    public int ContainerId { get; set; }
     
-    public Container container { get; set; }
+    public virtual Container Container { get; set; } = null!;
+
 }

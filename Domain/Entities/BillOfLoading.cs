@@ -1,30 +1,34 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class BillOfLoading {
-    public int Id { get; set; }
-    public string customerName { get; set; }
-    public string nameOnPermit { get; set; }
-    public string consignee { get; set; }
-    public string notifyParty { get; set; }
-    public string billNumber { get; set; }
-    public string shippingLine { get; set; }
-    public string goodsDescription { get; set; }
-    public float quantity { get; set; }
-    public int containerId { get; set; }
-    public float grossWeight { get; set; }
-    public string truckNumber { get; set; }
-    public string ATA { get; set; }
-    public string FZIN { get; set; }
-    public string FZOUT { get; set; }
-    public string destinationType { get; set; }
-    public string shippingAgent { get; set; }
-    public int portOfLoading { get; set; }
-    public DateTime actualDateOfDeparture { get; set; }
-    public DateTime estimatedDateOfArrival { get; set; }
-    public string voyageNumber { get; set; }
-    public string typeOfMerchandise { get; set; }
-    public int port_Id { get; set; }
-    public int container_id { get; set; }
+public class BillOfLoading : BaseAuditableEntity {
     
-    public Port port { get; set; }
+    public int Id { get; set; }
+    public string? CustomerName { get; set; }
+    public string? NameOnPermit { get; set; }
+    public string? Consignee { get; set; }
+    public string? NotifyParty { get; set; }
+    public string? BillNumber { get; set; }
+    public string? ShippingLine { get; set; }
+    public string? GoodsDescription { get; set; }
+    public float? Quantity { get; set; }
+    public int ContainerId { get; set; }
+    public float? GrossWeight { get; set; }
+    public string? TruckNumber { get; set; }
+    public string? ATA { get; set; }
+    public string? FZIN { get; set; }
+    public string? FZOUT { get; set; }
+    public string? DestinationType { get; set; }
+    public string? ShippingAgent { get; set; }
+    public int? PortOfLoading { get; set; }
+    public DateTime? ActualDateOfDeparture { get; set; }
+    public DateTime? EstimatedTimeOfArrival { get; set; }
+    public string? VoyageNumber { get; set; }
+    public string? TypeOfMerchandise { get; set; }
+    public int PortId { get; set; }
+    
+    public virtual Container Container { get; set; } = null!;
+    public virtual Port Port { get; set; } = null!;
+    public virtual Operation Operation { get; set; } = null!;
+
 }

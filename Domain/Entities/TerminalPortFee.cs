@@ -1,14 +1,18 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class TerminalPortFee
-{
+public class TerminalPortFee : BaseAuditableEntity {
+    
     public int Id { get; set; }
-    public string type { get; set; }
-    public DateTime paymentDate { get; set; }
-    public string paymentMethod { get; set; }
-    public string bankCode { get; set; }
-    public float amount { get; set; }
-    public string currency { get; set; }
-    public string description { get; set; }
-    public int operationId { get; set; }
+    public string Type { get; set; } = null!;
+    public DateTime PaymentDate { get; set; }
+    public string PaymentMethod { get; set; } = null!;
+    public string? BankCode { get; set; }
+    public float Amount { get; set; }
+    public string Currency { get; set; } = null!;
+    public string? Description { get; set; }
+    public int OperationId { get; set; }
+
+    public virtual Operation Operation { get; set; }
+
 }

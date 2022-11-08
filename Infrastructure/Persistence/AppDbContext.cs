@@ -26,6 +26,24 @@ namespace Infrastructure.Persistence
         public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
 
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
+        public virtual DbSet<UserGroup> UserGroups => Set<UserGroup>(); 
+        public virtual DbSet<Address> Addresses { get; set; } = null!;
+        public virtual DbSet<BillOfLoading> BillOfLoadings { get; set; } = null!;
+        public virtual DbSet<Company> Companies { get; set; } = null!;
+        public virtual DbSet<ContactPerson> ContactPeople { get; set; } = null!;
+        public virtual DbSet<Container> Containers { get; set; } = null!;
+        public virtual DbSet<Documentation> Documentations { get; set; } = null!;
+        public virtual DbSet<Driver> Drivers { get; set; } = null!;
+        public virtual DbSet<ECDDocument> ECDDocuments { get; set; } = null!;
+        public virtual DbSet<Good> Goods { get; set; } = null!;
+        public virtual DbSet<Image> Images { get; set; } = null!;
+        public virtual DbSet<Lookup> Lookups { get; set; } = null!;
+        public virtual DbSet<Operation> Operations { get; set; } = null!;
+        public virtual DbSet<Port> Ports { get; set; } = null!;
+        public virtual DbSet<ShippingAgent> ShippingAgents { get; set; } = null!;
+        public virtual DbSet<ShippingAgentFee> ShippingAgentFees { get; set; } = null!;
+        public virtual DbSet<TerminalPortFee> TerminalPortFees { get; set; } = null!;
+        public virtual DbSet<Truck> Trucks { get; set; } = null!;
 
         public DbSet<Lookup> Lookups => Set<Lookup>();
 

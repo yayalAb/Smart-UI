@@ -1,13 +1,23 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Company {
-    public int Id { get; set; }
-    public string name { get; set; }
-    public string tinNumber { get; set; }
-    public string codeNIF { get; set; }
-    public int contactPersonId { get; set; }
-    public int addressId { get; set; }
+public class Company : BaseAuditableEntity {
     
-    public ContactPerson contactPerson { get; set; }
-    public Address companyAddress { get; set; }
+    public Company()
+    {
+        Operations = new HashSet<Operation>();
+    }
+
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public string? TinNumber { get; set; }
+    public string? CodeNIF { get; set; }
+    public int ContactPersonId { get; set; }
+    public int AddressId { get; set; }
+    
+    public virtual ContactPerson ContactPerson { get; set; } = null!;
+    public virtual Address Address { get; set; } = null!;
+    
+    public ICollection<Operation> Operations { get; set; }
+    
 }

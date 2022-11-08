@@ -8,8 +8,8 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.User.Commands.CreateUser.Commands
-{
+namespace Application.User.Commands.CreateUser.Commands {
+    
     public record CreateUserCommand : IRequest<string>
     {
         public string FullName { get; init; }

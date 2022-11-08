@@ -11,8 +11,7 @@ namespace Application.User.Commands.CreateUser.Commands
     {
         private readonly IAppDbContext _context;
 
-        public CreateUserCommandValidator( IAppDbContext context)
-        {
+        public CreateUserCommandValidator( IAppDbContext context) {
 
             _context = context;
 
@@ -43,8 +42,7 @@ namespace Application.User.Commands.CreateUser.Commands
            
         }
 
-        private bool BeFoundInDb(int groupId)
-        {
+        private bool BeFoundInDb(int groupId) {
             return  _context.UserGroups.Find(groupId) != null;
         }
         private bool AllHaveValidPage(List<UserRoleDto> userRoles)

@@ -1,21 +1,22 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Documentation
+public class Documentation : BaseAuditableEntity
 {
     public int Id { get; set; }
-    public int operationId { get; set; }
-    public string type { get; set; }
-    public DateTime date { get; set; }
-    public string bankPermit { get; set; }
-    public string invoiceNumber { get; set; }
-    public string importerName { get; set; }
-    public string phone { get; set; }
-    public string country { get; set; }
-    public string city { get; set; }
-    public string tinNumber { get; set; }
-    public string transportaionMethod { get; set; }
-    public string source { get; set; }
-    public string destination { get; set; }
+    public int OperationId { get; set; }
+    public string Type { get; set; } = null!;
+    public DateTime Date { get; set; }
+    public string? BankPermit { get; set; }
+    public string? InvoiceNumber { get; set; }
+    public string? ImporterName { get; set; }
+    public string? Phone { get; set; }
+    public string? Country { get; set; }
+    public string? City { get; set; }
+    public string? TinNumber { get; set; }
+    public string? TransportationMethod { get; set; }
+    public string? Source { get; set; }
+    public string? Destination { get; set; }
     
-    public Operation operation { get; set; }
+    public virtual Operation Operation { get; set; } = null!;
 }
