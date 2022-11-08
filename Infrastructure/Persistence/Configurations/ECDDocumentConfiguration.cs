@@ -11,8 +11,6 @@ public class ECDDocumentConfiguration : IEntityTypeConfiguration<ECDDocument> {
         entity.HasIndex(e => e.Id, "id_UNIQUE")
             .IsUnique();
 
-        entity.Property(e => e.Document)
-            .HasColumnType("blob");
 
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.ECDDocuments)

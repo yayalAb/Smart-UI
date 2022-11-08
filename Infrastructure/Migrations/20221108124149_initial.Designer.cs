@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221108084909_create-tables")]
-    partial class createtables
+    [Migration("20221108124149_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -530,7 +530,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<byte[]>("Document")
                         .IsRequired()
-                        .HasColumnType("blob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -628,7 +628,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<byte[]>("Image1")
                         .IsRequired()
-                        .HasColumnType("blob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
