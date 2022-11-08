@@ -528,7 +528,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<byte[]>("Document")
                         .IsRequired()
-                        .HasColumnType("blob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -626,7 +626,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<byte[]>("Image1")
                         .IsRequired()
-                        .HasColumnType("blob");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");

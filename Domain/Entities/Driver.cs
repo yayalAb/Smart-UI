@@ -12,7 +12,7 @@ public class Driver : BaseAuditableEntity {
     public string LicenceNumber { get; set; } = null!;
     public int AddressId { get; set; }
     public int ImageId { get; set; }
-    public int TruckId { get; set; }
+    public int? TruckId { get; set; }
     
     //has one
     public virtual Address Address { get; set; }
