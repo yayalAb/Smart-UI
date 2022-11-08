@@ -1,11 +1,8 @@
 ﻿using Application.Common.Interfaces;
 using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.CreateUser.Commands;
-using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
-
 namespace Application.Common.Behaviours
 {
     public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull

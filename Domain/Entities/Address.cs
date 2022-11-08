@@ -1,13 +1,14 @@
+using Domain.Common;
+
 namespace Domain.Entities;
 
-public class Address
+public class Address : BaseAuditableEntity
 {
-    public int Id { get; set; }
-    public string email { get; set; }
-    public string phone { get; set; }
-    public string region { get; set; }
-    public string city { get; set; }
-    public string subcity { get; set; }
-    public string country { get; set; }
-    public string POBOX { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    public string? Region { get; set; }
+    public string? City { get; set; }
+    public string? Subcity { get; set; }
+    public string? Country { get; set; }
+    public string? POBOX { get; set; }
 }

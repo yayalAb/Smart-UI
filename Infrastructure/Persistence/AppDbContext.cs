@@ -29,6 +29,8 @@ namespace Infrastructure.Persistence
 
         public DbSet<Lookup> Lookups => Set<Lookup>();
 
+        public DbSet<Address> Addresses => Set<Address>();
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
