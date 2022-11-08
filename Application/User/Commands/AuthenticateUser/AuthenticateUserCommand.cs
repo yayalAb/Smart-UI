@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Runtime.Serialization;
 
 namespace Application.User.Commands.AuthenticateUser
 {
@@ -20,17 +21,20 @@ namespace Application.User.Commands.AuthenticateUser
         private readonly IAppDbContext _context;
         private readonly ILogger<AuthenticateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
+        private readonly IEmailService emailService;
 
-        public AuthenticateUserCommandHandler(IIdentityService identityService ,IAppDbContext context, ILogger<AuthenticateUserCommandHandler>logger , IMapper mapper)
+        public AuthenticateUserCommandHandler(IIdentityService identityService ,IAppDbContext context, ILogger<AuthenticateUserCommandHandler>logger , IMapper mapper , IEmailService emailService)
         {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _mapper = mapper;
+            this.emailService = emailService;
         }
         public async Task<LoginResponse> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
             try {
+
                 // authenticating user
                 var response = await _identityService.AuthenticateUser(request.Email, request.Password);
 
@@ -38,7 +42,6 @@ namespace Application.User.Commands.AuthenticateUser
                     throw new InvalidLoginException(string.Join(",", response.result.Errors));
                 }
                 IApplicationUser user = response.user;
-
                // fetching user roles
                 IEnumerable<UserRoleDto> roles = _context.AppUserRoles
                     .Where(r => r.ApplicationUserId.Equals(response.user.Id))

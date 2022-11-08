@@ -1,7 +1,9 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Common.Models;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +28,20 @@ namespace Infrastructure
             });
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
+
+            // --- mail service config
+            var emailConfig = configuration
+                    .GetSection("EmailConfiguration")
+                    .Get<EmailConfiguration>();
+           services.AddSingleton(emailConfig);
+           
+
+
             //local config
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<AppDbContextInitializer>();
+            services.AddScoped<IEmailService, EmailService>();
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -40,7 +52,10 @@ namespace Infrastructure
                 options.User.RequireUniqueEmail = true;
 
             }).AddEntityFrameworkStores<AppDbContext>()
-              .AddDefaultTokenProviders();
+                  .AddDefaultTokenProviders();
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(2));
 
             services.AddAuthentication(ops =>
             {
