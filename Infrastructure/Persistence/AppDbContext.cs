@@ -26,7 +26,6 @@ namespace Infrastructure.Persistence
         public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
 
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
-        public virtual DbSet<UserGroup> UserGroups => Set<UserGroup>(); 
         public virtual DbSet<Address> Addresses { get; set; } = null!;
         public virtual DbSet<BillOfLoading> BillOfLoadings { get; set; } = null!;
         public virtual DbSet<Company> Companies { get; set; } = null!;
@@ -45,9 +44,6 @@ namespace Infrastructure.Persistence
         public virtual DbSet<TerminalPortFee> TerminalPortFees { get; set; } = null!;
         public virtual DbSet<Truck> Trucks { get; set; } = null!;
 
-        public DbSet<Lookup> Lookups => Set<Lookup>();
-
-        public DbSet<Address> Addresses => Set<Address>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

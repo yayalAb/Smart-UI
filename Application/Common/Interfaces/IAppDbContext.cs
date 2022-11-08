@@ -28,8 +28,6 @@ namespace Application.Common.Interfaces
         DbSet<TerminalPortFee> TerminalPortFees { get; set; }
         DbSet<Truck> Trucks { get; set; }
         
-        DbSet<Lookup> Lookups { get;  } 
-        DbSet<Address> Addresses { get; }
         Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
