@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class ShippingAgent
+public class ShippingAgent : BaseAuditableEntity
 {
     public int Id { get; set; }
         public string FullName { get; set; } = null!;

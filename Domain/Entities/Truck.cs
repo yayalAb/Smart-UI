@@ -1,9 +1,11 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Truck {
+public class Truck : BaseAuditableEntity {
 
     public Truck() {
         Operations = new HashSet<Operation>();
+        Drivers = new HashSet<Driver>();
     }
 
     public int Id { get; set; }
@@ -17,4 +19,6 @@ public class Truck {
     
     //has many
     public ICollection<Operation> Operations { get; set; }
+    public ICollection<Driver> Drivers {get; set;}
+
 }

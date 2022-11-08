@@ -1,8 +1,9 @@
+using Domain.Common;
 using System.Reflection.Metadata;
 
 namespace Domain.Entities;
 
-public class ECDDocument {
+public class ECDDocument : BaseAuditableEntity {
     
     public int Id { get; set; }
     public byte[] Document { get; set; } = null!;

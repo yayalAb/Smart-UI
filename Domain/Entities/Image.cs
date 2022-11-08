@@ -1,8 +1,9 @@
+using Domain.Common;
 using System.Reflection.Metadata;
 
 namespace Domain.Entities;
 
-public class Image
+public class Image : BaseAuditableEntity
 {
 
     public Image() {

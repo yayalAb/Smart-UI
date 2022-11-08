@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Operation {
+public class Operation : BaseAuditableEntity {
 
     public Operation() {
         ECDDocuments = new HashSet<ECDDocument>();

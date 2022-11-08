@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Company {
+public class Company : BaseAuditableEntity {
     
     public Company()
     {

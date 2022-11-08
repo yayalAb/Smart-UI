@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class BillOfLoading {
+public class BillOfLoading : BaseAuditableEntity {
     
     public int Id { get; set; }
     public string? CustomerName { get; set; }

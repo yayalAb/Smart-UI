@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class TerminalPortFee {
+public class TerminalPortFee : BaseAuditableEntity {
     
     public int Id { get; set; }
     public string Type { get; set; } = null!;

@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Documentation
+public class Documentation : BaseAuditableEntity
 {
     public int Id { get; set; }
     public int OperationId { get; set; }

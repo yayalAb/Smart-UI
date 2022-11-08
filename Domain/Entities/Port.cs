@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Port {
+public class Port : BaseAuditableEntity {
 
     public Port() {
         BillOfLoadings = new HashSet<BillOfLoading>();

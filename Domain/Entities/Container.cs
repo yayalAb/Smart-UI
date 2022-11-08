@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Container
+public class Container : BaseAuditableEntity
 {
 
     public Container()

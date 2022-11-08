@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Driver {
+public class Driver : BaseAuditableEntity {
 
     public Driver() {
         Operations = new HashSet<Operation>();

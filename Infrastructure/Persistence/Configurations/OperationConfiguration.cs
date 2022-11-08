@@ -45,15 +45,15 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasForeignKey(d => d.TruckId)
             .HasConstraintName("fk_operation_truck1");
 
-        entity.HasOne(d => d.TerminalPortFee)
-            .WithOne(p => p.Operation)
-            .HasForeignKey<TerminalPortFee>(d => d.OperationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        // entity.HasOne(d => d.TerminalPortFee)
+        //     .WithOne(p => p.Operation)
+        //     .HasForeignKey<TerminalPortFee>(d => d.OperationId)
+        //     .OnDelete(DeleteBehavior.ClientSetNull);
         
-        entity.HasOne(d => d.ShippingAgentFee)
-            .WithOne(p => p.Operation)
-            .HasForeignKey<ShippingAgentFee>(d => d.OperationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        // entity.HasOne(d => d.ShippingAgentFee)
+        //     .WithOne(p => p.Operation)
+        //     .HasForeignKey<ShippingAgentFee>(d => d.OperationId)
+        //     .OnDelete(DeleteBehavior.ClientSetNull);
     
     }
 }

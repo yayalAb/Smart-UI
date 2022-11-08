@@ -78,10 +78,10 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_Bill of Loading_port1");
 
-        entity.HasOne(d => d.Operation)
-            .WithOne(p => p.BillOfLoading)
-            .HasForeignKey<Operation>(d => d.BillOfLoadingId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        // entity.HasOne(d => d.Operation)
+        //     .WithOne(p => p.BillOfLoading)
+        //     .HasForeignKey<Operation>(d => d.BillOfLoadingId)
+        //     .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

@@ -1,6 +1,7 @@
+using Domain.Common;
 namespace Domain.Entities;
 
-public class Good
+public class Good : BaseAuditableEntity
 {
     public int Id { get; set; }
     public string? Description { get; set; }
