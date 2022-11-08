@@ -11,8 +11,11 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image> {
         entity.HasIndex(e => e.Id, "id_UNIQUE")
             .IsUnique();
 
+<<<<<<< HEAD
         entity.Property(e => e.Image1);
             // .HasColumnType("image");
+=======
+>>>>>>> 367bbcf7f2bd1c31da35a688daf67daee970e73a
 
     }
 }
