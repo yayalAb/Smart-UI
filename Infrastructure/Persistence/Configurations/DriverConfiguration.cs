@@ -6,7 +6,6 @@ namespace Infrastructure.Persistence.Configurations;
 
 public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
     public void Configure(EntityTypeBuilder<Driver> entity) {
-        entity.Property(e => e.Id).ValueGeneratedNever();
 
         entity.Property(e => e.Fullname)
             .HasMaxLength(45);

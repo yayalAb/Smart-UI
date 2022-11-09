@@ -8,11 +8,6 @@ public class TerminalPortFeeConfiguration : IEntityTypeConfiguration<TerminalPor
     
     public void Configure(EntityTypeBuilder<TerminalPortFee> entity) {
 
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.BankCode)
             .HasMaxLength(45);
 

@@ -8,11 +8,29 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image> {
     
     public void Configure(EntityTypeBuilder<Image> entity) {
 
-        entity.HasIndex(e => e.Id, "id_UNIQUE")
-            .IsUnique();
+        entity.HasOne(d => d.ShippingAgent)
+           .WithOne(p => p.Image)
+           .HasForeignKey<ShippingAgent>(d => d.ImageId)
+           .IsRequired(false)
+           .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(e => e.Image1);
-            // .HasColumnType("image");
+        entity.HasOne(d => d.Driver)
+          .WithOne(p => p.Image)
+          .HasForeignKey<Driver>(d => d.ImageId)
+          .IsRequired(false)
+          .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.HasOne(d => d.Container)
+          .WithOne(p => p.Image)
+          .HasForeignKey<Container>(d => d.ImageId)
+          .IsRequired(false)
+          .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.HasOne(d => d.Truck)
+          .WithOne(p => p.Image)
+          .HasForeignKey<Truck>(d => d.ImageId)
+          .IsRequired(false)
+          .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

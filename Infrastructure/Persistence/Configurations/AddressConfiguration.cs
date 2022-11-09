@@ -7,12 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class AddressConfiguration : IEntityTypeConfiguration<Address> {
 
     public void Configure(EntityTypeBuilder<Address> entity) {
-    
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.City)
             .HasMaxLength(45);
 

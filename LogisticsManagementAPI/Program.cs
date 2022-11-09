@@ -14,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 var Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
+<<<<<<< HEAD
 // builder.Logging.ClearProviders();
+=======
+//builder.Logging.ClearProviders();
+>>>>>>> d4fca45ec4b5800f52b53248ca67cd577a869291
 builder.Logging.AddSerilog(Logger);  
 
 // builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
@@ -22,7 +26,11 @@ builder.Logging.AddSerilog(Logger);
 
 //-----//
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    }
+    );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

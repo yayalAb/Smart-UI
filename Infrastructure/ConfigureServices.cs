@@ -42,6 +42,7 @@ namespace Infrastructure
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<AppDbContextInitializer>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IFileUploadService, FileUploadService>();
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

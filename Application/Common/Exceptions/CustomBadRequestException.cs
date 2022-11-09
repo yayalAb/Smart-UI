@@ -3,18 +3,13 @@ namespace Application.Common.Exceptions
 {
     public class CustomBadRequestException : Exception
     {
-        public CustomBadRequestException():base()
+        public CustomBadRequestException():base("bad request")
         {
-            Errors = new List<string>();
+
         }
         public CustomBadRequestException(string message) : base(message)
         {
 
         }
-        public CustomBadRequestException(IEnumerable<string> errors):this()
-        {
-            Errors = errors;
-        }
-        public IEnumerable<string>? Errors{ get; }
     }
 }

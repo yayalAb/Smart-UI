@@ -7,11 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
     public void Configure(EntityTypeBuilder<Company> entity) {
         
-        entity.Property(e => e.Id).ValueGeneratedNever();
-        
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.CodeNIF)
             .HasMaxLength(45);
         

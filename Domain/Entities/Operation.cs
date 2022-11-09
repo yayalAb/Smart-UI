@@ -6,8 +6,6 @@ public class Operation : BaseAuditableEntity {
     public Operation() {
         ECDDocuments = new HashSet<ECDDocument>();
     }
-
-    public int Id { get; set; }
     public string OperationNumber { get; set; } = null!;
     public DateTime OpenedDate { get; set; }
     public string Status { get; set; } = null!;

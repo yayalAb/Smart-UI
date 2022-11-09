@@ -3,7 +3,6 @@ namespace Domain.Entities;
 
 public class ShippingAgent : BaseAuditableEntity
 {
-    public int Id { get; set; }
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
         public int? ImageId { get; set; }

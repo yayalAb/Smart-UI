@@ -8,11 +8,6 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
 {
     public void Configure(EntityTypeBuilder<BillOfLoading> entity) {
 
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.ActualDateOfDeparture)
             .HasColumnType("datetime");
 

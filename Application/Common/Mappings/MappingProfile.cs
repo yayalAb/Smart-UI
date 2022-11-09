@@ -1,4 +1,5 @@
-﻿using Application.User.Commands.AuthenticateUser;
+﻿using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Application.User.Commands.AuthenticateUser;
 using AutoMapper;
 using Domain.Entities;
 using System.Reflection;
@@ -17,6 +18,7 @@ namespace Application.Common.Mappings
         {
             //TODO: add mapping configs here
             CreateMap<UserRoleDto, AppUserRole>().ReverseMap();
+            CreateMap<AddressDto, Address>().ReverseMap();
 
             var mapFromType = typeof(IMapFrom<>);
 

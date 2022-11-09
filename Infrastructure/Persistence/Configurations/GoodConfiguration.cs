@@ -8,11 +8,6 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
     
     public void Configure(EntityTypeBuilder<Good> entity) {
         
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.CBM)
             .HasMaxLength(45);
 
