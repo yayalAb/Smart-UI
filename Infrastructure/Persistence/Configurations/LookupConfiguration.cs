@@ -8,9 +8,6 @@ public class LookupConfiguration : IEntityTypeConfiguration<Lookup> {
     
     public void Configure(EntityTypeBuilder<Lookup> entity) {
 
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.Name)
             .HasMaxLength(45);
 

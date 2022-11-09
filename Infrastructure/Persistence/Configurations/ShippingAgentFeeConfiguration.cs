@@ -7,11 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class ShippingAgentFeeConfiguration : IEntityTypeConfiguration<ShippingAgentFee> {
     public void Configure(EntityTypeBuilder<ShippingAgentFee> entity)
     {
-        entity.Property(e => e.Id).ValueGeneratedNever();
-        
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.BankCode)
             .HasMaxLength(45);
 

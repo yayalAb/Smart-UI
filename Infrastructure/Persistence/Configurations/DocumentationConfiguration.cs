@@ -7,10 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation> {
     
     public void Configure(EntityTypeBuilder<Documentation> entity) {
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
 
         entity.Property(e => e.BankPermit)
             .HasMaxLength(45);

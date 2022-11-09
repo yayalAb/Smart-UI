@@ -8,11 +8,6 @@ public class PortConfiguration : IEntityTypeConfiguration<Port> {
 
     public void Configure(EntityTypeBuilder<Port> entity) {
 
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.Country)
             .HasMaxLength(45);
 

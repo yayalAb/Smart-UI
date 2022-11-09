@@ -7,11 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 {
     public void Configure(EntityTypeBuilder<Operation> entity) {
-    
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "Id_UNIQUE")
-            .IsUnique();
 
         entity.Property(e => e.OpenedDate)
             .HasColumnType("datetime");

@@ -7,11 +7,6 @@ namespace Infrastructure.Persistence.Configurations;
 public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
     public void Configure(EntityTypeBuilder<Container> entity) {
 
-        entity.Property(e => e.Id).ValueGeneratedNever();
-
-        entity.HasIndex(e => e.Id, "id_UNIQUE")
-            .IsUnique();
-
         entity.Property(e => e.ContianerNumber)
             .HasMaxLength(45);
 

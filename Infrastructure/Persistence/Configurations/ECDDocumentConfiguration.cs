@@ -8,10 +8,6 @@ public class ECDDocumentConfiguration : IEntityTypeConfiguration<ECDDocument> {
     
     public void Configure(EntityTypeBuilder<ECDDocument> entity) {
 
-        entity.HasIndex(e => e.Id, "id_UNIQUE")
-            .IsUnique();
-
-
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.ECDDocuments)
             .HasForeignKey(d => d.OperationId)
