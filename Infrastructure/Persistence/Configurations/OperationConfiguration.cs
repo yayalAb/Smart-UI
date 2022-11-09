@@ -44,7 +44,8 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasConstraintName("fk_operation_truck1");
         entity.HasOne(o => o.ECDDocument)
             .WithOne(d => d.Operation)
-            .HasForeignKey<Operation>(o => o.ECDDocumentId);
+            .HasForeignKey<Operation>(o => o.ECDDocumentId)
+            .IsRequired(false);
 
         // entity.HasOne(d => d.TerminalPortFee)
         //     .WithOne(p => p.Operation)

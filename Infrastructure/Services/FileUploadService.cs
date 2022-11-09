@@ -24,7 +24,7 @@ namespace Infrastructure.Services
         {
           _context = context;
         }
-        public async Task<(Result, int )> uploadFile(IFormFile file, FileType fileType , int operationId)
+        public async Task<(Result, int )> uploadFile(IFormFile file, FileType fileType)
         {
             var extension = Path.GetExtension(file.FileName);//get file name
             switch (fileType)
@@ -49,7 +49,8 @@ namespace Infrastructure.Services
                         await _context.SaveChangesAsync();
                         return (Result.Success(), imageData.Id);
                     }
-                case FileType.EcdDocument:
+                 case FileType.EcdDocument:
+                 case   FileType.BillOfLoadingDocument:
                     if (!DocumentExtensions.Contains(extension.ToUpperInvariant()))
                     {
                         return (Result.Failure(new string[] { "document format must be in PDF, CSV , DOC, or DOCX" }), 0);
@@ -61,14 +62,14 @@ namespace Infrastructure.Services
                         await file.CopyToAsync(dataStream);
                         byte[] docBytes = dataStream.ToArray();
                         
-                            var document = new ECDDocument
+                            var document = new Document
                             {
-                                OperationId = operationId,
-                                Document = docBytes
+                                DocumentData = docBytes,
+                                Type = fileType.ToString(),
+
                             };
-                        
-                       
-                        _context.ECDDocuments.Add(document);
+
+                        _context.Documents.Add(document);
                         await _context.SaveChangesAsync();
                         return (Result.Success(), document.Id);
                     }
@@ -109,6 +110,7 @@ namespace Infrastructure.Services
                         return Result.Success();
                     }
                 case FileType.EcdDocument:
+                case FileType.BillOfLoadingDocument:
                     if (!DocumentExtensions.Contains(extension.ToUpperInvariant()))
                     {
                         return Result.Failure(new string[] { "document format must be in PDF, CSV , DOC, or DOCX" });
@@ -120,14 +122,14 @@ namespace Infrastructure.Services
                         await file.CopyToAsync(dataStream);
                         byte[] docBytes = dataStream.ToArray();
 
-                        var oldDocument = await _context.ECDDocuments.FindAsync(fileId);
+                        var oldDocument = await _context.Documents.FindAsync(fileId);
 
                         if(oldDocument == null)
                         {
-                            throw new NotFoundException("ECDDocument", new { Id = fileId });
+                            throw new NotFoundException("Document", new { Id = fileId });
                         }
-                        oldDocument.Document = docBytes;    
-                        _context.ECDDocuments.Update(oldDocument);
+                        oldDocument.DocumentData = docBytes;    
+                        _context.Documents.Update(oldDocument);
                         await _context.SaveChangesAsync();
                         return Result.Success();
                     }

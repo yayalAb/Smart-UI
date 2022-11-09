@@ -7,8 +7,6 @@ using Application.CompanyModule.Commands.CreateCompanyCommand;
 using Application.CompanyModule.Queries.GetCompanyQuery;
 
 namespace WebApi.Controllers {
-    [ApiController]
-    [Route("api/[controller]")]
     public class CompanyController : ApiControllerBase
     {
         [HttpPost]

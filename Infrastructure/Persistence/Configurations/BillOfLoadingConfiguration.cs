@@ -74,6 +74,7 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
         entity.HasOne(b => b.BillOfLoadingDocument)
             .WithOne(d => d.BillOfLoading)
             .HasForeignKey<BillOfLoading>(b => b.BillOfLoadingDocumentId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
           

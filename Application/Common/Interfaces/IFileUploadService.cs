@@ -7,7 +7,7 @@ namespace Application.Common.Interfaces
 {
     public interface IFileUploadService
     {
-        Task<(Result result, int imageId)> uploadFile(IFormFile file, FileType fileType ,  int operationId = 0);
+        Task<(Result result, int Id)> uploadFile(IFormFile file, FileType fileType );
         Task<Result> updateFile(IFormFile file, FileType fileType , int fileId);
     }
 }
