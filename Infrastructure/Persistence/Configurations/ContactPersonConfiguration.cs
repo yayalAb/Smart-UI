@@ -8,6 +8,9 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
     
     public void Configure(EntityTypeBuilder<ContactPerson> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+
         entity.Property(e => e.Email)
             .HasMaxLength(45);
 

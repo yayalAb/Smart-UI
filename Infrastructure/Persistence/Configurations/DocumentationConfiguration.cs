@@ -8,6 +8,9 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
     
     public void Configure(EntityTypeBuilder<Documentation> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.BankPermit)
             .HasMaxLength(45);
 

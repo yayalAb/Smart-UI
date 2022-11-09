@@ -15,7 +15,7 @@ namespace WebApi.Controllers
     {
         
         [HttpPost]
-        public async Task<ActionResult> create([FromBody] CreateDriverCommand command) {
+        public async Task<ActionResult> create([FromForm] CreateDriverCommand command) {
 
             try{
                 var response = await Mediator.Send(command);

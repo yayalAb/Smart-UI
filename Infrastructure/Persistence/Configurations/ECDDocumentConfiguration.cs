@@ -8,6 +8,9 @@ public class ECDDocumentConfiguration : IEntityTypeConfiguration<ECDDocument> {
     
     public void Configure(EntityTypeBuilder<ECDDocument> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.ECDDocuments)
             .HasForeignKey(d => d.OperationId)

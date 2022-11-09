@@ -8,6 +8,9 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image> {
     
     public void Configure(EntityTypeBuilder<Image> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.HasOne(d => d.ShippingAgent)
            .WithOne(p => p.Image)
            .HasForeignKey<ShippingAgent>(d => d.ImageId)

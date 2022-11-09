@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Domain.Entities;
+using Domain.Enums;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.TruckModule.Commands.CreateTruckCommand
 {
@@ -13,6 +15,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
+        public IFormFile? ImageFile { get; set; }
     }
 
     public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, Truck> {
@@ -20,24 +23,39 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
         private readonly ILogger<CreateTruckCommandHandler> _logger;
+        private readonly IFileUploadService _fileUploadService;
 
-        public CreateTruckCommandHandler(IIdentityService identityService , IAppDbContext context , ILogger<CreateTruckCommandHandler> logger) {
+        public CreateTruckCommandHandler(
+            IIdentityService identityService, 
+            IAppDbContext context, 
+            ILogger<CreateTruckCommandHandler> logger, 
+            IFileUploadService fileUploadService
+        ) {
             _identityService = identityService;
             _context = context;
             _logger = logger;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<Truck> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
 
-            Truck tr = new Truck();
-            tr.TruckNumber = request.TruckNumber;
-            tr.Type = request.Type;
-            tr.Capacity = request.Capacity;
+            //image uploading
+            var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+            if (!response.result.Succeeded)
+            {
+                throw new Exception(String.Join(" , ", response.result.Errors));
+            }
 
-            _context.Trucks.Add(tr);
+            Truck truck = new Truck();
+            truck.TruckNumber = request.TruckNumber;
+            truck.Type = request.Type;
+            truck.Capacity = request.Capacity;
+            truck.ImageId = response.imageId;
+
+            _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return tr;
+            return truck;
 
         }
 
