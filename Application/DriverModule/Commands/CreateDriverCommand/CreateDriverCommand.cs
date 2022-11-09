@@ -6,12 +6,14 @@ using MediatR;
 using Domain.Entities;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using Application.AddressModule.Commands.AddressCreateCommand;
 
 namespace Application.DriverModule.Commands.CreateDriverCommand
 {
     public record CreateDriverCommand : IRequest<Driver> {
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
+        public AddressCreateCommand address { get; init; }
     }
 
     public class CreateDriverCommandHandler : IRequestHandler<CreateDriverCommand, Driver> {
