@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221109043817_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,9 +351,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -375,9 +374,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId")
-                        .IsUnique();
-
-                    b.HasIndex("ImageId")
                         .IsUnique();
 
                     b.ToTable("Containers");
@@ -506,8 +502,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex("ImageId")
-                        .IsUnique();
+                    b.HasIndex("ImageId");
 
                     b.HasIndex("TruckId");
 
@@ -799,6 +794,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<int?>("ImageId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
@@ -812,9 +808,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex("ImageId")
-                        .IsUnique()
-                        .HasFilter("[ImageId] IS NOT NULL");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("ShippingAgents");
                 });
@@ -983,8 +977,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId")
-                        .IsUnique();
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Trucks");
                 });
@@ -1280,13 +1273,7 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("Domain.Entities.Container", "AddressId")
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Image", "Image")
-                        .WithOne("Container")
-                        .HasForeignKey("Domain.Entities.Container", "ImageId");
-
                     b.Navigation("Address");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
@@ -1307,8 +1294,10 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithOne("Driver")
-                        .HasForeignKey("Domain.Entities.Driver", "ImageId");
+                        .WithMany("Drivers")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Truck", "Truck")
                         .WithMany("Drivers")
@@ -1385,8 +1374,11 @@ namespace Infrastructure.Migrations
                         .HasConstraintName("fk_shipping agent_address1");
 
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithOne("ShippingAgent")
-                        .HasForeignKey("Domain.Entities.ShippingAgent", "ImageId");
+                        .WithMany("ShippingAgents")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_shipping agent_image1");
 
                     b.Navigation("Address");
 
@@ -1424,8 +1416,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithOne("Truck")
-                        .HasForeignKey("Domain.Entities.Truck", "ImageId");
+                        .WithMany("Trucks")
+                        .HasForeignKey("ImageId")
+                        .IsRequired()
+                        .HasConstraintName("image");
 
                     b.Navigation("Image");
                 });
@@ -1537,17 +1531,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Image", b =>
                 {
-                    b.Navigation("Container")
-                        .IsRequired();
+                    b.Navigation("Drivers");
 
-                    b.Navigation("Driver")
-                        .IsRequired();
+                    b.Navigation("ShippingAgents");
 
-                    b.Navigation("ShippingAgent")
-                        .IsRequired();
-
-                    b.Navigation("Truck")
-                        .IsRequired();
+                    b.Navigation("Trucks");
                 });
 
             modelBuilder.Entity("Domain.Entities.Operation", b =>

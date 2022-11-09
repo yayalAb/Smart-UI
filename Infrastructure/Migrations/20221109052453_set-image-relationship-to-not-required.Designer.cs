@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221108124149_initial")]
-    partial class initial
+    [Migration("20221109052453_set-image-relationship-to-not-required")]
+    partial class setimagerelationshiptonotrequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("City")
                         .HasMaxLength(45)
@@ -54,7 +57,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("POBOX")
-                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
@@ -71,9 +73,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -135,7 +134,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.BillOfLoading", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ATA")
                         .HasMaxLength(45)
@@ -237,17 +239,16 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PortId");
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE1");
-
                     b.ToTable("BillOfLoadings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -287,10 +288,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ContactPersonId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE2");
-
                     b.ToTable("Companies");
                 });
 
@@ -329,16 +326,16 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
-                        .IsUnique();
-
                     b.ToTable("ContactPeople");
                 });
 
             modelBuilder.Entity("Domain.Entities.Container", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -353,6 +350,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -379,9 +379,8 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("id_UNIQUE1");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.ToTable("Containers");
                 });
@@ -389,7 +388,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BankPermit")
                         .HasMaxLength(45)
@@ -459,17 +461,16 @@ namespace Infrastructure.Migrations
                     b.HasIndex("OperationId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE3");
-
                     b.ToTable("Documentations");
                 });
 
             modelBuilder.Entity("Domain.Entities.Driver", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -507,7 +508,8 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.HasIndex("TruckId");
 
@@ -545,17 +547,16 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OperationId");
 
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("id_UNIQUE2");
-
                     b.ToTable("ECDDocuments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Good", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CBM")
                         .HasMaxLength(45)
@@ -605,10 +606,6 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ContainerId");
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE4");
-
                     b.ToTable("Goods");
                 });
 
@@ -626,7 +623,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image1")
+                    b.Property<byte[]>("ImageData")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -637,10 +634,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("id_UNIQUE3");
 
                     b.ToTable("Images");
                 });
@@ -677,17 +670,16 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE5");
-
                     b.ToTable("Lookups");
                 });
 
             modelBuilder.Entity("Domain.Entities.Operation", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("BillOfLoadingId")
                         .HasColumnType("int");
@@ -738,17 +730,16 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TruckId");
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE6");
-
                     b.ToTable("Operations");
                 });
 
             modelBuilder.Entity("Domain.Entities.Port", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Country")
                         .HasMaxLength(45)
@@ -780,10 +771,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("id_UNIQUE4");
-
                     b.ToTable("Ports");
                 });
 
@@ -814,7 +801,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<int?>("ImageId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
@@ -828,11 +814,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AddressId")
                         .IsUnique();
 
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex(new[] { "Id" }, "id_UNIQUE")
+                    b.HasIndex("ImageId")
                         .IsUnique()
-                        .HasDatabaseName("id_UNIQUE5");
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("ShippingAgents");
                 });
@@ -840,7 +824,10 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ShippingAgentFee", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
@@ -896,17 +883,16 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ShippingAgentId");
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE7");
-
                     b.ToTable("ShippingAgentFees");
                 });
 
             modelBuilder.Entity("Domain.Entities.TerminalPortFee", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
@@ -958,17 +944,16 @@ namespace Infrastructure.Migrations
                     b.HasIndex("OperationId")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Id" }, "Id_UNIQUE")
-                        .IsUnique()
-                        .HasDatabaseName("Id_UNIQUE8");
-
                     b.ToTable("TerminalPortFees");
                 });
 
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<float>("Capacy")
                         .HasColumnType("real");
@@ -1000,7 +985,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.ToTable("Trucks");
                 });
@@ -1296,7 +1282,13 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("Domain.Entities.Container", "AddressId")
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Image", "Image")
+                        .WithOne("Container")
+                        .HasForeignKey("Domain.Entities.Container", "ImageId");
+
                     b.Navigation("Address");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
@@ -1317,10 +1309,8 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithMany("Drivers")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne("Driver")
+                        .HasForeignKey("Domain.Entities.Driver", "ImageId");
 
                     b.HasOne("Domain.Entities.Truck", "Truck")
                         .WithMany("Drivers")
@@ -1397,11 +1387,8 @@ namespace Infrastructure.Migrations
                         .HasConstraintName("fk_shipping agent_address1");
 
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithMany("ShippingAgents")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_shipping agent_image1");
+                        .WithOne("ShippingAgent")
+                        .HasForeignKey("Domain.Entities.ShippingAgent", "ImageId");
 
                     b.Navigation("Address");
 
@@ -1439,10 +1426,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.HasOne("Domain.Entities.Image", "Image")
-                        .WithMany("Trucks")
-                        .HasForeignKey("ImageId")
-                        .IsRequired()
-                        .HasConstraintName("image");
+                        .WithOne("Truck")
+                        .HasForeignKey("Domain.Entities.Truck", "ImageId");
 
                     b.Navigation("Image");
                 });
@@ -1554,11 +1539,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Image", b =>
                 {
-                    b.Navigation("Drivers");
+                    b.Navigation("Container")
+                        .IsRequired();
 
-                    b.Navigation("ShippingAgents");
+                    b.Navigation("Driver")
+                        .IsRequired();
 
-                    b.Navigation("Trucks");
+                    b.Navigation("ShippingAgent")
+                        .IsRequired();
+
+                    b.Navigation("Truck")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Operation", b =>
