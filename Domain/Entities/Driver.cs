@@ -6,8 +6,6 @@ public class Driver : BaseAuditableEntity {
     public Driver() {
         Operations = new HashSet<Operation>();
     }
-
-    public int Id { get; set; }
     public string Fullname { get; set; } = null!;
     public string LicenceNumber { get; set; } = null!;
     public int AddressId { get; set; }

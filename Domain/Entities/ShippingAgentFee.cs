@@ -3,7 +3,6 @@ namespace Domain.Entities;
 
 public class ShippingAgentFee : BaseAuditableEntity {
 
-    public int Id { get; set; }
     public string Type { get; set; } = null!;
     public DateTime PaymentDate { get; set; }
     public string PaymentMethod { get; set; } = null!;

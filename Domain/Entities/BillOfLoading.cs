@@ -3,7 +3,6 @@ namespace Domain.Entities;
 
 public class BillOfLoading : BaseAuditableEntity {
     
-    public int Id { get; set; }
     public string? CustomerName { get; set; }
     public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }

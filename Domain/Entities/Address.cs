@@ -10,7 +10,7 @@ public class Address : BaseAuditableEntity
     public string? City { get; set; }
     public string? Subcity { get; set; }
     public string? Country { get; set; }
-    public string POBOX { get; set; }
+    public string? POBOX { get; set; }
 
     public virtual Company Company { get; set; } = null!;
     public virtual Container Container { get; set; } = null!;

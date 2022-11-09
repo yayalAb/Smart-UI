@@ -7,8 +7,6 @@ public class Company : BaseAuditableEntity {
     {
         Operations = new HashSet<Operation>();
     }
-
-    public int Id { get; set; }
     public string? Name { get; set; }
     public string? TinNumber { get; set; }
     public string? CodeNIF { get; set; }

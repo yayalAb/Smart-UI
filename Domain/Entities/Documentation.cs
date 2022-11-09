@@ -3,7 +3,6 @@ namespace Domain.Entities;
 
 public class Documentation : BaseAuditableEntity
 {
-    public int Id { get; set; }
     public int OperationId { get; set; }
     public string Type { get; set; } = null!;
     public DateTime Date { get; set; }

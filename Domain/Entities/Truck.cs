@@ -8,7 +8,6 @@ public class Truck : BaseAuditableEntity {
         Drivers = new HashSet<Driver>();
     }
 
-    public int Id { get; set; }
     public string TruckNumber { get; set; } = null!;
     public string Type { get; set; } = null!;
     public float Capacy { get; set; }
