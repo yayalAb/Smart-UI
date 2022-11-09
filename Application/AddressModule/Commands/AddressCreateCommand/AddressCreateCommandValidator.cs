@@ -25,7 +25,7 @@ namespace Application.AddressModule.Commands.AddressCreateCommand {
             RuleFor(u => u.Email)
                 .NotEmpty()
                 .NotNull()
-                .EmailAddress();
+                .EmailAddress().WithMessage("email is not in the correct format");
             RuleFor(u => u.Phone)
                 .NotNull()
                 .NotEmpty();

@@ -38,8 +38,12 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
         public async Task<Company> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken){
             
-            // var comp = _context.companies.Include(c => c.companyAddress).Include(c => c.contactPerson).Find(request.Id);
-            var comp = _context.Companies.Find(request.Id);
+            var comp = _context.Companies
+                        .Include(c => c.Address)
+                        .Include(c => c.ContactPerson)
+                        .Where(c => c.Id == request.Id)
+                        .FirstOrDefault();
+            // var comp = _context.Companies.Find(request.Id);
 
             if(comp == null){
                 throw new Exception("Company not found!");

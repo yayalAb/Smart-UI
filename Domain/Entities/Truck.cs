@@ -11,7 +11,7 @@ public class Truck : BaseAuditableEntity {
     public int Id { get; set; }
     public string TruckNumber { get; set; } = null!;
     public string Type { get; set; } = null!;
-    public float Capacy { get; set; }
+    public float Capacity { get; set; }
     public int ImageId { get; set; }
     
     //has one

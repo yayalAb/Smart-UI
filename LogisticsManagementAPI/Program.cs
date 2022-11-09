@@ -14,8 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 var Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
-builder.Logging.ClearProviders();
+// builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(Logger);  
+
+// builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
+//     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 //-----//
 
