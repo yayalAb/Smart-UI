@@ -12,6 +12,7 @@ public class TerminalPortFeeConfiguration : IEntityTypeConfiguration<TerminalPor
             .HasMaxLength(45);
 
         entity.Property(e => e.Currency)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.Description)
@@ -20,17 +21,21 @@ public class TerminalPortFeeConfiguration : IEntityTypeConfiguration<TerminalPor
         entity.Property(e => e.OperationId).HasColumnName("operation_Id");
 
         entity.Property(e => e.PaymentDate)
+            .IsRequired()
             .HasColumnType("datetime");
 
         entity.Property(e => e.PaymentMethod)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.Type)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.HasOne(d => d.Operation)
-            .WithOne(p => p.TerminalPortFee)
-            .HasForeignKey<TerminalPortFee>(d => d.OperationId);
+            .WithMany(p => p.TerminalPortFees)
+            .HasForeignKey(d => d.OperationId)
+            .OnDelete(DeleteBehavior.ClientCascade);
         
     }
 }

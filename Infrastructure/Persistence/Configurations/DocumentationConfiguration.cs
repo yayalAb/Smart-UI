@@ -45,8 +45,8 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
             .HasMaxLength(45);
 
         entity.HasOne(d => d.Operation)
-            .WithOne(p => p.Documentaion)
-            .HasForeignKey<Documentation>(d => d.OperationId)
+            .WithMany(p => p.Documentaions)
+            .HasForeignKey(d => d.OperationId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
     }

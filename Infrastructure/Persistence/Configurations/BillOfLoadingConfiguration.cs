@@ -15,15 +15,18 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
             .HasMaxLength(45);
 
         entity.Property(e => e.BillNumber)
+            .IsRequired(true)   
             .HasMaxLength(45);
 
         entity.Property(e => e.Consignee)
             .HasMaxLength(45);
 
         entity.Property(e => e.CustomerName)
+            .IsRequired(true)
             .HasMaxLength(45);
 
         entity.Property(e => e.DestinationType)
+            .IsRequired(true)    
             .HasMaxLength(45);
 
         entity.Property(e => e.EstimatedTimeOfArrival)
@@ -36,6 +39,7 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
             .HasMaxLength(45);
 
         entity.Property(e => e.GoodsDescription)
+            .IsRequired(true)   
             .HasMaxLength(255);
 
         entity.Property(e => e.GrossWeight).HasColumnName("grossWeight");
@@ -44,34 +48,35 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
             .HasMaxLength(45);
 
         entity.Property(e => e.NotifyParty)
+            .IsRequired(true)    
             .HasMaxLength(45);
-
-        entity.Property(e => e.ShippingAgent)
-            .HasMaxLength(45);
-
         entity.Property(e => e.ShippingLine)
+            .IsRequired(true)   
             .HasMaxLength(45);
-
-        entity.Property(e => e.TruckNumber)
-            .HasMaxLength(45);
-
         entity.Property(e => e.TypeOfMerchandise)
+            .IsRequired(true)  
             .HasMaxLength(45);
 
         entity.Property(e => e.VoyageNumber)
+            .IsRequired(true)   
             .HasMaxLength(45);
 
         entity.HasOne(d => d.Container)
             .WithMany(p => p.BillOfLoadings)
             .HasForeignKey(d => d.ContainerId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("fk_Bill of Loading_container1");
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.HasOne(d => d.Port)
             .WithMany(p => p.BillOfLoadings)
-            .HasForeignKey(d => d.PortId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("fk_Bill of Loading_port1");
+            .HasForeignKey(d => d.PortOfLoadingId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.HasOne(b => b.BillOfLoadingDocument)
+            .WithOne(d => d.BillOfLoading)
+            .HasForeignKey<BillOfLoading>(b => b.BillOfLoadingDocumentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+          
 
         // entity.HasOne(d => d.Operation)
         //     .WithOne(p => p.BillOfLoading)

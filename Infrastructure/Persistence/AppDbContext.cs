@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence
         public virtual DbSet<Container> Containers { get; set; } = null!;
         public virtual DbSet<Documentation> Documentations { get; set; } = null!;
         public virtual DbSet<Driver> Drivers { get; set; } = null!;
-        public virtual DbSet<ECDDocument> ECDDocuments { get; set; } = null!;
+        public virtual DbSet<Document> Documents { get; set; } = null!;
         public virtual DbSet<Good> Goods { get; set; } = null!;
         public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Lookup> Lookups { get; set; } = null!;

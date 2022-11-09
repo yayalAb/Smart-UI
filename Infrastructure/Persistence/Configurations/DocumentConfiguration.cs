@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class ECDDocumentConfiguration : IEntityTypeConfiguration<ECDDocument> {
+public class DocumentConfiguration : IEntityTypeConfiguration<Document> {
     
-    public void Configure(EntityTypeBuilder<ECDDocument> entity) {
+    public void Configure(EntityTypeBuilder<Document> entity) {
 
         entity.HasOne(d => d.Operation)
-            .WithMany(p => p.ECDDocuments)
-            .HasForeignKey(d => d.OperationId)
+            .WithOne(p => p.ECDDocument)
+            .HasForeignKey<Operation>(d => d.ECDDocumentId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_ECD Document_operation1");
+        
 
     }
 }

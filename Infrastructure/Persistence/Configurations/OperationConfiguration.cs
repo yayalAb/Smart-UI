@@ -9,12 +9,15 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
     public void Configure(EntityTypeBuilder<Operation> entity) {
 
         entity.Property(e => e.OpenedDate)
+            .IsRequired(true)   
             .HasColumnType("datetime");
 
         entity.Property(e => e.OperationNumber)
+            .IsRequired(true)
             .HasMaxLength(45);
 
         entity.Property(e => e.Status)
+            .IsRequired(true    ) 
             .HasMaxLength(45);
 
         entity.Property(e => e.TruckId).HasColumnName("truck_id");
@@ -39,6 +42,9 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.TruckId)
             .HasConstraintName("fk_operation_truck1");
+        entity.HasOne(o => o.ECDDocument)
+            .WithOne(d => d.Operation)
+            .HasForeignKey<Operation>(o => o.ECDDocumentId);
 
         // entity.HasOne(d => d.TerminalPortFee)
         //     .WithOne(p => p.Operation)
