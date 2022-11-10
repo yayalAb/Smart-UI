@@ -11,28 +11,35 @@ public class ShippingAgentFeeConfiguration : IEntityTypeConfiguration<ShippingAg
             .HasMaxLength(45);
 
         entity.Property(e => e.Currency)
+            .IsRequired()   
             .HasMaxLength(45);
 
         entity.Property(e => e.Description)
             .HasMaxLength(100);
 
         entity.Property(e => e.PaymentDate)
+            .IsRequired()    
             .HasColumnType("datetime");
 
         entity.Property(e => e.PaymentMethod)
+            .IsRequired()  
             .HasMaxLength(45);
 
         entity.Property(e => e.Type)
+            .IsRequired()
             .HasMaxLength(45);
 
+        entity.Property(e => e.Amount)
+            .IsRequired();
+
         entity.HasOne(d => d.Operation)
-            .WithOne(p => p.ShippingAgentFee)
-            .HasForeignKey<ShippingAgentFee>(d => d.OperationId)
+            .WithMany(p => p.ShippingAgentFees)
+            .HasForeignKey(d => d.OperationId)
             .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.HasOne(d => d.Agent)
             .WithMany(p => p.AgentFees)
             .HasForeignKey(d => d.ShippingAgentId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

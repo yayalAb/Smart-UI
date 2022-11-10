@@ -12,6 +12,7 @@ public class PortConfiguration : IEntityTypeConfiguration<Port> {
             .HasMaxLength(45);
 
         entity.Property(e => e.Name)
+            .IsRequired()   
             .HasMaxLength(45);
 
         entity.Property(e => e.Region)

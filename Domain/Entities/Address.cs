@@ -14,7 +14,6 @@ public class Address : BaseAuditableEntity
     public string? POBOX { get; set; }
 
     public virtual Company Company { get; set; } = null!;
-    public virtual Container Container { get; set; } = null!;
     public virtual Driver Driver { get; set; } = null!;
     public virtual ShippingAgent ShippingAgent { set; get; } = null!;
     

@@ -6,7 +6,7 @@ public class Port : BaseAuditableEntity {
     public Port() {
         BillOfLoadings = new HashSet<BillOfLoading>();
     }
-    public string? Name { get; set; }
+    public string Name { get; set; }
     public string? Country { get; set; }
     public string? Region { get; set; }
     public string? Vollume { get; set; }

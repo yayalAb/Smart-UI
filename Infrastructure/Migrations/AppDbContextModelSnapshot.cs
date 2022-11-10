@@ -145,8 +145,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("BillNumber")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
+
+                    b.Property<int?>("BillOfLoadingDocumentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Consignee")
                         .HasMaxLength(45)
@@ -162,10 +166,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerName")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("DestinationType")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
@@ -181,6 +187,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("GoodsDescription")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -199,44 +206,49 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("NotifyParty")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
-                    b.Property<int>("PortId")
+                    b.Property<int>("PortOfLoadingId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PortOfLoading")
-                        .HasColumnType("int");
-
-                    b.Property<float?>("Quantity")
+                    b.Property<float>("Quantity")
                         .HasColumnType("real");
 
-                    b.Property<string>("ShippingAgent")
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                    b.Property<int>("ShippingAgentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShippingLine")
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
-
-                    b.Property<string>("TruckNumber")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("TypeOfMerchandise")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("VoyageNumber")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BillOfLoadingDocumentId")
+                        .IsUnique()
+                        .HasFilter("[BillOfLoadingDocumentId] IS NOT NULL");
+
                     b.HasIndex("ContainerId");
 
-                    b.HasIndex("PortId");
+                    b.HasIndex("PortOfLoadingId");
 
+<<<<<<< HEAD
+=======
+                    b.HasIndex("ShippingAgentId");
+
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.ToTable("BillOfLoadings");
                 });
 
@@ -335,9 +347,12 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+<<<<<<< HEAD
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
+=======
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.Property<string>("ContianerNumber")
                         .IsRequired()
                         .HasMaxLength(45)
@@ -349,7 +364,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+<<<<<<< HEAD
                     b.Property<int>("ImageId")
+=======
+                    b.Property<int?>("ImageId")
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
@@ -374,18 +393,60 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
                     b.HasIndex("AddressId")
                         .IsUnique();
 
                     b.HasIndex("ImageId")
                         .IsUnique();
+=======
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 
                     b.ToTable("Containers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.Property<int>("Id")
+<<<<<<< HEAD
+=======
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("DocumentData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
                 {
                     b.Property<int>("Id")
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -456,8 +517,12 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
                     b.HasIndex("OperationId")
                         .IsUnique();
+=======
+                    b.HasIndex("OperationId");
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 
                     b.ToTable("Documentations");
                 });
@@ -515,6 +580,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Drivers");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Domain.Entities.ECDDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -549,6 +615,8 @@ namespace Infrastructure.Migrations
                     b.ToTable("ECDDocuments");
                 });
 
+=======
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
             modelBuilder.Entity("Domain.Entities.Good", b =>
                 {
                     b.Property<int>("Id")
@@ -695,6 +763,9 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ECDDocumentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -727,6 +798,13 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("DriverId");
 
+<<<<<<< HEAD
+=======
+                    b.HasIndex("ECDDocumentId")
+                        .IsUnique()
+                        .HasFilter("[ECDDocumentId] IS NOT NULL");
+
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.HasIndex("TruckId");
 
                     b.ToTable("Operations");
@@ -757,6 +835,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
@@ -877,8 +956,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OperationId")
-                        .IsUnique();
+                    b.HasIndex("OperationId");
 
                     b.HasIndex("ShippingAgentId");
 
@@ -940,8 +1018,12 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
                     b.HasIndex("OperationId")
                         .IsUnique();
+=======
+                    b.HasIndex("OperationId");
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 
                     b.ToTable("TerminalPortFees");
                 });
@@ -1240,21 +1322,33 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.BillOfLoading", b =>
                 {
+                    b.HasOne("Domain.Entities.Document", "BillOfLoadingDocument")
+                        .WithOne("BillOfLoading")
+                        .HasForeignKey("Domain.Entities.BillOfLoading", "BillOfLoadingDocumentId");
+
                     b.HasOne("Domain.Entities.Container", "Container")
                         .WithMany("BillOfLoadings")
                         .HasForeignKey("ContainerId")
-                        .IsRequired()
-                        .HasConstraintName("fk_Bill of Loading_container1");
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Port", "Port")
                         .WithMany("BillOfLoadings")
-                        .HasForeignKey("PortId")
-                        .IsRequired()
-                        .HasConstraintName("fk_Bill of Loading_port1");
+                        .HasForeignKey("PortOfLoadingId")
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ShippingAgent", "ShippingAgent")
+                        .WithMany()
+                        .HasForeignKey("ShippingAgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BillOfLoadingDocument");
 
                     b.Navigation("Container");
 
                     b.Navigation("Port");
+
+                    b.Navigation("ShippingAgent");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>
@@ -1276,16 +1370,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Container", b =>
                 {
+<<<<<<< HEAD
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Container")
                         .HasForeignKey("Domain.Entities.Container", "AddressId")
                         .IsRequired();
 
+=======
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.HasOne("Domain.Entities.Image", "Image")
                         .WithOne("Container")
                         .HasForeignKey("Domain.Entities.Container", "ImageId");
-
-                    b.Navigation("Address");
 
                     b.Navigation("Image");
                 });
@@ -1293,8 +1388,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
                 {
                     b.HasOne("Domain.Entities.Operation", "Operation")
-                        .WithOne("Documentaion")
-                        .HasForeignKey("Domain.Entities.Documentation", "OperationId")
+                        .WithMany("Documentaions")
+                        .HasForeignKey("OperationId")
                         .IsRequired();
 
                     b.Navigation("Operation");
@@ -1321,17 +1416,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Image");
 
                     b.Navigation("Truck");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ECDDocument", b =>
-                {
-                    b.HasOne("Domain.Entities.Operation", "Operation")
-                        .WithMany("ECDDocuments")
-                        .HasForeignKey("OperationId")
-                        .IsRequired()
-                        .HasConstraintName("fk_ECD Document_operation1");
-
-                    b.Navigation("Operation");
                 });
 
             modelBuilder.Entity("Domain.Entities.Good", b =>
@@ -1363,6 +1447,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("DriverId")
                         .HasConstraintName("fk_operation_driver1");
 
+                    b.HasOne("Domain.Entities.Document", "ECDDocument")
+                        .WithOne("Operation")
+                        .HasForeignKey("Domain.Entities.Operation", "ECDDocumentId")
+                        .HasConstraintName("fk_ECD Document_operation1");
+
                     b.HasOne("Domain.Entities.Truck", "Truck")
                         .WithMany("Operations")
                         .HasForeignKey("TruckId")
@@ -1373,6 +1462,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Driver");
+
+                    b.Navigation("ECDDocument");
 
                     b.Navigation("Truck");
                 });
@@ -1397,13 +1488,14 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.ShippingAgentFee", b =>
                 {
                     b.HasOne("Domain.Entities.Operation", "Operation")
-                        .WithOne("ShippingAgentFee")
-                        .HasForeignKey("Domain.Entities.ShippingAgentFee", "OperationId")
+                        .WithMany("ShippingAgentFees")
+                        .HasForeignKey("OperationId")
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.ShippingAgent", "Agent")
                         .WithMany("AgentFees")
                         .HasForeignKey("ShippingAgentId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Agent");
@@ -1414,9 +1506,9 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.TerminalPortFee", b =>
                 {
                     b.HasOne("Domain.Entities.Operation", "Operation")
-                        .WithOne("TerminalPortFee")
-                        .HasForeignKey("Domain.Entities.TerminalPortFee", "OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("TerminalPortFees")
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Operation");
@@ -1497,9 +1589,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Company")
                         .IsRequired();
 
-                    b.Navigation("Container")
-                        .IsRequired();
-
                     b.Navigation("Driver")
                         .IsRequired();
 
@@ -1531,6 +1620,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("Goods");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.Navigation("BillOfLoading")
+                        .IsRequired();
+
+                    b.Navigation("Operation")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Driver", b =>
                 {
                     b.Navigation("Operations");
@@ -1553,16 +1651,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Operation", b =>
                 {
-                    b.Navigation("Documentaion")
-                        .IsRequired();
+                    b.Navigation("Documentaions");
 
-                    b.Navigation("ECDDocuments");
+                    b.Navigation("ShippingAgentFees");
 
-                    b.Navigation("ShippingAgentFee")
-                        .IsRequired();
-
-                    b.Navigation("TerminalPortFee")
-                        .IsRequired();
+                    b.Navigation("TerminalPortFees");
                 });
 
             modelBuilder.Entity("Domain.Entities.Port", b =>

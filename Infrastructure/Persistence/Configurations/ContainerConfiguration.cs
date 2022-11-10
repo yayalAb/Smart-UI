@@ -19,10 +19,6 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.Property(e => e.Owner)
             .HasMaxLength(45);
 
-        entity.HasOne(d => d.Address)
-            .WithOne(p => p.Container)
-            .HasForeignKey<Container>(d => d.AddressId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
         
     }
 }

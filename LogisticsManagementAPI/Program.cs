@@ -14,8 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 var Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
+<<<<<<< HEAD
 // builder.Logging.ClearProviders();
 //builder.Logging.ClearProviders();
+=======
+
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 builder.Logging.AddSerilog(Logger);  
 
 // builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
