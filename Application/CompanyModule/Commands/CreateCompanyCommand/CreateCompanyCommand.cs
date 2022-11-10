@@ -10,9 +10,9 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 
 public record CreateCompanyCommand: IRequest<Company> {
 
-    public string? Name { get; init; }
-    public string? TinNumber { get; init; }
-    public string? CodeNIF { get; init; }
+    public string Name { get; init; }
+    public string TinNumber { get; init; }
+    public string CodeNIF { get; init; }
     public ContactPersonCreateCommand contactPerson { get; init; }
     public AddressCreateCommand address { get; init; }
 
