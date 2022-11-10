@@ -61,13 +61,13 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
 
                 _context.Drivers.Add(new_driver);
                 await _context.SaveChangesAsync(cancellationToken);
-                transaction.CommitAsync();
+                await transaction.CommitAsync();
 
                 return new_driver;
 
-            }catch(Exception ex){
-                transaction.RollbackAsync();
-                throw ex;
+            }catch(Exception ){
+               await transaction.RollbackAsync();
+                throw ;
             }
 
         }

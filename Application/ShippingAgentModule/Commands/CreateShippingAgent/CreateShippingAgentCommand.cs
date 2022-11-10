@@ -35,16 +35,16 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
            using var transaction = _context.database.BeginTransaction();
             try
             {
-                var imageId = 0; 
+                byte[]? imageByte = null; 
                 /// save image to db and retrive id
                  if(request.ImageFile != null)
                 {
-                    var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+                    var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                     if (!response.result.Succeeded)
                     {
                         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
-                     imageId = response.Id;
+                     imageByte = response.byteData;
                 }
                 /// save address to db 
                 Address address = _mapper.Map<Address>(request.Address);    
@@ -57,7 +57,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                     FullName = request.FullName,
                     CompanyName = request.CompanyName,
                     AddressId = address.Id,
-                    ImageId = imageId!=0 ? imageId : null, 
+                    Image = imageByte 
                 };
                 await _context.ShippingAgents.AddAsync(shippingAgent);
                 await _context.SaveChangesAsync(cancellationToken);

@@ -2,7 +2,7 @@
 
 namespace Domain.Enums
 {
-    public enum OperationStatus
+    public enum Status
     {
         Opened,
         TerminalPortFeePaid,

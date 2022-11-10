@@ -17,9 +17,7 @@ namespace Application.Common.Interfaces
         DbSet<Container> Containers { get; set; }
         DbSet<Documentation> Documentations { get; set; }
         DbSet<Driver> Drivers { get; set; }
-        DbSet<Document> Documents { get; set; }
         DbSet<Good> Goods { get; set; }
-        DbSet<Image> Images { get; set; }
         DbSet<Lookup> Lookups { get; set; }
         DbSet<Operation> Operations { get; set; }
         DbSet<Port> Ports { get; set; }

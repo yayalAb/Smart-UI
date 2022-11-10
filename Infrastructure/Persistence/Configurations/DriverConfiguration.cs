@@ -8,9 +8,11 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
     public void Configure(EntityTypeBuilder<Driver> entity) {
 
         entity.Property(e => e.Fullname)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.LicenceNumber)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.HasOne(d => d.Address)

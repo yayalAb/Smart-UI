@@ -19,12 +19,12 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
         entity.HasOne(d => d.ContactPerson)
             .WithOne(p => p.Company)
             .HasForeignKey<Company>(d => d.ContactPersonId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.ClientCascade);
         
         entity.HasOne(d => d.Address)
             .WithOne(p => p.Company)
             .HasForeignKey<Company>(d => d.AddressId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.ClientCascade);
         
     }
 

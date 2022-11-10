@@ -11,6 +11,9 @@ public class TerminalPortFeeConfiguration : IEntityTypeConfiguration<TerminalPor
         entity.Property(e => e.BankCode)
             .HasMaxLength(45);
 
+        entity.Property(e => e.Amount)
+            .IsRequired();
+
         entity.Property(e => e.Currency)
             .IsRequired()
             .HasMaxLength(45);

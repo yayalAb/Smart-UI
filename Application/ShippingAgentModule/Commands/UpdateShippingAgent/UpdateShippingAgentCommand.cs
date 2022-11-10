@@ -14,7 +14,6 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         public int Id { get; set; }
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
-        public int ImageId { get; set; }
         public int AddressId { get; set; }
         public IFormFile? ImageFile { get; set; }
         public AddressDto Address { get; set; }
@@ -37,14 +36,24 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
             using var transaction = _context.database.BeginTransaction();
             try
             {
+                /// check if shipping agent exists
+                var oldShippingAgent = await _context.ShippingAgents.FindAsync(request.Id);
+                if (oldShippingAgent == null)
+                {
+                    throw new NotFoundException("shippingAgnet", new { Id = request.Id });
+                }
+
+
                 /// update image 
+                byte[]? newImage = oldShippingAgent.Image;
                 if (request.ImageFile != null)
                 {
-                    var response = await _fileUploadService.updateFile(request.ImageFile, FileType.Image,request.ImageId);
-                    if (!response.Succeeded)
+                    var response = await _fileUploadService.GetFileByte(request.ImageFile , FileType.Image);
+                    if (!response.result.Succeeded)
                     {
-                        throw new CustomBadRequestException(String.Join(" , ", response.Errors));
+                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
+                    newImage = response.byteData;
                    
                 }
                 /// update address  
@@ -66,13 +75,10 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
                 await _context.SaveChangesAsync(cancellationToken);
 
                 // update shipping agent 
-                var oldShippingAgent = await _context.ShippingAgents.FindAsync(request.Id);
-                if (oldShippingAgent == null)
-                {
-                    throw new NotFoundException("shippingAgnet", new { Id = request.Id });
-                }
+              
                 oldShippingAgent.FullName = request.FullName;
-                oldShippingAgent.CompanyName = request.CompanyName; 
+                oldShippingAgent.CompanyName = request.CompanyName;
+                oldShippingAgent.Image = newImage;
                  _context.ShippingAgents.Update(oldShippingAgent);
                 await _context.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync();

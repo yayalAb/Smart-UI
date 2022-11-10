@@ -12,6 +12,7 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
             .HasMaxLength(45);
 
         entity.Property(e => e.Name)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.Phone)

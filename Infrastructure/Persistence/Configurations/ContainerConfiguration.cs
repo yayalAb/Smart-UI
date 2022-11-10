@@ -8,9 +8,12 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
     public void Configure(EntityTypeBuilder<Container> entity) {
 
         entity.Property(e => e.ContianerNumber)
+            .IsRequired()
             .HasMaxLength(45);
+         entity.Property(e => e.Size)
+            .IsRequired(); ;
 
-        entity.Property(e => e.Loacation)
+        entity.Property(e => e.Location)
             .HasMaxLength(45);
 
         entity.Property(e => e.Owner)

@@ -23,11 +23,10 @@ public class BillOfLoading : BaseAuditableEntity {
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string VoyageNumber { get; set; }
     public string TypeOfMerchandise { get; set; }
-    public int? BillOfLoadingDocumentId { get; set; }
+    public byte[]? BillOfLoadingDocument { get; set; }
     public virtual Container Container { get; set; } = null!;
     public virtual Port Port { get; set; } = null!;
-    public virtual Operation Operation { get; set; } = null!;
-    public virtual Document BillOfLoadingDocument { get; set; } = null!;    
+    public virtual Operation Operation { get; set; } = null!; 
     public virtual ShippingAgent ShippingAgent { get; set; } = null!;   
 
 }

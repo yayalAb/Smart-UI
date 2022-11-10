@@ -32,16 +32,16 @@ namespace Application.ContainerModule.Commands.CreateContainer
             using var transaction = _context.database.BeginTransaction();
             try
             {
-                var imageId = 0;
+                byte[]? imageData = null;
                 /// save image to db and retrive id
                 if (request.ImageFile != null)
                 {
-                    var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+                    var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                     if (!response.result.Succeeded)
                     {
                         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
-                    imageId = response.Id;
+                    imageData = response.byteData;
                 }
 
                 Container newContainer = new Container()
@@ -49,9 +49,9 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     ContianerNumber = request.ContianerNumber,
                     Size = request.Size,
                     Owner = request.Owner,
-                    Loacation = request.Loacation,
+                    Location = request.Loacation,
                     ManufacturedDate = request.ManufacturedDate,
-                    ImageId = imageId != 0 ? imageId : null,    
+                    Image = imageData,    
                 };
 
                 await _context.Containers.AddAsync(newContainer);

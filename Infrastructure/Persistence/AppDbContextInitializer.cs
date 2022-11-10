@@ -104,7 +104,7 @@ namespace Infrastructure.Persistence
                     await _context.AddRangeAsync(defaultRoles);
                     _logger.LogInformation("successfully added roles for the default user");
 
-                }catch(Exception e)
+                }catch(Exception)
                 {
                     _logger.LogError("could not add roles ");
                 }

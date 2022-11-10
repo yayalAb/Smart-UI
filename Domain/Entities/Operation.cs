@@ -10,7 +10,7 @@ public class Operation : BaseAuditableEntity {
     public int? TruckId { get; set; }
     public int? CompanyId { get; set; }
     public int? DriverId { get; set; }
-    public int? ECDDocumentId { get; set; }
+    public byte[]? ECDDocument { get; set; }
     
     public virtual BillOfLoading BillOfLoading { get; set; } = null!;
     public virtual Company? Company { get; set; }
@@ -18,7 +18,8 @@ public class Operation : BaseAuditableEntity {
     public virtual Truck? Truck { get; set; }
     public virtual ICollection<TerminalPortFee>? TerminalPortFees { get; set; } 
     public virtual ICollection<ShippingAgentFee>? ShippingAgentFees { get; set; }
-    public virtual Document? ECDDocument { get; set; }
     public virtual ICollection<Documentation>? Documentaions { get; set; }
+    public virtual ICollection<Good>? Goods { get; set; }
+    public virtual ICollection<OperationStatus>? OperationStatus { get; set; }
 
 }

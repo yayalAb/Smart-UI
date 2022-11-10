@@ -27,7 +27,7 @@ namespace Application.OperationModule.Commands.CreateOperation
                 OperationNumber = request.OperationNumber,
                 OpenedDate = request.OpenedDate,
                 BillOfLoadingId = request.BillOfLoadingId,
-                Status = OperationStatus.Opened.ToString()
+                Status = Status.Opened.ToString()
             };
             await _context.Operations.AddAsync(newOperation);
             await _context.SaveChangesAsync(cancellationToken);

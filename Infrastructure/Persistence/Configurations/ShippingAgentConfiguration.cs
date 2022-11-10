@@ -11,6 +11,7 @@ public class ShippingAgentConfiguration : IEntityTypeConfiguration<ShippingAgent
             .ValueGeneratedOnAdd();
 
         entity.Property(e => e.FullName)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.CompanyName)
@@ -19,8 +20,7 @@ public class ShippingAgentConfiguration : IEntityTypeConfiguration<ShippingAgent
         entity.HasOne(d => d.Address)
             .WithOne(p => p.ShippingAgent)
             .HasForeignKey<ShippingAgent>(d => d.AddressId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("fk_shipping agent_address1");
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }
