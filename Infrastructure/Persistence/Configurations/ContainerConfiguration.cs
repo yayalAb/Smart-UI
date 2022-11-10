@@ -7,6 +7,9 @@ namespace Infrastructure.Persistence.Configurations;
 public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
     public void Configure(EntityTypeBuilder<Container> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.ContianerNumber)
             .IsRequired()
             .HasMaxLength(45);

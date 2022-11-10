@@ -1,10 +1,14 @@
 using FluentValidation;
 
-namespace Application.TruckModule.Commands.CreateTruckCommand {
+namespace Application.TruckModule.Commands.UpdateTruckCommand {
 
-    public class CreateTruckCommandValidator : AbstractValidator<CreateTruckCommand> {
+    public class UpdateTruckCommandValidator : AbstractValidator<UpdateTruckCommand> {
         
-        public CreateTruckCommandValidator(){
+        public UpdateTruckCommandValidator(){
+            RuleFor(u => u.Id)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("truck id is not in the correct format");
             RuleFor(u => u.TruckNumber)
                 .NotNull()
                 .NotEmpty()

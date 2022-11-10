@@ -10,6 +10,9 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.Property(e => e.Type)
             .IsRequired();
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.BankPermit)
             .HasMaxLength(45);
 

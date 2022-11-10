@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.DriverModule.Commands.CreateDriverCommand;
 // using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.DriverModule.Commands.UpdateDriverCommand;
+using Application.DriverModule.Commands.ChangeDriverImageCommand;
 
 namespace WebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace WebApi.Controllers
     {
         
         [HttpPost]
-        public async Task<ActionResult> create([FromBody] CreateDriverCommand command) {
+        public async Task<ActionResult> create([FromForm] CreateDriverCommand command) {
 
             try{
                 var response = await Mediator.Send(command);
@@ -36,6 +37,17 @@ namespace WebApi.Controllers
                 return NotFound(ex.Message);
             }
 
+        }
+
+        [HttpPut]
+        [Route("change_image")]
+        public async Task<ActionResult> changeImage([FromForm] ChangeDriverImage command){
+            try{
+                var response = await Mediator.Send(command);
+                return Ok(response);
+            }catch(Exception ex) {
+                return NotFound(ex.Message);
+            }
         }
 
     }

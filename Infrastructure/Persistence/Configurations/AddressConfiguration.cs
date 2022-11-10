@@ -7,6 +7,9 @@ namespace Infrastructure.Persistence.Configurations;
 public class AddressConfiguration : IEntityTypeConfiguration<Address> {
 
     public void Configure(EntityTypeBuilder<Address> entity) {
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.City)
             .HasMaxLength(45);
 

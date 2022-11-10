@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Entities;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyModule.Queries.GetCompanyQuery
 {
@@ -33,7 +30,7 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
 
         public async Task<Company> Handle(GetCompanyQuery request, CancellationToken cancellationToken) {
             
-            var company = await _context.Companies.FindAsync(request.Id);
+            var company = await _context.Companies.Include(c => c.Address).Include(c => c.ContactPerson).Where(c => c.Id == request.Id).FirstOrDefaultAsync();
             if(company == null){
                 throw new Exception("company not found!");
             }

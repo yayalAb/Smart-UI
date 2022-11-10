@@ -240,8 +240,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PortOfLoadingId");
 
+<<<<<<< HEAD
+=======
                     b.HasIndex("ShippingAgentId");
 
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.ToTable("BillOfLoadings");
                 });
 
@@ -340,6 +343,12 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+<<<<<<< HEAD
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+=======
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                     b.Property<string>("ContianerNumber")
                         .IsRequired()
                         .HasMaxLength(45)
@@ -382,6 +391,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
                 {
                     b.Property<int>("Id")
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -452,7 +462,12 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
+                    b.HasIndex("OperationId")
+                        .IsUnique();
+=======
                     b.HasIndex("OperationId");
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 
                     b.ToTable("Documentations");
                 });
@@ -507,6 +522,43 @@ namespace Infrastructure.Migrations
                     b.ToTable("Drivers");
                 });
 
+<<<<<<< HEAD
+            modelBuilder.Entity("Domain.Entities.ECDDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Document")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OperationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationId");
+
+                    b.ToTable("ECDDocuments");
+                });
+
+=======
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
             modelBuilder.Entity("Domain.Entities.Good", b =>
                 {
                     b.Property<int>("Id")
@@ -916,7 +968,12 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+<<<<<<< HEAD
+                    b.HasIndex("OperationId")
+                        .IsUnique();
+=======
                     b.HasIndex("OperationId");
+>>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
 
                     b.ToTable("TerminalPortFees");
                 });

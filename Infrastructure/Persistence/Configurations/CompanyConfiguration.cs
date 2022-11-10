@@ -7,6 +7,9 @@ namespace Infrastructure.Persistence.Configurations;
 public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
     public void Configure(EntityTypeBuilder<Company> entity) {
         
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.CodeNIF)
             .HasMaxLength(45);
         

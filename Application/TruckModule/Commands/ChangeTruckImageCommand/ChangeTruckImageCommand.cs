@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,26 +5,24 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.TruckModule.Commands.CreateTruckCommand
+namespace Application.TruckModule.Commands.ChangeTruckImageCommand
 {
-    public record CreateTruckCommand : IRequest<Truck> {
-        public string TruckNumber { get; init; }
-        public string Type { get; init; }
-        public float Capacity { get; init; }
+    public record ChangeTruckImageCommand : IRequest<Truck> {
+        public int Id { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
 
-    public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, Truck> {
+    public class ChangeTruckImageCommandHandler : IRequestHandler<ChangeTruckImageCommand, Truck> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
-        private readonly ILogger<CreateTruckCommandHandler> _logger;
+        private readonly ILogger<ChangeTruckImageCommandHandler> _logger;
         private readonly IFileUploadService _fileUploadService;
 
-        public CreateTruckCommandHandler(
+        public ChangeTruckImageCommandHandler(
             IIdentityService identityService, 
             IAppDbContext context, 
-            ILogger<CreateTruckCommandHandler> logger, 
+            ILogger<ChangeTruckImageCommandHandler> logger, 
             IFileUploadService fileUploadService
         ) {
             _identityService = identityService;
@@ -37,7 +31,13 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             _fileUploadService = fileUploadService;
         }
 
-        public async Task<Truck> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
+        public async Task<Truck> Handle(ChangeTruckImageCommand request, CancellationToken cancellationToken) {
+
+            Truck found_truck = await _context.Trucks.FindAsync(request.Id);
+
+            if(found_truck == null){
+                throw new Exception("Truck not found");
+            }
 
             //image uploading
             var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
@@ -46,16 +46,10 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
                 throw new Exception(String.Join(" , ", response.result.Errors));
             }
 
-            Truck truck = new Truck();
-            truck.TruckNumber = request.TruckNumber;
-            truck.Type = request.Type;
-            truck.Capacity = request.Capacity;
-            truck.ImageId = response.Id;
-
-            _context.Trucks.Add(truck);
+            found_truck.ImageId = response.Id;
             await _context.SaveChangesAsync(cancellationToken);
 
-            return truck;
+            return found_truck;
 
         }
 

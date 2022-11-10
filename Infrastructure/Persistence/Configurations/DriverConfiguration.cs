@@ -7,6 +7,9 @@ namespace Infrastructure.Persistence.Configurations;
 public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
     public void Configure(EntityTypeBuilder<Driver> entity) {
 
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+            
         entity.Property(e => e.Fullname)
             .IsRequired()
             .HasMaxLength(45);
