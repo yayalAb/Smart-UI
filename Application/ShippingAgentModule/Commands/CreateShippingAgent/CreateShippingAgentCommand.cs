@@ -44,7 +44,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                     {
                         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
-                     imageId = response.imageId;
+                     imageId = response.Id;
                 }
                 /// save address to db 
                 Address address = _mapper.Map<Address>(request.Address);    

@@ -26,7 +26,7 @@ namespace WebApi.Controllers
 
         // PUT api/<BillOfLoadingController>/5
         [HttpPut]
-        public async Task<IActionResult> UpdateBillOfLoading( [FromBody] UpdateBillOfLoadingCommand command)
+        public async Task<IActionResult> UpdateBillOfLoading( [FromForm] UpdateBillOfLoadingCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new

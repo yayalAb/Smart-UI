@@ -14,10 +14,7 @@ public class Container : BaseAuditableEntity
     public string? Owner { get; set; }
     public string? Loacation { get; set; }
     public DateTime? ManufacturedDate { get; set; }
-    public int AddressId { get; set; }
-    public int ImageId { get; set; }
-    
-    public virtual Address Address { set; get; } = null!;
+    public int? ImageId { get; set; } 
     public virtual Image Image { get; set; } = null!;
     
     public virtual ICollection<BillOfLoading> BillOfLoadings { get; set; }
