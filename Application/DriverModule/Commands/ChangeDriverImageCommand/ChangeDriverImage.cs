@@ -46,7 +46,7 @@ namespace Application.DriverModule.Commands.ChangeDriverImageCommand {
                 throw new Exception(String.Join(" , ", response.result.Errors));
             }
 
-            found_driver.ImageId = response.imageId;
+            found_driver.ImageId = response.Id;
             await _context.SaveChangesAsync(cancellationToken);
 
             return found_driver;

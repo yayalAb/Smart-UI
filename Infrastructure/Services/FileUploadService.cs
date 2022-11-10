@@ -38,7 +38,7 @@ namespace Infrastructure.Services
                     }
                     else
                     {
-                       using var dataStream = new MemoryStream();
+                        using var dataStream = new MemoryStream();
                         await file.CopyToAsync(dataStream);
                         byte[] imageBytes = dataStream.ToArray();
                         var imageData = new Image

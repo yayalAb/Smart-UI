@@ -42,23 +42,11 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.TruckId)
             .HasConstraintName("fk_operation_truck1");
-<<<<<<< HEAD
-=======
+
         entity.HasOne(o => o.ECDDocument)
             .WithOne(d => d.Operation)
             .HasForeignKey<Operation>(o => o.ECDDocumentId)
             .IsRequired(false);
-
-        // entity.HasOne(d => d.TerminalPortFee)
-        //     .WithOne(p => p.Operation)
-        //     .HasForeignKey<TerminalPortFee>(d => d.OperationId)
-        //     .OnDelete(DeleteBehavior.ClientSetNull);
-        
-        // entity.HasOne(d => d.ShippingAgentFee)
-        //     .WithOne(p => p.Operation)
-        //     .HasForeignKey<ShippingAgentFee>(d => d.OperationId)
-        //     .OnDelete(DeleteBehavior.ClientSetNull);
->>>>>>> 5fc16aa64bb312f5fcbbd99349e4b59a390366bd
     
     }
 }

@@ -46,7 +46,7 @@ namespace Application.TruckModule.Commands.ChangeTruckImageCommand
                 throw new Exception(String.Join(" , ", response.result.Errors));
             }
 
-            found_truck.ImageId = response.imageId;
+            found_truck.ImageId = response.Id;
             await _context.SaveChangesAsync(cancellationToken);
 
             return found_truck;

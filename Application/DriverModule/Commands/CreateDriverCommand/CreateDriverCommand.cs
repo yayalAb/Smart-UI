@@ -56,7 +56,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                     throw new Exception(String.Join(" , ", response.result.Errors));
                 }
 
-                imageId = response.imageId;
+                imageId = response.Id;
 
 
                 //address insertion

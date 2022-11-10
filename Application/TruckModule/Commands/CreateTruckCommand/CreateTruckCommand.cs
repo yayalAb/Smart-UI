@@ -50,7 +50,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             truck.TruckNumber = request.TruckNumber;
             truck.Type = request.Type;
             truck.Capacity = request.Capacity;
-            truck.ImageId = response.imageId;
+            truck.ImageId = response.Id;
 
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);
