@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class truckUpdate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,14 +13,15 @@ namespace Infrastructure.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Region = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     City = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Subcity = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Country = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    POBOX = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    POBOX = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -65,12 +66,30 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Image1 = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -103,8 +122,9 @@ namespace Infrastructure.Migrations
                 name: "Ports",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Country = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Region = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Vollume = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
@@ -136,32 +156,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Containers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    ContianerNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
-                    Size = table.Column<float>(type: "real", nullable: false),
-                    Owner = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    Loacation = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    ManufacturedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Containers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Containers_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -186,7 +180,8 @@ namespace Infrastructure.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     TinNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     CodeNIF = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
@@ -213,6 +208,33 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Containers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContianerNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    Size = table.Column<float>(type: "real", nullable: false),
+                    Owner = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    Loacation = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    ManufacturedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ImageId = table.Column<int>(type: "int", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Containers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Containers_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShippingAgents",
                 columns: table => new
                 {
@@ -220,7 +242,7 @@ namespace Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    ImageId = table.Column<int>(type: "int", nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -236,18 +258,18 @@ namespace Infrastructure.Migrations
                         principalTable: "Addresses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "fk_shipping agent_image1",
+                        name: "FK_ShippingAgents_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Trucks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TruckNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Type = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Capacity = table.Column<float>(type: "real", nullable: false),
@@ -261,7 +283,7 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Trucks", x => x.Id);
                     table.ForeignKey(
-                        name: "image",
+                        name: "FK_Trucks_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "Id");
@@ -300,57 +322,11 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BillOfLoadings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CustomerName = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    NameOnPermit = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    Consignee = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    NotifyParty = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    BillNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    ShippingLine = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    GoodsDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Quantity = table.Column<float>(type: "real", nullable: true),
-                    ContainerId = table.Column<int>(type: "int", nullable: false),
-                    grossWeight = table.Column<float>(type: "real", nullable: true),
-                    TruckNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    ATA = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    FZIN = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    FZOUT = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    DestinationType = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    ShippingAgent = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    PortOfLoading = table.Column<int>(type: "int", nullable: true),
-                    ActualDateOfDeparture = table.Column<DateTime>(type: "datetime", nullable: true),
-                    EstimatedTimeOfArrival = table.Column<DateTime>(type: "datetime", nullable: true),
-                    VoyageNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    TypeOfMerchandise = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
-                    PortId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BillOfLoadings", x => x.Id);
-                    table.ForeignKey(
-                        name: "fk_Bill of Loading_container1",
-                        column: x => x.ContainerId,
-                        principalTable: "Containers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "fk_Bill of Loading_port1",
-                        column: x => x.PortId,
-                        principalTable: "Ports",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Goods",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     HSCode = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     Manufacturer = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
@@ -376,10 +352,69 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BillOfLoadings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerName = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    NameOnPermit = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    Consignee = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    NotifyParty = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    BillNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    ShippingLine = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    GoodsDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Quantity = table.Column<float>(type: "real", nullable: false),
+                    ContainerId = table.Column<int>(type: "int", nullable: false),
+                    grossWeight = table.Column<float>(type: "real", nullable: true),
+                    ATA = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    FZIN = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    FZOUT = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    DestinationType = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    ShippingAgentId = table.Column<int>(type: "int", nullable: false),
+                    PortOfLoadingId = table.Column<int>(type: "int", nullable: false),
+                    ActualDateOfDeparture = table.Column<DateTime>(type: "datetime", nullable: true),
+                    EstimatedTimeOfArrival = table.Column<DateTime>(type: "datetime", nullable: true),
+                    VoyageNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    TypeOfMerchandise = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    BillOfLoadingDocumentId = table.Column<int>(type: "int", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BillOfLoadings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BillOfLoadings_Containers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "Containers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BillOfLoadings_Documents_BillOfLoadingDocumentId",
+                        column: x => x.BillOfLoadingDocumentId,
+                        principalTable: "Documents",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BillOfLoadings_Ports_PortOfLoadingId",
+                        column: x => x.PortOfLoadingId,
+                        principalTable: "Ports",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BillOfLoadings_ShippingAgents_ShippingAgentId",
+                        column: x => x.ShippingAgentId,
+                        principalTable: "ShippingAgents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Drivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Fullname = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     LicenceNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
@@ -402,8 +437,7 @@ namespace Infrastructure.Migrations
                         name: "FK_Drivers_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Drivers_Trucks_TruckId",
                         column: x => x.TruckId,
@@ -530,7 +564,8 @@ namespace Infrastructure.Migrations
                 name: "Operations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OperationNumber = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     OpenedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
@@ -538,6 +573,7 @@ namespace Infrastructure.Migrations
                     truck_id = table.Column<int>(type: "int", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
                     DriverId = table.Column<int>(type: "int", nullable: true),
+                    ECDDocumentId = table.Column<int>(type: "int", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -546,6 +582,11 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Operations", x => x.Id);
+                    table.ForeignKey(
+                        name: "fk_ECD Document_operation1",
+                        column: x => x.ECDDocumentId,
+                        principalTable: "Documents",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "fk_operation_Bill of Loading1",
                         column: x => x.BillOfLoadingId,
@@ -572,7 +613,8 @@ namespace Infrastructure.Migrations
                 name: "Documentations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OperationId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -602,33 +644,11 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ECDDocuments",
+                name: "ShippingAgentFees",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Document = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    OperationId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ECDDocuments", x => x.Id);
-                    table.ForeignKey(
-                        name: "fk_ECD Document_operation1",
-                        column: x => x.OperationId,
-                        principalTable: "Operations",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShippingAgentFees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
@@ -662,7 +682,8 @@ namespace Infrastructure.Migrations
                 name: "TerminalPortFees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
@@ -683,15 +704,8 @@ namespace Infrastructure.Migrations
                         name: "FK_TerminalPortFees_Operations_operation_Id",
                         column: x => x.operation_Id,
                         principalTable: "Operations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE",
-                table: "Addresses",
-                column: "Id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUserRoles_ApplicationUserId",
@@ -743,10 +757,11 @@ namespace Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE1",
+                name: "IX_BillOfLoadings_BillOfLoadingDocumentId",
                 table: "BillOfLoadings",
-                column: "Id",
-                unique: true);
+                column: "BillOfLoadingDocumentId",
+                unique: true,
+                filter: "[BillOfLoadingDocumentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BillOfLoadings_ContainerId",
@@ -754,15 +769,14 @@ namespace Infrastructure.Migrations
                 column: "ContainerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BillOfLoadings_PortId",
+                name: "IX_BillOfLoadings_PortOfLoadingId",
                 table: "BillOfLoadings",
-                column: "PortId");
+                column: "PortOfLoadingId");
 
             migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE2",
-                table: "Companies",
-                column: "Id",
-                unique: true);
+                name: "IX_BillOfLoadings_ShippingAgentId",
+                table: "BillOfLoadings",
+                column: "ShippingAgentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Companies_AddressId",
@@ -777,34 +791,16 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "id_UNIQUE",
-                table: "ContactPeople",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "id_UNIQUE1",
+                name: "IX_Containers_ImageId",
                 table: "Containers",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Containers_AddressId",
-                table: "Containers",
-                column: "AddressId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE3",
-                table: "Documentations",
-                column: "Id",
-                unique: true);
+                column: "ImageId",
+                unique: true,
+                filter: "[ImageId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Documentations_OperationId",
                 table: "Documentations",
-                column: "OperationId",
-                unique: true);
+                column: "OperationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_AddressId",
@@ -815,7 +811,8 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_ImageId",
                 table: "Drivers",
-                column: "ImageId");
+                column: "ImageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_TruckId",
@@ -823,44 +820,9 @@ namespace Infrastructure.Migrations
                 column: "TruckId");
 
             migrationBuilder.CreateIndex(
-                name: "id_UNIQUE2",
-                table: "ECDDocuments",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ECDDocuments_OperationId",
-                table: "ECDDocuments",
-                column: "OperationId");
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE4",
-                table: "Goods",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Goods_ContainerId",
                 table: "Goods",
                 column: "ContainerId");
-
-            migrationBuilder.CreateIndex(
-                name: "id_UNIQUE3",
-                table: "Images",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE5",
-                table: "Lookups",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE6",
-                table: "Operations",
-                column: "Id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Operations_BillOfLoadingId",
@@ -879,38 +841,26 @@ namespace Infrastructure.Migrations
                 column: "DriverId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Operations_ECDDocumentId",
+                table: "Operations",
+                column: "ECDDocumentId",
+                unique: true,
+                filter: "[ECDDocumentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Operations_truck_id",
                 table: "Operations",
                 column: "truck_id");
 
             migrationBuilder.CreateIndex(
-                name: "id_UNIQUE4",
-                table: "Ports",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE7",
-                table: "ShippingAgentFees",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShippingAgentFees_OperationId",
                 table: "ShippingAgentFees",
-                column: "OperationId",
-                unique: true);
+                column: "OperationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShippingAgentFees_ShippingAgentId",
                 table: "ShippingAgentFees",
                 column: "ShippingAgentId");
-
-            migrationBuilder.CreateIndex(
-                name: "id_UNIQUE5",
-                table: "ShippingAgents",
-                column: "Id",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShippingAgents_AddressId",
@@ -921,24 +871,20 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ShippingAgents_ImageId",
                 table: "ShippingAgents",
-                column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "Id_UNIQUE8",
-                table: "TerminalPortFees",
-                column: "Id",
-                unique: true);
+                column: "ImageId",
+                unique: true,
+                filter: "[ImageId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TerminalPortFees_operation_Id",
                 table: "TerminalPortFees",
-                column: "operation_Id",
-                unique: true);
+                column: "operation_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trucks_ImageId",
                 table: "Trucks",
-                column: "ImageId");
+                column: "ImageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_Name",
@@ -971,9 +917,6 @@ namespace Infrastructure.Migrations
                 name: "Documentations");
 
             migrationBuilder.DropTable(
-                name: "ECDDocuments");
-
-            migrationBuilder.DropTable(
                 name: "Goods");
 
             migrationBuilder.DropTable(
@@ -990,9 +933,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "ShippingAgents");
 
             migrationBuilder.DropTable(
                 name: "Operations");
@@ -1013,7 +953,13 @@ namespace Infrastructure.Migrations
                 name: "Containers");
 
             migrationBuilder.DropTable(
+                name: "Documents");
+
+            migrationBuilder.DropTable(
                 name: "Ports");
+
+            migrationBuilder.DropTable(
+                name: "ShippingAgents");
 
             migrationBuilder.DropTable(
                 name: "ContactPeople");

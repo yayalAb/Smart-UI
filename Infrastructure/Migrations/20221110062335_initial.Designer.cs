@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221109220717_fix-fk-conflict-on-container-table")]
-    partial class fixfkconflictoncontainertable
+    [Migration("20221110062335_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -964,7 +964,7 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<float>("Capacy")
+                    b.Property<float>("Capacity")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("Created")
