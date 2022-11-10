@@ -33,7 +33,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
             try
             {
                 byte[]? imageData = null;
-                /// save image to db and retrive id
+                //get imagebyte data
                 if (request.ImageFile != null)
                 {
                     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);

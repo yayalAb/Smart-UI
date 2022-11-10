@@ -40,13 +40,13 @@ namespace Application.TruckModule.Commands.ChangeTruckImageCommand
             }
 
             //image uploading
-            var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+            var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
             if (!response.result.Succeeded)
             {
                 throw new Exception(String.Join(" , ", response.result.Errors));
             }
 
-            found_truck.ImageId = response.Id;
+            found_truck.Image = response.byteData;
             await _context.SaveChangesAsync(cancellationToken);
 
             return found_truck;

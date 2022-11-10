@@ -9,16 +9,16 @@ namespace Infrastructure.Services
 {
     public  class FileUploadService : IFileUploadService
     {
-        private readonly AppDbContext _context;
+
         //to restrict file extensions
         public static readonly List<string> ImageExtensions = new() { ".JPG", ".BMP", ".PNG" }; 
         public static readonly List<string> DocumentExtensions = new() { ".PDF", ".CSV", ".DOC", ".DOCX" };
        
 
 
-        public FileUploadService(AppDbContext context)
+        public FileUploadService()
         {
-          _context = context;
+          
         }
         public async Task<(Result, byte[]? )> GetFileByte(IFormFile file, FileType fileType)
         {

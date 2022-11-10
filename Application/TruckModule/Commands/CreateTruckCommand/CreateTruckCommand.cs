@@ -40,7 +40,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         public async Task<Truck> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
 
             //image uploading
-            var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+            var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
             if (!response.result.Succeeded)
             {
                 throw new Exception(String.Join(" , ", response.result.Errors));
@@ -50,7 +50,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             truck.TruckNumber = request.TruckNumber;
             truck.Type = request.Type;
             truck.Capacity = request.Capacity;
-            truck.ImageId = response.Id;
+            truck.Image = response.byteData;
 
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);
