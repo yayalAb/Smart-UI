@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.User.Commands.AuthenticateUser;
-using Application.User.Commands.CreateUser.Commands;
+using Application.User.Commands.CreateUser;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 namespace Application.Common.Behaviours

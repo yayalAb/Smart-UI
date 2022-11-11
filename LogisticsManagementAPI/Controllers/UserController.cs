@@ -1,6 +1,6 @@
 ﻿using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.ChangePassword;
-using Application.User.Commands.CreateUser.Commands;
+using Application.User.Commands.CreateUser;
 using Application.User.Commands.ForgotPassword;
 using Application.User.Commands.ResetPassword;
 using Microsoft.AspNetCore.Mvc;

@@ -1,17 +1,16 @@
-﻿
-
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.User.Commands.AuthenticateUser;
 using Domain.Enums;
 using FluentValidation;
 
-namespace Application.User.Commands.CreateUser.Commands
+namespace Application.User.Commands.CreateUser
 {
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>  
+    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
         private readonly IAppDbContext _context;
 
-        public CreateUserCommandValidator( IAppDbContext context) {
+        public CreateUserCommandValidator(IAppDbContext context)
+        {
 
             _context = context;
 
@@ -38,24 +37,25 @@ namespace Application.User.Commands.CreateUser.Commands
                 .Must(BeFoundInDb).WithMessage("group with the provided id is not found");
             RuleFor(u => u.UserRoles)
                 .Must(AllHaveValidPage).WithMessage(" one or more userRole  have invalid page name ");
-                
-           
+
+
         }
 
-        private bool BeFoundInDb(int groupId) {
-            return  _context.UserGroups.Find(groupId) != null;
+        private bool BeFoundInDb(int groupId)
+        {
+            return _context.UserGroups.Find(groupId) != null;
         }
         private bool AllHaveValidPage(List<UserRoleDto> userRoles)
         {
-            if(userRoles == null || userRoles.Count == 0)
+            if (userRoles == null || userRoles.Count == 0)
             {
                 return true;
             }
-            foreach(UserRoleDto userRole in userRoles)
+            foreach (UserRoleDto userRole in userRoles)
             {
-                if(!Enum.GetNames(typeof(Page)).Any(p=>p.ToLower() == userRole.page.ToLower()))
+                if (!Enum.GetNames(typeof(Page)).Any(p => p.ToLower() == userRole.page.ToLower()))
                 {
-                    return false; 
+                    return false;
                 }
             }
             return true;
