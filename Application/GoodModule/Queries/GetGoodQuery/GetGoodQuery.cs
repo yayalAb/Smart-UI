@@ -35,7 +35,7 @@ namespace Application.GoodModule.Queries.GetGoodQuery
 
         public async Task<Good> Handle(GetGoodQuery request, CancellationToken cancellationToken) {
             
-            var good = await _context.Goods.Include(c => c.Container).Where(c => c.Id == request.Id).FirstOrDefaultAsync();
+            var good = await _context.Goods.Include(c => c.Container).Where(c => c.Id == request.Id ).FirstOrDefaultAsync();
             if(good == null){
                 throw new Exception("good not found!");
             }
