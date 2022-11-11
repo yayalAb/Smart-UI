@@ -7,6 +7,8 @@ namespace Infrastructure.Persistence.Configurations;
 public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation> {
     
     public void Configure(EntityTypeBuilder<Documentation> entity) {
+        entity.Property(e => e.Type)
+            .IsRequired();
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
@@ -21,7 +23,8 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
             .HasMaxLength(45);
 
         entity.Property(e => e.Date)
-            .HasColumnType("datetime");
+            .HasColumnType("datetime")
+            .IsRequired();
 
         entity.Property(e => e.Destination)
             .HasMaxLength(45);

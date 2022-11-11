@@ -4,7 +4,6 @@ namespace Domain.Entities;
 
 public class Address : BaseAuditableEntity
 {
-    public int Id {get; set;}
     public string? Email { get; set; }
     public string? Phone { get; set; }
     public string? Region { get; set; }

@@ -7,7 +7,7 @@ namespace Application.PortModule.Commands.CreatePort
 {
     public record CreatePortCommand : IRequest<int>
     {
-        public string Name { get; set; }
+        public string PortNumber { get; set; }
         public string? Country { get; set; }
         public string? Region { get; set; }
         public string? Vollume { get; set; }
@@ -24,7 +24,7 @@ namespace Application.PortModule.Commands.CreatePort
         {
             Port newPort = new Port()
             {
-                Name = request.Name,    
+                PortNumber = request.PortNumber,    
                 Country = request.Country,
                 Region = request.Region,
                 Vollume = request.Vollume,

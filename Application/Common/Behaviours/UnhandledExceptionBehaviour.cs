@@ -1,5 +1,5 @@
 ﻿using Application.User.Commands.AuthenticateUser;
-using Application.User.Commands.CreateUser.Commands;
+using Application.User.Commands.CreateUser;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

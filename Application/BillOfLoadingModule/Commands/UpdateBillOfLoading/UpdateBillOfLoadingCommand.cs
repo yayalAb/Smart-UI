@@ -34,7 +34,6 @@ namespace Application.BillOfLoadingModule.Commands.UpdateBillOfLoading
         public string VoyageNumber { get; set; }
         public string TypeOfMerchandise { get; set; }
         public IFormFile? BillOfLoadingDocument { get; set; }
-        public int BillOfLoadingDocumentId { get; set; }
     }
     public class UpdateBillOfLoadingCommandHandler : IRequestHandler<UpdateBillOfLoadingCommand, int>
     {
@@ -50,20 +49,23 @@ namespace Application.BillOfLoadingModule.Commands.UpdateBillOfLoading
             using var transaction = _context.database.BeginTransaction();
             try
             {
-                if (request.BillOfLoadingDocument != null)
-                {
-                    var response = await _fileUploadService.updateFile(request.BillOfLoadingDocument, FileType.BillOfLoadingDocument ,request.BillOfLoadingDocumentId);
-                    if (!response.Succeeded)
-                    {
-                        throw new CustomBadRequestException(String.Join(" , ", response.Errors));
-                    }
-                }
+                
+
                 var oldBillOfLoading = await _context.BillOfLoadings.FindAsync(request.Id);
                 if(oldBillOfLoading == null)
                 {
                     throw new NotFoundException("BillOfLoading", new { Id = request.Id });
                 }
-
+                byte[]? newBillOfLoadingDoc = oldBillOfLoading.BillOfLoadingDocument;
+                if (request.BillOfLoadingDocument != null)
+                {
+                    var response = await _fileUploadService.GetFileByte(request.BillOfLoadingDocument, FileType.BillOfLoadingDocument);
+                    if (!response.result.Succeeded)
+                    {
+                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                    }
+                    newBillOfLoadingDoc = response.byteData;
+                }
                 oldBillOfLoading.CustomerName = request.CustomerName;
                 oldBillOfLoading.NameOnPermit = request.NameOnPermit;
                 oldBillOfLoading.Consignee = request.Consignee;
@@ -84,6 +86,7 @@ namespace Application.BillOfLoadingModule.Commands.UpdateBillOfLoading
                 oldBillOfLoading.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
                 oldBillOfLoading.VoyageNumber = request.VoyageNumber;
                 oldBillOfLoading.TypeOfMerchandise = request.TypeOfMerchandise;
+                oldBillOfLoading.BillOfLoadingDocument = newBillOfLoadingDoc;
 
 
 

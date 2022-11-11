@@ -48,15 +48,15 @@ namespace Application.BillOfLoadingModule.Commands.CreateBillOfLoading
             using var transaction = _context.database.BeginTransaction();
             try
             {
-                int documentId = 0;
+                byte[]? documentData = null;
                 if (request.BillOfLoadingDocument != null)
                 {
-                    var response = await _fileUploadService.uploadFile(request.BillOfLoadingDocument, FileType.BillOfLoadingDocument);
+                    var response = await _fileUploadService.GetFileByte(request.BillOfLoadingDocument, FileType.BillOfLoadingDocument);
                     if (!response.result.Succeeded)
                     {
                         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
-                    documentId = response.Id;
+                    documentData = response.byteData;
                 }
                 BillOfLoading newBillOfLoading = new BillOfLoading
                 {
@@ -80,7 +80,7 @@ namespace Application.BillOfLoadingModule.Commands.CreateBillOfLoading
                     EstimatedTimeOfArrival = request.EstimatedTimeOfArrival,    
                     VoyageNumber = request.VoyageNumber,
                     TypeOfMerchandise = request.TypeOfMerchandise,  
-                    BillOfLoadingDocumentId = documentId!=0? documentId : null,    
+                    BillOfLoadingDocument = documentData,    
                   
                 };
                 await _context.BillOfLoadings.AddAsync(newBillOfLoading);

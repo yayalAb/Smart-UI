@@ -40,6 +40,6 @@ public class ShippingAgentFeeConfiguration : IEntityTypeConfiguration<ShippingAg
         entity.HasOne(d => d.Agent)
             .WithMany(p => p.AgentFees)
             .HasForeignKey(d => d.ShippingAgentId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

@@ -10,10 +10,10 @@ namespace Application.ContainerModule.Commands.CreateContainer
 {
     public record  CreateContainerCommand : IRequest<int>
     {
-        public string ContianerNumber { get; set; } = null!;
+        public string ContianerNumber { get; set; }
         public float Size { get; set; }
         public string? Owner { get; set; }
-        public string? Loacation { get; set; }
+        public string? Location { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
@@ -32,16 +32,16 @@ namespace Application.ContainerModule.Commands.CreateContainer
             using var transaction = _context.database.BeginTransaction();
             try
             {
-                var imageId = 0;
-                /// save image to db and retrive id
+                byte[]? imageData = null;
+                //get imagebyte data
                 if (request.ImageFile != null)
                 {
-                    var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+                    var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                     if (!response.result.Succeeded)
                     {
                         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
                     }
-                    imageId = response.Id;
+                    imageData = response.byteData;
                 }
 
                 Container newContainer = new Container()
@@ -49,9 +49,9 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     ContianerNumber = request.ContianerNumber,
                     Size = request.Size,
                     Owner = request.Owner,
-                    Loacation = request.Loacation,
+                    Location = request.Location,
                     ManufacturedDate = request.ManufacturedDate,
-                    ImageId = imageId != 0 ? imageId : null,    
+                    Image = imageData,    
                 };
 
                 await _context.Containers.AddAsync(newContainer);

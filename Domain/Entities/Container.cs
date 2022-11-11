@@ -12,10 +12,9 @@ public class Container : BaseAuditableEntity
     public string ContianerNumber { get; set; } = null!;
     public float Size { get; set; }
     public string? Owner { get; set; }
-    public string? Loacation { get; set; }
+    public string? Location { get; set; }
     public DateTime? ManufacturedDate { get; set; }
-    public int? ImageId { get; set; } 
-    public virtual Image Image { get; set; } = null!;
+    public byte[]? Image { get; set; } 
     
     public virtual ICollection<BillOfLoading> BillOfLoadings { get; set; }
     public virtual ICollection<Good> Goods { get; set; }

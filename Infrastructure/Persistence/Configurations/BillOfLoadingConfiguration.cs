@@ -70,14 +70,15 @@ public class BillOfLoadingConfiguration : IEntityTypeConfiguration<BillOfLoading
             .WithMany(p => p.BillOfLoadings)
             .HasForeignKey(d => d.PortOfLoadingId)
             .OnDelete(DeleteBehavior.ClientSetNull);
-
-        entity.HasOne(b => b.BillOfLoadingDocument)
-            .WithOne(d => d.BillOfLoading)
-            .HasForeignKey<BillOfLoading>(b => b.BillOfLoadingDocumentId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
+        entity.HasOne(b => b.ShippingAgent)
+             .WithMany(s => s.BillOfLoadings)
+             .HasForeignKey(b => b.ShippingAgentId)
+             .OnDelete(DeleteBehavior.ClientSetNull);
           
+         entity.HasOne(d => d.Operation)
+             .WithOne(p => p.BillOfLoading)
+             .HasForeignKey<Operation>(d => d.BillOfLoadingId)
+             .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

@@ -11,9 +11,11 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
             .ValueGeneratedOnAdd();
             
         entity.Property(e => e.Fullname)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.LicenceNumber)
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.HasOne(d => d.Address)

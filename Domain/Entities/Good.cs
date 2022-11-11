@@ -13,7 +13,9 @@ public class Good : BaseAuditableEntity
     public float? UnitPrice { get; set; }
     public string? UnitOfMeasurnment { get; set; }
     public int ContainerId { get; set; }
+    public int OperationId { get; set;  }
     
     public virtual Container Container { get; set; } = null!;
+    public virtual Operation Operation { get; set; } = null!;   
 
 }

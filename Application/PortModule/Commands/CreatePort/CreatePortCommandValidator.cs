@@ -7,7 +7,7 @@ namespace Application.PortModule.Commands.CreatePort
     {
         public CreatePortCommandValidator()
         {
-            RuleFor(c => c.Name)
+            RuleFor(c => c.PortNumber)
                 .NotNull()
                 .NotEmpty();
         }

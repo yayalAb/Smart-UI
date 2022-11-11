@@ -11,9 +11,12 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
             .ValueGeneratedOnAdd();
             
         entity.Property(e => e.ContianerNumber)
+            .IsRequired()
             .HasMaxLength(45);
+         entity.Property(e => e.Size)
+            .IsRequired(); ;
 
-        entity.Property(e => e.Loacation)
+        entity.Property(e => e.Location)
             .HasMaxLength(45);
 
         entity.Property(e => e.Owner)

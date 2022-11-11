@@ -36,7 +36,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
         public async Task<Driver> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
         {
 
-            Truck found_truck = await _context.Trucks.FindAsync(request.TruckId);
+            var found_truck = await _context.Trucks.FindAsync(request.TruckId);
 
             if (found_truck == null)
             {
@@ -44,19 +44,19 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
             }
 
             var transaction = _context.database.BeginTransaction();
-            int imageId;
+            byte[]? image;
 
             try
             {
 
                 //image uploading
-                var response = await _fileUploadService.uploadFile(request.ImageFile, FileType.Image);
+                var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                 if (!response.result.Succeeded)
                 {
                     throw new Exception(String.Join(" , ", response.result.Errors));
                 }
 
-                imageId = response.Id;
+                image = response.byteData;
 
 
                 //address insertion
@@ -78,22 +78,17 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                 new_driver.LicenceNumber = request.LicenceNumber;
                 new_driver.TruckId = request.TruckId;
                 new_driver.AddressId = new_address.Id;
-                new_driver.ImageId = imageId;
+                new_driver.Image = image;
 
                 _context.Drivers.Add(new_driver);
                 await _context.SaveChangesAsync(cancellationToken);
-                
-                //commit changes
-                transaction.CommitAsync();
+                await transaction.CommitAsync();
 
                 return new_driver;
 
-            }
-            catch (Exception ex)
-            {
-                //rollback when error happend
-                transaction.RollbackAsync();
-                throw ex;
+            }catch(Exception ){
+               await transaction.RollbackAsync();
+                throw ;
             }
 
         }
