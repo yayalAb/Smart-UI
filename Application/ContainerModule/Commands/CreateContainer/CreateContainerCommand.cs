@@ -10,10 +10,10 @@ namespace Application.ContainerModule.Commands.CreateContainer
 {
     public record  CreateContainerCommand : IRequest<int>
     {
-        public string ContianerNumber { get; set; } = null!;
+        public string ContianerNumber { get; set; }
         public float Size { get; set; }
         public string? Owner { get; set; }
-        public string? Loacation { get; set; }
+        public string? Location { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
@@ -49,7 +49,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     ContianerNumber = request.ContianerNumber,
                     Size = request.Size,
                     Owner = request.Owner,
-                    Location = request.Loacation,
+                    Location = request.Location,
                     ManufacturedDate = request.ManufacturedDate,
                     Image = imageData,    
                 };
