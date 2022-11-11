@@ -10,6 +10,9 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
+
+        entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
             
         entity.Property(e => e.CBM)
             .HasMaxLength(45);
