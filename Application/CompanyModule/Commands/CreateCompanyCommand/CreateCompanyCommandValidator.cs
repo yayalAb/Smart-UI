@@ -12,13 +12,19 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand {
             
             RuleFor(u => u.Name)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("name is not in the correct format!");
             RuleFor(u => u.TinNumber)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("tin number is not in the correct format!");
             RuleFor(u => u.CodeNIF)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("codenif is not in the correct format!");
             
         }
 

@@ -14,9 +14,12 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
         RuleFor(l => l.Name)
             .NotEmpty()
             .NotNull()
-            .Must(BeUnique);
+            // .Must(BeUnique);
+            .MaximumLength(45)
+            .WithMessage("lookup key is not in the correct format");
         
     }
+
     private bool BeUnique(CreateLookUpKey lookup ,string name)
     {
         return !_context.Lookups.Where(l => l.Name == name && l.Type == "key" ).Any();

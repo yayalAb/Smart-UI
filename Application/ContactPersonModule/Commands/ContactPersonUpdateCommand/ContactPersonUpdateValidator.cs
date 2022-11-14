@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
 using FluentValidation;
 
 namespace Application.ContactPersonModule.Commands.ContactPersonUpdateCommand {
@@ -14,14 +9,20 @@ namespace Application.ContactPersonModule.Commands.ContactPersonUpdateCommand {
                 .NotEmpty();
             RuleFor(u => u.Name)
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(45)
+                .WithMessage("name is not in the correct format!");
             RuleFor(u => u.Email)
                 .NotNull()
                 .NotEmpty()
-                .EmailAddress();
+                .EmailAddress()
+                .MaximumLength(45)
+                .WithMessage("email is not in the correct format!");
             RuleFor(u => u.Phone)
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .MaximumLength(45)
+                .WithMessage("phone is not in the correct format!");
         }
     }
 

@@ -12,23 +12,35 @@ namespace Application.AddressModule.Commands.AddressUpdateCommand {
 
             RuleFor(u => u.City)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("city is not in the correct format!");
             RuleFor(u => u.Subcity)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("subcity is not in the correct format!");
             RuleFor(u => u.Country)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("country is not in the correct format!");
             RuleFor(u => u.Region)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("region is not in the correct format!");
             RuleFor(u => u.Email)
                 .NotEmpty()
+                .MaximumLength(45)
                 .NotNull()
-                .EmailAddress();
+                .EmailAddress()
+                .WithMessage("email is not in the correct format!");
             RuleFor(u => u.Phone)
                 .NotNull()
-                .NotEmpty();
+                .MaximumLength(45)
+                .NotEmpty()
+                .WithMessage("phone is not in the correct format!");
 
         }
         
