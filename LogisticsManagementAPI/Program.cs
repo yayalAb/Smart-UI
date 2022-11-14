@@ -11,13 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //-- serilog config
-var Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .CreateLogger();
+// var Logger = new LoggerConfiguration()
+//     .ReadFrom.Configuration(builder.Configuration)
+//     .CreateLogger();
 
 // builder.Logging.ClearProviders();
 //builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(Logger);  
+// builder.Logging.AddSerilog(Logger);  
 
 // builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
 //     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
