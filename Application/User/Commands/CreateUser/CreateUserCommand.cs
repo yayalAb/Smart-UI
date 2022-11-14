@@ -17,7 +17,6 @@ namespace Application.User.Commands.CreateUser
         public string Email { get; init; }
         public string Password { get; init; }
         public int GroupId { get; init; }
-        public List<UserRoleDto>? UserRoles { get; init; }
 
     }
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, string>
@@ -36,50 +35,15 @@ namespace Application.User.Commands.CreateUser
         }
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            List<AppUserRole> userRoles = _mapper.Map<List<AppUserRole>>(request.UserRoles);
-
-            using var transaction = _context.database.BeginTransaction();
-
             var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, request.GroupId);
 
             if (!response.result.Succeeded)
             {
                 throw new CantCreateUserException(response.result.Errors.ToList());
             }
+            return response.userId;
 
-            if (userRoles == null || userRoles.ToArray().Length == 0)
-            {
-                userRoles = AppUserRole.createDefaultRoles(response.userId);
-            }
-            if (userRoles.ToArray().Length != Enum.GetNames(typeof(Page)).Length)
-            {
-                userRoles = AppUserRole.fillUndefinedRoles(userRoles);
-            }
-            //add user id to every role
-            for (int i = 0; i < userRoles.Count; i++)
-            {
-
-                if (userRoles[i].ApplicationUserId == null)
-                {
-                    userRoles[i].ApplicationUserId = response.userId;
-                }
-
-            }
-
-            try
-            {
-
-                await _context.AddRangeAsync(userRoles);
-                await _context.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync();
-                return response.userId;
-
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                throw new CantCreateUserException(new List<string> { e.Message });
-            }
+         
 
         }
     }

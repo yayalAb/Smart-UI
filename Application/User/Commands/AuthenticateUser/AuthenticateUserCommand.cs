@@ -5,7 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Runtime.Serialization;
+
 
 namespace Application.User.Commands.AuthenticateUser
 {
@@ -44,7 +44,7 @@ namespace Application.User.Commands.AuthenticateUser
                 IApplicationUser user = response.user;
                // fetching user roles
                 IEnumerable<UserRoleDto> roles = _context.AppUserRoles
-                    .Where(r => r.ApplicationUserId.Equals(response.user.Id))
+                    .Where(r => r.UserGroupId.Equals(response.user.UserGroupId))
                     .ProjectTo<UserRoleDto>(_mapper.ConfigurationProvider);
                  
                 return new LoginResponse {

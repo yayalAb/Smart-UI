@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Enums;
 using MediatR;
+using System.Text.RegularExpressions;
 
 namespace Domain.Entities
 {
@@ -13,10 +14,11 @@ namespace Domain.Entities
         public bool CanViewDetail { get; set; } = true;
         public bool CanView { get; set; } = true;
         public bool CanUpdate { get; set; } = true; 
-        public string ApplicationUserId { get; set; }
+        public int  UserGroupId { get; set; }
+
       
 
-        public static List<AppUserRole> createDefaultRoles(string userId)
+        public static List<AppUserRole> createDefaultRoles(int groupId)
         {
             
             List<AppUserRole> defaultRoles = new List<AppUserRole>();
@@ -28,7 +30,7 @@ namespace Domain.Entities
                 {
                     Title = pageTitle,
                     Page = pageName,
-                    ApplicationUserId = userId
+                    UserGroupId = groupId
                 });
             }
             return defaultRoles;

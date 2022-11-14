@@ -35,8 +35,6 @@ namespace Application.User.Commands.CreateUser
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInDb).WithMessage("group with the provided id is not found");
-            RuleFor(u => u.UserRoles)
-                .Must(AllHaveValidPage).WithMessage(" one or more userRole  have invalid page name ");
 
 
         }
@@ -45,20 +43,6 @@ namespace Application.User.Commands.CreateUser
         {
             return _context.UserGroups.Find(groupId) != null;
         }
-        private bool AllHaveValidPage(List<UserRoleDto> userRoles)
-        {
-            if (userRoles == null || userRoles.Count == 0)
-            {
-                return true;
-            }
-            foreach (UserRoleDto userRole in userRoles)
-            {
-                if (!Enum.GetNames(typeof(Page)).Any(p => p.ToLower() == userRole.page.ToLower()))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+
     }
 }

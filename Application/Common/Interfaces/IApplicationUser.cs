@@ -15,7 +15,6 @@ namespace Application.Common.Interfaces
         public string PasswordHash { get; set; }    
         public string FullName { get; set; }
         public int UserGroupId { get; set; }
-        public IEnumerable<AppUserRole> UserRoles { get; set; }
 
 
     }
