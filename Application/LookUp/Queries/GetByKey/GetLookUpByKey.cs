@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.LookUp.Query.GetByKey {
     public class GetLookUpByKey : IRequest<List<Lookup>> {
-        public string Type {get; init;}
+        public string Key {get; init;}
 
         public GetLookUpByKey(string type){
-            this.Type = type;
+            this.Key = type;
         }
     }
 
@@ -19,7 +19,7 @@ namespace Application.LookUp.Query.GetByKey {
             _context = context;
         }
         public async Task<List<Lookup>> Handle(GetLookUpByKey request, CancellationToken cancellationToken) {
-            return await _context.Lookups.Where(l => l.Type.Equals(request.Type)).ToListAsync();
+            return await _context.Lookups.Where(l => l.Key.Equals(request.Key)).ToListAsync();
         }
     }
 }

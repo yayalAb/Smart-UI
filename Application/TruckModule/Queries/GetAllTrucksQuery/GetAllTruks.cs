@@ -34,7 +34,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
 
         public async Task<ICollection<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
             
-            var truck = await _context.Trucks.Include(t => t.Image).Include(t => t.Drivers).ProjectTo<TruckDto>(_mapper.ConfigurationProvider).ToListAsync();
+            var truck = await _context.Trucks.Include(t => t.Image).ProjectTo<TruckDto>(_mapper.ConfigurationProvider).ToListAsync();
             if(truck == null){
                 throw new Exception("truck not found!");
             }

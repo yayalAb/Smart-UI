@@ -16,24 +16,16 @@ namespace Application.LookUp.Commands.UpdateLookup
             RuleFor(l => l.Id)
                 .NotEmpty()
                 .NotNull();
-<<<<<<< HEAD
-            RuleFor(l => l.Type)
+            RuleFor(l => l.Key)
                 .NotEmpty()
                 .NotNull()
                 .MaximumLength(45)
-                .WithMessage("type is not in the correct format!");
-            RuleFor(l => l.Name)
-=======
-
-            RuleFor(l => l.Key)
-                .NotEmpty()
-                .NotNull();
+                .WithMessage("key is not in the correct format!");
             RuleFor(l => l.Value)
->>>>>>> 68a589be846fc74a04d36d873b4bfefc93d8539c
                 .NotNull()
                 .NotEmpty()
                 // .Must(BeUnique)
-                .WithMessage("lookup name is not in the correct format");
+                .WithMessage("lookup value is not in the correct format");
         }
         private bool BeUnique(UpdateLookupCommand lookup, string name)
         {

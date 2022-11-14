@@ -9,19 +9,15 @@ namespace Application.LookUp.Commands.CreateLookup
 
         public CreateLookupCommandValidator(IAppDbContext context)
         {
+            
             _context = context; 
 
             RuleFor(l => l.Key)
                 .NotEmpty()
-<<<<<<< HEAD
                 .NotNull()
                 .MaximumLength(45)
-                .WithMessage("type is not in the correct format");
-            RuleFor(l => l.Name)
-=======
-                .NotNull();
+                .WithMessage("key is not in the correct format");
             RuleFor(l => l.Value)
->>>>>>> 68a589be846fc74a04d36d873b4bfefc93d8539c
                 .NotNull()
                 .NotEmpty()
                 // .Must(BeUnique)

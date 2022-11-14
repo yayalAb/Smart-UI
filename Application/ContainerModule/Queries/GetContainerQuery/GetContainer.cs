@@ -31,7 +31,7 @@ public class GetContainer : IRequest<Container> {
 
         public async Task<Container> Handle(GetContainer request, CancellationToken cancellationToken) {
             
-            var container = await _context.Containers.Include(c => c.Container).Where(c => c.Id == request.Id ).FirstOrDefaultAsync();
+            var container = await _context.Containers.Include(c => c.Goods).Where(c => c.Id == request.Id ).FirstOrDefaultAsync();
             if(container == null){
                 throw new Exception("container not found!");
             }

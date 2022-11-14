@@ -14,10 +14,6 @@ public class UpdateDriverCommandValidator : AbstractValidator<UpdateDriverComman
             .NotNull()
             .NotEmpty()
             .WithMessage("licence number is not in the correct format");
-        RuleFor(u => u.TruckId)
-            .NotNull()
-            .NotEmpty()
-            .WithMessage("fullname is not in the correct format");
         RuleFor(d => d.Id)
             .NotNull()
             .NotEmpty()

@@ -30,7 +30,7 @@ public class GetAllShippingAgentsHandler : IRequestHandler<GetShippingAgent, Shi
 
     public async Task<ShippingAgent> Handle(GetShippingAgent request, CancellationToken cancellationToken) {
         
-        var agent = await _context.ShippingAgents.Include(t => t.Address).Include(t => t.AgentFees).FirstOrDefaultAsync();
+        var agent = await _context.ShippingAgents.Include(t => t.Address).FirstOrDefaultAsync();
         if(agent == null){
             throw new Exception("Agent not found!");
         }

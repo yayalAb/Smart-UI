@@ -5,10 +5,10 @@ using MediatR;
 namespace Application.LookUp.Commands.CreateLookUpKey;
 
 public record CreateLookUpKey : IRequest<int> {
-    public string Name { get; init; }
+    public string Value { get; init; }
 
     public CreateLookUpKey(string name){
-        this.Name = name;
+        this.Value = name;
     }
 }
 
@@ -22,8 +22,8 @@ public class CreateLookUpKeyHandler : IRequestHandler<CreateLookUpKey, int> {
 
         Lookup newLookup = new Lookup
         {
-            Name = request.Name,
-            Type = "key",
+            Value = request.Value,
+            Key = "key",
         };
 
         await _context.Lookups.AddAsync(newLookup);

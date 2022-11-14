@@ -14,6 +14,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public CreateContainerCommandValidator(IAppDbContext context )
         {
             _context = context;
+            
             RuleFor(c => c.ContianerNumber)
                 .NotNull()
                 .NotEmpty()
@@ -22,7 +23,6 @@ namespace Application.ContainerModule.Commands.CreateContainer
             RuleFor(c => c.Size)
                 .NotNull()
                 .NotEmpty();
-<<<<<<< HEAD
             RuleFor(c => c.Owner)
                 .NotNull()
                 .NotEmpty()
@@ -32,13 +32,11 @@ namespace Application.ContainerModule.Commands.CreateContainer
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("name is not in the correct format!");
-=======
             RuleFor(c => c.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
             
         }
->>>>>>> 68a589be846fc74a04d36d873b4bfefc93d8539c
 
         private bool BeFoundInDb(int operationId)
         {

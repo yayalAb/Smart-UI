@@ -4,7 +4,7 @@ using Application.DriverModule;
 
 namespace Application.BillOfLoadingModule;
 
-public class BillOfLoadingDto : IMapFrom<BillOfLoading> {
+public class BillOfLoadingDto : IMapFrom<Operation> {
     public string CustomerName { get; set; }
     public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }

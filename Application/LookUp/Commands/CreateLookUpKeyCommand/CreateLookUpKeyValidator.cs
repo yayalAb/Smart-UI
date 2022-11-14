@@ -11,7 +11,7 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
     {
         _context = context; 
 
-        RuleFor(l => l.Name)
+        RuleFor(l => l.Value)
             .NotEmpty()
             .NotNull()
             // .Must(BeUnique);
@@ -22,7 +22,7 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
 
     private bool BeUnique(CreateLookUpKey lookup ,string name)
     {
-        return !_context.Lookups.Where(l => l.Name == name && l.Type == "key" ).Any();
+        return !_context.Lookups.Where(l => l.Value == name && l.Key == "key" ).Any();
     }
 
 }
