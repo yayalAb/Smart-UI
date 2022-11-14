@@ -1,7 +1,9 @@
 ﻿using Application.LookUp.Commands.CreateLookup;
 using Application.LookUp.Commands.DeleteLookup;
 using Application.LookUp.Commands.UpdateLookup;
+using Application.LookUp.Query.GetByKey;
 using Microsoft.AspNetCore.Mvc;
+using Application.LookUp.Commands.CreateLookUpKey;
 
 
 namespace WebApi.Controllers
@@ -15,6 +17,18 @@ namespace WebApi.Controllers
         public async Task<IActionResult> createLookup([FromBody] CreateLookupCommand command)
         {
             var response =  await Mediator.Send(command);
+            var responseObj = new
+            {
+                Id = response,
+            };
+            return StatusCode(StatusCodes.Status201Created, responseObj);
+        }
+
+        [HttpPost("{lookup_key}")]
+        // [Route("lookup_key")]
+        public async Task<IActionResult> createLookupKey(string lookup_key)
+        {
+            var response =  await Mediator.Send(new CreateLookUpKey(lookup_key));
             var responseObj = new
             {
                 Id = response,
@@ -49,6 +63,15 @@ namespace WebApi.Controllers
             };
             return Ok(responseObj);
 
+        }
+
+        [HttpGet("{type}")]
+        public async Task<ActionResult> getLookup(string type){
+            try{
+                return Ok(Mediator.Send(new GetLookUpByKey(type)));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
         }
     }
 }

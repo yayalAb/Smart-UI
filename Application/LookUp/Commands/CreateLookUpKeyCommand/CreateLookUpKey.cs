@@ -6,6 +6,10 @@ namespace Application.LookUp.Commands.CreateLookUpKey;
 
 public record CreateLookUpKey : IRequest<int> {
     public string Name { get; init; }
+
+    public CreateLookUpKey(string name){
+        this.Name = name;
+    }
 }
 
 public class CreateLookUpKeyHandler : IRequestHandler<CreateLookUpKey, int> {

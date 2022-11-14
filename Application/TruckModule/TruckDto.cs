@@ -2,6 +2,8 @@ using Application.Common.Mappings;
 using Domain.Entities;
 using Application.DriverModule;
 
+namespace Application.TruckModule;
+
 public class TruckDto : IMapFrom<Truck> {
     public string TruckNumber { get; set; } = null!;
     public string Type { get; set; } = null!;

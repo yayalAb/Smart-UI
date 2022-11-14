@@ -1,5 +1,4 @@
-﻿
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
@@ -17,8 +16,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public DateTime? ManufacturedDate { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
-    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, int>
-    {
+    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, int> {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
 
