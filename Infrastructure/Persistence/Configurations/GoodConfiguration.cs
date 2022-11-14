@@ -31,11 +31,6 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
             .HasForeignKey(d => d.ContainerId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.HasOne(g => g.Operation)
-            .WithMany(o => o.Goods)
-            .HasForeignKey(g => g.OperationId)
-            .OnDelete(DeleteBehavior.ClientCascade);
-
 
     }
 }

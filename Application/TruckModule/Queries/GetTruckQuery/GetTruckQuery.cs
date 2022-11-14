@@ -34,7 +34,7 @@ namespace Application.TruckModule.Queries.GetTruckQuery
 
         public async Task<Truck> Handle(GetTruckQuery request, CancellationToken cancellationToken) {
             
-            var truck = _context.Trucks.Include(t => t.Image).Include(t => t.Drivers).Where(t => t.Id == request.Id).FirstOrDefault();
+            var truck = _context.Trucks.Where(t => t.Id == request.Id).FirstOrDefault();
             if(truck == null){
                 throw new Exception("truck not found!");
             }

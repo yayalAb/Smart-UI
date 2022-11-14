@@ -11,10 +11,10 @@ namespace Application.LookUp.Commands.CreateLookup
         {
             _context = context; 
 
-            RuleFor(l => l.Type)
+            RuleFor(l => l.Key)
                 .NotEmpty()
                 .NotNull();
-            RuleFor(l => l.Name)
+            RuleFor(l => l.Value)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeUnique).WithMessage("lookup name must be unique");
@@ -22,7 +22,7 @@ namespace Application.LookUp.Commands.CreateLookup
         }
         private bool BeUnique(CreateLookupCommand lookup ,string name)
         {
-            return !_context.Lookups.Where(l=>l.Name == name && lookup.Type == l.Type ).Any();  
+            return !_context.Lookups.Where(l=>l.Value == name && lookup.Key == l.Key ).Any();  
         }
 
     }

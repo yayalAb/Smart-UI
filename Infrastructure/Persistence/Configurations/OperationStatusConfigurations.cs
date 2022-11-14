@@ -15,7 +15,7 @@ namespace Infrastructure.Persistence.Configurations
             entity.Property(os => os.GeneratedDate)
                 .IsRequired();
             entity.HasOne(os => os.Operation)
-                .WithMany(o => o.OperationStatus)
+                .WithMany(o => o.OperationStatuses)
                 .HasForeignKey(os => os.OperationId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 

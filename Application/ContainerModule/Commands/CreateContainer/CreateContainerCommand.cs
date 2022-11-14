@@ -13,7 +13,8 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public string ContianerNumber { get; set; }
         public float Size { get; set; }
         public string? Owner { get; set; }
-        public string? Location { get; set; }
+        public int LocationPortId { get; set; }
+        public int OperationId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
@@ -49,8 +50,9 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     ContianerNumber = request.ContianerNumber,
                     Size = request.Size,
                     Owner = request.Owner,
-                    Location = request.Location,
+                    LocationPortId = request.LocationPortId,
                     ManufacturedDate = request.ManufacturedDate,
+                    OperationId = request.OperationId,
                     Image = imageData,    
                 };
 

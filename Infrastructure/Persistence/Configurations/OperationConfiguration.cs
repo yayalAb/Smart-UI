@@ -20,25 +20,18 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .IsRequired(true    ) 
             .HasMaxLength(45);
 
-        entity.Property(e => e.TruckId).HasColumnName("truck_id");
-
-        entity.HasOne(d => d.BillOfLoading)
-            .WithOne(p => p.Operation)
-            .HasForeignKey<Operation>(d => d.BillOfLoadingId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
         entity.HasOne(d => d.Company)
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.CompanyId);
 
-        entity.HasOne(d => d.Driver)
+        entity.HasOne(d => d.PortOfLoading)
             .WithMany(p => p.Operations)
-            .HasForeignKey(d => d.DriverId);
+            .HasForeignKey(d => d.PortOfLoadingId);
 
 
-        entity.HasOne(d => d.Truck)
+        entity.HasOne(d => d.ShippingAgent)
             .WithMany(p => p.Operations)
-            .HasForeignKey(d => d.TruckId);
+            .HasForeignKey(d => d.ShippingAgentId);
 
     }
 }
