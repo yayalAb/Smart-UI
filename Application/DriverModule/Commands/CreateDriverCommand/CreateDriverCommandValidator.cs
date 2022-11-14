@@ -14,10 +14,6 @@ namespace Application.DriverModule.Commands.CreateDriverCommand {
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("licence number is not in the correct format");
-            RuleFor(u => u.TruckId)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("fullname is not in the correct format");
             RuleFor(d => d.ImageFile)
                 .NotNull()
                 .NotEmpty()

@@ -8,10 +8,10 @@ public class LookupConfiguration : IEntityTypeConfiguration<Lookup> {
     
     public void Configure(EntityTypeBuilder<Lookup> entity) {
 
-        entity.Property(e => e.Name)
+        entity.Property(e => e.Key)
             .HasMaxLength(45);
 
-        entity.Property(e => e.Type)
+        entity.Property(e => e.Value)
             .HasMaxLength(45);
 
     }

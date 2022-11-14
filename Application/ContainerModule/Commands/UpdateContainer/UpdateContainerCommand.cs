@@ -10,12 +10,13 @@ namespace Application.ContainerModule.Commands.UpdateContainer
     public record UpdateContainerCommand : IRequest<int>
     {
         public int Id { get; init; }
-        public string ContianerNumber { get; set; } = null!;
-        public float Size { get; set; }
-        public string? Owner { get; set; }
-        public string? Location { get; set; }
-        public DateTime? ManufacturedDate { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public string ContianerNumber { get; init; } = null!;
+        public float Size { get; init; }
+        public string? Owner { get; init; }
+        public int LocationPortId { get; init; }
+        public int OperationId { get; init; }
+        public DateTime? ManufacturedDate { get; init; }
+        public IFormFile? ImageFile { get; init; }
     }
     public class UpdateContainerCommandHandler : IRequestHandler<UpdateContainerCommand, int>
     {
@@ -46,10 +47,11 @@ namespace Application.ContainerModule.Commands.UpdateContainer
                 oldContainer.Image = response.byteData;
             }
             // update contianer record
-            oldContainer.Location = request.Location;
+            oldContainer.LocationPortId = request.LocationPortId;
             oldContainer.ContianerNumber = request.ContianerNumber;
             oldContainer.Owner = request.Owner;
             oldContainer.Size = request.Size;
+            oldContainer.OperationId = request.OperationId;
             oldContainer.ManufacturedDate = request.ManufacturedDate;
             _context.Containers.Update(oldContainer);
             await  _context.SaveChangesAsync(cancellationToken);

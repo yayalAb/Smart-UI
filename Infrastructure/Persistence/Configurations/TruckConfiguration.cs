@@ -9,9 +9,7 @@ public class TruckConfiguration : IEntityTypeConfiguration<Truck> {
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-            
-        entity.Property(e => e.Id)
-            .ValueGeneratedOnAdd();
+ 
         entity.Property(e => e.TruckNumber)
             .IsRequired()
             .HasMaxLength(45);

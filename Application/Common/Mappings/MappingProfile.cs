@@ -1,10 +1,9 @@
 ﻿using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.DocumentationModule.Commands.UpdateDocumentation;
-using Application.ShippingAgentFeeModule.Commands.CreateShippingAgentFee;
-using Application.ShippingAgentFeeModule.Commands.UpdateShippingAgentFee;
+using Application.OperationModule.Commands.CreateOperation;
+using Application.PaymentModule.Commands.CreatePayment;
+using Application.PaymentModule.Commands.UpdatePayment;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
-using Application.TerminalPortFeeModule.Commands.CreateTerminalPortFee;
-using Application.TerminalPortFeeModule.Commands.UpdateTerminalPortFee;
 using Application.User.Commands.AuthenticateUser;
 using AutoMapper;
 using Domain.Entities;
@@ -30,11 +29,10 @@ namespace Application.Common.Mappings
 
             CreateMap<CreateShippingAgentCommand, ShippingAgent>();
 
-            CreateMap<UpdateShippingAgentFeeCommand, ShippingAgentFee>();
-            CreateMap<CreateShippingAgentFeeCommand , ShippingAgentFee>();
+            CreateMap<UpdatePymentCommand, Payment>();
+            CreateMap<CreatePaymentCommand , Payment>();
+            CreateMap<CreateOperationCommand, Operation>();
 
-            CreateMap<CreateTerminalPortFeeCommand, TerminalPortFee>();
-            CreateMap<UpdateTerminalPortFeeCommand, TerminalPortFee>();
             
 
             var mapFromType = typeof(IMapFrom<>);

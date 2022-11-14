@@ -8,8 +8,8 @@ namespace Application.LookUp.Commands.UpdateLookup
     public class UpdateLookupCommand : IRequest<int>
     {
         public int Id { get; set; }
-        public string Name { get; init; }
-        public string Type { get; init; }
+        public string Key { get; init; }
+        public string Value { get; init; }
     }
     public class UpdateLookupCommandHandler : IRequestHandler<UpdateLookupCommand, int>
     {
@@ -27,8 +27,8 @@ namespace Application.LookUp.Commands.UpdateLookup
                 throw new NotFoundException("Lookup", new { Id = request.Id });
 
             };
-            existingLookup.Name = request.Name; 
-            existingLookup.Type = request.Type; 
+            existingLookup.Key = request.Key; 
+            existingLookup.Value = request.Value; 
             _context.Lookups.Update(existingLookup);
             await _context.SaveChangesAsync(cancellationToken);
             return existingLookup.Id;

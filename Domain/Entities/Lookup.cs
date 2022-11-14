@@ -4,6 +4,6 @@ namespace Domain.Entities;
 
 public class Lookup : BaseAuditableEntity
 {
-    public string Type { get; set; }
-    public string Name { get; set; }
+    public string Key { get; set; }
+    public string Value { get; set; }
 }

@@ -7,10 +7,12 @@ public class ShippingAgent : BaseAuditableEntity
         public string? CompanyName { get; set; }
         public byte[]? Image { get; set; }
         public int AddressId { get; set; }
+
    
     public Address Address { get; set; }
+
     
     //has many
-    public ICollection<ShippingAgentFee> AgentFees { get; set; }
-    public ICollection<BillOfLoading> BillOfLoadings { get; set; }
+    public ICollection<Payment> Payments { get; set; }
+    public ICollection<Operation> Operations { get; set; }
 }

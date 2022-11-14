@@ -11,12 +11,17 @@ namespace Application.LookUp.Commands.CreateLookup
         {
             _context = context; 
 
-            RuleFor(l => l.Type)
+            RuleFor(l => l.Key)
                 .NotEmpty()
+<<<<<<< HEAD
                 .NotNull()
                 .MaximumLength(45)
                 .WithMessage("type is not in the correct format");
             RuleFor(l => l.Name)
+=======
+                .NotNull();
+            RuleFor(l => l.Value)
+>>>>>>> 68a589be846fc74a04d36d873b4bfefc93d8539c
                 .NotNull()
                 .NotEmpty()
                 // .Must(BeUnique)
@@ -27,7 +32,7 @@ namespace Application.LookUp.Commands.CreateLookup
         
         private bool BeUnique(CreateLookupCommand lookup ,string name)
         {
-            return !_context.Lookups.Where(l=>l.Name == name && lookup.Type == l.Type ).Any();  
+            return !_context.Lookups.Where(l=>l.Value == name && lookup.Key == l.Key ).Any();  
         }
 
     }

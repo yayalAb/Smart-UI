@@ -12,7 +12,6 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
     {
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
-        public int TruckId { get; set; }
         public IFormFile? ImageFile { get; set; }
         public AddressCreateCommand address { get; init; }
     }
@@ -36,12 +35,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
         public async Task<Driver> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
         {
 
-            var found_truck = await _context.Trucks.FindAsync(request.TruckId);
-
-            if (found_truck == null)
-            {
-                throw new Exception("Truck not found");
-            }
+        
 
             var transaction = _context.database.BeginTransaction();
             byte[]? image;
@@ -76,7 +70,6 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                 Driver new_driver = new Driver();
                 new_driver.Fullname = request.Fullname;
                 new_driver.LicenceNumber = request.LicenceNumber;
-                new_driver.TruckId = request.TruckId;
                 new_driver.AddressId = new_address.Id;
                 new_driver.Image = image;
 

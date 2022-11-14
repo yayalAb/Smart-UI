@@ -15,7 +15,6 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
         public int Id {get; init;}
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
-        public int TruckId {get; init;}
         public AddressCreateCommand address { get; init; }
     }
 
@@ -35,7 +34,6 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
 
             Driver found_driver = _context.Drivers
                         .Include(d => d.Address)
-                        .Include(d => d.Truck)
                         .Where(d => d.Id == request.Id)
                         .FirstOrDefault();
 
@@ -43,18 +41,6 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
                 throw new Exception("driver not found");
             }
 
-            if(found_driver.Truck == null || found_driver.Truck.Id != request.TruckId){
-                
-                Truck found_truck = await _context.Trucks.FindAsync(request.TruckId);
-
-                if(found_driver == null){
-                    throw new Exception("Truck not found");
-                }
-
-                found_driver.TruckId = found_truck.Id;
-                found_driver.Truck = null;
-
-            }
 
             found_driver.Address.Email = request.address.Email;
             found_driver.Address.Phone = request.address.Phone;

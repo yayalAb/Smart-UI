@@ -8,8 +8,8 @@ namespace Application.LookUp.Commands.CreateLookup
 {
     public record CreateLookupCommand : IRequest<int>
     {
-        public string Name { get; init; }
-        public string Type { get; init; }   
+        public string Key { get; init; }
+        public string Value { get; init; }   
     }
     public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, int>
     {
@@ -23,8 +23,8 @@ namespace Application.LookUp.Commands.CreateLookup
         {
             Lookup newLookup = new Lookup
             {
-                Name = request.Name,
-                Type = request.Type,
+                Key = request.Key,
+                Value = request.Value,
             };
 
             await _context.Lookups.AddAsync(newLookup);
