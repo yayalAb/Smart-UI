@@ -16,15 +16,16 @@ namespace Application.LookUp.Commands.UpdateLookup
             RuleFor(l => l.Id)
                 .NotEmpty()
                 .NotNull();
-
             RuleFor(l => l.Key)
                 .NotEmpty()
-                .NotNull();
+                .NotNull()
+                .MaximumLength(45)
+                .WithMessage("key is not in the correct format!");
             RuleFor(l => l.Value)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeUnique).WithMessage("lookup name must be unique");
-
+                // .Must(BeUnique)
+                .WithMessage("lookup value is not in the correct format");
         }
         private bool BeUnique(UpdateLookupCommand lookup, string name)
         {

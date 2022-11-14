@@ -27,7 +27,7 @@ namespace Application.LookUp.Commands.CreateLookup
                 Value = request.Value,
             };
 
-             await _context.Lookups.AddAsync(newLookup);
+            await _context.Lookups.AddAsync(newLookup);
             await _context.SaveChangesAsync(cancellationToken);
             return newLookup.Id;
            

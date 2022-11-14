@@ -17,7 +17,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand {
             RuleFor(d => d.ImageFile)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("fullname is not in the correct format");
+                .WithMessage("image is not in the correct format");
         }
     }
 
