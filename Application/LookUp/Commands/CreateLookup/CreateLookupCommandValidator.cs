@@ -21,7 +21,7 @@ namespace Application.LookUp.Commands.CreateLookup
                 .NotNull()
                 .NotEmpty()
                 // .Must(BeUnique)
-                .MinimumLength(45)
+                .MaximumLength(45)
                 .WithMessage("lookup name not in the correct format");
           
         }
