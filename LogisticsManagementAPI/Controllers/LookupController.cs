@@ -25,6 +25,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Route("category")]
         public async Task<IActionResult> createLookupKey(CreateLookUpKey command)
         {
             var response =  await Mediator.Send(command);
