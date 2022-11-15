@@ -7,6 +7,8 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
+using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.User.Commands.CreateUser
 {
@@ -19,7 +21,7 @@ namespace Application.User.Commands.CreateUser
         public string Password { get; init; }
         public byte State {get; init;} = 1!;
         public int GroupId { get; init; }
-        public AddressCreateCommand Address {get; init;}
+        public AddressDto Address {get; init;}
 
     }
 
@@ -39,10 +41,15 @@ namespace Application.User.Commands.CreateUser
         }
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            
-            _context.database.BeginTransaction();
+           var executionStrategy = _context.database.CreateExecutionStrategy();
+         return  await executionStrategy.ExecuteAsync(
+            async ()=>{
 
-            Address new_address = _mapper.Map<Address>(request.Address);
+
+      using (var transaction =    _context.database.BeginTransaction()){
+    try
+    {
+         Address new_address = _mapper.Map<Address>(request.Address);
             _context.Addresses.Add(new_address);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -54,9 +61,23 @@ namespace Application.User.Commands.CreateUser
                 throw new CantCreateUserException(response.result.Errors.ToList());
             }
 
-            _context.database.CommitTransaction();
+           await  _context.database.CommitTransactionAsync();
             return response.userId;
 
-        }
+
+    }
+    catch (System.Exception)
+    {
+        await _context.database.RollbackTransactionAsync();
+        throw;
+    }
+          
+         }
+
+
+            });
+
+      
+              }
     }
 }
