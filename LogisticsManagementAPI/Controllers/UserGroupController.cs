@@ -4,6 +4,7 @@ using Application.UserGroupModule.Commands.DeleteUserGroup;
 using Application.UserGroupModule.Commands.UpdateUserGroup;
 using Application.UserGroupModule.Queries.GetAllUserGroups;
 using Application.UserGroupModule.Queries.GetUserGroupById;
+using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -71,6 +72,18 @@ namespace WebApi.Controllers
                 message = "userGroup deleted successfully"
             };
             return Ok(responseObj);
+        }
+
+        [HttpGet]
+        [Route("lookup")]
+        public async Task<IActionResult> LookUp() {
+            
+            try{
+                return Ok(await Mediator.Send(new UserGroupLookup()));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+
         }
     }
 }
