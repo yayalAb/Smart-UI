@@ -8,6 +8,7 @@ namespace Infrastructure.Identity
     {
         public string FullName { get; set; }
         public int UserGroupId { get; set; }
+        public int AddressId {get; set;}
         public UserGroup UserGroup { get; set; }
       
     }

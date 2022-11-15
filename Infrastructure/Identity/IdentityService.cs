@@ -51,7 +51,7 @@ namespace Infrastructure.Identity
             return user.UserName;
         }
 
-        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, int groupId)
+        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, int addressId, int groupId)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             if (existingUser != null)
@@ -63,11 +63,11 @@ namespace Infrastructure.Identity
             {
                 return (Result.Failure(new string[] { "username is already taken" }), string.Empty);
             }
-            var newUser = new ApplicationUser()
-            {
+            var newUser = new ApplicationUser() {
                 FullName = fullName,
                 UserName = userName,
                 Email = email,
+                AddressId = addressId,
                 UserGroupId = groupId
             };
 

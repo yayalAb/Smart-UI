@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Application.AddressModule.Commands.AddressCreateCommand;
 
 namespace Application.User.Commands.CreateUser
 {
@@ -17,8 +18,10 @@ namespace Application.User.Commands.CreateUser
         public string Email { get; init; }
         public string Password { get; init; }
         public int GroupId { get; init; }
+        public AddressCreateCommand Address {get; init;}
 
     }
+
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, string>
     {
         private readonly IIdentityService _identityService;
@@ -35,15 +38,23 @@ namespace Application.User.Commands.CreateUser
         }
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, request.GroupId);
+            
+            _context.database.BeginTransaction();
+
+            Address new_address = _mapper.Map<Address>(request.Address);
+            _context.Addresses.Add(new_address);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, new_address.Id, request.GroupId);
 
             if (!response.result.Succeeded)
             {
+                _context.database.RollbackTransaction();
                 throw new CantCreateUserException(response.result.Errors.ToList());
             }
-            return response.userId;
 
-         
+            _context.database.CommitTransaction();
+            return response.userId;
 
         }
     }

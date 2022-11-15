@@ -24,10 +24,14 @@ namespace Infrastructure
                 // options.UseSqlServer(configuration.GetConnectionString("appDbConnectionString"),
                 //     builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
                 
+                // options.UseMySql(configuration.GetConnectionString("appDbConnectionString"),
+                // //   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.31-mysql"),
+                //   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"),
+                // builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
+
                 options.UseMySql(configuration.GetConnectionString("appDbConnectionString"),
-                //   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.31-mysql"),
                   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"),
-                builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
+                  mySqlOptions => mySqlOptions.EnableRetryOnFailure());
                 
 
 
