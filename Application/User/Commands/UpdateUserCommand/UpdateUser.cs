@@ -17,6 +17,7 @@ public record UpdateUser : IRequest<string> {
     public string UserName { get; init; }
     public string Email { get; init; }
     public string Password { get; init; }
+    public byte State {get; init;}
     public int GroupId { get; init; }
     public AddressUpdateCommand Address { get; init; }
 
@@ -44,7 +45,7 @@ public class UpdateUserHandler : IRequestHandler<UpdateUser, string> {
         
         _context.database.BeginTransaction();
         
-        var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Email, request.GroupId);
+        var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Email, request.State, request.GroupId);
 
         if(!response.Succeeded){
             throw new CannotUpdateUserException(response.Errors.ToList());
@@ -65,7 +66,7 @@ public class UpdateUserHandler : IRequestHandler<UpdateUser, string> {
             found_address.City = request.Address.City;
             found_address.Subcity = request.Address.Subcity;
             found_address.Country = request.Address.Country;
-            found_address.POBOX = request.Address.POBOX;
+            found_address.POBOX = request.Address.POBOX ?? "";
 
             await _context.SaveChangesAsync(cancellationToken);
             _context.database.CommitTransaction();

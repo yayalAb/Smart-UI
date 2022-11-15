@@ -61,12 +61,7 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
 
                 throw;
             }
-           
 
-
-
-
-           
         }
     }
 }

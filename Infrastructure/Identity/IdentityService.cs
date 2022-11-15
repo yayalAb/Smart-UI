@@ -51,7 +51,7 @@ namespace Infrastructure.Identity
             return user.UserName;
         }
 
-        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, int addressId, int groupId)
+        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, byte state, int addressId, int groupId)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             if (existingUser != null)
@@ -67,6 +67,7 @@ namespace Infrastructure.Identity
                 FullName = fullName,
                 UserName = userName,
                 Email = email,
+                State = state,
                 AddressId = addressId,
                 UserGroupId = groupId
             };
@@ -106,9 +107,6 @@ namespace Infrastructure.Identity
             return Result.Success();
         }
 
-
-
-
         public async Task<Result> ChangePassword(string email, string oldPassword, string newPassword)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -124,7 +122,7 @@ namespace Infrastructure.Identity
             return Result.Success();
         }
 
-        public async Task<Result> UpdateUser(int id, string fullName, string userName, string email, int groupId) {
+        public async Task<Result> UpdateUser(int id, string fullName, string userName, string email, byte state, int groupId) {
 
             var user = await _userManager.FindByIdAsync(id.ToString());
 
@@ -136,6 +134,7 @@ namespace Infrastructure.Identity
             user.UserName = userName;
             user.Email = email;
             user.UserGroupId = groupId;
+            user.State = state;
 
             var response = await _userManager.UpdateAsync(user);
 

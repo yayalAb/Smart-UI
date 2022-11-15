@@ -17,6 +17,7 @@ namespace Application.User.Commands.CreateUser
         public string UserName { get; init; }
         public string Email { get; init; }
         public string Password { get; init; }
+        public byte State {get; init;} = 1!;
         public int GroupId { get; init; }
         public AddressCreateCommand Address {get; init;}
 
@@ -45,7 +46,7 @@ namespace Application.User.Commands.CreateUser
             _context.Addresses.Add(new_address);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, new_address.Id, request.GroupId);
+            var response = await _identityService.createUser(request.FullName, request.UserName, request.Email, request.Password, request.State, new_address.Id, request.GroupId);
 
             if (!response.result.Succeeded)
             {

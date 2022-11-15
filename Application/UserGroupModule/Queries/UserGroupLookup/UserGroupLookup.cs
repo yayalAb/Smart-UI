@@ -19,7 +19,7 @@ public class UserGroupLookupHandler : IRequestHandler<UserGroupLookup, List<User
         _mapper = mapper;
     }
 
-    public async Task<List<UserGroupLookupDto>> Handle(UserGroupLookup request, CancellationToken candellationToken){
+    public async Task<List<UserGroupLookupDto>> Handle(UserGroupLookup request, CancellationToken candellationToken) {
         return await _context.UserGroups.Select(u => new UserGroupLookupDto() {
             Text = u.Name,
             Value = u.Id
