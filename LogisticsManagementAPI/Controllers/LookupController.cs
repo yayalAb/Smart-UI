@@ -24,11 +24,10 @@ namespace WebApi.Controllers
             return StatusCode(StatusCodes.Status201Created, responseObj);
         }
 
-        [HttpPost("{lookup_key}")]
-        // [Route("lookup_key")]
-        public async Task<IActionResult> createLookupKey(string lookup_key)
+        [HttpPost]
+        public async Task<IActionResult> createLookupKey(CreateLookUpKey command)
         {
-            var response =  await Mediator.Send(new CreateLookUpKey(lookup_key));
+            var response =  await Mediator.Send(command);
             var responseObj = new
             {
                 Id = response,
