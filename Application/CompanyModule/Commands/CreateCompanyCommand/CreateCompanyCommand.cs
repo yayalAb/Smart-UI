@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.AddressModule.Commands.AddressCreateCommand;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 
@@ -31,9 +32,9 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
     }
     
     public async Task<Company> Handle(CreateCompanyCommand request, CancellationToken cancellationToken) {
-
-        var transaction = _context.database.BeginTransaction();
-
+        var executionStrategy = _context.database.CreateExecutionStrategy();
+   return await executionStrategy.ExecuteAsync(async()=>{
+       using (var transaction = _context.database.BeginTransaction()) {
         try{
 
             Address new_address = new Address();
@@ -79,5 +80,11 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
             throw new CompanyException(ex.Message);
         }
 
+        }
+
+        
+        });
+
+        
     }
 }

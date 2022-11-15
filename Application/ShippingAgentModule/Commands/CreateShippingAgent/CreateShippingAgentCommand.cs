@@ -7,6 +7,7 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
 {
@@ -31,8 +32,11 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
         }
         public async Task<int> Handle(CreateShippingAgentCommand request, CancellationToken cancellationToken)
         {
-          
-           using var transaction = _context.database.BeginTransaction();
+          var executionStrategy = _context.database.CreateExecutionStrategy();
+         return  await executionStrategy.ExecuteAsync(
+            async ()=>{
+                 using (var transaction = _context.database.BeginTransaction()){
+
             try
             {
                 byte[]? imageByte = null; 
@@ -73,6 +77,9 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                 throw;
             }
         }
+          });
+       
+           }
     }
 
 }

@@ -5,6 +5,7 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.DriverModule.Commands.CreateDriverCommand
 {
@@ -35,12 +36,15 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
         public async Task<Driver> Handle(CreateDriverCommand request, CancellationToken cancellationToken)
         {
 
-        
+           var executionStrategy = _context.database.CreateExecutionStrategy();
+   return await executionStrategy.ExecuteAsync(async()=>{
 
-            var transaction = _context.database.BeginTransaction();
+     using( var transaction = _context.database.BeginTransaction()){
+            
             byte[]? image;
 
             try
+           
             {
 
                 //image uploading
@@ -83,6 +87,9 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                await transaction.RollbackAsync();
                 throw ;
             }
+           }
+        
+   });
 
         }
     }
