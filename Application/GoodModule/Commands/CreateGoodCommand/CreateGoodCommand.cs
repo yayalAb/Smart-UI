@@ -17,7 +17,7 @@ namespace Application.GoodModule.Commands.CreateGoodCommand {
         public float? Quantity { get; init; }
         public float? UnitPrice { get; init; }
         public string? UnitOfMeasurnment { get; init; }
-        public int ContainerId { get; init; }
+        public int ContainerId { get; set; }
     }
 
     public class CreateGoodCommandHandler : IRequestHandler<CreateGoodCommand, Good>

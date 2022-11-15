@@ -35,12 +35,20 @@ namespace Application.ContainerModule.Commands.CreateContainer
             RuleFor(c => c.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
+            RuleFor(c => c.LocationPortId)
+                .NotNull()
+                .Must(BeFoundInPort).WithMessage("port not found with the provided id");
             
         }
 
         private bool BeFoundInDb(int operationId)
         {
             return _context.UserGroups.Find(operationId) != null;
+        }
+
+        private bool BeFoundInPort(int PortId)
+        {
+            return _context.Ports.Find(PortId) != null;
         }
     }
 }

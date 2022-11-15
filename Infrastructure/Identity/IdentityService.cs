@@ -26,21 +26,21 @@ namespace Infrastructure.Identity
             _logger = logger;
             _configuration = configuration;
         }
-        public async Task<(Result result, string tokenString ,IApplicationUser? user )> AuthenticateUser(string email, string password)
+        public async Task<(Result result, string tokenString, IApplicationUser? user)> AuthenticateUser(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-       
-        
+
+
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
 
                 var tokenString = await generateToken(user);
-                return (Result.Success(), tokenString , user);
+                return (Result.Success(), tokenString, user);
 
 
             }
             string[] errors = new string[] { "Invalid login" };
-            return (Result.Failure(errors), string.Empty , null);
+            return (Result.Failure(errors), string.Empty, null);
 
         }
 
@@ -51,15 +51,15 @@ namespace Infrastructure.Identity
             return user.UserName;
         }
 
-        public async Task<(Result, string )> createUser(string fullName , string userName , string email , string password , int groupId)
+        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, int groupId)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
-            if(existingUser != null)
+            if (existingUser != null)
             {
                 return (Result.Failure(new string[] { "user with the given email already exists" }), string.Empty);
             }
             existingUser = await _userManager.FindByNameAsync(userName);
-            if(existingUser != null)
+            if (existingUser != null)
             {
                 return (Result.Failure(new string[] { "username is already taken" }), string.Empty);
             }
@@ -70,27 +70,27 @@ namespace Infrastructure.Identity
                 Email = email,
                 UserGroupId = groupId
             };
-          
-           var  result =  await _userManager.CreateAsync(newUser , password);
+
+            var result = await _userManager.CreateAsync(newUser, password);
             if (!result.Succeeded)
             {
                 return (result.ToApplicationResult(), string.Empty);
             }
-            return (Result.Success(), newUser.Id) ;    
+            return (Result.Success(), newUser.Id);
         }
 
-        public async Task<(Result,string)> ForgotPassword(string email)
+        public async Task<(Result, string)> ForgotPassword(string email)
         {
-           var user = await _userManager.FindByEmailAsync (email);
-            if(user == null)
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
             {
                 return (Result.Failure(new string[] { "could not find user with the given email" }), string.Empty);
             }
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            
+
             return (Result.Success(), token);
         }
-        public async Task<Result > ResetPassword(string email , string password , string token)
+        public async Task<Result> ResetPassword(string email, string password, string token)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -112,11 +112,11 @@ namespace Infrastructure.Identity
         public async Task<Result> ChangePassword(string email, string oldPassword, string newPassword)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if(user == null)
+            if (user == null)
             {
                 return Result.Failure(new string[] { "could not find user with the given email" });
             }
-          var response =   await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            var response = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (!response.Succeeded)
             {
                 return Result.Failure(new string[] { "change password failed " });
@@ -124,6 +124,28 @@ namespace Infrastructure.Identity
             return Result.Success();
         }
 
+        public async Task<Result> UpdateUser(int id, string fullName, string userName, string email, int groupId) {
+
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null) {
+                return Result.Failure(new string[] { "could not find user with the given id" });
+            }
+
+            user.FullName = fullName;
+            user.UserName = userName;
+            user.Email = email;
+            user.UserGroupId = groupId;
+
+            var response = await _userManager.UpdateAsync(user);
+
+            if(!response.Succeeded) {
+                return Result.Failure(new string[] { "User Updating failed!" });
+            }
+
+            return Result.Success();
+
+        }
 
         private async Task<string> generateToken(ApplicationUser user)
         {
@@ -154,6 +176,6 @@ namespace Infrastructure.Identity
             return tokenString;
         }
 
-      
+
     }
 }

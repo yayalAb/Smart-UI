@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.LookUp.Query.GetByKey {
-    public class GetLookUpByKey : IRequest<List<Lookup>> {
+    public class GetLookUpByKey : IRequest<ICollection<Lookup>> {
         public string Key {get; init;}
 
         public GetLookUpByKey(string type){
@@ -12,14 +12,16 @@ namespace Application.LookUp.Query.GetByKey {
         }
     }
 
-    public class GetLookUpByKeyHandler : IRequestHandler<GetLookUpByKey, List<Lookup>> {
+    public class GetLookUpByKeyHandler : IRequestHandler<GetLookUpByKey, ICollection<Lookup>> {
         private readonly IAppDbContext _context;
 
         public GetLookUpByKeyHandler(IAppDbContext context) {
             _context = context;
         }
-        public async Task<List<Lookup>> Handle(GetLookUpByKey request, CancellationToken cancellationToken) {
-            return await _context.Lookups.Where(l => l.Key.Equals(request.Key)).ToListAsync();
+        public async Task<ICollection<Lookup>> Handle(GetLookUpByKey request, CancellationToken cancellationToken) {
+            // return await _context.Lookups.Where(l => l.Key == request.Key).ToListAsync();
+            return await _context.Lookups.ToListAsync();
+
         }
     }
 }

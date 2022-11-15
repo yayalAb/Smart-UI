@@ -68,7 +68,7 @@ namespace WebApi.Controllers
         [HttpGet("{type}")]
         public async Task<ActionResult> getLookup(string type){
             try{
-                return Ok(Mediator.Send(new GetLookUpByKey(type)));
+                return Ok(await Mediator.Send(new GetLookUpByKey(type)));
             }catch(Exception ex){
                 return NotFound(ex.Message);
             }

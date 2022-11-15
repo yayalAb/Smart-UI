@@ -3,8 +3,8 @@ using FluentValidation;
 
 namespace Application.LookUp.Commands.CreateLookup
 {
-    public class CreateLookupCommandValidator : AbstractValidator<CreateLookupCommand>    
-    {
+    public class CreateLookupCommandValidator : AbstractValidator<CreateLookupCommand> {
+        
         private readonly IAppDbContext _context;
 
         public CreateLookupCommandValidator(IAppDbContext context)

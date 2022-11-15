@@ -15,7 +15,7 @@ namespace Application.AddressModule.Commands.AddressUpdateCommand {
         public string City { get; init; }
         public string Subcity { get; init; }
         public string Country { get; init; }
-        public string POBOX { get; init; }
+        public string? POBOX { get; init; }
     }
 
 }

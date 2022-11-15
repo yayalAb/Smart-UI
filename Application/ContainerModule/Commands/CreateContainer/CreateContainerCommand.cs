@@ -4,6 +4,8 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Application.GoodModule.Commands.CreateGoodCommand;
+using AutoMapper;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
@@ -16,19 +18,25 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public int OperationId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public IFormFile? ImageFile { get; set; }
+
+        public ICollection<CreateGoodCommand> Goods {get; set;}
     }
+
     public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, int> {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
+        private readonly IMapper _mapper;
 
-        public CreateContainerCommandHandler(IAppDbContext context , IFileUploadService fileUploadService)
+        public CreateContainerCommandHandler(IAppDbContext context , IFileUploadService fileUploadService, IMapper mapper)
         {
             _context = context;
             _fileUploadService = fileUploadService;
+            _mapper = mapper;
         }
         public async Task<int> Handle(CreateContainerCommand request, CancellationToken cancellationToken)
         {
             using var transaction = _context.database.BeginTransaction();
+
             try
             {
                 byte[]? imageData = null;
@@ -54,8 +62,18 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     Image = imageData,    
                 };
 
-                await _context.Containers.AddAsync(newContainer);
+                _context.Containers.Add(newContainer);
                 await _context.SaveChangesAsync(cancellationToken);
+
+                //inserting goods
+
+                foreach(var good in request.Goods){
+                    good.ContainerId = newContainer.Id;
+                    _context.Goods.Add(_mapper.Map<Good>(good));
+                }
+
+                await _context.SaveChangesAsync(cancellationToken);
+
                 await transaction.CommitAsync();
                 return newContainer.Id;
 
