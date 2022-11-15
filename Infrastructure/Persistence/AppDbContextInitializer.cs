@@ -58,7 +58,9 @@ namespace Infrastructure.Persistence
             // Adding Default userGroup
             UserGroup defaultGroup = new UserGroup
             {
-                Name = "AdminGroup"
+                Name = "AdminGroup",
+                Responsiblity = "adminstration",
+
             };
             if (!_context.UserGroups.Any(ug=>ug.Name == defaultGroup.Name))
             {
@@ -100,7 +102,7 @@ namespace Infrastructure.Persistence
                 await _context.SaveChangesAsync();
 
                 //adding default user roles
-               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(administrator.Id);
+               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(defaultGroup.Id);
                 try
                 {
                     await _context.AddRangeAsync(defaultRoles);

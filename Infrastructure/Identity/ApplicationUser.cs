@@ -9,7 +9,6 @@ namespace Infrastructure.Identity
         public string FullName { get; set; }
         public int UserGroupId { get; set; }
         public UserGroup UserGroup { get; set; }
-        public IEnumerable<AppUserRole> UserRoles { get ; set; }
-       
+      
     }
 }

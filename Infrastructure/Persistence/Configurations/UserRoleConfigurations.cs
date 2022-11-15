@@ -10,8 +10,8 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<AppUserRole> builder)
         {
-            builder.HasOne<ApplicationUser>()
-                .WithMany(u => u.UserRoles).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne<UserGroup>()
+                .WithMany(g => g.UserRoles).OnDelete(DeleteBehavior.Cascade);
             
         }
     }

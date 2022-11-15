@@ -4,10 +4,8 @@ namespace Domain.Enums
     public enum Page
     {
         dashboard,
-        bill_of_loading,
         operation,
-        shipping_agent_payment,
-        terminal_port_handling,
+        payment,
         container,
         shipping_agent,
         driver,
@@ -15,7 +13,7 @@ namespace Domain.Enums
         port,
         company,
         operation_followup,
-        assign_goods_to_container,
+        truck_assignment,
         documentation,
         users,
         lookup,
