@@ -2,7 +2,7 @@
 using Application.Common.Mappings;
 using Domain.Entities;
 
-namespace Application.ShippingAgentFeeModule.Queries.GetShippingAgentFeeById
+namespace Application.PaymentModule.Queries.GetPaymentById
 {
     public class PaymentDto : IMapFrom<Payment>
     {

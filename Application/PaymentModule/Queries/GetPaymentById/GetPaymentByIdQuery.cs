@@ -6,7 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 
-namespace Application.ShippingAgentFeeModule.Queries.GetShippingAgentFeeById
+namespace Application.PaymentModule.Queries.GetPaymentById
 {
     public record GetPaymentByIdQuery : IRequest<PaymentDto>
     {

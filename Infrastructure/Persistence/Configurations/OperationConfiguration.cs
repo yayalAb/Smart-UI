@@ -27,11 +27,13 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.HasOne(d => d.PortOfLoading)
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.PortOfLoadingId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
 
         entity.HasOne(d => d.ShippingAgent)
             .WithMany(p => p.Operations)
+            .IsRequired(false)
             .HasForeignKey(d => d.ShippingAgentId);
 
     }

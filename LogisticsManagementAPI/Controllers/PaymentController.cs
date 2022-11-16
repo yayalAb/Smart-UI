@@ -2,8 +2,8 @@
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.DeletePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
-using Application.ShippingAgentFeeModule.Queries.GetPaymentList;
-using Application.ShippingAgentFeeModule.Queries.GetShippingAgentFeeById;
+using Application.PaymentModule.Queries.GetPaymentById;
+using Application.PaymentModule.Queries.GetPaymentList;
 using Microsoft.AspNetCore.Mvc;
 
 
