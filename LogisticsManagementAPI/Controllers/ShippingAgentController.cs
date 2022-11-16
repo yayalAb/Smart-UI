@@ -4,6 +4,7 @@ using Application.ShippingAgentModule.Commands.DeleteShippingAgent;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Application.ShippingAgentModule.Queries.GetShippingAgentById;
 using Application.ShippingAgentModule.Queries.GetShippingAgentList;
+using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,11 +15,25 @@ namespace WebApi.Controllers
     {
        // GET api/<ShippingAgentController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetShippingAgentListQuery query)
+        public async Task<IActionResult> Get([FromQuery] int? pageNumber ,[FromQuery] int? pageSize)
         {
 
-            var response = await Mediator.Send(query);
+            if(pageNumber == 0 || pageNumber == null || pageSize == 0 || pageSize == null ){
+                var query = new GetShippingAgentListQuery();
+                var response = await Mediator.Send(query);
+                return Ok(response);
+
+            }
+            else{
+                var query = new GetShippingAgentPaginatedListQuery{
+                    pageNumber = (int)pageNumber,
+                    pageSize = (int)pageSize
+                };
+                var response = await Mediator.Send(query);
             return Ok(response);
+            }
+
+            
         }
 
         // GET api/<ShippingAgentController>/5

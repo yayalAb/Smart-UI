@@ -8,24 +8,24 @@ using Application.Common.Models;
 using AutoMapper.QueryableExtensions;
 using Application.Common.Mappings;
 
-namespace Application.ShippingAgentModule.Queries.GetShippingAgentList;
+namespace Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 
-public class GetShippingAgentListQuery : IRequest<PaginatedList<ShippingAgentDto>> {
-    public int pageNumber {get; init; }=1;
-    public int pageSize {get; init; }=10;
+public class GetShippingAgentPaginatedListQuery : IRequest<PaginatedList<ShippingAgentDto>> {
+    public int pageNumber {get; init; }
+    public int pageSize {get; init; }
 }
 
-public class GetShippingAgentListHandler : IRequestHandler<GetShippingAgentListQuery, PaginatedList<ShippingAgentDto>> {
+public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShippingAgentPaginatedListQuery, PaginatedList<ShippingAgentDto>> {
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetShippingAgentListHandler( IAppDbContext context , IMapper mapper){
+    public GetShippingAgentPaginatedListQueryHandler( IAppDbContext context , IMapper mapper){
         _context = context;
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<ShippingAgentDto>> Handle(GetShippingAgentListQuery request, CancellationToken cancellationToken) {
+    public async Task<PaginatedList<ShippingAgentDto>> Handle(GetShippingAgentPaginatedListQuery request, CancellationToken cancellationToken) {
         return await _context.ShippingAgents
         .Include(t => t.Address)
         .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider)
