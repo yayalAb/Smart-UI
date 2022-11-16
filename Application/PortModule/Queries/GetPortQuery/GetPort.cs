@@ -6,14 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.PortModule.Queries.GetPort;
 
-public class GetPort : IRequest<Port> {
-        
+public record GetPort : IRequest<Port> {
     public int Id {get; init;}
-
-    public GetPort(int id){
-        this.Id = id;
-    }
-
 }
 
 public class GetPortHandler : IRequestHandler<GetPort, Port> {
@@ -22,7 +16,7 @@ public class GetPortHandler : IRequestHandler<GetPort, Port> {
     private readonly IAppDbContext _context;
 
     public GetPortHandler(
-        IIdentityService identityService, 
+        IIdentityService identityService,
         IAppDbContext context
     ){
         _identityService = identityService;
@@ -32,7 +26,7 @@ public class GetPortHandler : IRequestHandler<GetPort, Port> {
     public async Task<Port> Handle(GetPort request, CancellationToken cancellationToken) {
         
         var port = await _context.Ports.Where(t => t.Id == request.Id).FirstOrDefaultAsync();
-        if(port == null){
+        if(port == null) {
             throw new Exception("port not found!");
         }
 

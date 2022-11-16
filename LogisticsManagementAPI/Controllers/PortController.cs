@@ -3,6 +3,7 @@ using Application.PortModule.Commands.CreatePort;
 using Application.PortModule.Commands.UpdatePort;
 using Microsoft.AspNetCore.Mvc;
 using Application.PortModule.Queries.GetAllPortsQuery;
+using Application.PortModule.Queries.GetPort;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,7 +21,7 @@ namespace WebApi.Controllers
             {
                 Id = response
             };
-            return StatusCode(StatusCodes.Status201Created,responseObj);    
+            return StatusCode(StatusCodes.Status201Created,responseObj);
 
         }
         // PUT api/<PortController>/
@@ -37,7 +38,17 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("list")]
         public async Task<ActionResult> get([FromQuery] GetAllPorts command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getPort([FromQuery] GetPort command){
             try{
                 return Ok(await Mediator.Send(command));
             }catch(Exception ex){
