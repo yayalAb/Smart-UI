@@ -21,7 +21,7 @@ namespace Application.User.Commands.CreateUser
                 .NotNull()
                 .NotEmpty();
 
-            RuleFor(u => u.Email)
+            RuleFor(u => u.Address.Email)
                 .NotEmpty()
                 .NotNull()
                 .EmailAddress();
