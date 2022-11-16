@@ -15,7 +15,7 @@ public class Container : BaseAuditableEntity
     public DateTime? ManufacturedDate { get; set; }
     public int OperationId { get; set; }    
     public int? TruckAssignmentId { get; set; }
-    public byte[]? Image { get; set; } 
+    public byte[]? Image { get; set; }
     
 
     public virtual ICollection<Good> Goods { get; set; }

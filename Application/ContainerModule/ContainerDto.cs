@@ -5,6 +5,7 @@ using Application.BillOfLoadingModule;
 namespace Application.ContainerModule;
 
 public class ContainerDto : IMapFrom<Container> {
+    public int Id {get; set;}
     public string ContianerNumber { get; set; } = null!;
     public float Size { get; set; }
     public string? Owner { get; set; }
