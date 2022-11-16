@@ -4,6 +4,7 @@ using Application.TruckModule.Commands.ChangeTruckImageCommand;
 using Application.TruckModule.Commands.UpdateTruckCommand;
 using Application.TruckModule.Queries.GetTruckQuery;
 using Application.TruckModule.Queries.GetAllTruckQuery;
+using Application.TruckModule.Commands.DeleteTruckCommand;
 
 namespace WebApi.Controllers
 {
@@ -57,6 +58,15 @@ namespace WebApi.Controllers
 
         [HttpGet]
         public async Task<ActionResult> getAll([FromQuery] GetAllTrucks command){
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch(Exception ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> deleteTruck([FromQuery] DeleteTruck command){
             try {
                 return Ok(await Mediator.Send(command));
             } catch(Exception ex) {
