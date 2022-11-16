@@ -4,7 +4,7 @@ using Application.LookUp.Commands.UpdateLookup;
 using Application.LookUp.Query.GetByKey;
 using Microsoft.AspNetCore.Mvc;
 using Application.LookUp.Commands.CreateLookUpKey;
-
+using Application.LookUp.Query.GetAllLookups;
 
 namespace WebApi.Controllers
 {
@@ -73,5 +73,16 @@ namespace WebApi.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("list")]
+        public async Task<ActionResult> getAll([FromQuery] GetAllLookups command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }
