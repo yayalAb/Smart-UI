@@ -17,7 +17,6 @@ namespace Application.User.Commands.CreateUser
     {
         public string FullName { get; init; }
         public string UserName { get; init; }
-        public string Password { get; init; }
         public byte State {get; init;} = 1!;
         public int GroupId { get; init; }
         public AddressDto Address {get; init;}
@@ -52,7 +51,10 @@ namespace Application.User.Commands.CreateUser
             _context.Addresses.Add(new_address);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, request.Password, request.State, new_address.Id, request.GroupId);
+            // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
+            var defaultUserPassword = "pass123#@A";
+
+            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email,defaultUserPassword, request.State, new_address.Id, request.GroupId);
 
             if (!response.result.Succeeded)
             {
