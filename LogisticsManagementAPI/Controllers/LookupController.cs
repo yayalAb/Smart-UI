@@ -75,7 +75,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
         public async Task<ActionResult> getAll([FromQuery] GetAllLookups command){
             try{
                 return Ok(await Mediator.Send(command));
