@@ -58,8 +58,9 @@ namespace Application.User.Commands.CreateUser
 
             if (!response.result.Succeeded)
             {
-                _context.database.RollbackTransaction();
                 throw new CantCreateUserException(response.result.Errors.ToList());
+
+           
             }
 
            await  _context.database.CommitTransactionAsync();
