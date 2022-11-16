@@ -9,7 +9,8 @@ namespace Application.LookUp.Commands.CreateLookup
     public record CreateLookupCommand : IRequest<int>
     {
         public string Key { get; init; }
-        public string Value { get; init; }   
+        public string Value { get; init; }
+        public byte? is_parent {get; init;} = 0!;
     }
     public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, int>
     {
@@ -27,7 +28,15 @@ namespace Application.LookUp.Commands.CreateLookup
                 Value = request.Value,
             };
 
-            await _context.Lookups.AddAsync(newLookup);
+            _context.Lookups.Add(newLookup);
+
+            if(request.is_parent == 1){
+                _context.Lookups.Add(new Lookup(){
+                    Key = "key",
+                    Value = request.Value
+                });
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return newLookup.Id;
            

@@ -1,9 +1,6 @@
-using Domain.Entities;
 using Application.Common.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
-using Application.LookUp;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
