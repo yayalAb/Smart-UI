@@ -11,7 +11,7 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
     {
         _context = context; 
 
-        RuleFor(l => l.Value)
+        RuleFor(l => l.Key)
             .NotEmpty()
             .NotNull()
             // .Must(BeUnique);
