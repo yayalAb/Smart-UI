@@ -4,6 +4,7 @@ using Application.PortModule.Commands.UpdatePort;
 using Microsoft.AspNetCore.Mvc;
 using Application.PortModule.Queries.GetAllPortsQuery;
 using Application.PortModule.Queries.GetPort;
+using Application.PortModule.Commands.DeletePort;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -49,6 +50,15 @@ namespace WebApi.Controllers
 
         [HttpGet]
         public async Task<ActionResult> getPort([FromQuery] GetPort command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> delete([FromQuery] DeletePort command) {
             try{
                 return Ok(await Mediator.Send(command));
             }catch(Exception ex){
