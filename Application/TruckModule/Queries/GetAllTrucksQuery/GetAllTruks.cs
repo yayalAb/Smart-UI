@@ -8,12 +8,12 @@ using AutoMapper;
 
 namespace Application.TruckModule.Queries.GetAllTruckQuery
 {
-    public class GetAllTrucks : IRequest<ICollection<TruckDto>> {
+    public class GetAllTrucks : IRequest<List<TruckDto>> {
         public int PageNumber { get; init; } = 1;
         public int PageSize { get; init; } = 10;
     }
 
-    public class GetAllTrucksHandler: IRequestHandler<GetAllTrucks, ICollection<TruckDto>> {
+    public class GetAllTrucksHandler: IRequestHandler<GetAllTrucks, List<TruckDto>> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -32,7 +32,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             _mapper = mapper;
         }
 
-        public async Task<ICollection<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
+        public async Task<List<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
             
             var truck = await _context.Trucks.Include(t => t.Image).ProjectTo<TruckDto>(_mapper.ConfigurationProvider).ToListAsync();
             if(truck == null){
@@ -40,7 +40,6 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             }
 
             return truck;
-            // throw new Exception("not implemented yet!");
 
         }
 
