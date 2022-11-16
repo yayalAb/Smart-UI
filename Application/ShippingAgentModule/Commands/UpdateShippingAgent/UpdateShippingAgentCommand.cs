@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 {
@@ -33,7 +34,11 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         }
         public async Task<int> Handle(UpdateShippingAgentCommand request, CancellationToken cancellationToken)
         {
-            using var transaction = _context.database.BeginTransaction();
+            
+            var executionStrategy = _context.database.CreateExecutionStrategy();
+            return await executionStrategy.ExecuteAsync(async()=>{
+
+            using( var transaction = _context.database.BeginTransaction()){
             try
             {
                 /// check if shipping agent exists
@@ -92,7 +97,12 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
                 await transaction.RollbackAsync();
                 throw;
             }
-        }
+        
+            }
+         
+   });
+
+   }
     }
 
 }
