@@ -41,7 +41,7 @@ namespace Infrastructure.Services
                         return (Result.Success(), imageBytes);
                     }
                  case FileType.EcdDocument:
-                 case   FileType.BillOfLoadingDocument:
+                 case   FileType.SourceDocument:
                     if (!DocumentExtensions.Contains(extension.ToUpperInvariant()))
                     {
                         return (Result.Failure(new string[] { "document format must be in PDF, CSV , DOC, or DOCX" }), null);

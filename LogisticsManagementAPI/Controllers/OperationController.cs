@@ -13,12 +13,12 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPost]
-        public async Task<IActionResult> CreateOperation([FromBody] CreateOperationCommand command)
+        public async Task<IActionResult> CreateOperation([FromForm] CreateOperationCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
             {
-                Id = response
+                message = $"operation created successfully ==== {response}"
             };
             return StatusCode(StatusCodes.Status201Created, responseObj);
         }
