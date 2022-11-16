@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.DriverModule.Commands.CreateDriverCommand;
-// using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.DriverModule.Commands.UpdateDriverCommand;
 using Application.DriverModule.Commands.ChangeDriverImageCommand;
+using Application.DriverModule.Queries.GetAllDriversQuery;
+using Application.DriverModule.Queries.GetDriverQuery;
 
 namespace WebApi.Controllers
 {
@@ -42,6 +39,27 @@ namespace WebApi.Controllers
         [HttpPut]
         [Route("change_image")]
         public async Task<ActionResult> changeImage([FromForm] ChangeDriverImage command){
+            try{
+                var response = await Mediator.Send(command);
+                return Ok(response);
+            }catch(Exception ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getDriver([FromQuery] GetDriver command){
+            try{
+                var response = await Mediator.Send(command);
+                return Ok(response);
+            }catch(Exception ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public async Task<ActionResult> get([FromQuery] GetAllDrivers command){
             try{
                 var response = await Mediator.Send(command);
                 return Ok(response);

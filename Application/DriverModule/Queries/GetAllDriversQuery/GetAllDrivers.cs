@@ -3,10 +3,14 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Models;
 
 namespace Application.DriverModule.Queries.GetAllDriversQuery;
 
-public class GetAllDrivers : IRequest<List<Driver>> {}
+public record GetAllDrivers : IRequest<List<Driver>> {
+    public int PageNumber {get; set;}
+    public int PageSize {get; set;}
+}
 
 public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, List<Driver>> {
 
@@ -22,7 +26,8 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, List<Driver>>
     }
 
     public async Task<List<Driver>> Handle(GetAllDrivers request, CancellationToken cancellationToken) {
-        return await _context.Drivers.Include(t => t.Address).ToListAsync();
+        var drivers = await PaginatedList<Driver>.CreateAsync(_context.Drivers.Include(t => t.Address), request.PageNumber, request.PageSize);
+        return drivers.Items;
     }
 
 }

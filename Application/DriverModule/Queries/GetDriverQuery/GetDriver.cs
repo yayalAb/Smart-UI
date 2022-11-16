@@ -6,14 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.DriverModule.Queries.GetDriverQuery;
 
-public class GetDriver : IRequest<Driver> {
-        
+public record GetDriver : IRequest<Driver> {
     public int Id {get; init;}
-
-    public GetDriver(int id){
-        this.Id = id;
-    }
-
 }
 
 public class GetDriverHandler : IRequestHandler<GetDriver, Driver> {
