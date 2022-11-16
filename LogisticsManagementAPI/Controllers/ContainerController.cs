@@ -1,6 +1,9 @@
 ﻿
 using Application.ContainerModule.Commands.CreateContainer;
 using Application.ContainerModule.Commands.UpdateContainer;
+using Application.ContainerModule.Queries.GetAllContainersQuery;
+using Application.ContainerModule.Queries.GetContainerQuery;
+
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,6 +37,24 @@ namespace WebApi.Controllers
             };
             return Ok(responseObj);
 
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ContainerList(GetAllContainers command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetContainer(int id){
+            try{
+                return Ok(await Mediator.Send(new GetContainer(id)));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
         }
 
 
