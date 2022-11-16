@@ -3,6 +3,7 @@ using Application.TruckModule.Commands.CreateTruckCommand;
 using Application.TruckModule.Commands.ChangeTruckImageCommand;
 using Application.TruckModule.Commands.UpdateTruckCommand;
 using Application.TruckModule.Queries.GetTruckQuery;
+using Application.TruckModule.Queries.GetAllTruckQuery;
 
 namespace WebApi.Controllers
 {
@@ -50,6 +51,15 @@ namespace WebApi.Controllers
                 var response = await Mediator.Send(new GetTruckQuery(id));
                 return Ok(response);
             }catch(Exception ex) {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> getAll([FromQuery] GetAllTrucks command){
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch(Exception ex) {
                 return NotFound(ex.Message);
             }
         }

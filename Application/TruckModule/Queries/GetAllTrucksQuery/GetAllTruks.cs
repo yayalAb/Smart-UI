@@ -1,3 +1,4 @@
+using System;
 using Domain.Entities;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Application.Common.Models;
 
 namespace Application.TruckModule.Queries.GetAllTruckQuery
 {
@@ -25,6 +27,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             IAppDbContext context, 
             ILogger<GetAllTrucksHandler> logger,
             IMapper mapper
+
         ){
             _identityService = identityService;
             _context = context;
@@ -34,12 +37,8 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
 
         public async Task<List<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
             
-            var truck = await _context.Trucks.Include(t => t.Image).ProjectTo<TruckDto>(_mapper.ConfigurationProvider).ToListAsync();
-            if(truck == null){
-                throw new Exception("truck not found!");
-            }
-
-            return truck;
+            var trucks = await PaginatedList<TruckDto>.CreateAsync(_context.Trucks.ProjectTo<TruckDto>(_mapper.ConfigurationProvider), request.PageNumber, request.PageSize);
+            return trucks.Items;
 
         }
 
