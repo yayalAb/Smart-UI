@@ -7,12 +7,12 @@ using Application.Common.Models;
 
 namespace Application.DriverModule.Queries.GetAllDriversQuery;
 
-public record GetAllDrivers : IRequest<List<Driver>> {
+public record GetAllDrivers : IRequest<PaginatedList<Driver>> {
     public int PageNumber {get; set;}
-    public int PageSize {get; set;}
+    public int PageCount {get; set;}
 }
 
-public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, List<Driver>> {
+public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList<Driver>> {
 
     private readonly IIdentityService _identityService;
     private readonly IAppDbContext _context;
@@ -25,9 +25,8 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, List<Driver>>
         _context = context;
     }
 
-    public async Task<List<Driver>> Handle(GetAllDrivers request, CancellationToken cancellationToken) {
-        var drivers = await PaginatedList<Driver>.CreateAsync(_context.Drivers.Include(t => t.Address), request.PageNumber, request.PageSize);
-        return drivers.Items;
+    public async Task<PaginatedList<Driver>> Handle(GetAllDrivers request, CancellationToken cancellationToken) {
+        return await PaginatedList<Driver>.CreateAsync(_context.Drivers.Include(t => t.Address), request.PageNumber, request.PageCount);
     }
 
 }
