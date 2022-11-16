@@ -22,6 +22,7 @@ public class DeletePortHandler: IRequestHandler<DeletePort, string> {
         var found_port = await _context.Ports.FindAsync(request.Id);
         if(found_port != null){
             _context.Ports.Remove(found_port);
+            await _context.SaveChangesAsync(cancellationToken);
         }
         
         return "Port deleted successfully!";

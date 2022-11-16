@@ -26,7 +26,8 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 
         entity.HasOne(d => d.PortOfLoading)
             .WithMany(p => p.Operations)
-            .HasForeignKey(d => d.PortOfLoadingId);
+            .HasForeignKey(d => d.PortOfLoadingId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
 
         entity.HasOne(d => d.ShippingAgent)
