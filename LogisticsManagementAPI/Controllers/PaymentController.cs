@@ -1,6 +1,8 @@
 ﻿
 using Application.PaymentModule.Commands.CreatePayment;
+using Application.PaymentModule.Commands.DeletePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
+using Application.ShippingAgentFeeModule.Queries.GetPaymentList;
 using Application.ShippingAgentFeeModule.Queries.GetShippingAgentFeeById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,33 +14,41 @@ namespace WebApi.Controllers
     public class PaymentController : ApiControllerBase
     {
     
-
-        // GET api/<ShippingAgentFeeController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+  // GET api/<PaymentController>/
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query)
         {
-            var command = new GetPaymentByIdQuery
-            {
-                Id = id
-            };
-            var response = await Mediator.Send(command);
+
+            var response = await Mediator.Send(query);
             return Ok(response);
         }
 
-        // POST api/<ShippingAgentFeeController>
+        // GET api/<PaymentController>/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var query = new GetPaymentByIdQuery
+            {
+                Id = id
+            };
+            var response = await Mediator.Send(query);
+            return Ok(response);
+        }
+
+        // POST api/<PaymentController>
         [HttpPost]
         public async Task<IActionResult> CreatePayment( [FromBody] CreatePaymentCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
             {
-                Id = response
+                Message = "payment created successfully"
             };
             return StatusCode(StatusCodes.Status201Created, responseObj);
         }
 
 
-        // PUT api/<ShippingAgentFeeController>/
+        // PUT api/<PaymentController>/
         [HttpPut]
         public async Task<IActionResult> UpdatePayment([FromBody] UpdatePymentCommand command)
         {
@@ -46,6 +56,23 @@ namespace WebApi.Controllers
             var responseObj = new
             {
                 Message = $"Payment with id : {response} is updated successfully"
+            };
+            return Ok(responseObj);
+        }
+
+
+        // DELETE api/<PaymentController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var command = new DeletePaymentCommand
+            {
+                Id = id
+            };
+            await Mediator.Send(command);
+            var responseObj = new
+            {
+                message = "Payment deleted successfully"
             };
             return Ok(responseObj);
         }

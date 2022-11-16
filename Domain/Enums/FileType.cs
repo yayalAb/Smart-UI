@@ -5,6 +5,6 @@ namespace Domain.Enums
     {
         Image,
         EcdDocument,
-        BillOfLoadingDocument
+        SourceDocument
     }
 }
