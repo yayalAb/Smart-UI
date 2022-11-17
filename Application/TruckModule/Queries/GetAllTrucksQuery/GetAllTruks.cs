@@ -10,12 +10,12 @@ using Application.Common.Models;
 
 namespace Application.TruckModule.Queries.GetAllTruckQuery
 {
-    public class GetAllTrucks : IRequest<List<TruckDto>> {
+    public class GetAllTrucks : IRequest<PaginatedList<TruckDto>> {
         public int PageNumber { get; init; } = 1;
         public int PageSize { get; init; } = 10;
     }
 
-    public class GetAllTrucksHandler: IRequestHandler<GetAllTrucks, List<TruckDto>> {
+    public class GetAllTrucksHandler: IRequestHandler<GetAllTrucks, PaginatedList<TruckDto>> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -35,11 +35,8 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             _mapper = mapper;
         }
 
-        public async Task<List<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
-            
-            var trucks = await PaginatedList<TruckDto>.CreateAsync(_context.Trucks.ProjectTo<TruckDto>(_mapper.ConfigurationProvider), request.PageNumber, request.PageSize);
-            return trucks.Items;
-
+        public async Task<PaginatedList<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
+            return await PaginatedList<TruckDto>.CreateAsync(_context.Trucks.ProjectTo<TruckDto>(_mapper.ConfigurationProvider), request.PageNumber, request.PageSize);
         }
 
     }
