@@ -5,6 +5,7 @@ using Application.LookUp.Query.GetByKey;
 using Microsoft.AspNetCore.Mvc;
 using Application.LookUp.Commands.CreateLookUpKey;
 using Application.LookUp.Query.GetAllLookups;
+using Application.LookUp.Query.GetByIdQuery;
 
 namespace WebApi.Controllers
 {
@@ -63,6 +64,15 @@ namespace WebApi.Controllers
             };
             return Ok(responseObj);
 
+        }
+
+        [HttpGet("one/{id}")]
+        public async Task<ActionResult> getById(int id){
+            try{
+                return Ok(await Mediator.Send(new GetById(){Id = id}));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }            
         }
 
         [HttpGet("{type}")]

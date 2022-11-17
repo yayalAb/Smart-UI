@@ -7,8 +7,8 @@ using AutoMapper.QueryableExtensions;
 namespace Application.LookUp.Query.GetAllLookups;
 
 public record GetAllLookups : IRequest<PaginatedList<LookupDto>> {
-    public int PageCount {get; set;}
-    public int PageSize {get; set;}
+    public int? PageCount {get; set;}
+    public int? PageSize {get; set;}
 }
 
 public class GetAllLookupsHandler: IRequestHandler<GetAllLookups, PaginatedList<LookupDto>> {
@@ -22,7 +22,7 @@ public class GetAllLookupsHandler: IRequestHandler<GetAllLookups, PaginatedList<
     }
 
     public async Task<PaginatedList<LookupDto>> Handle(GetAllLookups request, CancellationToken cancellationToken) {
-        var lookups = await PaginatedList<LookupDto>.CreateAsync(_context.Lookups.ProjectTo<LookupDto>(_mapper.ConfigurationProvider), request.PageCount, request.PageSize);
+        var lookups = await PaginatedList<LookupDto>.CreateAsync(_context.Lookups.ProjectTo<LookupDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
         return lookups;
     }
 
