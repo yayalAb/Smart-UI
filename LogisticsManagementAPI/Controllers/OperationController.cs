@@ -1,5 +1,6 @@
 ﻿
 using Application.OperationModule.Commands.CreateOperation;
+using Application.OperationModule.Commands.DeleteOperation;
 using Application.OperationModule.Queries.GetOperationById;
 using Application.OperationModule.Queries.GetOperationList;
 using Application.OperationModule.Queries.GetOperationPaginatedList;

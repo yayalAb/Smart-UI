@@ -31,7 +31,7 @@ namespace WebApi.Controllers
             var response = await Mediator.Send(command);
             var responseObj = new
             {
-                Id = response
+                message = "user created successfully"
             };
 
             return StatusCode(StatusCodes.Status201Created, responseObj);
