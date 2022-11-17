@@ -9,11 +9,12 @@ using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Models;
 
 namespace Application.User.Commands.CreateUser
 {
 
-    public record CreateUserCommand : IRequest<string>
+    public record CreateUserCommand : IRequest<bool>
     {
         public string FullName { get; init; }
         public string UserName { get; init; }
@@ -23,21 +24,23 @@ namespace Application.User.Commands.CreateUser
 
     }
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, string>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, bool>
     {
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
         private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public CreateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
+        public CreateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<CreateUserCommandHandler> logger, IMapper mapper , IEmailService emailService)
         {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _mapper = mapper;
+            _emailService = emailService;
         }
-        public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
            var executionStrategy = _context.database.CreateExecutionStrategy();
          return  await executionStrategy.ExecuteAsync(
@@ -52,9 +55,8 @@ namespace Application.User.Commands.CreateUser
             await _context.SaveChangesAsync(cancellationToken);
 
             // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
-            var defaultUserPassword = "pass123#@A";
 
-            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email,defaultUserPassword, request.State, new_address.Id, request.GroupId);
+            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, request.State, new_address.Id, request.GroupId);
 
             if (!response.result.Succeeded)
             {
@@ -62,9 +64,16 @@ namespace Application.User.Commands.CreateUser
 
            
             }
-
-           await  _context.database.CommitTransactionAsync();
-            return response.userId;
+            var emailContent = $"{response.password} is your default password you can login and change it ";
+             var mailrequest = new MailRequest()
+            {
+                Subject = "Welcome",
+                Body = emailContent,
+                ToEmail = request.Address.Email,
+            };
+            await _emailService.SendEmailAsync(mailrequest);
+            await  _context.database.CommitTransactionAsync();
+            return true;
 
 
     }
@@ -81,5 +90,7 @@ namespace Application.User.Commands.CreateUser
 
       
               }
+
+              
     }
 }

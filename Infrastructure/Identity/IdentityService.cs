@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -47,11 +48,12 @@ namespace Infrastructure.Identity
         public async Task<string> GetUserNameAsync(string userId)
         {
             var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+            
 
             return user.UserName;
         }
 
-        public async Task<(Result, string)> createUser(string fullName, string userName, string email, string password, byte state, int addressId, int groupId)
+        public async Task<(Result, string)> createUser(string fullName, string userName, string email, byte state, int addressId, int groupId)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             if (existingUser != null)
@@ -71,13 +73,13 @@ namespace Infrastructure.Identity
                 AddressId = addressId,
                 UserGroupId = groupId
             };
-
+            string password = GeneratePassword();
             var result = await _userManager.CreateAsync(newUser, password);
             if (!result.Succeeded)
             {
                 return (result.ToApplicationResult(), string.Empty);
             }
-            return (Result.Success(), newUser.Id);
+            return (Result.Success(), password);
         }
 
         public async Task<(Result, string)> ForgotPassword(string email)
@@ -174,8 +176,49 @@ namespace Infrastructure.Identity
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenString;
         }
+        private string GeneratePassword()
+        {
+            var options = _userManager.Options.Password;
 
-        public IQueryable<IApplicationUser> AllUsers(){
+            int length = options.RequiredLength;
+
+            bool nonAlphanumeric = options.RequireNonAlphanumeric;
+            bool digit = options.RequireDigit;
+            bool lowercase = options.RequireLowercase;
+            bool uppercase = options.RequireUppercase;
+
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            while (password.Length < length)
+            {
+                char c = (char)random.Next(32, 126);
+
+                password.Append(c);
+
+                if (char.IsDigit(c))
+                    digit = false;
+                else if (char.IsLower(c))
+                    lowercase = false;
+                else if (char.IsUpper(c))
+                    uppercase = false;
+                else if (!char.IsLetterOrDigit(c))
+                    nonAlphanumeric = false;
+            }
+
+            if (nonAlphanumeric)
+                password.Append((char)random.Next(33, 48));
+            if (digit)
+                password.Append((char)random.Next(48, 58));
+            if (lowercase)
+                password.Append((char)random.Next(97, 123));
+            if (uppercase)
+                password.Append((char)random.Next(65, 91));
+
+     
+            return password.ToString();
+        }
+           public IQueryable<IApplicationUser> AllUsers(){
             return _userManager.Users;
         }
 
