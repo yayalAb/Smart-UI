@@ -25,7 +25,7 @@ namespace Application.User.Commands.CreateUser
                 .NotEmpty()
                 .NotNull()
                 .EmailAddress();
-            RuleFor(u => u.GroupId)
+            RuleFor(u => u.UserGroupId)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInDb).WithMessage("group with the provided id is not found");

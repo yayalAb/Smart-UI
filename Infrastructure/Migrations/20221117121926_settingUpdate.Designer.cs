@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221116124240_make-foriegnkeyes-nullable-in-operation")]
-    partial class makeforiegnkeyesnullableinoperation
+    [Migration("20221117121926_settingUpdate")]
+    partial class settingUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -449,6 +449,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<byte>("IsParent")
+                        .HasColumnType("tinyint unsigned");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(45)
@@ -722,6 +725,47 @@ namespace Infrastructure.Migrations
                     b.ToTable("Ports");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Setting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Port")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Protocol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Setting");
+                });
+
             modelBuilder.Entity("Domain.Entities.ShippingAgent", b =>
                 {
                     b.Property<int>("Id")
@@ -950,6 +994,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1272,10 +1318,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
                 {
+                    b.HasOne("Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.UserGroup", "UserGroup")
                         .WithMany()
                         .HasForeignKey("UserGroupId")
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("UserGroup");
                 });

@@ -1,13 +1,10 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.User.Commands.AuthenticateUser;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
-using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
 
@@ -19,8 +16,8 @@ namespace Application.User.Commands.CreateUser
         public string FullName { get; init; }
         public string UserName { get; init; }
         public byte State { get; init; } = 1!;
-        public int GroupId { get; init; }
-        public AddressDto Address { get; init; }
+        public int UserGroupId { get; init; }
+        public AddressCreateCommand Address { get; init; }
 
     }
 
@@ -58,7 +55,7 @@ namespace Application.User.Commands.CreateUser
 
                            // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
 
-                           var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, request.State, new_address.Id, request.GroupId);
+                           var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, request.State, new_address.Id, request.UserGroupId);
 
                            if (!response.result.Succeeded)
                            {

@@ -10,7 +10,7 @@ namespace Application.LookUp.Commands.CreateLookup
     {
         public string Key { get; init; }
         public string Value { get; init; }
-        public byte? is_parent {get; init;} = 0!;
+        public byte? IsParent {get; init;} = 0!;
     }
     public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, int>
     {
@@ -26,14 +26,16 @@ namespace Application.LookUp.Commands.CreateLookup
             {
                 Key = request.Key,
                 Value = request.Value,
+                IsParent = request.IsParent ?? 0
             };
 
             _context.Lookups.Add(newLookup);
 
-            if(request.is_parent == 1){
-                _context.Lookups.Add(new Lookup(){
+            if(request.IsParent == 1){
+                _context.Lookups.Add(new Lookup() {
                     Key = "key",
-                    Value = request.Value
+                    Value = request.Value,
+                    IsParent = 1
                 });
             }
 

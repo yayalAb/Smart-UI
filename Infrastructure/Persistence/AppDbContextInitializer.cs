@@ -1,4 +1,5 @@
-﻿
+﻿using System.Drawing;
+
 using Domain.Entities;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -62,8 +63,8 @@ namespace Infrastructure.Persistence
                 Responsiblity = "adminstration",
 
             };
-            if (!_context.UserGroups.Any(ug=>ug.Name == defaultGroup.Name))
-            {
+            var found_group = _context.UserGroups.Where(ug=>ug.Name == defaultGroup.Name).FirstOrDefault();
+            if (found_group == null) {
         
                 try
                 {
@@ -77,6 +78,24 @@ namespace Infrastructure.Persistence
 
             }
 
+            Address defaultAddress = new Address
+            {
+                Email = "admin@gmail.com",
+                Phone = "0987654321",
+                Region = "Addis Ababa",
+                City = "Addis Ababa",
+                Subcity = "Bole",
+                Country = "Ethiopia",
+                POBOX = ""
+            };
+
+            try {
+                await _context.Addresses.AddAsync(defaultAddress);
+                await _context.SaveChangesAsync();
+            } catch (Exception e) {
+                _logger.LogError($"error creating default address: {e}");
+            }
+
 
             // Default user
 
@@ -86,8 +105,8 @@ namespace Infrastructure.Persistence
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = "admin@gmail.com",
                 FullName = "admin admin",
-                UserGroupId = defaultGroup.Id,
-                
+                UserGroupId = (found_group == null) ? defaultGroup.Id : found_group.Id,
+                AddressId = defaultAddress.Id
             };
 
             //adding default user

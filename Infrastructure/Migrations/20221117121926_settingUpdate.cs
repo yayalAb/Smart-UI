@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class newServer : Migration
+    public partial class settingUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -100,6 +100,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Value = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsParent = table.Column<byte>(type: "tinyint unsigned", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -137,6 +138,31 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ports", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Setting",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Email = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Port = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Host = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Protocol = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Username = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Setting", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -355,6 +381,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserGroupId = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<byte>(type: "tinyint unsigned", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -382,6 +409,11 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetUsers_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AspNetUsers_UserGroups_UserGroupId",
                         column: x => x.UserGroupId,
                         principalTable: "UserGroups",
@@ -395,19 +427,17 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CustomerName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     NameOnPermit = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Consignee = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NotifyParty = table.Column<string>(type: "longtext", nullable: false)
+                    NotifyParty = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BillNumber = table.Column<string>(type: "longtext", nullable: false)
+                    BillNumber = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ShippingLine = table.Column<string>(type: "longtext", nullable: false)
+                    ShippingLine = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    GoodsDescription = table.Column<string>(type: "longtext", nullable: false)
+                    GoodsDescription = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Quantity = table.Column<float>(type: "float", nullable: false),
                     GrossWeight = table.Column<float>(type: "float", nullable: true),
@@ -417,16 +447,14 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FZOUT = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DestinationType = table.Column<string>(type: "longtext", nullable: false)
+                    DestinationType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SourceDocument = table.Column<byte[]>(type: "longblob", nullable: true),
-                    SourceDocumentType = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ActualDateOfDeparture = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     EstimatedTimeOfArrival = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    VoyageNumber = table.Column<string>(type: "longtext", nullable: false)
+                    VoyageNumber = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TypeOfMerchandise = table.Column<string>(type: "longtext", nullable: false)
+                    TypeOfMerchandise = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OperationNumber = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -434,8 +462,8 @@ namespace Infrastructure.Migrations
                     Status = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ECDDocument = table.Column<byte[]>(type: "longblob", nullable: true),
-                    ShippingAgentId = table.Column<int>(type: "int", nullable: false),
-                    PortOfLoadingId = table.Column<int>(type: "int", nullable: false),
+                    ShippingAgentId = table.Column<int>(type: "int", nullable: true),
+                    PortOfLoadingId = table.Column<int>(type: "int", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -457,14 +485,12 @@ namespace Infrastructure.Migrations
                         name: "FK_Operations_Ports_PortOfLoadingId",
                         column: x => x.PortOfLoadingId,
                         principalTable: "Ports",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Operations_ShippingAgents_ShippingAgentId",
                         column: x => x.ShippingAgentId,
                         principalTable: "ShippingAgents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -861,6 +887,11 @@ namespace Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_AddressId",
+                table: "AspNetUsers",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserGroupId",
                 table: "AspNetUsers",
                 column: "UserGroupId");
@@ -1016,6 +1047,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Setting");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

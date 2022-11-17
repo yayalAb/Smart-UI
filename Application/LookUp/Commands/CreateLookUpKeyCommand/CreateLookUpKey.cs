@@ -20,10 +20,10 @@ public class CreateLookUpKeyHandler : IRequestHandler<CreateLookUpKey, int> {
     }
     public async Task<int> Handle(CreateLookUpKey request, CancellationToken cancellationToken) {
 
-        Lookup newLookup = new Lookup
-        {
-            Value = request.Key,
+        Lookup newLookup = new Lookup() {
             Key = "key",
+            Value = request.Key,
+            IsParent = 1
         };
 
         await _context.Lookups.AddAsync(newLookup);
