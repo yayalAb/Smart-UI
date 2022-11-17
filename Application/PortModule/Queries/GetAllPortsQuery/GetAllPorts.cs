@@ -10,8 +10,8 @@ using Application.Common.Models;
 namespace Application.PortModule.Queries.GetAllPortsQuery;
 
 public record GetAllPorts : IRequest<PaginatedList<Port>> {
-    public int? PageNumber {get; init;} = 1!;
-    public int? PageCount {get; init;} = 10!;
+    public int? PageCount {get; init;} = 1!;
+    public int? PageSize {get; init;} = 10!;
 }
 
 public class GetAllDriversHandler : IRequestHandler<GetAllPorts, PaginatedList<Port>> {
@@ -28,7 +28,7 @@ public class GetAllDriversHandler : IRequestHandler<GetAllPorts, PaginatedList<P
     }
 
     public async Task<PaginatedList<Port>> Handle(GetAllPorts request, CancellationToken cancellationToken) {
-        return await PaginatedList<Port>.CreateAsync(_context.Ports, request.PageNumber ?? 1, request.PageCount ?? 10);
+        return await PaginatedList<Port>.CreateAsync(_context.Ports, request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }

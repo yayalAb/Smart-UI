@@ -4,11 +4,15 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Application.Common.Models;
 
 namespace Application.ContainerModule.Queries.GetAllContainersQuery;
 
-public class GetAllContainers : IRequest<List<ContainerDto>> {}
-public class GetAllContainersHandler: IRequestHandler<GetAllContainers, List<ContainerDto>> {
+public class GetAllContainers : IRequest<PaginatedList<ContainerDto>> {
+    public int? PageCount {set; get;} = 1!;
+    public int? PageSize {get; set;} = 10!;
+}
+public class GetAllContainersHandler: IRequestHandler<GetAllContainers, PaginatedList<ContainerDto>> {
 
     private readonly IIdentityService _identityService;
     private readonly IAppDbContext _context;
@@ -24,10 +28,8 @@ public class GetAllContainersHandler: IRequestHandler<GetAllContainers, List<Con
         _mapper = mapper;
     }
 
-    public async Task<List<ContainerDto>> Handle(GetAllContainers request, CancellationToken cancellationToken) {
-        
-        return await _context.Containers.Include(c => c.Goods).ProjectTo<ContainerDto>(_mapper.ConfigurationProvider).ToListAsync();
-
+    public async Task<PaginatedList<ContainerDto>> Handle(GetAllContainers request, CancellationToken cancellationToken) {
+        return await PaginatedList<ContainerDto>.CreateAsync(_context.Containers.Include(c => c.Goods).ProjectTo<ContainerDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }

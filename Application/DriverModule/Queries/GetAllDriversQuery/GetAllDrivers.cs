@@ -8,8 +8,8 @@ using Application.Common.Models;
 namespace Application.DriverModule.Queries.GetAllDriversQuery;
 
 public record GetAllDrivers : IRequest<PaginatedList<Driver>> {
-    public int PageNumber {get; set;}
-    public int PageCount {get; set;}
+    public int? PageCount {get; set;} = 1!;
+    public int? PageSize {get; set;} = 10!;
 }
 
 public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList<Driver>> {
@@ -26,7 +26,7 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList
     }
 
     public async Task<PaginatedList<Driver>> Handle(GetAllDrivers request, CancellationToken cancellationToken) {
-        return await PaginatedList<Driver>.CreateAsync(_context.Drivers.Include(t => t.Address), request.PageNumber, request.PageCount);
+        return await PaginatedList<Driver>.CreateAsync(_context.Drivers.Include(t => t.Address), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }
