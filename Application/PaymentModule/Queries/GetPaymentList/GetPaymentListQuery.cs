@@ -1,13 +1,13 @@
 using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
-using Application.ShippingAgentFeeModule.Queries.GetShippingAgentFeeById;
+using Application.PaymentModule.Queries.GetPaymentById;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.ShippingAgentFeeModule.Queries.GetPaymentList{
+namespace Application.PaymentModule.Queries.GetPaymentList{
     public record GetPaymentListQuery : IRequest<PaginatedList<PaymentDto>>{
         public int pageNumber {get; init;}=1;
         public int pageSize {get; init; }=10;

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221116113858_update-operation-table")]
+    partial class updateoperationtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -537,6 +539,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(45)");
 
                     b.Property<int?>("PortOfLoadingId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<float>("Quantity")
@@ -1180,7 +1183,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Port", "PortOfLoading")
                         .WithMany("Operations")
-                        .HasForeignKey("PortOfLoadingId");
+                        .HasForeignKey("PortOfLoadingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.ShippingAgent", "ShippingAgent")
                         .WithMany("Operations")

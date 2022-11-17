@@ -11,32 +11,30 @@ namespace Application.OperationModule.Commands.CreateOperation
 {
     public record CreateOperationCommand : IRequest<int>
     {
-        public string CustomerName { get; init; }
-        public string? NameOnPermit { get; init; }
-        public string? Consignee { get; init; }
-        public string NotifyParty { get; init; }
-        public string BillNumber { get; init; }
-        public string ShippingLine { get; init; }
-        public string GoodsDescription { get; init; }
-        public float Quantity { get; init; }
-        public float? GrossWeight { get; init; }
-        public string? ATA { get; init; }
-        public string? FZIN { get; init; }
-        public string? FZOUT { get; init; }
-        public string DestinationType { get; init; }
-        public IFormFile? SourceDocument { get; init; }
-        public string SourceDocumentType { get; init; }
-        public DateTime? ActualDateOfDeparture { get; init; }
-        public DateTime? EstimatedTimeOfArrival { get; init; }
-        public string VoyageNumber { get; init; }
-        public string TypeOfMerchandise { get; init; }
-        public string OperationNumber { get; init; } = null!;
-        public DateTime OpenedDate { get; init; }
-        public string Status { get; init; } = null!;
-        public IFormFile? ECDDocument { get; init; }
-        public int ShippingAgentId { get; init; }
-        public int PortOfLoadingId { get; init; }
-        public int CompanyId { get; init; }
+    public string? NameOnPermit { get; set; }
+    public string? Consignee { get; set; }
+    public string? NotifyParty { get; set; }
+    public string? BillNumber { get; set; }
+    public string? ShippingLine { get; set; }
+    public string? GoodsDescription { get; set; }
+    public float Quantity { get; set; }
+    public float? GrossWeight { get; set; }
+    public string? ATA { get; set; }
+    public string? FZIN { get; set; }
+    public string? FZOUT { get; set; }
+    public string? DestinationType { get; set; }
+    public IFormFile? SourceDocument { get; set; }
+    public DateTime? ActualDateOfDeparture { get; set; }
+    public DateTime? EstimatedTimeOfArrival { get; set; }
+    public string? VoyageNumber { get; set; }
+    public string? TypeOfMerchandise { get; set; }
+    public string OperationNumber { get; set; } = null!;
+    public DateTime OpenedDate { get; set; }
+    public string Status { get; set; } = null!;
+    public IFormFile? ECDDocument { get; set; }
+    public int? ShippingAgentId { get; set; }
+    public int? PortOfLoadingId { get; set; }
+    public int CompanyId { get; set; }
     }
     public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, int>
     {
