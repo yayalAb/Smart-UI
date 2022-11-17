@@ -35,8 +35,6 @@ namespace Application.PaymentModule.Commands.CreatePayment
                  .NotEmpty()
                  .Must(BeRegisteredOperationId).WithMessage("Operation with the provided id is not found");
             RuleFor(s => s.ShippingAgentId)
-                 .NotNull()
-                 .NotEmpty()
                  .Must(BeRegisteredShippingAgentId).WithMessage("shipping agent with the provided id is not found");
 
         }
@@ -44,9 +42,9 @@ namespace Application.PaymentModule.Commands.CreatePayment
         {
             return _context.Operations.Find(operationId) != null;
         }
-        private bool BeRegisteredShippingAgentId(int shippingAgentId)
+        private bool BeRegisteredShippingAgentId(int? shippingAgentId)
         {
-            return _context.ShippingAgents.Find(shippingAgentId) != null;
+            return shippingAgentId == null||_context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
 

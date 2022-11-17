@@ -18,7 +18,7 @@ namespace Application.PaymentModule.Commands.CreatePayment
         public string Currency { get; init; }
         public string? Description { get; init; }
         public int OperationId { get; init; }
-        public int ShippingAgentId { get; init; }
+        public int? ShippingAgentId { get; init; }
     }
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, int>
     {
