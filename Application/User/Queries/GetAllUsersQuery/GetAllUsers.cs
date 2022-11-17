@@ -35,7 +35,7 @@ public class GetAllUsersHandler: IRequestHandler<GetAllUsers, PaginatedList<IApp
     }
 
     public async Task<PaginatedList<IApplicationUser>> Handle(GetAllUsers request, CancellationToken cancellationToken) {
-        return await PaginatedList<IApplicationUser>.CreateAsync(_identityService.AllUsers(), request.PageCount ?? 1, request.PageSize ?? 10);
+        return await PaginatedList<IApplicationUser>.CreateAsync(_identityService.AllUsers().Include(u => u.UserGroup).Include(u => u.Address), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }

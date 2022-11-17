@@ -8,7 +8,7 @@ namespace Application.LookUp.Commands.DeleteLookup
 {
     public record DeleteLookupCommand : IRequest<bool>
     {
-        public int Id { get; set; }
+        public List<int> Ids { get; set; } = new List<int>()!;
     }
     public class DeleteLookupCommandHandler : IRequestHandler<DeleteLookupCommand, bool>
     {
@@ -20,14 +20,15 @@ namespace Application.LookUp.Commands.DeleteLookup
         }
         public async  Task<bool> Handle(DeleteLookupCommand request, CancellationToken cancellationToken)
         {
-            var existingLookup = await _context.Lookups.FindAsync(request.Id);
-            if (existingLookup == null)
-            {
-                throw new NotFoundException("Lookup", new { Id = request.Id });
+            var existingLookup = _context.Lookups.Where(l => request.Ids.Contains(l.Id)).ToList();
+            _context.Lookups.RemoveRange(existingLookup);
+            // if (existingLookup == null)
+            // {
+            //     throw new NotFoundException("Lookup", new { Id = request.Id });
 
-            };
+            // };
            
-            _context.Lookups.Remove(existingLookup);
+            // _context.Lookups.Remove(existingLookup);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

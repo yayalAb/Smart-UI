@@ -17,9 +17,9 @@ namespace Application.User.Commands.CreateUser
     {
         public string FullName { get; init; }
         public string UserName { get; init; }
-        public byte State {get; init;} = 1!;
+        public byte State { get; init; } = 1!;
         public int GroupId { get; init; }
-        public AddressDto Address {get; init;}
+        public AddressDto Address { get; init; }
 
     }
 
@@ -39,47 +39,47 @@ namespace Application.User.Commands.CreateUser
         }
         public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-           var executionStrategy = _context.database.CreateExecutionStrategy();
-         return  await executionStrategy.ExecuteAsync(
-            async ()=>{
+            var executionStrategy = _context.database.CreateExecutionStrategy();
+            return await executionStrategy.ExecuteAsync(
+               async () =>
+               {
 
 
-      using (var transaction =    _context.database.BeginTransaction()){
-    try
-    {
-         Address new_address = _mapper.Map<Address>(request.Address);
-            _context.Addresses.Add(new_address);
-            await _context.SaveChangesAsync(cancellationToken);
+                   using (var transaction = _context.database.BeginTransaction())
+                   {
+                       try
+                       {
+                           Address new_address = _mapper.Map<Address>(request.Address);
+                           _context.Addresses.Add(new_address);
+                           await _context.SaveChangesAsync(cancellationToken);
 
-            // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
-            var defaultUserPassword = "pass123#@A";
+                           // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
+                           var defaultUserPassword = "pass123#@A";
 
-            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email,defaultUserPassword, request.State, new_address.Id, request.GroupId);
+                           var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, defaultUserPassword, request.State, new_address.Id, request.GroupId);
 
-            if (!response.result.Succeeded)
-            {
-                throw new CantCreateUserException(response.result.Errors.ToList());
+                           if (!response.result.Succeeded)
+                           {
+                               throw new CantCreateUserException(response.result.Errors.ToList());
+                           }
 
-           
-            }
-
-           await  _context.database.CommitTransactionAsync();
-            return response.userId;
-
-
-    }
-    catch (System.Exception)
-    {
-        await _context.database.RollbackTransactionAsync();
-        throw;
-    }
-          
-         }
+                           await _context.database.CommitTransactionAsync();
+                           return response.userId;
 
 
-            });
+                       }
+                       catch (System.Exception)
+                       {
+                           await _context.database.RollbackTransactionAsync();
+                           throw;
+                       }
 
-      
-              }
+                   }
+
+
+               });
+
+
+        }
     }
 }

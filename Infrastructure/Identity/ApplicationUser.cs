@@ -11,6 +11,7 @@ namespace Infrastructure.Identity
         public int AddressId {get; set;}
         public byte State {get; set;}
         public UserGroup UserGroup { get; set; }
+        public Address Address {get; set;}
       
     }
 }

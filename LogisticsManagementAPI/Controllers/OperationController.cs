@@ -1,8 +1,9 @@
-﻿using Application.LookUp.Commands.DeleteLookup;
+﻿
 using Application.OperationModule.Commands.CreateOperation;
 using Application.OperationModule.Queries.GetOperationById;
 using Application.OperationModule.Queries.GetOperationList;
 using Application.OperationModule.Queries.GetOperationPaginatedList;
+using Application.OperationModule.Commands.DeleteOperation;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -67,7 +68,7 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOperation(int id)
         {
-            var command = new DeleteLookupCommand
+            var command = new DeleteOperationCommand
             {
                 Id = id
             };

@@ -50,14 +50,10 @@ namespace WebApi.Controllers
         }
 
         // DELETE api/<LookupController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteLookupCommand command)
         {
-            var command = new DeleteLookupCommand
-            {
-                Id = id
-            };
-             await Mediator.Send(command);
+            await Mediator.Send(command);
             var responseObj = new
             {
                 message = "lookup deleted successfully"

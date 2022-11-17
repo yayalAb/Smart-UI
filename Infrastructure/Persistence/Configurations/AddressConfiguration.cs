@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.Identity;
 
 namespace Infrastructure.Persistence.Configurations;
 
@@ -30,6 +31,11 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address> {
 
         entity.Property(e => e.Subcity)
             .HasMaxLength(45);
+
+        entity.HasMany<ApplicationUser>()
+            .WithOne(u=>u.Address)
+            .HasForeignKey(u=>u.AddressId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     
     }
 
