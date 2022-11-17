@@ -4,6 +4,7 @@ using Application.User.Commands.CreateUser;
 using Application.User.Commands.ForgotPassword;
 using Application.User.Commands.ResetPassword;
 using Application.User.Commands.UpdateUserCommand;
+using Application.User.Queries.GetAllUsersQuery;
 using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
@@ -84,6 +85,15 @@ namespace WebApi.Controllers
 
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUser command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> list([FromQuery] GetAllUsers command){
             try{
                 return Ok(await Mediator.Send(command));
             }catch(Exception ex){

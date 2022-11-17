@@ -175,6 +175,9 @@ namespace Infrastructure.Identity
             return tokenString;
         }
 
+        public IQueryable<IApplicationUser> AllUsers(){
+            return _userManager.Users;
+        }
 
     }
 }

@@ -11,7 +11,7 @@ using Application.Common.Models;
 namespace Application.TruckModule.Queries.GetAllTruckQuery
 {
     public class GetAllTrucks : IRequest<PaginatedList<TruckDto>> {
-        public int PageNumber { get; init; } = 1;
+        public int PageCount { get; init; } = 1;
         public int PageSize { get; init; } = 10;
     }
 
@@ -36,7 +36,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
         }
 
         public async Task<PaginatedList<TruckDto>> Handle(GetAllTrucks request, CancellationToken cancellationToken) {
-            return await PaginatedList<TruckDto>.CreateAsync(_context.Trucks.ProjectTo<TruckDto>(_mapper.ConfigurationProvider), request.PageNumber, request.PageSize);
+            return await PaginatedList<TruckDto>.CreateAsync(_context.Trucks.ProjectTo<TruckDto>(_mapper.ConfigurationProvider), request.PageCount, request.PageSize);
         }
 
     }
