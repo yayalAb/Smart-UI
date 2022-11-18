@@ -1,5 +1,6 @@
 ﻿
 
+using Application.Common.Interfaces;
 using Domain.Enums;
 using FluentValidation;
 
@@ -7,15 +8,23 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
 {
     public class CreateUserGroupCommandValidator : AbstractValidator<CreateUserGroupCommand>
     {
-        public CreateUserGroupCommandValidator()
+        private readonly IAppDbContext _context;
+
+        public CreateUserGroupCommandValidator( IAppDbContext context)
         {
             RuleFor(g => g.Name)
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .Must(BeUnique).WithMessage("group name should be unique");
             RuleFor(g => g.UserRoles)
                 .Must(AllHaveValidPage).WithMessage(" one or more userRole  have invalid page name ");
+          _context = context;
+        }
 
 
+        private bool BeUnique(CreateUserGroupCommand userGroup ,string name)
+        {
+            return !_context.UserGroups.Where(ug => ug.Name == name ).Any();  
         }
         private bool AllHaveValidPage(List<UserRoleDto> userRoles)
         {

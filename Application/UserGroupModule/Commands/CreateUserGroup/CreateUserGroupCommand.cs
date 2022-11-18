@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.UserGroupModule.Commands.CreateUserGroup
 {
@@ -27,8 +28,12 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
         }
         public async Task<int> Handle(CreateUserGroupCommand request, CancellationToken cancellationToken)
         {
-            List<AppUserRole> userRoles = _mapper.Map<List<AppUserRole>>(request.UserRoles);
-            using var transaction = _context.database.BeginTransaction();
+            var executionStrategy = _context.database.CreateExecutionStrategy();
+         return  await executionStrategy.ExecuteAsync(
+            async()=>{
+            using (var transaction = _context.database.BeginTransaction()){
+                 List<AppUserRole> userRoles = _mapper.Map<List<UserRoleDto> , List<AppUserRole>>(request.UserRoles);
+
             try
             {
                 var newGroup = new UserGroup
@@ -61,6 +66,11 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
 
                 throw;
             }
+            }
+            }
+         );
+           
+
 
         }
     }

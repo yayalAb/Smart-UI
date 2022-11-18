@@ -11,8 +11,8 @@ using Application.Common.Mappings;
 namespace Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 
 public class GetDocumentationPaginatedListQuery : IRequest<PaginatedList<DocumentationDto>> {
-    public int pageNumber {get; init; }
-    public int pageSize {get; init; }
+    public int PageCount {get; init; }
+    public int PageSize {get; init; }
 }
 
 public class GetDocumentationPaginatedListQueryHandler : IRequestHandler<GetDocumentationPaginatedListQuery, PaginatedList<DocumentationDto>> {
@@ -28,7 +28,7 @@ public class GetDocumentationPaginatedListQueryHandler : IRequestHandler<GetDocu
     public async Task<PaginatedList<DocumentationDto>> Handle(GetDocumentationPaginatedListQuery request, CancellationToken cancellationToken) {
         return await _context.Documentations
         .ProjectTo<DocumentationDto>(_mapper.ConfigurationProvider)
-        .PaginatedListAsync(request.pageNumber , request.pageSize);
+        .PaginatedListAsync(request.PageCount , request.PageSize);
     }
 
 }

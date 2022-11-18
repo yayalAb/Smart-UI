@@ -11,8 +11,8 @@ using Application.Common.Mappings;
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 
 public class GetShippingAgentPaginatedListQuery : IRequest<PaginatedList<ShippingAgentDto>> {
-    public int pageNumber {get; init; }
-    public int pageSize {get; init; }
+    public int PageCount {get; init; }
+    public int PageSize {get; init; }
 }
 
 public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShippingAgentPaginatedListQuery, PaginatedList<ShippingAgentDto>> {
@@ -29,7 +29,7 @@ public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShip
         return await _context.ShippingAgents
         .Include(t => t.Address)
         .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider)
-        .PaginatedListAsync(request.pageNumber , request.pageSize);
+        .PaginatedListAsync(request.PageCount , request.PageSize);
     }
 
 }

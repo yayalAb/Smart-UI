@@ -1,5 +1,5 @@
-﻿using Application.User.Commands.AuthenticateUser;
-
+﻿
+using Application.UserGroupModule.Commands;
 
 namespace Application.Common.Models
 {

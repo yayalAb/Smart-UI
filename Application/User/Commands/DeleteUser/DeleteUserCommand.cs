@@ -3,7 +3,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using MediatR;
 
-namespace Application.UserModule.Commands.DeleteUser
+namespace Application.User.Commands.DeleteUser
 {
    public record DeleteUserCommand : IRequest<bool>
     {
