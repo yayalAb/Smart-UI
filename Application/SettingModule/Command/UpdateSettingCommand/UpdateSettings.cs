@@ -1,10 +1,13 @@
+using System.Net;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Application.SettingModule.Command.UpdateSettingCommand;
 
-public record UpdateSetting : IRequest<string> {
+public record UpdateSetting : IRequest<CustomResponse> {
     public int Id {get; set;}
     public string Email {get; set;}
     public string Password {get; set;}
@@ -14,7 +17,7 @@ public record UpdateSetting : IRequest<string> {
     public string Username {get; set;}
 }
 
-public class UpdateSettingHandler : IRequestHandler<UpdateSetting, string> {
+public class UpdateSettingHandler : IRequestHandler<UpdateSetting, CustomResponse> {
 
     private readonly IAppDbContext _context;
 
@@ -22,12 +25,12 @@ public class UpdateSettingHandler : IRequestHandler<UpdateSetting, string> {
         _context = context;
     }
 
-    public async Task<string> Handle(UpdateSetting request, CancellationToken cancellationToken){
+    public async Task<CustomResponse> Handle(UpdateSetting request, CancellationToken cancellationToken){
         
         var setting = await _context.Settings.FindAsync(request.Id);
         
         if(setting == null){
-            throw new Exception("setting not found!");
+            throw new GhionException(CustomResponse.Failed("setting not found!"));
         }
 
         setting.Email = request.Email;
@@ -39,7 +42,7 @@ public class UpdateSettingHandler : IRequestHandler<UpdateSetting, string> {
 
         await _context.SaveChangesAsync(cancellationToken);
         
-        return "Setting is Saved Successfully!";
+        return CustomResponse.Succeeded("Setting is Saved Successfully!");
 
     } 
 
