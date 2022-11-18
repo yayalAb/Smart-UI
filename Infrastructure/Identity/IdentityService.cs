@@ -124,7 +124,7 @@ namespace Infrastructure.Identity
             return Result.Success();
         }
 
-        public async Task<Result> UpdateUser(int id, string fullName, string userName, string email, byte state, int groupId) {
+        public async Task<Result> UpdateUser(string id, string fullName, string userName, string email, byte state, int groupId) {
 
             var user = await _userManager.FindByIdAsync(id.ToString());
 

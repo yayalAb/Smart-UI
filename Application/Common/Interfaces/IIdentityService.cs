@@ -12,7 +12,7 @@ namespace Application.Common.Interfaces
         Task<(Result result , string resetToken)> ForgotPassword(string email);
         Task<Result> ResetPassword(string email, string password, string token);
         Task<Result> ChangePassword(string email , string oldPassword ,string newPassword);
-        Task<Result> UpdateUser(int id, string fullName, string userName, string email, byte status, int groupId);
+        Task<Result> UpdateUser(string id, string fullName, string userName, string email, byte status, int groupId);
         IQueryable<IApplicationUser> AllUsers();
     }
 }
