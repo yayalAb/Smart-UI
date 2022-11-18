@@ -65,7 +65,7 @@ namespace Application.OperationModule.Commands.CreateOperation
                         ecdDoc = ECDresponse.byteData;
                         }
                         if(request.SourceDocument != null){
-                            var sourceResponse = await _fileUploadService.GetFileByte(request.ECDDocument , FileType.SourceDocument);
+                            var sourceResponse = await _fileUploadService.GetFileByte(request.SourceDocument , FileType.SourceDocument);
                             if(!sourceResponse.result.Succeeded){
                                 throw new Exception(String.Join(" , ", sourceResponse.result.Errors)); 
                             }

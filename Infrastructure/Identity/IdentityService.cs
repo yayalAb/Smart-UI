@@ -104,7 +104,7 @@ namespace Infrastructure.Identity
             if (!resetPassResult.Succeeded)
             {
                 var errors = resetPassResult.Errors.Select(e => e.Description);
-                return Result.Failure(errors);
+               throw new Exception( $"password reset failed! \n {resetPassResult.Errors}" );
             }
             return Result.Success();
         }
@@ -119,7 +119,7 @@ namespace Infrastructure.Identity
             var response = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (!response.Succeeded)
             {
-                return Result.Failure(new string[] { "change password failed " });
+                throw new Exception( $"Change password failed! \n {response.Errors}" );
             }
             return Result.Success();
         }
@@ -141,13 +141,25 @@ namespace Infrastructure.Identity
             var response = await _userManager.UpdateAsync(user);
 
             if(!response.Succeeded) {
-                return Result.Failure(new string[] { "User Updating failed!" });
+                throw new Exception( $"User Updating failed! \n {response.Errors}" );
             }
 
             return Result.Success();
 
         }
+        public async Task<Result> DeleteUser(string userId){
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null){
+                return Result.Failure(new string[] { "could not find user with the given id" });
+            }
+            var response = await _userManager.DeleteAsync(user);
+            
+            if(!response.Succeeded) {
+                throw new Exception( $"User Deleting failed! \n {response.Errors}" );
+            }
 
+            return Result.Success();
+        }
         private async Task<string> generateToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);

@@ -6,6 +6,7 @@ using Application.OperationModule.Queries.GetOperationList;
 using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.OperationModule.Commands.DeleteOperation;
 using Microsoft.AspNetCore.Mvc;
+using Application.OperationModule.Commands.UpdateOperation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -63,6 +64,17 @@ namespace WebApi.Controllers
             return StatusCode(StatusCodes.Status201Created, responseObj);
         }
 
+        // POST api/<OperationController>
+        [HttpPut]
+        public async Task<IActionResult> UpdateOperation([FromForm] UpdateOperationCommand command)
+        {
+            var response = await Mediator.Send(command);
+            var responseObj = new
+            {
+                message = $"operation with id = {response} updated successfully"
+            };
+            return Ok(responseObj);
+        }
 
 
         // DELETE api/<OperationController>/5

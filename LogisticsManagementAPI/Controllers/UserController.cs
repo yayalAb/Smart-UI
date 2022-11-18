@@ -6,6 +6,7 @@ using Application.User.Commands.ResetPassword;
 using Application.User.Commands.UpdateUserCommand;
 using Application.User.Queries.GetAllUsersQuery;
 using Application.User.Queries.GetUserQuery;
+using Application.UserModule.Commands.DeleteUser;
 using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
@@ -109,6 +110,17 @@ namespace WebApi.Controllers
             }catch(Exception ex){
                 return NotFound(ex.Message);
             }
+        }
+        [HttpDelete("id")]
+        public async Task<IActionResult> deleteUser(string id){
+            var command = new DeleteUserCommand{
+                Id = id
+            };
+            var response = await Mediator.Send(command);
+            var responseObj = new{
+                message = "user deleted successfully"
+            };
+            return Ok(responseObj);
         }
     }
 }

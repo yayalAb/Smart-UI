@@ -1,15 +1,15 @@
-﻿
+
 
 using Application.Common.Interfaces;
 using FluentValidation;
 
-namespace Application.OperationModule.Commands.CreateOperation
+namespace Application.OperationModule.Commands.UpdateOperation
 {
-    public class CreateOperationCommandValidator : AbstractValidator<CreateOperationCommand>    
+    public class UpdateOperationCommandValidator : AbstractValidator<UpdateOperationCommand>    
     {
         private readonly IAppDbContext _context;
 
-        public CreateOperationCommandValidator(IAppDbContext context)
+        public UpdateOperationCommandValidator(IAppDbContext context)
         {
             _context = context;
             RuleFor(o => o.OperationNumber)
