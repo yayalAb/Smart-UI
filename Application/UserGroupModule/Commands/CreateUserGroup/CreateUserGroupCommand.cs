@@ -27,7 +27,7 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
         }
         public async Task<int> Handle(CreateUserGroupCommand request, CancellationToken cancellationToken)
         {
-            List<AppUserRole> userRoles = _mapper.Map<List<AppUserRole>>(request.UserRoles);
+            List<AppUserRole> userRoles = _mapper.Map<List<UserRoleDto> , List<AppUserRole>>(request.UserRoles);
             using var transaction = _context.database.BeginTransaction();
             try
             {
