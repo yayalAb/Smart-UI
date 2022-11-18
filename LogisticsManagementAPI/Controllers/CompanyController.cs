@@ -3,6 +3,7 @@ using Application.CompanyModule.Commands.CreateCompanyCommand;
 using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.CompanyModule.Commands.UpdateCompanyCommand;
 using Application.CompanyModule.Queries.GetAllCompanyQuery;
+using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
 
@@ -51,6 +52,15 @@ namespace WebApi.Controllers {
                 return Ok(await Mediator.Send(command));
             }catch(GhionException gx){
                 return NotFound(gx.Response);
+            }catch(Exception ex){
+                return NotFound(CustomResponse.Failed(ex.Message));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> delete([FromQuery] DeleteCompany command){
+            try{
+                return Ok(await Mediator.Send(command));
             }catch(Exception ex){
                 return NotFound(CustomResponse.Failed(ex.Message));
             }
