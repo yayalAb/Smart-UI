@@ -14,5 +14,6 @@ namespace Application.Common.Interfaces
         Task<Result> ChangePassword(string email , string oldPassword ,string newPassword);
         Task<Result> UpdateUser(int id, string fullName, string userName, string email, byte status, int groupId);
         IQueryable<IApplicationUser> AllUsers();
+        Task<Result> DeleteUser(string userId);
     }
 }
