@@ -3,10 +3,12 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Application.CompanyModule.Queries.GetCompanyQuery
 {
-    public class GetCompanyQuery : IRequest<Company> {
+    public class GetCompanyQuery : IRequest<CompanyDto> {
         
         public int Id {get; init;}
 
@@ -16,21 +18,27 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
 
     }
 
-    public class GetCompanyQueryHandler: IRequestHandler<GetCompanyQuery, Company> {
+    public class GetCompanyQueryHandler: IRequestHandler<GetCompanyQuery, CompanyDto> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
         private readonly ILogger<GetCompanyQueryHandler> _logger;
+        private readonly IMapper _mapper;
 
-        public GetCompanyQueryHandler(IIdentityService identityService , IAppDbContext context , ILogger<GetCompanyQueryHandler> logger){
+        public GetCompanyQueryHandler(IIdentityService identityService , IAppDbContext context , ILogger<GetCompanyQueryHandler> logger , IMapper mapper){
             _identityService = identityService;
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<Company> Handle(GetCompanyQuery request, CancellationToken cancellationToken) {
+        public async Task<CompanyDto> Handle(GetCompanyQuery request, CancellationToken cancellationToken) {
             
-            var company = await _context.Companies.Include(c => c.Address).Include(c => c.ContactPerson).Where(c => c.Id == request.Id).FirstOrDefaultAsync();
+            var company = await _context.Companies
+            .Include(c => c.Address)
+            .Include(c => c.ContactPerson)
+            .ProjectTo<CompanyDto>(_mapper.ConfigurationProvider)
+            .Where(c => c.Id == request.Id).FirstOrDefaultAsync();
             if(company == null){
                 throw new Exception("company not found!");
             }
