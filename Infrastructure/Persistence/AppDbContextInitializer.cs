@@ -57,6 +57,7 @@ namespace Infrastructure.Persistence
         public async Task TrySeedAsync()
         {
             // Adding Default userGroup
+            int groupId  =0 ;
             UserGroup defaultGroup = new UserGroup
             {
                 Name = "AdminGroup",
@@ -70,13 +71,18 @@ namespace Infrastructure.Persistence
                 {
                     await _context.UserGroups.AddAsync(defaultGroup);
                     await _context.SaveChangesAsync();
+                    groupId = defaultGroup.Id;
                 }
                 catch (Exception e)
                 {
                     _logger.LogError($"error creating default userGroup: {e}");
                 }
 
+            }else{
+                groupId = found_group.Id;
             }
+
+
 
             Address defaultAddress = new Address
             {
@@ -121,7 +127,7 @@ namespace Infrastructure.Persistence
                 await _context.SaveChangesAsync();
 
                 //adding default user roles
-               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(defaultGroup.Id);
+               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(groupId);
                 try
                 {
                     await _context.AddRangeAsync(defaultRoles);
