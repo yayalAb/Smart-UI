@@ -18,7 +18,7 @@ public record UpdateUser : IRequest<string> {
     public string Email { get; init; }
     public string Password { get; init; }
     public byte State {get; init;}
-    public int GroupId { get; init; }
+    public int UserGroupId { get; init; }
     public AddressUpdateCommand Address { get; init; }
 
 }
@@ -45,7 +45,7 @@ public class UpdateUserHandler : IRequestHandler<UpdateUser, string> {
         
         _context.database.BeginTransaction();
         
-        var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Email, request.State, request.GroupId);
+        var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Email, request.State, request.UserGroupId);
 
         if(!response.Succeeded){
             throw new CannotUpdateUserException(response.Errors.ToList());
