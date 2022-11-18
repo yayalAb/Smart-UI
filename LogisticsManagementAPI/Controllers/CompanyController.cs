@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.CompanyModule.Commands.CreateCompanyCommand;
 using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.CompanyModule.Commands.UpdateCompanyCommand;
+using Application.CompanyModule.Queries.GetAllCompanyQuery;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace WebApi.Controllers {
     public class CompanyController : ApiControllerBase
@@ -43,6 +42,17 @@ namespace WebApi.Controllers {
                 return Ok(response);
             }catch(Exception ex) {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> list([FromQuery] GetAllCompanies command){
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(GhionException gx){
+                return NotFound(gx.Response);
+            }catch(Exception ex){
+                return NotFound(CustomResponse.Failed(ex.Message));
             }
         }
 
