@@ -27,7 +27,7 @@ public class GetOperationByIdQuery : IRequest<OperationDto>{
 
             if(operation == null)
             {
-                throw new NotFoundException("Payment", new { request.Id });
+                throw new NotFoundException("Operation", new { request.Id });
             }
             return operation;
         }
