@@ -13,10 +13,11 @@ namespace Domain.Enums
         port,
         company,
         operation_followup,
-        truck_assignment,
+        assign_goods,
         documentation,
         users,
         lookup,
+        group,
         settings
 
     }

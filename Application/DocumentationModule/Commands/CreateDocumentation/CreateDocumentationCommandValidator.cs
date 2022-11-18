@@ -14,7 +14,7 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
             
             RuleFor(d => d.OperationId)
                 .NotNull()
-                .Must(BeFoundInDb);
+                .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
             RuleFor(d => d.Date)
                 .NotNull()
                 .NotEmpty()
