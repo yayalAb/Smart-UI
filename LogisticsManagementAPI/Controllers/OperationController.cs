@@ -18,10 +18,10 @@ namespace WebApi.Controllers
       
       // GET api/<OperationController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber ,[FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int? pageCount ,[FromQuery] int? pageSize)
         {
 
-            if(pageNumber == 0 || pageNumber == null || pageSize == 0 || pageSize == null ){
+            if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
                 var query = new GetOperationListQuery();
                 var response = await Mediator.Send(query);
                 return Ok(response);
@@ -29,8 +29,8 @@ namespace WebApi.Controllers
             }
             else{
                 var query = new GetOperationPaginatedListQuery{
-                    pageNumber = (int)pageNumber,
-                    pageSize = (int)pageSize
+                    PageCount = (int)pageCount,
+                    PageSize = (int)pageSize
                 };
                 var response = await Mediator.Send(query);
             return Ok(response);

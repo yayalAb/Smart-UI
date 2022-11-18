@@ -9,8 +9,8 @@ using Application.Common.Mappings;
 namespace Application.OperationModule.Queries.GetOperationPaginatedList;
 
 public class GetOperationPaginatedListQuery : IRequest<PaginatedList<OperationDto>> {
-    public int pageNumber {get; init; }
-    public int pageSize {get; init; }
+    public int PageCount {get; init; }
+    public int PageSize {get; init; }
 }
 
 public class GetOperationPaginatedListQueryHandler : IRequestHandler<GetOperationPaginatedListQuery, PaginatedList<OperationDto>> {
@@ -26,7 +26,7 @@ public class GetOperationPaginatedListQueryHandler : IRequestHandler<GetOperatio
     public async Task<PaginatedList<OperationDto>> Handle(GetOperationPaginatedListQuery request, CancellationToken cancellationToken) {
         return await _context.Operations
         .ProjectTo<OperationDto>(_mapper.ConfigurationProvider)
-        .PaginatedListAsync(request.pageNumber , request.pageSize);
+        .PaginatedListAsync(request.PageCount , request.PageSize);
     }
 
 }

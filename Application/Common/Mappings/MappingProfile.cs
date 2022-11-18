@@ -1,10 +1,9 @@
 ﻿using Application.DocumentationModule.Commands.CreateDocumentation;
-using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.OperationModule.Commands.CreateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
-using Application.User.Commands.AuthenticateUser;
+using Application.UserGroupModule.Commands;
 using AutoMapper;
 using Domain.Entities;
 using System.Reflection;
@@ -22,7 +21,7 @@ namespace Application.Common.Mappings
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
             //TODO: add mapping configs here
-            CreateMap<UserRoleDto, AppUserRole>().ReverseMap();
+            CreateMap<UserRoleDto, AppUserRole>();
             CreateMap<AddressDto, Address>().ReverseMap();
 
             CreateMap<CreateDocumentationCommand, Documentation>();

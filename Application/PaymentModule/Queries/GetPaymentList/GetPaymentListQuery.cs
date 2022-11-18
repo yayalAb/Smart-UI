@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.PaymentModule.Queries.GetPaymentList{
     public record GetPaymentListQuery : IRequest<PaginatedList<PaymentDto>>{
-        public int pageNumber {get; init;}=1;
-        public int pageSize {get; init; }=10;
+        public int PageCount {get; init;}=1;
+        public int PageSize {get; init; }=10;
     }
 
     public class GetPaymentListQueryHandler : IRequestHandler<GetPaymentListQuery, PaginatedList<PaymentDto>>
@@ -30,7 +30,7 @@ namespace Application.PaymentModule.Queries.GetPaymentList{
           return await _context.Payments
             .OrderBy(p => p.Id)
             .ProjectTo<PaymentDto>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.pageNumber , request.pageSize);
+            .PaginatedListAsync(request.PageCount , request.PageSize);
         }
     }
 
