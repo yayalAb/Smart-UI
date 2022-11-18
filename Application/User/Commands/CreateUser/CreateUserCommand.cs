@@ -4,9 +4,10 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Application.AddressModule.Commands.AddressCreateCommand;
+using Application.Addresses.Commands.CreateAddress;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
+using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 
 namespace Application.User.Commands.CreateUser
 {
@@ -17,7 +18,7 @@ namespace Application.User.Commands.CreateUser
         public string UserName { get; init; }
         public byte State { get; init; } = 1!;
         public int UserGroupId { get; init; }
-        public AddressCreateCommand Address { get; init; }
+        public AddressDto Address { get; init; }
 
     }
 
@@ -43,7 +44,6 @@ namespace Application.User.Commands.CreateUser
             return await executionStrategy.ExecuteAsync(
                async () =>
                {
-
 
                    using (var transaction = _context.database.BeginTransaction())
                    {

@@ -41,6 +41,7 @@ namespace Infrastructure.Persistence
         public virtual DbSet<ShippingAgent> ShippingAgents { get; set; } = null!;        
         public virtual DbSet<Truck> Trucks { get; set; } = null!;
         public virtual DbSet<TruckAssignment> TruckAssignments { get; set; } = null!;
+        public virtual DbSet<Setting> Settings {get; set;} = null!;
 
 
 

@@ -25,6 +25,7 @@ namespace Application.Common.Interfaces
         DbSet<ShippingAgent> ShippingAgents { get; set; }
         DbSet<Truck> Trucks { get; set; }
         DbSet<TruckAssignment> TruckAssignments { get; set; }
+        DbSet<Setting> Settings {get; set;}
         
         Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

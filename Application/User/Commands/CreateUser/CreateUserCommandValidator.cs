@@ -30,7 +30,6 @@ namespace Application.User.Commands.CreateUser
                 .NotEmpty()
                 .Must(BeFoundInDb).WithMessage("group with the provided id is not found");
 
-
         }
 
         private bool BeFoundInDb(int groupId)

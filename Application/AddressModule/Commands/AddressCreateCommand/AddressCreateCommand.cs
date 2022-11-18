@@ -4,13 +4,13 @@ using MediatR;
 namespace Application.AddressModule.Commands.AddressCreateCommand {
 
     public record AddressCreateCommand : IRequest<Address> {
-        public string Email { get; init; }
-        public string Phone { get; init; }
-        public string Region { get; init; }
-        public string City { get; init; }
-        public string Subcity { get; init; }
-        public string Country { get; init; }
-        public string POBOX { get; init; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Region { get; set; }
+        public string City { get; set; }
+        public string Subcity { get; set; }
+        public string Country { get; set; }
+        public string? POBOX { get; set; }
     }
 
 }
