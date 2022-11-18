@@ -6,7 +6,7 @@ using Application.User.Commands.ResetPassword;
 using Application.User.Commands.UpdateUserCommand;
 using Application.User.Queries.GetAllUsersQuery;
 using Application.User.Queries.GetUserQuery;
-using Application.UserModule.Commands.DeleteUser;
+using Application.User.Commands.DeleteUser;
 using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
