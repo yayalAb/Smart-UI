@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Application.Common.Models;
+using Application.User;
 
 namespace Application.User.Queries.GetAllUsersQuery;
 
-public class GetAllUsers: IRequest<PaginatedList<IApplicationUser>> {
+public class GetAllUsers: IRequest<PaginatedList<UserDto>> {
     public int? PageCount { get; init; } = 1;
     public int? PageSize { get; init; } = 10;
 }
 
-public class GetAllUsersHandler: IRequestHandler<GetAllUsers, PaginatedList<IApplicationUser>> {
+public class GetAllUsersHandler: IRequestHandler<GetAllUsers, PaginatedList<UserDto>> {
 
     private readonly IIdentityService _identityService;
     private readonly IAppDbContext _context;
@@ -34,8 +35,19 @@ public class GetAllUsersHandler: IRequestHandler<GetAllUsers, PaginatedList<IApp
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<IApplicationUser>> Handle(GetAllUsers request, CancellationToken cancellationToken) {
-        return await PaginatedList<IApplicationUser>.CreateAsync(_identityService.AllUsers().Include(u => u.UserGroup).Include(u => u.Address), request.PageCount ?? 1, request.PageSize ?? 10);
+    public async Task<PaginatedList<UserDto>> Handle(GetAllUsers request, CancellationToken cancellationToken) {
+        return await PaginatedList<UserDto>.CreateAsync(
+            _identityService.AllUsers()
+                .Include(u => u.UserGroup)
+                .Include(u => u.Address)
+                .Select(u => new UserDto() {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    FullName = u.FullName,
+                    PhoneNumber = u.Address.Phone,
+                    UserGroupName = u.UserGroup.Name
+                }), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }
