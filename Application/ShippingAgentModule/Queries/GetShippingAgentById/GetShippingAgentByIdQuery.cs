@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentById;
 
@@ -28,13 +27,12 @@ public class GetShippingAgentByIdQueryHandler : IRequestHandler<GetShippingAgent
         
         var agent = await _context.ShippingAgents
         .Include(t => t.Address)
-        .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider)
         .FirstOrDefaultAsync(s =>s.Id == request.Id);
         if(agent == null){
             throw new NotFoundException("Shipping Agent" , new{Id=request.Id});
         }
 
-        return agent;
+        return agent.ToShippingAgentDto();
 
     }
 

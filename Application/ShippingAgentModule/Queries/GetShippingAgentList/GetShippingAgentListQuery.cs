@@ -21,10 +21,10 @@ public class GetShippingAgentListQueryHandler : IRequestHandler<GetShippingAgent
     }
 
     public async Task<List<ShippingAgentDto>> Handle(GetShippingAgentListQuery request, CancellationToken cancellationToken) {
-        return await _context.ShippingAgents
+        var shippingAgents = await _context.ShippingAgents
         .Include(t => t.Address)
-        .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider)
         .ToListAsync();
+        return shippingAgents.ToShippingAgentDto();
     }
 
 }
