@@ -3,6 +3,7 @@ using Application.ContainerModule.Commands.CreateContainer;
 using Application.ContainerModule.Commands.UpdateContainer;
 using Application.ContainerModule.Queries.GetAllContainersQuery;
 using Application.ContainerModule.Queries.GetContainerQuery;
+using Application.ContainerModule.Commands.ContainerDelete;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,15 @@ namespace WebApi.Controllers
         public async Task<ActionResult> GetContainer(int id){
             try{
                 return Ok(await Mediator.Send(new GetContainer(id)));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id){
+            try{
+                return Ok(await Mediator.Send(new ContainerDelete(){Id = id}));
             }catch(Exception ex){
                 return NotFound(ex.Message);
             }
