@@ -1,7 +1,7 @@
 using Domain.Entities;
 
 namespace Application.ShippingAgentModule.Queries;
-public static class ShippingAgentListExtensions
+public static class ShippingAgentExtensions
 {
     public static List<ShippingAgentDto> ToShippingAgentDto(this List<ShippingAgent> items){
          List<ShippingAgentDto> itemDtos  = new List<ShippingAgentDto>();

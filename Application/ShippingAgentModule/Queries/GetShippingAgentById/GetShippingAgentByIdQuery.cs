@@ -4,15 +4,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentById;
 
-public class GetShippingAgentByIdQuery : IRequest<ShippingAgentDto> {
+public class GetShippingAgentByIdQuery : IRequest<SingleShippingAgentDto> {
     public int Id {get; set;}
 
 }
 
-public class GetShippingAgentByIdQueryHandler : IRequestHandler<GetShippingAgentByIdQuery, ShippingAgentDto> {
+public class GetShippingAgentByIdQueryHandler : IRequestHandler<GetShippingAgentByIdQuery, SingleShippingAgentDto> {
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
@@ -23,16 +24,17 @@ public class GetShippingAgentByIdQueryHandler : IRequestHandler<GetShippingAgent
         _mapper = mapper;
     }
 
-    public async Task<ShippingAgentDto> Handle(GetShippingAgentByIdQuery request, CancellationToken cancellationToken) {
+    public async Task<SingleShippingAgentDto> Handle(GetShippingAgentByIdQuery request, CancellationToken cancellationToken) {
         
         var agent = await _context.ShippingAgents
         .Include(t => t.Address)
+        .ProjectTo<SingleShippingAgentDto>(_mapper.ConfigurationProvider)
         .FirstOrDefaultAsync(s =>s.Id == request.Id);
         if(agent == null){
             throw new NotFoundException("Shipping Agent" , new{Id=request.Id});
         }
 
-        return agent.ToShippingAgentDto();
+        return agent;
 
     }
 
