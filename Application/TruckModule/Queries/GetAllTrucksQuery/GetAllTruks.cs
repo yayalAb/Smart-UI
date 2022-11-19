@@ -27,7 +27,6 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             IAppDbContext context, 
             ILogger<GetAllTrucksHandler> logger,
             IMapper mapper
-
         ){
             _identityService = identityService;
             _context = context;

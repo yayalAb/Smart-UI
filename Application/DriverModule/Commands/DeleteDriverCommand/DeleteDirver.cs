@@ -24,7 +24,7 @@ public class DeleteDriverHandler : IRequestHandler<DeleteDriver, CustomResponse>
 
     public async Task<CustomResponse> Handle(DeleteDriver request, CancellationToken cancellationToken){
 
-        var driver = _context.Drivers.FindAsync(request.Id);
+        var driver = await _context.Drivers.FindAsync(request.Id);
 
         if(driver != null){
             _context.Drivers.Remove(driver);

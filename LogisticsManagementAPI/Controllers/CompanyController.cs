@@ -27,8 +27,7 @@ namespace WebApi.Controllers {
         public async Task<ActionResult> update([FromBody] UpdateCompanyCommand command) {
 
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
+                return Ok(await Mediator.Send(command));
             }catch(Exception ex) {
                 return NotFound(ex.Message);
             }
@@ -38,9 +37,7 @@ namespace WebApi.Controllers {
         [HttpGet("{id}")]
         public async Task<ActionResult> view(int id){
             try{
-                GetCompanyQuery command = new GetCompanyQuery(id);
-                var response = await Mediator.Send(command);
-                return Ok(response);
+                return Ok(await Mediator.Send(new GetCompanyQuery(id)));
             }catch(Exception ex) {
                 return NotFound(ex.Message);
             }

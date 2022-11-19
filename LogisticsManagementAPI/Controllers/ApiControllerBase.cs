@@ -12,10 +12,22 @@ namespace WebApi.Controllers
 
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 
-        public ActionResult AppdivResponse(CustomResponse response){
+        // public ActionResult AppdivResponse(CustomResponse response){
             
-            return StatusCode(response.StatusCode, response);
+        //     // if(response.StatusCode == 401){
+        //     //     return Unauthorized(response);
+        //     // }
 
-        }
+        //     // if(response.StatusCode == 400){
+        //     //     return NotFound(response);
+        //     // }
+
+        //     // else {
+        //     //     return BadRequest(response);
+        //     // }
+
+        //     return StatusCode(response.StatusCode, response);
+
+        // }
     }
 }

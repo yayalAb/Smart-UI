@@ -76,7 +76,7 @@ namespace WebApi.Controllers
                 var response = await Mediator.Send(new DeleteDriver(){Id = id});
                 return Ok(response);
             }catch(Exception ex) {
-                return AppdivResponse(CustomResponse.Failed(ex.Message));
+                return NotFound(CustomResponse.Failed(ex.Message));
             }
         }
 
