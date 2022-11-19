@@ -31,4 +31,21 @@ public class CustomResponse {
             StatusCode = code
         };
     }
+
+    public static CustomResponse Forbiden(string message){
+        return new CustomResponse(){
+            Status = false,
+            Message = message,
+            StatusCode = 403
+        };
+    }
+
+    public static CustomResponse NotFound(string message){
+        return new CustomResponse(){
+            Status = false,
+            Message = message,
+            StatusCode = 400
+        };
+    }
+
 }
