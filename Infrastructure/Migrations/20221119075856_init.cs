@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class settingUpdate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,17 +19,17 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Email = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    Email = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phone = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    Phone = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Region = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    Region = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    City = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Subcity = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    Subcity = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Country = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    Country = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     POBOX = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -62,6 +62,21 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Blacklists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    tokenString = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blacklists", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -142,7 +157,7 @@ namespace Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Setting",
+                name: "Settings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -162,7 +177,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Setting", x => x.Id);
+                    table.PrimaryKey("PK_Settings", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1034,6 +1049,9 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Blacklists");
+
+            migrationBuilder.DropTable(
                 name: "Documentations");
 
             migrationBuilder.DropTable(
@@ -1049,7 +1067,7 @@ namespace Infrastructure.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Setting");
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

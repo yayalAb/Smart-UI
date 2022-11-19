@@ -8,6 +8,9 @@ using Application.User.Queries.GetAllUsersQuery;
 using Application.User.Queries.GetUserQuery;
 using Application.User.Commands.DeleteUser;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Application.User.Commands.Logout;
+
 namespace WebApi.Controllers
 {
     public class UserController : ApiControllerBase
@@ -15,6 +18,7 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticateUserCommand command)
         {
            var response = await Mediator.Send(command);
@@ -84,7 +88,19 @@ namespace WebApi.Controllers
             return Ok(responseObj);
 
         }
+        // POST api/<UserController>
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> ChangePassword([FromBody] LogoutCommand command)
+        {
+            await Mediator.Send(command);
+            var responseObj = new
+            {
+                message = "logout successfull"
+            };
+            return Ok(responseObj);
 
+        }
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUser command){
             try{

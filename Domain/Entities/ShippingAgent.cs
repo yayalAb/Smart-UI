@@ -7,9 +7,7 @@ public class ShippingAgent : BaseAuditableEntity
         public string? CompanyName { get; set; }
         public byte[]? Image { get; set; }
         public int AddressId { get; set; }
-
-   
-    public Address Address { get; set; }
+        public Address Address { get; set; }
 
     
     //has many

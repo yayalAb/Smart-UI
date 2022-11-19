@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221117121926_settingUpdate")]
-    partial class settingUpdate
+    [Migration("20221119075856_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,10 +28,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
@@ -42,6 +44,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
@@ -56,14 +59,17 @@ namespace Infrastructure.Migrations
                         .HasColumnType("varchar(45)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
                     b.Property<string>("Region")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
                     b.Property<string>("Subcity")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
@@ -121,6 +127,21 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserGroupId");
 
                     b.ToTable("AppUserRoles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Blacklist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("tokenString")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blacklists");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>
@@ -763,7 +784,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Setting");
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("Domain.Entities.ShippingAgent", b =>

@@ -127,6 +127,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("AppUserRoles");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Blacklist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("tokenString")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blacklists");
+                });
+
             modelBuilder.Entity("Domain.Entities.Company", b =>
                 {
                     b.Property<int>("Id")
