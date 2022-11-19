@@ -6,6 +6,7 @@ using Application.DriverModule.Queries.GetAllDriversQuery;
 using Application.DriverModule.Queries.GetDriverQuery;
 using Application.DriverModule.Commands.DeleteDriverCommand;
 using Application.Common.Models;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -76,7 +77,7 @@ namespace WebApi.Controllers
                 var response = await Mediator.Send(new DeleteDriver(){Id = id});
                 return Ok(response);
             }catch(Exception ex) {
-                return NotFound(CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
