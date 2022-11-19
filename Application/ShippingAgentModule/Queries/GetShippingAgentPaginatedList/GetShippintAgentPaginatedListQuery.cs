@@ -26,10 +26,20 @@ public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShip
     }
 
     public async Task<PaginatedList<ShippingAgentDto>> Handle(GetShippingAgentPaginatedListQuery request, CancellationToken cancellationToken) {
-        return await _context.ShippingAgents
-        .Include(t => t.Address)
-        .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider)
-        .PaginatedListAsync(request.PageCount , request.PageSize);
+        var shippingAgents =  _context.ShippingAgents
+        .Include(t => t.Address);
+       var paginatedList = await PaginatedList<ShippingAgent>.CreateAsync(shippingAgents,pageCount: request.PageCount , pageSize: request.PageSize);
+       
+       List<ShippingAgent> items = paginatedList.Items;
+       List<ShippingAgentDto> itemDtos  = items.ToShippingAgentDto();
+    PaginatedList<ShippingAgentDto> paginatedShippingAgentDtos = new PaginatedList<ShippingAgentDto>(
+        items: itemDtos ,
+        count: paginatedList.TotalCount,
+        pageCount: paginatedList.PageCount,
+        pageSize: paginatedList.PageCount
+    );
+    return paginatedShippingAgentDtos;
+    
     }
 
 }
