@@ -4,6 +4,8 @@ using Application.DriverModule.Commands.UpdateDriverCommand;
 using Application.DriverModule.Commands.ChangeDriverImageCommand;
 using Application.DriverModule.Queries.GetAllDriversQuery;
 using Application.DriverModule.Queries.GetDriverQuery;
+using Application.DriverModule.Commands.DeleteDriverCommand;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -65,6 +67,16 @@ namespace WebApi.Controllers
                 return Ok(response);
             }catch(Exception ex) {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id){
+            try{
+                var response = await Mediator.Send(new DeleteDriver(){Id = id});
+                return Ok(response);
+            }catch(Exception ex) {
+                return NotFound(CustomResponse.Succeeded(ex.Message));
             }
         }
 
