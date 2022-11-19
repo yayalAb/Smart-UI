@@ -1,9 +1,10 @@
-﻿using Application.LookUp.Commands.DeleteLookup;
+﻿
 using Application.UserGroupModule.Commands.CreateUserGroup;
 using Application.UserGroupModule.Commands.DeleteUserGroup;
 using Application.UserGroupModule.Commands.UpdateUserGroup;
-using Application.UserGroupModule.Queries.GetAllUserGroups;
 using Application.UserGroupModule.Queries.GetUserGroupById;
+using Application.UserGroupModule.Queries.GetUserGroupList;
+using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +14,27 @@ namespace WebApi.Controllers
 
     public class UserGroupController : ApiControllerBase
     {
-        // GET: api/<UserGroupController>
+          // GET api/<UserGroupController>/
         [HttpGet]
-        public async Task<IActionResult> GetAllUserGroups()
+        public async Task<IActionResult> Get([FromQuery] int? pageCount ,[FromQuery] int? pageSize)
         {
-            var userGroups = await Mediator.Send(new GetAllUserGroupsQuery());
-            return Ok(userGroups);
+
+            if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
+                var query = new GetUserGroupListQuery();
+                var response = await Mediator.Send(query);
+                return Ok(response);
+
+            }
+            else{
+                var query = new GetUserGroupPaginatedListQuery{
+                    PageCount = (int)pageCount,
+                    PageSize = (int)pageSize
+                };
+                var response = await Mediator.Send(query);
+            return Ok(response);
+            }
+
+            
         }
 
         // GET api/<UserGroupController>/5
