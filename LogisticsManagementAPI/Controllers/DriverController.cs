@@ -7,6 +7,7 @@ using Application.DriverModule.Queries.GetDriverQuery;
 using Application.DriverModule.Commands.DeleteDriverCommand;
 using Application.Common.Models;
 using WebApi.Models;
+using Application.Common.Exceptions;
 
 namespace WebApi.Controllers
 {
@@ -74,9 +75,11 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> delete(int id){
             try{
-                var response = await Mediator.Send(new DeleteDriver(){Id = id});
-                return Ok(response);
-            }catch(Exception ex) {
+                return Ok(await Mediator.Send(new DeleteDriver(){Id = id}));
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }

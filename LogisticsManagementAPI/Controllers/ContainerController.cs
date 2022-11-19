@@ -41,9 +41,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ContainerList(){
+        public async Task<ActionResult> ContainerList([FromQuery] GetAllContainers command){
             try{
-                return Ok(await Mediator.Send(new GetAllContainers()));
+                return Ok(await Mediator.Send(command));
             }catch(Exception ex){
                 return NotFound(ex.Message);
             }
