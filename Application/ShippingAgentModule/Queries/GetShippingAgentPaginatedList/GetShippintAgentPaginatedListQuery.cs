@@ -1,12 +1,10 @@
 using Domain.Entities;
 using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Application.Common.Models;
-using AutoMapper.QueryableExtensions;
-using Application.Common.Mappings;
+
 
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 
