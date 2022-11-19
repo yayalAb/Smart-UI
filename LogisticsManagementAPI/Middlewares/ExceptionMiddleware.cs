@@ -40,6 +40,7 @@ namespace WebApi.Middlewares
                 NotFoundException => (int)HttpStatusCode.NotFound,
                 InvalidLoginException => (int)HttpStatusCode.BadRequest,    
                 AuthenticationException => (int)HttpStatusCode.Unauthorized,
+                ForbiddenAccessException => (int)HttpStatusCode.Unauthorized,
                 CantCreateUserException => (int)HttpStatusCode.BadRequest, 
                 PasswordResetException => (int)HttpStatusCode.BadRequest,
                 CustomBadRequestException   => (int)HttpStatusCode.BadRequest,
@@ -72,6 +73,7 @@ namespace WebApi.Middlewares
                         message = ex2.Message + "\n" + errors;
                     }
                     break;
+                
             }
           
             await context.Response.WriteAsync(new ErrorDetail()

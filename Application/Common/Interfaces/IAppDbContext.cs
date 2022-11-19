@@ -26,6 +26,7 @@ namespace Application.Common.Interfaces
         DbSet<Truck> Trucks { get; set; }
         DbSet<TruckAssignment> TruckAssignments { get; set; }
         DbSet<Setting> Settings {get; set;}
+        DbSet<Blacklist> Blacklists {get; set;}
         
         Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
