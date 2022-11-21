@@ -106,11 +106,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getAll([FromQuery] GetAllLookups command) {
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex){
+            }
+             catch(GhionException ex){
                 return AppdiveResponse.Response(this, ex.Response);
             }
             catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

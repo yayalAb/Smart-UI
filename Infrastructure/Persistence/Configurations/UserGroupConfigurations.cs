@@ -13,7 +13,8 @@ namespace Infrastructure.Persistence.Configurations
             builder.HasMany<ApplicationUser>()
                 .WithOne(u=>u.UserGroup)
                 .HasForeignKey(u=>u.UserGroupId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .IsRequired(false);
             builder.HasIndex(u=>u.Name).IsUnique();
 
         }

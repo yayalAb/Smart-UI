@@ -21,7 +21,8 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
         entity.HasOne(d => d.Address)
             .WithOne(p => p.Driver)
             .HasForeignKey<Driver>(d => d.AddressId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .IsRequired(false);
         
     }
 }

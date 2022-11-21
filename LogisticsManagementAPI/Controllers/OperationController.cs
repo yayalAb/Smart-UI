@@ -77,7 +77,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPost]
-        public async Task<IActionResult> CreateOperation([FromForm] CreateOperationCommand command)
+        public async Task<IActionResult> CreateOperation([ FromBody] CreateOperationCommand command)
         {
 
             try
@@ -97,7 +97,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPut]
-        public async Task<IActionResult> UpdateOperation([FromForm] UpdateOperationCommand command)
+        public async Task<IActionResult> UpdateOperation([ FromBody] UpdateOperationCommand command)
         {
 
             try
@@ -120,16 +120,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOperation(int id)
         {
-            var command = new DeleteOperationCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "Operation deleted successfully"
-            };
-            return Ok(responseObj);
+           try{
+
+                return Ok( await Mediator.Send(new DeleteOperationCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
     }
 }

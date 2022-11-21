@@ -22,14 +22,14 @@ public class ContainerDeleteHandler : IRequestHandler<ContainerDelete, CustomRes
 
     public async Task<CustomResponse> Handle(ContainerDelete request, CancellationToken cancellationToken){
         
-        var container = await _context.Containers.FindAsync(request.Id);
-
-        if(container != null) {
-            _context.Containers.Remove(container);
-            await _context.SaveChangesAsync(cancellationToken);
+       var found_Container = await _context.Containers.FindAsync(request.Id);
+        if(found_Container == null){
+            throw new GhionException(CustomResponse.NotFound($"Container with id = {request.Id} is not found"));
         }
+        _context.Containers.Remove(found_Container);
+            await _context.SaveChangesAsync(cancellationToken);
 
-        return CustomResponse.Succeeded("Container Deleted Successfully!");
+         return CustomResponse.Succeeded("Container deleted successfully!");
 
     }
 }

@@ -94,16 +94,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var command = new DeletePaymentCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "Payment deleted successfully"
-            };
-            return Ok(responseObj);
+         try{
+
+                return Ok( await Mediator.Send(new DeletePaymentCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            }
         }
 
     }

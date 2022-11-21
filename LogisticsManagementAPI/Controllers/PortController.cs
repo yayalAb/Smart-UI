@@ -81,12 +81,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> delete([FromQuery] DeletePort command) {
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id) {
             try{
-                return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+
+                return Ok( await Mediator.Send(new DeletePort{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

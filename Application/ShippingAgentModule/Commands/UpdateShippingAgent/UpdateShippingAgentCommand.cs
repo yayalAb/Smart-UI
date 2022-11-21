@@ -17,7 +17,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
         public int AddressId { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public byte[]? Image { get; set; }
         public AddressDto Address { get; set; }
 
     }
@@ -53,17 +53,17 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 
 
                         /// update image 
-                        byte[]? newImage = oldShippingAgent.Image;
-                        if (request.ImageFile != null)
-                        {
-                            var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                            if (!response.result.Succeeded)
-                            {
-                                throw new GhionException(CustomResponse.Failed(response.result.Errors));
-                            }
-                            newImage = response.byteData;
+                        // byte[]? newImage = oldShippingAgent.Image;
+                        // if (request.ImageFile != null)
+                        // {
+                        //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+                        //     if (!response.result.Succeeded)
+                        //     {
+                        //         throw new GhionException(CustomResponse.Failed(response.result.Errors));
+                        //     }
+                        //     newImage = response.byteData;
 
-                        }
+                        // }
                         /// update address  
                         var newAddress = request.Address;
                         var oldAddress = await _context.Addresses.FindAsync(request.AddressId);
@@ -86,7 +86,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 
                         oldShippingAgent.FullName = request.FullName;
                         oldShippingAgent.CompanyName = request.CompanyName;
-                        oldShippingAgent.Image = newImage;
+                        oldShippingAgent.Image = request.Image;
                         _context.ShippingAgents.Update(oldShippingAgent);
                         await _context.SaveChangesAsync(cancellationToken);
                         await transaction.CommitAsync();

@@ -23,12 +23,11 @@ namespace Application.Common.Behaviours
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _logger.LogCritical("Authorizationnnnnnnnnnnnnnnnnnnnnnn");
+           
             var tokenString = _currentUserService.tokenString(); 
             if( _context.Blacklists.Any(b => b.tokenString == tokenString)){
                 throw new ForbiddenAccessException();
             }
-            _logger.LogCritical("aafter auth");
 
 
             return await next();

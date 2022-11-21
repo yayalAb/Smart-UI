@@ -17,7 +17,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
-        public IFormFile? ImageFile { get; set; }
+        public byte[]? Image { get; set; }
     }
 
     public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, CustomResponse> {
@@ -41,18 +41,18 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
 
         public async Task<CustomResponse> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
 
-            //image uploading
-            var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-            if (!response.result.Succeeded)
-            {
-                throw new GhionException(CustomResponse.Failed(response.result.Errors));
-            }
+            // //image uploading
+            // var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+            // if (!response.result.Succeeded)
+            // {
+            //     throw new Exception(String.Join(" , ", response.result.Errors));
+            // }
 
             Truck truck = new Truck();
             truck.TruckNumber = request.TruckNumber;
             truck.Type = request.Type;
             truck.Capacity = request.Capacity;
-            truck.Image = response.byteData;
+            truck.Image = request.Image;
 
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);

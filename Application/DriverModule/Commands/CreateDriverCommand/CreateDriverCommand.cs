@@ -15,7 +15,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
     {
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
-        public IFormFile? ImageFile { get; set; }
+        public byte[]? Image { get; set; }
         public AddressCreateCommand address { get; init; }
     }
 
@@ -45,20 +45,20 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                 using (var transaction = _context.database.BeginTransaction())
                 {
 
-                    byte[]? image;
+                    // byte[]? image;
 
                     try
 
                     {
 
-                        //image uploading
-                        var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                        if (!response.result.Succeeded)
-                        {
-                            throw new GhionException(CustomResponse.Failed(response.result.Errors));
-                        }
+                        // //image uploading
+                        // var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+                        // if (!response.result.Succeeded)
+                        // {
+                        //     throw new Exception(String.Join(" , ", response.result.Errors));
+                        // }
 
-                        image = response.byteData;
+                        // image = response.byteData;
 
 
                         //address insertion
@@ -79,7 +79,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                         new_driver.Fullname = request.Fullname;
                         new_driver.LicenceNumber = request.LicenceNumber;
                         new_driver.AddressId = new_address.Id;
-                        new_driver.Image = image;
+                        new_driver.Image = request.Image;
 
                         _context.Drivers.Add(new_driver);
                         await _context.SaveChangesAsync(cancellationToken);

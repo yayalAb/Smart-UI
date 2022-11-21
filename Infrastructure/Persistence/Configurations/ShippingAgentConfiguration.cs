@@ -20,6 +20,7 @@ public class ShippingAgentConfiguration : IEntityTypeConfiguration<ShippingAgent
         entity.HasOne(d => d.Address)
             .WithOne(p => p.ShippingAgent)
             .HasForeignKey<ShippingAgent>(d => d.AddressId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
     }

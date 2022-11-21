@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         
 
         [HttpPost]
-        public async Task<ActionResult> create([FromForm] CreateTruckCommand command) {
+        public async Task<ActionResult> create([ FromBody] CreateTruckCommand command) {
 
             try{
                 return Ok(await Mediator.Send(command));
@@ -33,24 +33,24 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpPut]
-        [Route("change_image")]
-        public async Task<ActionResult> changeImage([FromForm] ChangeTruckImageCommand command){
-            try{
-                return Ok(await Mediator.Send(command));
-            }
-            catch (GhionException ex)
-            {
-                return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-        }
+        // [HttpPut]
+        // [Route("change_image")]
+        // public async Task<ActionResult> changeImage([FromForm] ChangeTruckImageCommand command){
+        //     try{
+        //         return Ok(await Mediator.Send(command));
+        //     }
+        //     catch (GhionException ex)
+        //     {
+        //         return AppdiveResponse.Response(this, ex.Response);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+        //     }
+        // }
 
         [HttpPut]
-        public async Task<ActionResult> update([FromForm] UpdateTruckCommand command){
+        public async Task<ActionResult> update([ FromBody] UpdateTruckCommand command){
             try{
                 return Ok(await Mediator.Send(command));
             }
@@ -94,12 +94,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> deleteTruck([FromQuery] DeleteTruck command){
-            try {
-                return Ok(await Mediator.Send(command));
-            } catch(Exception ex) {
-                return NotFound(ex.Message);
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> deleteTruck(int id){
+          try{
+
+                return Ok( await Mediator.Send(new DeleteTruck{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

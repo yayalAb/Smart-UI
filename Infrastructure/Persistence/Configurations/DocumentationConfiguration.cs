@@ -53,7 +53,7 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.Documentaions)
             .HasForeignKey(d => d.OperationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior. Cascade);
 
     }
     

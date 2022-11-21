@@ -162,16 +162,19 @@ namespace WebApi.Controllers
             }
             
         }
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> deleteUser(string id){
-            var command = new DeleteUserCommand{
-                Id = id
-            };
-            var response = await Mediator.Send(command);
-            var responseObj = new{
-                message = "user deleted successfully"
-            };
-            return Ok(responseObj);
+            try{
+
+                return Ok( await Mediator.Send(new DeleteUserCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            }
+          
         }
     }
 }

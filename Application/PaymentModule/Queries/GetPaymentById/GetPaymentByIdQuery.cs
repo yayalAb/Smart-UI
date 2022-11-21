@@ -6,6 +6,7 @@ using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.PaymentModule.Queries.GetPaymentById
 {
@@ -25,6 +26,8 @@ namespace Application.PaymentModule.Queries.GetPaymentById
         public async Task<PaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
         {
             var payment = _context.Payments
+                .Include(p => p.Operation)
+                .ThenInclude(p => p.ShippingAgent)
                 .ProjectTo<PaymentDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefault(s => s.Id == request.Id);
 
