@@ -34,7 +34,8 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.HasOne(d => d.ShippingAgent)
             .WithMany(p => p.Operations)
             .IsRequired(false)
-            .HasForeignKey(d => d.ShippingAgentId);
+            .HasForeignKey(d => d.ShippingAgentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

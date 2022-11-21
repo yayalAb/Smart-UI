@@ -1,10 +1,13 @@
-﻿using Application.DocumentationModule.Commands.CreateDocumentation;
+﻿using Application.Common.Exceptions;
+using Application.Common.Models;
+using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.DocumentationModule.Commands.DeleteDocumentation;
 using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -78,14 +81,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocumentation(int id)
         {
-            var command = new DeleteDocumentationCommand{
-                Id = id
-            };
-            var response = await Mediator.Send(command);
-            var responseObj = new {
-                Message = "Documentation deleted successfully"
-            };
-            return Ok(responseObj);
+          try{
+
+                return Ok( await Mediator.Send(new DeleteDocumentationCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
     }
 }

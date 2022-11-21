@@ -1,4 +1,6 @@
-﻿using Application.LookUp.Commands.DeleteLookup;
+﻿using Application.Common.Exceptions;
+using Application.Common.Models;
+using Application.LookUp.Commands.DeleteLookup;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Application.ShippingAgentModule.Commands.DeleteShippingAgent;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
@@ -6,6 +8,7 @@ using Application.ShippingAgentModule.Queries.GetShippingAgentById;
 using Application.ShippingAgentModule.Queries.GetShippingAgentList;
 using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,16 +80,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var command = new DeleteShippingAgentCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "shippingAgent deleted successfully"
-            };
-            return Ok(responseObj);
+             try{
+
+                return Ok( await Mediator.Send(new DeleteShippingAgentCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            }
         }
     }
 }

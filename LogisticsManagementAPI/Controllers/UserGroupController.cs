@@ -88,7 +88,7 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
             catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message, ex.HResult));
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
           
         }

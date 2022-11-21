@@ -1,12 +1,9 @@
-using System.ComponentModel;
-using Application.CompanyModule.Queries;
-using Domain.Entities;
+
 using MediatR;
 using Application.Common.Interfaces;
-using Application.Common.Exceptions;
 using Application.Common.Models;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+
 
 namespace Application.DriverModule.Commands.DeleteDriverCommand;
 
@@ -28,11 +25,12 @@ public class DeleteDriverHandler : IRequestHandler<DeleteDriver, CustomResponse>
 
         if(driver != null){
             _context.Drivers.Remove(driver);
+            
             await _context.SaveChangesAsync(cancellationToken);
+              return CustomResponse.Succeeded("Driver deleted successfully!");
         }
 
-        throw new Exception("lsjdfl");
-        return CustomResponse.Succeeded("Driver deleted Successfully");
+        throw new Common.Exceptions.GhionException(CustomResponse.NotFound($"Driver with id = {request.Id} is not found"));
 
     }
 

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221121094549_ondelete-behaviour-change")]
+    partial class ondeletebehaviourchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1161,7 +1163,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.UserGroup", null)
                         .WithMany("UserRoles")
                         .HasForeignKey("UserGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
@@ -1170,13 +1172,13 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Company")
                         .HasForeignKey("Domain.Entities.Company", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.ContactPerson", "ContactPerson")
                         .WithOne("Company")
                         .HasForeignKey("Domain.Entities.Company", "ContactPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -1194,7 +1196,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("Containers")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.TruckAssignment", "TruckAssignment")
@@ -1213,7 +1215,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("Documentaions")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Operation");
@@ -1266,7 +1268,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("OperationStatuses")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Operation");
@@ -1277,7 +1279,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("Payments")
                         .HasForeignKey("OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.ShippingAgent", "ShippingAgent")

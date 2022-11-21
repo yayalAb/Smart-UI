@@ -20,7 +20,7 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.HasOne(c => c.Operation)
             .WithMany(o => o.Containers)
             .HasForeignKey(c => c.OperationId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
         entity.HasOne(c => c.LocationPort)
             .WithMany(p => p.Containers)
             .HasForeignKey(c => c.LocationPortId)

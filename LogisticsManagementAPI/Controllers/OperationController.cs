@@ -7,6 +7,9 @@ using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.OperationModule.Commands.DeleteOperation;
 using Microsoft.AspNetCore.Mvc;
 using Application.OperationModule.Commands.UpdateOperation;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -81,16 +84,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOperation(int id)
         {
-            var command = new DeleteOperationCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "Operation deleted successfully"
-            };
-            return Ok(responseObj);
+           try{
+
+                return Ok( await Mediator.Send(new DeleteOperationCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
     }
 }

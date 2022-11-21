@@ -24,15 +24,14 @@ public class DeleteCompanyHandler : IRequestHandler<DeleteCompany, CustomRespons
 
     public async Task<CustomResponse> Handle(DeleteCompany request, CancellationToken cancellationToken){
         
-        var company = await _context.Companies.FindAsync(request.Id);
-
-        if(company != null) {
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync(cancellationToken);
+        var found_Company = await _context.Companies.FindAsync(request.Id);
+        if(found_Company == null){
+            throw new GhionException(CustomResponse.NotFound($"Company with id = {request.Id} is not found"));
         }
+        _context.Companies.Remove(found_Company);
+            await _context.SaveChangesAsync(cancellationToken);
 
-        return CustomResponse.Succeeded("Company Deleted Successfully!");
-
+         return CustomResponse.Succeeded("Company deleted successfully!");
     }
 
 }

@@ -38,7 +38,7 @@ namespace Infrastructure.Persistence.Configurations
             entity.HasOne(p => p.Operation)
                 .WithMany(o => o.Payments)
                 .HasForeignKey(d => d.OperationId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(p => p.ShippingAgent)
                 .WithMany(s => s.Payments)

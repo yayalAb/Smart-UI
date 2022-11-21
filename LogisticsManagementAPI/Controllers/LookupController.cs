@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Application.LookUp.Commands.CreateLookUpKey;
 using Application.LookUp.Query.GetAllLookups;
 using Application.LookUp.Query.GetByIdQuery;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -84,8 +87,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getAll([FromQuery] GetAllLookups command) {
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }
+             catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

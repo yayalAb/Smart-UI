@@ -30,9 +30,8 @@ namespace Application.User.Commands.Logout
             new Blacklist{
                 tokenString = request.TokenString
            });
-           _logger.LogCritical($"blacklistinggggggggggggggggggggggggggggggg..................");
+       
            await _context.SaveChangesAsync(cancellationToken);
-           _logger.LogCritical($"blacklistinggggggggggggggggggggggggggggggg..................");
         
 
             return true;

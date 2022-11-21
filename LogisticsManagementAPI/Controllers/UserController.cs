@@ -10,6 +10,9 @@ using Application.User.Commands.DeleteUser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.User.Commands.Logout;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -127,16 +130,19 @@ namespace WebApi.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> deleteUser(string id){
-            var command = new DeleteUserCommand{
-                Id = id
-            };
-            var response = await Mediator.Send(command);
-            var responseObj = new{
-                message = "user deleted successfully"
-            };
-            return Ok(responseObj);
+            try{
+
+                return Ok( await Mediator.Send(new DeleteUserCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            }
+          
         }
     }
 }

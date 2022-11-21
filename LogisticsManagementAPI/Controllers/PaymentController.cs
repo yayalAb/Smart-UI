@@ -1,12 +1,13 @@
 ﻿
+using Application.Common.Exceptions;
+using Application.Common.Models;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.DeletePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.PaymentModule.Queries.GetPaymentById;
 using Application.PaymentModule.Queries.GetPaymentList;
 using Microsoft.AspNetCore.Mvc;
-
-
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -65,16 +66,16 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var command = new DeletePaymentCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "Payment deleted successfully"
-            };
-            return Ok(responseObj);
+         try{
+
+                return Ok( await Mediator.Send(new DeletePaymentCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            }
         }
 
     }

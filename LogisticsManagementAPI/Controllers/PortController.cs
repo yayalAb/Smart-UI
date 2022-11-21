@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Application.PortModule.Queries.GetAllPortsQuery;
 using Application.PortModule.Queries.GetPort;
 using Application.PortModule.Commands.DeletePort;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -57,12 +60,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> delete([FromQuery] DeletePort command) {
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id) {
             try{
-                return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+
+                return Ok( await Mediator.Send(new DeletePort{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

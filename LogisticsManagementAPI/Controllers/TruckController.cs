@@ -5,6 +5,9 @@ using Application.TruckModule.Commands.UpdateTruckCommand;
 using Application.TruckModule.Queries.GetTruckQuery;
 using Application.TruckModule.Queries.GetAllTruckQuery;
 using Application.TruckModule.Commands.DeleteTruckCommand;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -65,12 +68,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> deleteTruck([FromQuery] DeleteTruck command){
-            try {
-                return Ok(await Mediator.Send(command));
-            } catch(Exception ex) {
-                return NotFound(ex.Message);
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> deleteTruck(int id){
+          try{
+
+                return Ok( await Mediator.Send(new DeleteTruck{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 
