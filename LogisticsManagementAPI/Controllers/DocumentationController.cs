@@ -1,4 +1,4 @@
-﻿using Application.Common.Exceptions;
+using Application.Common.Exceptions;
 using Application.Common.Models;
 using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.DocumentationModule.Commands.DeleteDocumentation;
@@ -18,39 +18,15 @@ namespace WebApi.Controllers
     {
         // GET api/<DocumentationController>/
         [HttpGet]
-        public async Task<IActionResult> GetDocumentationList([FromQuery] int? pageCount, [FromQuery] int? pageSize)
+        public async Task<IActionResult> GetDocumentationList([FromQuery] GetDocumentationPaginatedListQuery query)
         {
-
-            try
-            {
-                if (pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null)
-                {
-                    var query = new GetDocumentationListQuery();
-                    var response = await Mediator.Send(query);
-                    return Ok(response);
-
-                }
-                else
-                {
-                    var query = new GetDocumentationPaginatedListQuery
-                    {
-                        PageCount = (int)pageCount,
-                        PageSize = (int)pageSize
-                    };
-                    var response = await Mediator.Send(query);
-                    return Ok(response);
-                }
-            }
-            catch (GhionException ex)
-            {
-                return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            return Ok(await Mediator.Send(query));
             }
 
-        }
+            
+        
+
+
 
         // POST api/<DocumentationController>
         [HttpPost]

@@ -9,8 +9,8 @@ using Application.Common.Mappings;
 namespace Application.OperationModule.Queries.GetOperationPaginatedList;
 
 public class GetOperationPaginatedListQuery : IRequest<PaginatedList<OperationDto>> {
-    public int PageCount {get; init; }
-    public int PageSize {get; init; }
+    public int PageCount {get; init; }=1;
+    public int PageSize {get; init; }=10;
 }
 
 public class GetOperationPaginatedListQueryHandler : IRequestHandler<GetOperationPaginatedListQuery, PaginatedList<OperationDto>> {

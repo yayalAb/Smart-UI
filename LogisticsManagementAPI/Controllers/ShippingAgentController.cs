@@ -18,37 +18,14 @@ namespace WebApi.Controllers
     {
         // GET api/<ShippingAgentController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageCount, [FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] GetShippingAgentPaginatedListQuery query)
         {
 
-            try{
-                if (pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null)
-                {
-                    return Ok(await Mediator.Send(new GetShippingAgentListQuery()));
-                }
-                else
-                {
-                    return Ok(
-                        await Mediator.Send(
-                            new GetShippingAgentPaginatedListQuery
-                            {
-                                PageCount = (int)pageCount,
-                                PageSize = (int)pageSize
-                            }
-                        )
-                    );
-                }
-            }
-            catch (GhionException ex)
-            {
-                return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-            
+            return Ok(await Mediator.Send(query));
         }
+
+
+
 
         // GET api/<ShippingAgentController>/5
         [HttpGet("{id}")]
@@ -69,7 +46,7 @@ namespace WebApi.Controllers
 
         // POST api/<ShippingAgentController>
         [HttpPost]
-        public async Task<IActionResult> CreateShippingAgent([FromForm] CreateShippingAgentCommand command)
+        public async Task<IActionResult> CreateShippingAgent([FromBody] CreateShippingAgentCommand command)
         {
             try{
                 return Ok(await Mediator.Send(command));
@@ -86,7 +63,7 @@ namespace WebApi.Controllers
 
         // PUT api/<ShippingAgentController>/
         [HttpPut()]
-        public async Task<IActionResult> updateShippingAgent([FromForm] UpdateShippingAgentCommand command)
+        public async Task<IActionResult> updateShippingAgent([FromBody] UpdateShippingAgentCommand command)
         {
             try{
                 return Ok(await Mediator.Send(command));
@@ -106,15 +83,18 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-             try{
+            try
+            {
 
-                return Ok( await Mediator.Send(new DeleteShippingAgentCommand{Id = id})) ;
+                return Ok(await Mediator.Send(new DeleteShippingAgentCommand { Id = id }));
             }
-            catch(GhionException ex){
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
     }

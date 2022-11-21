@@ -11,8 +11,9 @@ using Application.Common.Mappings;
 namespace Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 
 public class GetDocumentationPaginatedListQuery : IRequest<PaginatedList<DocumentationDto>> {
-    public int PageCount {get; init; }
-    public int PageSize {get; init; }
+    public int PageCount {get; init; } = 1;
+
+    public int PageSize {get; init; } =10;
 }
 
 public class GetDocumentationPaginatedListQueryHandler : IRequestHandler<GetDocumentationPaginatedListQuery, PaginatedList<DocumentationDto>> {

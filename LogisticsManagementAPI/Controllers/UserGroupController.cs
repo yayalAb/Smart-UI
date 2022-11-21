@@ -16,36 +16,14 @@ namespace WebApi.Controllers
 
     public class UserGroupController : ApiControllerBase
     {
-          // GET api/<UserGroupController>/
+        // GET api/<UserGroupController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageCount ,[FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] GetUserGroupPaginatedListQuery query)
         {
 
-            try{
-                if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
-                    return Ok(await Mediator.Send(new GetUserGroupListQuery()));
-                }
-                else{
-                    return Ok(
-                        await Mediator.Send(
-                            new GetUserGroupPaginatedListQuery{
-                                PageCount = (int)pageCount,
-                                PageSize = (int)pageSize
-                            }
-                        )
-                    );
-                }
-            }
-            catch (GhionException ex)
-            {
-                return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-            
+            return Ok(await Mediator.Send(query));
         }
+
 
         // GET api/<UserGroupController>/5
         [HttpGet("{id}")]
@@ -87,7 +65,7 @@ namespace WebApi.Controllers
 
         // PUT api/<UserGroupController>/5
         [HttpPut]
-        public async Task<IActionResult> UpdateUserGroup( [FromBody] UpdateUserGroupCommand command)
+        public async Task<IActionResult> UpdateUserGroup([FromBody] UpdateUserGroupCommand command)
         {
             
             try{
@@ -108,24 +86,29 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserGroup(int id)
         {
-            try{
+            try
+            {
 
-                return Ok( await Mediator.Send(new DeleteUserGroupCommand{Id = id})) ;
+                return Ok(await Mediator.Send(new DeleteUserGroupCommand { Id = id }));
             }
-            catch(GhionException ex){
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
-          
+
         }
 
         [HttpGet]
         [Route("lookup")]
-        public async Task<IActionResult> LookUp() {
-            
-            try{
+        public async Task<IActionResult> LookUp()
+        {
+
+            try
+            {
                 return Ok(await Mediator.Send(new UserGroupLookup()));
             }
             catch (GhionException ex)

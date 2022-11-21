@@ -14,12 +14,12 @@ namespace Application.UserGroupModule.Queries.GetUserGroupPaginatedList
     public int PageCount { get; init; } = 1;
     public int PageSize { get; init; } = 10;
     }
-    public class GetAllUserGroupsCommandHandler : IRequestHandler<GetUserGroupPaginatedListQuery, PaginatedList<UserGroupDto>>
+    public class GetUserGroupPaginatedListQueryHandler : IRequestHandler<GetUserGroupPaginatedListQuery, PaginatedList<UserGroupDto>>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetAllUserGroupsCommandHandler(IAppDbContext context , IMapper mapper)
+        public GetUserGroupPaginatedListQueryHandler(IAppDbContext context , IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

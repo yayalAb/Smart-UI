@@ -9,8 +9,8 @@ using Application.Common.Models;
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 
 public class GetShippingAgentPaginatedListQuery : IRequest<PaginatedList<ShippingAgentDto>> {
-    public int PageCount {get; init; }
-    public int PageSize {get; init; }
+    public int PageCount {get; init; }=1;
+    public int PageSize {get; init; }=10;
 }
 
 public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShippingAgentPaginatedListQuery, PaginatedList<ShippingAgentDto>> {

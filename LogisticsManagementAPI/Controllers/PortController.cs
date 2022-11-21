@@ -53,7 +53,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
         public async Task<ActionResult> get([FromQuery] GetAllPorts command){
             try{
                 return Ok(await Mediator.Send(command));
@@ -67,8 +66,8 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> getPort([FromQuery] GetPort command){
+        [HttpGet("{id}")]
+        public async Task<ActionResult> getPort(int id){
             try{
                 return Ok(await Mediator.Send(command));
             }catch (GhionException ex)
@@ -78,6 +77,9 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return Ok(await Mediator.Send(new GetPort{Id=id}));
+            }catch(Exception ex){
+                return NotFound(ex.Message);
             }
         }
 

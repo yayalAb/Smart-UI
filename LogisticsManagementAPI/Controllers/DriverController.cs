@@ -59,8 +59,8 @@ namespace WebApi.Controllers
         //     }
         // }
 
-        [HttpGet]
-        public async Task<ActionResult> getDriver([FromQuery] GetDriver command){
+        [HttpGet("{id}")]
+        public async Task<ActionResult> getDriver(int id){
             try{
                 return Ok(await Mediator.Send(command));
             }catch (GhionException ex)
@@ -74,7 +74,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("all")]
         public async Task<ActionResult> get([FromQuery] GetAllDrivers command){
             try{
                 return Ok(await Mediator.Send(command));
