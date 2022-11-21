@@ -1,8 +1,10 @@
 ﻿
 using Application.Common.Mappings;
+using Application.OperationModule.Queries;
+using Application.ShippingAgentModule.Queries;
 using Domain.Entities;
 
-namespace Application.PaymentModule.Queries.GetPaymentById
+namespace Application.PaymentModule.Queries
 {
     public class PaymentDto : IMapFrom<Payment>
     {
@@ -17,5 +19,7 @@ namespace Application.PaymentModule.Queries.GetPaymentById
         public string? Description { get; set; }
         public int OperationId { get; set; }
         public int ShippingAgentId { get; set; }
+        public GetPaymentOperationDto Operation{get; set;}
+        public GetPaymentShippingAgentDto ShippingAgent {get; set;}
     }
 }
