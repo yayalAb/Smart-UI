@@ -11,6 +11,6 @@ namespace Application.UserGroupModule.Queries
         public int Id { get; set; } 
         public string Name { get; set; }
         public string Responsiblity { get; set; }
-        public ICollection<UserRoleDto> UserRoles { get; set; } 
+        public ICollection<FetchUserRoleDto> UserRoles { get; set; } 
     }
 }
