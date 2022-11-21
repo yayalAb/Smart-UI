@@ -7,6 +7,7 @@ using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Application.ShippingAgentModule.Queries.GetShippingAgentById;
 using Application.ShippingAgentModule.Queries.GetShippingAgentList;
 using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
+using Application.UserGroupModule.Queries.GetShippingAgentLookupQuery;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
@@ -96,6 +97,21 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
+        }
+        [HttpGet]
+        [Route("lookup")]
+        public async Task<IActionResult> LookUp()
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new GetShippingAgentLookupQuery()));
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
     }
 }

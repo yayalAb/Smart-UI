@@ -8,6 +8,7 @@ using Application.OperationModule.Commands.UpdateOperation;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
+using Application.UserGroupModule.Queries.GetOperationLookupQuery;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -106,6 +107,21 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
+        }
+          [HttpGet]
+        [Route("lookup")]
+        public async Task<IActionResult> LookUp()
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new GetOperationLookupQuery()));
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
     }
 }
