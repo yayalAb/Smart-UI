@@ -16,7 +16,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         public int LocationPortId { get; init; }
         public int OperationId { get; init; }
         public DateTime? ManufacturedDate { get; init; }
-        public IFormFile? ImageFile { get; init; }
+        public byte[]? Image { get; init; }
     }
     public class UpdateContainerCommandHandler : IRequestHandler<UpdateContainerCommand, int>
     {
@@ -37,15 +37,15 @@ namespace Application.ContainerModule.Commands.UpdateContainer
                 throw new NotFoundException("Container", new { Id = request.Id });
             }
             // update image 
-            if(request.ImageFile != null)
-            {
-                var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                if (!response.result.Succeeded)
-                {
-                    throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
-                }
-                oldContainer.Image = response.byteData;
-            }
+            // if(request.ImageFile != null)
+            // {
+            //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+            //     if (!response.result.Succeeded)
+            //     {
+            //         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+            //     }
+            //     oldContainer.Image = response.byteData;
+            // }
             // update contianer record
             oldContainer.LocationPortId = request.LocationPortId;
             oldContainer.ContianerNumber = request.ContianerNumber;
@@ -53,6 +53,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             oldContainer.Size = request.Size;
             oldContainer.OperationId = request.OperationId;
             oldContainer.ManufacturedDate = request.ManufacturedDate;
+            oldContainer.Image = request.Image;
             _context.Containers.Update(oldContainer);
             await  _context.SaveChangesAsync(cancellationToken);
             return oldContainer.Id; 

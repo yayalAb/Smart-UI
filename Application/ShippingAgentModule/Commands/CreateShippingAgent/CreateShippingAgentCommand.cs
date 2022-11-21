@@ -15,7 +15,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
     {
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public byte[]? Image { get; set; }
         public AddressDto Address { get; set; }
     }
     public class CreateShippingAgentCommandHandler : IRequestHandler<CreateShippingAgentCommand, int>
@@ -39,17 +39,17 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
 
             try
             {
-                byte[]? imageByte = null; 
-                /// save image to db and retrive id
-                 if(request.ImageFile != null)
-                {
-                    var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                    if (!response.result.Succeeded)
-                    {
-                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
-                    }
-                     imageByte = response.byteData;
-                }
+                // byte[]? imageByte = null; 
+                // /// save image to db and retrive id
+                //  if(request.ImageFile != null)
+                // {
+                //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+                //     if (!response.result.Succeeded)
+                //     {
+                //         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                //     }
+                //      imageByte = response.byteData;
+                // }
                 /// save address to db 
                 Address address = _mapper.Map<Address>(request.Address);    
                 await _context.Addresses.AddAsync(address);
@@ -61,7 +61,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                     FullName = request.FullName,
                     CompanyName = request.CompanyName,
                     AddressId = address.Id,
-                    Image = imageByte 
+                    Image = request.Image 
                 };
                 await _context.ShippingAgents.AddAsync(shippingAgent);
                 await _context.SaveChangesAsync(cancellationToken);

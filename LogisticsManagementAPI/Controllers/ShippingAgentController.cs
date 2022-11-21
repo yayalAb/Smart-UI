@@ -53,7 +53,7 @@ namespace WebApi.Controllers
 
         // POST api/<ShippingAgentController>
         [HttpPost]
-        public async Task<IActionResult> CreateShippingAgent ([FromForm] CreateShippingAgentCommand command)
+        public async Task<IActionResult> CreateShippingAgent ([ FromBody] CreateShippingAgentCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
@@ -66,7 +66,7 @@ namespace WebApi.Controllers
 
         // PUT api/<ShippingAgentController>/
         [HttpPut()]
-        public async Task<IActionResult> updateShippingAgent ( [FromForm] UpdateShippingAgentCommand command)
+        public async Task<IActionResult> updateShippingAgent ( [ FromBody] UpdateShippingAgentCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new

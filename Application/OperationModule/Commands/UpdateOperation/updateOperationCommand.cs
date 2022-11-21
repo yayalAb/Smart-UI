@@ -1,6 +1,7 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.OperationModule.Commands.UpdateOperation
 
 {
-    public record UpdateOperationCommand : IRequest<int>
+    public record UpdateOperationCommand : IRequest<CustomResponse>
     {
     public int Id {get; set;}
     public string? NameOnPermit { get; set; }
@@ -26,7 +27,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
     public string? FZIN { get; set; }
     public string? FZOUT { get; set; }
     public string? DestinationType { get; set; }
-    public IFormFile? SourceDocument { get; set; }
+    public byte[]? SourceDocument { get; set; }
     public DateTime? ActualDateOfDeparture { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }
@@ -34,12 +35,12 @@ namespace Application.OperationModule.Commands.UpdateOperation
     public string OperationNumber { get; set; } = null!;
     public DateTime OpenedDate { get; set; }
     public string Status { get; set; } = null!;
-    public IFormFile? ECDDocument { get; set; }
+    public byte[]? ECDDocument { get; set; }
     public int? ShippingAgentId { get; set; }
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }
     }
-    public class UpdateOperationCommandHandler : IRequestHandler<UpdateOperationCommand, int>
+    public class UpdateOperationCommandHandler : IRequestHandler<UpdateOperationCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
@@ -51,74 +52,85 @@ namespace Application.OperationModule.Commands.UpdateOperation
             _mapper = mapper;
             _fileUploadService = fileUploadService;
         }
-        public async Task<int> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
         {
-          var executionStrategy = _context.database.CreateExecutionStrategy();
-             return await executionStrategy.ExecuteAsync(async () =>{
-                 using(var transaction = _context.database.BeginTransaction()){
+            var existingOperation = await _context.Operations.FindAsync(request.Id);
+            if(! _context.Operations.Any(o => o.Id == request.Id)){
+                throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
+            }
+            Operation updatedOperation = _mapper.Map<Operation>(request);
+            _context.Operations.Update(updatedOperation);
+            await _context.SaveChangesAsync(cancellationToken);
+            return CustomResponse.Succeeded("operation updated successfully!");
+
+
+        //   var executionStrategy = _context.database.CreateExecutionStrategy();
+        //      return await executionStrategy.ExecuteAsync(async () =>{
+        //          using(var transaction = _context.database.BeginTransaction()){
                
-                    try
-                    {
-                        var existingOperation = await _context.Operations.FindAsync(request.Id);
-                        if(existingOperation == null){
-                            throw new NotFoundException("operation" , new{ Id = request.Id});
-                        }
+        //             try
+        //             {
+        //                 var existingOperation = await _context.Operations.FindAsync(request.Id);
+        //                 if(existingOperation == null){
+        //                     throw new NotFoundException("operation" , new{ Id = request.Id});
+        //                 }
 
 
 
-                        if(request.ECDDocument != null){
-                        var ECDresponse = await _fileUploadService.GetFileByte(request.ECDDocument , FileType.EcdDocument);
-                            if(!ECDresponse.result.Succeeded){
-                                throw new Exception(String.Join(" , ", ECDresponse.result.Errors)); 
-                            }
-                            existingOperation.ECDDocument = ECDresponse.byteData;
-                        }
-                        if(request.SourceDocument != null){
-                            var sourceResponse = await _fileUploadService.GetFileByte(request.SourceDocument , FileType.SourceDocument);
-                            if(!sourceResponse.result.Succeeded){
-                                throw new Exception(String.Join(" , ", sourceResponse.result.Errors)); 
-                            }
-                            existingOperation.SourceDocument = sourceResponse.byteData;
-                        }
-                        existingOperation.NameOnPermit = request.NameOnPermit;
-                        existingOperation.Consignee = request.Consignee;
-                        existingOperation.NotifyParty = request.NotifyParty;
-                        existingOperation.BillNumber = request.BillNumber;
-                        existingOperation.ShippingLine = request.ShippingLine;
-                        existingOperation.GoodsDescription = request.GoodsDescription;
-                        existingOperation.Quantity = request.Quantity;
-                        existingOperation.GrossWeight = request.GrossWeight;
-                        existingOperation.ATA = request.ATA;
-                        existingOperation.FZIN = request.FZIN;
-                        existingOperation.FZOUT = request.FZOUT;
-                        existingOperation.DestinationType = request.DestinationType;
-                        existingOperation.ActualDateOfDeparture = request.ActualDateOfDeparture;
-                        existingOperation.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
-                        existingOperation.VoyageNumber = request.VoyageNumber;
-                        existingOperation.TypeOfMerchandise = request.TypeOfMerchandise;
-                        existingOperation.OperationNumber = request.OperationNumber;
-                        existingOperation.OpenedDate = request.OpenedDate;
-                        existingOperation.Status = request.Status;
-                        existingOperation.ShippingAgentId = request.ShippingAgentId;
-                        existingOperation.PortOfLoadingId = request.PortOfLoadingId;
-                        existingOperation.CompanyId = request.CompanyId;
+        //                 if(request.ECDDocument != null){
+        //                 var ECDresponse = await _fileUploadService.GetFileByte(request.ECDDocument , FileType.EcdDocument);
+        //                     if(!ECDresponse.result.Succeeded){
+        //                         throw new Exception(String.Join(" , ", ECDresponse.result.Errors)); 
+        //                     }
+        //                     existingOperation.ECDDocument = ECDresponse.byteData;
+        //                 }
+        //                 if(request.SourceDocument != null){
+        //                     var sourceResponse = await _fileUploadService.GetFileByte(request.SourceDocument , FileType.SourceDocument);
+        //                     if(!sourceResponse.result.Succeeded){
+        //                         throw new Exception(String.Join(" , ", sourceResponse.result.Errors)); 
+        //                     }
+        //                     existingOperation.SourceDocument = sourceResponse.byteData;
+        //                 }
+        //                 existingOperation.NameOnPermit = request.NameOnPermit;
+        //                 existingOperation.Consignee = request.Consignee;
+        //                 existingOperation.NotifyParty = request.NotifyParty;
+        //                 existingOperation.BillNumber = request.BillNumber;
+        //                 existingOperation.ShippingLine = request.ShippingLine;
+        //                 existingOperation.GoodsDescription = request.GoodsDescription;
+        //                 existingOperation.Quantity = request.Quantity;
+        //                 existingOperation.GrossWeight = request.GrossWeight;
+        //                 existingOperation.ATA = request.ATA;
+        //                 existingOperation.FZIN = request.FZIN;
+        //                 existingOperation.FZOUT = request.FZOUT;
+        //                 existingOperation.DestinationType = request.DestinationType;
+        //                 existingOperation.ActualDateOfDeparture = request.ActualDateOfDeparture;
+        //                 existingOperation.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
+        //                 existingOperation.VoyageNumber = request.VoyageNumber;
+        //                 existingOperation.TypeOfMerchandise = request.TypeOfMerchandise;
+        //                 existingOperation.OperationNumber = request.OperationNumber;
+        //                 existingOperation.OpenedDate = request.OpenedDate;
+        //                 existingOperation.Status = request.Status;
+        //                 existingOperation.ShippingAgentId = request.ShippingAgentId;
+        //                 existingOperation.PortOfLoadingId = request.PortOfLoadingId;
+        //                 existingOperation.CompanyId = request.CompanyId;
+                       
 
-                        _context.Operations.Update(existingOperation);
-                        await _context.SaveChangesAsync(cancellationToken);
-                        await transaction.CommitAsync();
-                        return existingOperation.Id;
-                    }
-                    catch (System.Exception)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
+        //                 _context.Operations.Update(existingOperation);
+        //                 await _context.SaveChangesAsync(cancellationToken);
+        //                 await transaction.CommitAsync();
+        //                 return existingOperation.Id;
+        //             }
+        //             catch (System.Exception)
+        //             {
+        //                 await transaction.RollbackAsync();
+        //                 throw;
+        //             }
                    
                  
 
 
-                 }
-             });
+        //          }
+        //      });
           
         }
     }

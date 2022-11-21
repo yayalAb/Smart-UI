@@ -7,14 +7,14 @@ public class CustomResponse
     public int StatusCode { get; set; }
     public string Message { get; set; }
 
-    public static CustomResponse Succeeded(string message)
+    public static CustomResponse Succeeded(string message , int statusCode = 200)
     {
 
         return new CustomResponse()
         {
             Status = true,
             Message = message,
-            StatusCode = 200
+            StatusCode = statusCode
         };
 
     }

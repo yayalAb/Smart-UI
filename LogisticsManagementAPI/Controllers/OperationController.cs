@@ -57,7 +57,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPost]
-        public async Task<IActionResult> CreateOperation([FromForm] CreateOperationCommand command)
+        public async Task<IActionResult> CreateOperation([ FromBody] CreateOperationCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
@@ -69,7 +69,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPut]
-        public async Task<IActionResult> UpdateOperation([FromForm] UpdateOperationCommand command)
+        public async Task<IActionResult> UpdateOperation([ FromBody] UpdateOperationCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new

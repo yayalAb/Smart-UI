@@ -17,7 +17,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public byte[]? Image { get; set; }
 
         public ICollection<CreateGoodCommand> Goods {get; set;}
     }
@@ -39,17 +39,17 @@ namespace Application.ContainerModule.Commands.CreateContainer
 
             try
             {
-                byte[]? imageData = null;
-                //get imagebyte data
-                if (request.ImageFile != null)
-                {
-                    var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                    if (!response.result.Succeeded)
-                    {
-                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
-                    }
-                    imageData = response.byteData;
-                }
+                // byte[]? imageData = null;
+                // //get imagebyte data
+                // if (request.ImageFile != null)
+                // {
+                //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+                //     if (!response.result.Succeeded)
+                //     {
+                //         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                //     }
+                //     imageData = response.byteData;
+                // }
 
                 Container newContainer = new Container()
                 {
@@ -59,7 +59,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     LocationPortId = request.LocationPortId,
                     ManufacturedDate = request.ManufacturedDate,
                     OperationId = request.OperationId,
-                    Image = imageData,    
+                    Image = request.Image,    
                 };
 
                 _context.Containers.Add(newContainer);

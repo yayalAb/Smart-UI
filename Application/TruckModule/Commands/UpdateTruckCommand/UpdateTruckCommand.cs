@@ -12,6 +12,8 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
+        public byte[]? Image { get; set; }
+        
     }
 
     public class UpdateTruckCommandHandler : IRequestHandler<UpdateTruckCommand, Truck> {
@@ -41,6 +43,7 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand
             found_truck.TruckNumber = request.TruckNumber;
             found_truck.Type = request.Type;
             found_truck.Capacity = request.Capacity;
+            found_truck.Image = request.Image;
 
             await _context.SaveChangesAsync(cancellationToken);
 

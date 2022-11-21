@@ -16,6 +16,7 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
         public AddressCreateCommand address { get; init; }
+        public byte[]? Image {get; init; }
     }
 
     public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, Driver> {
@@ -41,7 +42,9 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
                 throw new Exception("driver not found");
             }
 
-
+            found_driver.Fullname = request.Fullname;
+            found_driver.LicenceNumber = request.LicenceNumber;
+            found_driver.Image = request.Image;
             found_driver.Address.Email = request.address.Email;
             found_driver.Address.Phone = request.address.Phone;
             found_driver.Address.Region = request.address.Region;
@@ -49,6 +52,8 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
             found_driver.Address.Subcity = request.address.Subcity;
             found_driver.Address.Country = request.address.Country;
             found_driver.Address.POBOX = request.address.POBOX;
+
+
 
             await _context.SaveChangesAsync(cancellationToken);
 

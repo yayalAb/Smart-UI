@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         
 
         [HttpPost]
-        public async Task<ActionResult> create([FromForm] CreateTruckCommand command) {
+        public async Task<ActionResult> create([ FromBody] CreateTruckCommand command) {
 
             try{
                 var response = await Mediator.Send(command);
@@ -28,19 +28,19 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpPut]
-        [Route("change_image")]
-        public async Task<ActionResult> changeImage([FromForm] ChangeTruckImageCommand command){
-            try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
-            }
-        }
+        // [HttpPut]
+        // [Route("change_image")]
+        // public async Task<ActionResult> changeImage([ FromBody] ChangeTruckImageCommand command){
+        //     try{
+        //         var response = await Mediator.Send(command);
+        //         return Ok(response);
+        //     }catch(Exception ex) {
+        //         return NotFound(ex.Message);
+        //     }
+        // }
 
         [HttpPut]
-        public async Task<ActionResult> update([FromForm] UpdateTruckCommand command){
+        public async Task<ActionResult> update([ FromBody] UpdateTruckCommand command){
             try{
                 var response = await Mediator.Send(command);
                 return Ok(response);

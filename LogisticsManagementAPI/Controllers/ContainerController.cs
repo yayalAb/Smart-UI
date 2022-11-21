@@ -19,7 +19,7 @@ namespace WebApi.Controllers
 
         // POST api/<ContainerController>
         [HttpPost]
-        public async Task<IActionResult> CreateContainer([FromForm] CreateContainerCommand command)
+        public async Task<IActionResult> CreateContainer([ FromBody] CreateContainerCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
@@ -32,7 +32,7 @@ namespace WebApi.Controllers
 
         // PUT api/<ContainerController>/
         [HttpPut]
-        public async Task<IActionResult> UpdateContainer([FromForm] UpdateContainerCommand command)
+        public async Task<IActionResult> UpdateContainer([FromBody] UpdateContainerCommand command)
         {
             var response = await Mediator.Send(command);
             var responseObj = new
