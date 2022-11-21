@@ -22,6 +22,8 @@ namespace Application.Common.Mappings
         {
             //TODO: add mapping configs here
             CreateMap<UserRoleDto, AppUserRole>();
+            CreateMap<FetchUserRoleDto, AppUserRole>();
+
             CreateMap<AddressDto, Address>().ReverseMap();
 
             CreateMap<CreateDocumentationCommand, Documentation>();

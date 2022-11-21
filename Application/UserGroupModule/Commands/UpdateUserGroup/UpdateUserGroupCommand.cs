@@ -16,7 +16,7 @@ namespace Application.UserGroupModule.Commands.UpdateUserGroup
         public int Id { get; init; }
         public string Name { get; init; }
         public string Responsiblity { get; init; }
-        public List<UserRoleDto> UserRoles { get; set; }
+        public List<FetchUserRoleDto> UserRoles { get; set; }
     }
     public class UpdateUserGroupCommandHandler : IRequestHandler<UpdateUserGroupCommand, int>
     {
@@ -36,7 +36,7 @@ namespace Application.UserGroupModule.Commands.UpdateUserGroup
                {
                    using (var transaction = _context.database.BeginTransaction())
                    {
-                       List<AppUserRole> userRoles = _mapper.Map<List<UserRoleDto>, List<AppUserRole>>(request.UserRoles);
+                       List<AppUserRole> userRoles = _mapper.Map<List<FetchUserRoleDto>, List<AppUserRole>>(request.UserRoles);
 
                        try
                        {
