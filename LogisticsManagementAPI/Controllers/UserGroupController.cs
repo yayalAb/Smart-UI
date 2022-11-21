@@ -1,4 +1,6 @@
 ﻿
+using Application.Common.Exceptions;
+using Application.Common.Models;
 using Application.UserGroupModule.Commands.CreateUserGroup;
 using Application.UserGroupModule.Commands.DeleteUserGroup;
 using Application.UserGroupModule.Commands.UpdateUserGroup;
@@ -7,7 +9,7 @@ using Application.UserGroupModule.Queries.GetUserGroupList;
 using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
-
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -78,16 +80,17 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserGroup(int id)
         {
-            var command = new DeleteUserGroupCommand
-            {
-                Id = id
-            };
-            await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = "userGroup deleted successfully"
-            };
-            return Ok(responseObj);
+            try{
+
+                return Ok( await Mediator.Send(new DeleteUserGroupCommand{Id = id})) ;
+            }
+            catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message, ex.HResult));
+            }
+          
         }
 
         [HttpGet]
