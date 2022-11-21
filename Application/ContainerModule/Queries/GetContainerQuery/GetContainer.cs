@@ -1,3 +1,4 @@
+using System.Reflection;
 using Domain.Entities;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.ContainerModule.Queries.GetContainerQuery;
 
@@ -38,7 +41,7 @@ public class GetContainer : IRequest<ContainerDto> {
             
             var container = await _context.Containers.Include(c => c.Goods).ProjectTo<ContainerDto>(_mapper.ConfigurationProvider).Where(c => c.Id == request.Id ).FirstOrDefaultAsync();
             if(container == null){
-                throw new Exception("container not found!");
+                throw new GhionException(CustomResponse.NotFound("container not found!"));
             }
 
             return container;

@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.CompanyModule.Queries.GetCompanyQuery
 {
@@ -40,7 +42,7 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
             .ProjectTo<CompanyDto>(_mapper.ConfigurationProvider)
             .Where(c => c.Id == request.Id).FirstOrDefaultAsync();
             if(company == null){
-                throw new Exception("company not found!");
+                throw new GhionException(CustomResponse.NotFound("company not found!"));
             }
 
             return company;

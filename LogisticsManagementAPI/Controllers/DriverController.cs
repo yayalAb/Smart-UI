@@ -20,10 +20,14 @@ namespace WebApi.Controllers
         public async Task<ActionResult> create([FromForm] CreateDriverCommand command) {
 
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -32,10 +36,14 @@ namespace WebApi.Controllers
         public async Task<ActionResult> change([FromBody] UpdateDriverCommand command) {
 
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -54,10 +62,14 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult> getDriver([FromQuery] GetDriver command){
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -65,10 +77,14 @@ namespace WebApi.Controllers
         [Route("all")]
         public async Task<ActionResult> get([FromQuery] GetAllDrivers command){
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

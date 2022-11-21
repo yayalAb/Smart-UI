@@ -1,5 +1,7 @@
 ﻿
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationModule.Commands.CreateOperation
 {
-    public record CreateOperationCommand : IRequest<int>
+    public record CreateOperationCommand : IRequest<CustomResponse>
     {
     public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }
@@ -36,7 +38,7 @@ namespace Application.OperationModule.Commands.CreateOperation
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }
     }
-    public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, int>
+    public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
@@ -48,7 +50,7 @@ namespace Application.OperationModule.Commands.CreateOperation
             _mapper = mapper;
             _fileUploadService = fileUploadService;
         }
-        public async Task<int> Handle(CreateOperationCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(CreateOperationCommand request, CancellationToken cancellationToken)
         {
              var executionStrategy = _context.database.CreateExecutionStrategy();
              return await executionStrategy.ExecuteAsync(async () =>{
@@ -57,17 +59,18 @@ namespace Application.OperationModule.Commands.CreateOperation
                     byte[]? sourceDoc = null;
                     try
                     {
+
                         if(request.ECDDocument != null){
                         var ECDresponse = await _fileUploadService.GetFileByte(request.ECDDocument , FileType.EcdDocument);
                         if(!ECDresponse.result.Succeeded){
-                            throw new Exception(String.Join(" , ", ECDresponse.result.Errors)); 
+                            throw new GhionException(CustomResponse.Failed(ECDresponse.result.Errors)); 
                         }
                         ecdDoc = ECDresponse.byteData;
                         }
                         if(request.SourceDocument != null){
                             var sourceResponse = await _fileUploadService.GetFileByte(request.SourceDocument , FileType.SourceDocument);
                             if(!sourceResponse.result.Succeeded){
-                                throw new Exception(String.Join(" , ", sourceResponse.result.Errors)); 
+                                throw new GhionException(CustomResponse.Failed(sourceResponse.result.Errors)); 
                             }
                             sourceDoc = sourceResponse.byteData;
                         }
@@ -77,7 +80,8 @@ namespace Application.OperationModule.Commands.CreateOperation
                         await _context.Operations.AddAsync(newOperation);
                         await _context.SaveChangesAsync(cancellationToken);
                         await transaction.CommitAsync();
-                        return newOperation.Id;
+                        return CustomResponse.Succeeded("Operation created successlly!");
+
                     }
                     catch (System.Exception)
                     {

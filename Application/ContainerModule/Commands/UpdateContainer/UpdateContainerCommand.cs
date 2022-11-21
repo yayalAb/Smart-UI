@@ -1,13 +1,14 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.ContainerModule.Commands.UpdateContainer
 {
-    public record UpdateContainerCommand : IRequest<int>
+    public record UpdateContainerCommand : IRequest<CustomResponse>
     {
         public int Id { get; init; }
         public string ContianerNumber { get; init; } = null!;
@@ -18,7 +19,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         public DateTime? ManufacturedDate { get; init; }
         public IFormFile? ImageFile { get; init; }
     }
-    public class UpdateContainerCommandHandler : IRequestHandler<UpdateContainerCommand, int>
+    public class UpdateContainerCommandHandler : IRequestHandler<UpdateContainerCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
@@ -28,13 +29,13 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             _context = context;
             _fileUploadService = fileUploadService;
         }
-        public async Task<int> Handle(UpdateContainerCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdateContainerCommand request, CancellationToken cancellationToken)
         {
             // check if container exists 
             var oldContainer = await _context.Containers.FindAsync(request.Id);
             if(oldContainer == null)
             {
-                throw new NotFoundException("Container", new { Id = request.Id });
+                throw new GhionException(CustomResponse.NotFound("Container not found"));
             }
             // update image 
             if(request.ImageFile != null)
@@ -42,7 +43,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
                 var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                 if (!response.result.Succeeded)
                 {
-                    throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                    throw new GhionException(CustomResponse.Failed(response.result.Errors));
                 }
                 oldContainer.Image = response.byteData;
             }
@@ -55,7 +56,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             oldContainer.ManufacturedDate = request.ManufacturedDate;
             _context.Containers.Update(oldContainer);
             await  _context.SaveChangesAsync(cancellationToken);
-            return oldContainer.Id; 
+            return CustomResponse.Succeeded("Container Updated");
 
         }
     }

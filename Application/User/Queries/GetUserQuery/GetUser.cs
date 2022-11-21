@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.User.Queries.GetUserQuery;
 
@@ -33,7 +34,7 @@ public class GetUserHandler: IRequestHandler<GetUser, IApplicationUser>{
     public async Task<IApplicationUser> Handle(GetUser request, CancellationToken cancellationToken){
         var user = await _identityService.AllUsers().Include(u => u.UserGroup).Include(u => u.Address).Where(u => u.Id == request.Id).FirstOrDefaultAsync();
         if(user == null){
-            throw new Exception("user not found");
+            throw new GhionException(CustomResponse.NotFound("user not found!"));
         }
         return user;
     }

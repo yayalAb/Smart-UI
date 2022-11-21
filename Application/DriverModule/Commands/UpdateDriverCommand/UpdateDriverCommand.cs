@@ -8,17 +8,19 @@ using Domain.Entities;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.DriverModule.Commands.UpdateDriverCommand
 {
-    public record UpdateDriverCommand : IRequest<Driver> {
+    public record UpdateDriverCommand : IRequest<CustomResponse> {
         public int Id {get; init;}
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
         public AddressCreateCommand address { get; init; }
     }
 
-    public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, Driver> {
+    public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, CustomResponse> {
         
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -30,15 +32,15 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
             _logger = logger;
         }
 
-        public async Task<Driver> Handle(UpdateDriverCommand request, CancellationToken cancellationToken){
+        public async Task<CustomResponse> Handle(UpdateDriverCommand request, CancellationToken cancellationToken){
 
-            Driver found_driver = _context.Drivers
+            var found_driver = _context.Drivers
                         .Include(d => d.Address)
                         .Where(d => d.Id == request.Id)
                         .FirstOrDefault();
 
             if(found_driver == null){
-                throw new Exception("driver not found");
+                throw new GhionException(CustomResponse.NotFound("driver not found"));
             }
 
 
@@ -52,7 +54,7 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return found_driver;
+            return CustomResponse.Succeeded("Dirver Update Successful");
 
         }
 

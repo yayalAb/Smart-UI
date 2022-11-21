@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.PaymentModule.Commands.UpdatePayment
 
 {
-    public record UpdatePymentCommand : IRequest<int>
+    public record UpdatePymentCommand : IRequest<CustomResponse>
     {
         public int Id { get; set; } 
         public string Type { get; init; }
@@ -23,7 +24,7 @@ namespace Application.PaymentModule.Commands.UpdatePayment
         public int OperationId { get; init; }
         public int ShippingAgentId { get; init; }
     }
-    public class UpdatePymentCommandHandler : IRequestHandler<UpdatePymentCommand, int>
+    public class UpdatePymentCommandHandler : IRequestHandler<UpdatePymentCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
@@ -33,20 +34,19 @@ namespace Application.PaymentModule.Commands.UpdatePayment
             _context = context;
             _mapper = mapper;
         }
-        public async Task<int> Handle(UpdatePymentCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdatePymentCommand request, CancellationToken cancellationToken)
         {
             var oldPayment = await _context.Payments.AsNoTracking().FirstOrDefaultAsync(s => s.Id == request.Id);
             
-            if (oldPayment == null)
-            {
-                throw new NotFoundException("payment" , new {Id = request.Id});
+            if (oldPayment == null) {
+                throw new GhionException(CustomResponse.NotFound("payment not found"));
             }
 
             oldPayment = _mapper.Map<Payment>(request);
              _context.Payments.Update(oldPayment);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return oldPayment.Id;
+            return CustomResponse.Succeeded("Payment Updated");
 
         }
     }

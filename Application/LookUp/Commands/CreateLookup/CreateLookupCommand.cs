@@ -1,18 +1,19 @@
 ﻿
 
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.LookUp.Commands.CreateLookup
 {
-    public record CreateLookupCommand : IRequest<int>
+    public record CreateLookupCommand : IRequest<CustomResponse>
     {
         public string Key { get; init; }
         public string Value { get; init; }
         public byte? IsParent {get; init;} = 0!;
     }
-    public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, int>
+    public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
 
@@ -20,7 +21,7 @@ namespace Application.LookUp.Commands.CreateLookup
         {
            _context = context;
         }
-        public async Task<int> Handle(CreateLookupCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(CreateLookupCommand request, CancellationToken cancellationToken)
         {
             Lookup newLookup = new Lookup
             {
@@ -40,7 +41,7 @@ namespace Application.LookUp.Commands.CreateLookup
             }
 
             await _context.SaveChangesAsync(cancellationToken);
-            return newLookup.Id;
+            return CustomResponse.Succeeded("Lookup created!");
            
         }
     }

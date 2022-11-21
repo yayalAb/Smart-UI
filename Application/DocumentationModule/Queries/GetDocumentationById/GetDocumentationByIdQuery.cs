@@ -2,6 +2,7 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -31,9 +32,9 @@ namespace Application.DocumentationModule.Queries.GetDocumentationById
             .FirstOrDefault(d => d.Id == request.Id);
             if(doc == null)
             {
-                throw new NotFoundException("Documentation", new { id = request.Id });
+                throw new GhionException(CustomResponse.NotFound("Documentation"));
             }
-            return doc; 
+            return doc;
         }
     }
 }

@@ -2,6 +2,7 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -12,8 +13,7 @@ namespace Application.PaymentModule.Queries.GetPaymentById
     {
         public int Id { get; init; } 
     }
-    public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto>
-    {
+    public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto> {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
@@ -30,7 +30,7 @@ namespace Application.PaymentModule.Queries.GetPaymentById
 
             if(payment == null)
             {
-                throw new NotFoundException("Payment", new { request.Id });
+                throw new GhionException(CustomResponse.NotFound("Payment created!"));
             }
             return payment;
         }

@@ -10,6 +10,9 @@ using Application.User.Commands.DeleteUser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.User.Commands.Logout;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -48,44 +51,52 @@ namespace WebApi.Controllers
         [Route("forgot-password")]
         public async Task<IActionResult> ForgootPassword([FromBody] ForgotPasswordCommand command)
         {
-            var response = await Mediator.Send(command);
-            if (!response)
-            {
-                return BadRequest();
+            try{
+                return Ok(await Mediator.Send(command));
             }
-            var responseObj = new
+            catch (GhionException ex)
             {
-                message = "successfully sent password reset link by email"
-            };
-            return Ok(responseObj);
-
-
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
         // POST api/<UserController>
         [HttpPost]
         [Route("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
-             await Mediator.Send(command);
-            var responseObj = new
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                message = "password reset successful"
-            };
-            return Ok(responseObj);
-
-
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
         // POST api/<UserController>
         [HttpPost]
         [Route("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
-            await Mediator.Send(command);
-            var responseObj = new
+            
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                message = "password changed successfully"
-            };
-            return Ok(responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
 
         }
         // POST api/<UserController>
@@ -93,20 +104,31 @@ namespace WebApi.Controllers
         [Route("logout")]
         public async Task<IActionResult> ChangePassword([FromBody] LogoutCommand command)
         {
-            await Mediator.Send(command);
-            var responseObj = new
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                message = "logout successfull"
-            };
-            return Ok(responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
 
         }
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUser command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -114,8 +136,14 @@ namespace WebApi.Controllers
         public async Task<ActionResult> list([FromQuery] GetAllUsers command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -123,9 +151,16 @@ namespace WebApi.Controllers
         public async Task<ActionResult> single([FromQuery] GetUser command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
             }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+            
         }
         [HttpDelete("id")]
         public async Task<IActionResult> deleteUser(string id){

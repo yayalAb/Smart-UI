@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Application.LookUp.Commands.CreateLookUpKey;
 using Application.LookUp.Query.GetAllLookups;
 using Application.LookUp.Query.GetByIdQuery;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -17,42 +20,55 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> createLookup([FromBody] CreateLookupCommand command)
         {
-            var response =  await Mediator.Send(command);
-            var responseObj = new
-            {
-                Id = response,
-            };
-            return StatusCode(StatusCodes.Status201Created, responseObj);
+
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
 
         [HttpPost]
         [Route("category")]
         public async Task<IActionResult> createLookupKey(CreateLookUpKey command)
         {
-            var response =  await Mediator.Send(command);
-            var responseObj = new
-            {
-                Id = response,
-            };
-            return StatusCode(StatusCodes.Status201Created, responseObj);
+
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
 
         // PUT api/<LookupController>/5
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdateLookupCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
-            {
-                message = $"lookup with id {response} is updated successfully"
-            };
-            return Ok(responseObj);
+
+            try{
+                return Ok(await Mediator.Send(command));
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+            
         }
 
         // DELETE api/<LookupController>/5
         [HttpDelete]
         public async Task<IActionResult> Delete(DeleteLookupCommand command)
         {
+
             await Mediator.Send(command);
             var responseObj = new
             {
@@ -66,17 +82,23 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getById(int id){
             try{
                 return Ok(await Mediator.Send(new GetById(){Id = id}));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
-            }            
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
 
         [HttpGet("{type}")]
         public async Task<ActionResult> getLookup(string type){
             try{
                 return Ok(await Mediator.Send(new GetLookUpByKey(type)));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -84,8 +106,11 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getAll([FromQuery] GetAllLookups command) {
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }catch(GhionException ex){
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

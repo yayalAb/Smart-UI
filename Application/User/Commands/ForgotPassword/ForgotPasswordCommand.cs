@@ -9,12 +9,12 @@ using System.Web;
 
 namespace Application.User.Commands.ForgotPassword
 {
-    public record ForgotPasswordCommand : IRequest<bool>
+    public record ForgotPasswordCommand : IRequest<CustomResponse>
     {
-        public string Email { get; init; }   
+        public string Email { get; init; }
         public string ClientURI { get; init; }
     }
-    public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, bool>
+    public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, CustomResponse>
     {
         private readonly IIdentityService _identityService;
         private readonly IEmailService _emailService;
@@ -26,13 +26,12 @@ namespace Application.User.Commands.ForgotPassword
             _emailService = emailService;
             _logger = logger;
         }
-        public async Task<bool> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
             var response = await _identityService.ForgotPassword(request.Email);
             if (!response.result.Succeeded)
             {
-                return false;
-
+                return CustomResponse.Failed(response.result.Errors);
             }
             var token  = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(response.resetToken)); ;
             var param = new Dictionary<string, string?>
@@ -58,10 +57,10 @@ namespace Application.User.Commands.ForgotPassword
             }
             catch (Exception)
             {
-
                 throw;
             }
-            return true;
+
+            return CustomResponse.Succeeded("successfully sent password reset link by email");
 
         }
     }

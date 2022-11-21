@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Application.Common.Models;
 
 namespace Application.ShippingAgentModule.Queries.GetShippingAgentById;
 
@@ -31,7 +32,7 @@ public class GetShippingAgentByIdQueryHandler : IRequestHandler<GetShippingAgent
         .ProjectTo<SingleShippingAgentDto>(_mapper.ConfigurationProvider)
         .FirstOrDefaultAsync(s =>s.Id == request.Id);
         if(agent == null){
-            throw new NotFoundException("Shipping Agent" , new{Id=request.Id});
+            throw new GhionException(CustomResponse.NotFound("Shipping Agent not found"));
         }
 
         return agent;

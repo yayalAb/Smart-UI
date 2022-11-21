@@ -2,11 +2,12 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
 
 namespace Application.PortModule.Commands.UpdatePort
 {
-    public record UpdatePortCommand : IRequest<int>
+    public record UpdatePortCommand : IRequest<CustomResponse>
     {
         public int Id { get; set; }
         public string PortNumber { get; set; }
@@ -14,7 +15,7 @@ namespace Application.PortModule.Commands.UpdatePort
         public string? Region { get; set; }
         public string? Vollume { get; set; }
     }
-    public class UpdatePortCommandHandler : IRequestHandler<UpdatePortCommand, int>
+    public class UpdatePortCommandHandler : IRequestHandler<UpdatePortCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
 
@@ -22,13 +23,13 @@ namespace Application.PortModule.Commands.UpdatePort
         {
             _context = context;
         }
-        public async  Task<int> Handle(UpdatePortCommand request, CancellationToken cancellationToken)
+        public async  Task<CustomResponse> Handle(UpdatePortCommand request, CancellationToken cancellationToken)
         {
             //check if port exists
             var oldPort = await _context.Ports.FindAsync(request.Id);
             if(oldPort == null)
             {
-                throw new NotFoundException("Port", new { id = request.Id });
+                throw new GhionException(CustomResponse.NotFound("Port"));
             }
             // update port
             oldPort.PortNumber = request.PortNumber;
@@ -38,7 +39,7 @@ namespace Application.PortModule.Commands.UpdatePort
 
              _context.Ports.Update(oldPort);
             await _context.SaveChangesAsync(cancellationToken);
-            return oldPort.Id;
+            return CustomResponse.Succeeded("Port Updated Successfully!");
         }
     }
 }

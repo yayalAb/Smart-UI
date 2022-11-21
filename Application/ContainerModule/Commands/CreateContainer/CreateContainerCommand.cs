@@ -6,10 +6,11 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Application.GoodModule.Commands.CreateGoodCommand;
 using AutoMapper;
+using Application.Common.Models;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
-    public record  CreateContainerCommand : IRequest<int>
+    public record  CreateContainerCommand : IRequest<CustomResponse>
     {
         public string ContianerNumber { get; set; }
         public float Size { get; set; }
@@ -22,7 +23,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public ICollection<CreateGoodCommand> Goods {get; set;}
     }
 
-    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, int> {
+    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, CustomResponse> {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
         private readonly IMapper _mapper;
@@ -33,7 +34,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
             _fileUploadService = fileUploadService;
             _mapper = mapper;
         }
-        public async Task<int> Handle(CreateContainerCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(CreateContainerCommand request, CancellationToken cancellationToken)
         {
             using var transaction = _context.database.BeginTransaction();
 
@@ -46,7 +47,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                     if (!response.result.Succeeded)
                     {
-                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                        throw new GhionException(CustomResponse.Failed(response.result.Errors));
                     }
                     imageData = response.byteData;
                 }
@@ -75,12 +76,10 @@ namespace Application.ContainerModule.Commands.CreateContainer
                 await _context.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync();
-                return newContainer.Id;
+                return CustomResponse.Succeeded("Container Created");
 
-            }
-            catch (Exception)
-            {
-
+            } catch (Exception) {
+                transaction.Rollback();
                 throw;
             }
 

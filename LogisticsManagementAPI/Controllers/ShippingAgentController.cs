@@ -1,4 +1,6 @@
-﻿using Application.LookUp.Commands.DeleteLookup;
+﻿using Application.Common.Exceptions;
+using Application.Common.Models;
+using Application.LookUp.Commands.DeleteLookup;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Application.ShippingAgentModule.Commands.DeleteShippingAgent;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
@@ -6,6 +8,7 @@ using Application.ShippingAgentModule.Queries.GetShippingAgentById;
 using Application.ShippingAgentModule.Queries.GetShippingAgentList;
 using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,26 +16,37 @@ namespace WebApi.Controllers
 {
     public class ShippingAgentController : ApiControllerBase
     {
-       // GET api/<ShippingAgentController>/
+        // GET api/<ShippingAgentController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageCount ,[FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int? pageCount, [FromQuery] int? pageSize)
         {
 
-            if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
-                var query = new GetShippingAgentListQuery();
-                var response = await Mediator.Send(query);
-                return Ok(response);
-
+            try{
+                if (pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null)
+                {
+                    return Ok(await Mediator.Send(new GetShippingAgentListQuery()));
+                }
+                else
+                {
+                    return Ok(
+                        await Mediator.Send(
+                            new GetShippingAgentPaginatedListQuery
+                            {
+                                PageCount = (int)pageCount,
+                                PageSize = (int)pageSize
+                            }
+                        )
+                    );
+                }
             }
-            else{
-                var query = new GetShippingAgentPaginatedListQuery{
-                    PageCount = (int)pageCount,
-                    PageSize = (int)pageSize
-                };
-                var response = await Mediator.Send(query);
-            return Ok(response);
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
             }
-
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
             
         }
 
@@ -40,37 +54,52 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var query = new GetShippingAgentByIdQuery
+            try{
+                return Ok(await Mediator.Send(new GetShippingAgentByIdQuery {Id = id}));
+            }
+            catch (GhionException ex)
             {
-                Id = id
-            };
-            var response = await Mediator.Send(query);
-            return Ok(response);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
 
         // POST api/<ShippingAgentController>
         [HttpPost]
-        public async Task<IActionResult> CreateShippingAgent ([FromForm] CreateShippingAgentCommand command)
+        public async Task<IActionResult> CreateShippingAgent([FromForm] CreateShippingAgentCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                Id = response
-            };
-            return StatusCode(StatusCodes.Status201Created, responseObj);
-
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
         }
 
         // PUT api/<ShippingAgentController>/
         [HttpPut()]
-        public async Task<IActionResult> updateShippingAgent ( [FromForm] UpdateShippingAgentCommand command)
+        public async Task<IActionResult> updateShippingAgent([FromForm] UpdateShippingAgentCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                message = $"shippingAgent with id {response} is updated successfully"
-            };
-            return Ok(responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
 
         // DELETE api/<ShippingAgentController>/5

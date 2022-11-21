@@ -3,6 +3,8 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Application.PortModule.Queries.GetPort;
 
@@ -27,7 +29,7 @@ public class GetPortHandler : IRequestHandler<GetPort, Port> {
         
         var port = await _context.Ports.Where(t => t.Id == request.Id).FirstOrDefaultAsync();
         if(port == null) {
-            throw new Exception("port not found!");
+            throw new GhionException(CustomResponse.NotFound("port not found!"));
         }
 
         return port;

@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Entities;
@@ -31,7 +32,7 @@ namespace Application.UserGroupModule.Queries.GetUserGroupById
                 .FirstOrDefaultAsync(ug => ug.Id == request.Id);
             if (oldGroup == null)
             {
-                throw new NotFoundException("UserGroup", new { Id = request.Id });
+                throw new GhionException(CustomResponse.NotFound("UserGroup"));
             }
             return oldGroup;    
         }

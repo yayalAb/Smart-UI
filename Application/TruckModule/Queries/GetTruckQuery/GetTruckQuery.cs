@@ -3,6 +3,8 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.TruckModule.Queries.GetTruckQuery
 {
@@ -36,7 +38,7 @@ namespace Application.TruckModule.Queries.GetTruckQuery
             
             var truck = await _context.Trucks.Where(t => t.Id == request.Id).FirstOrDefaultAsync();
             if(truck == null){
-                throw new Exception("truck not found!");
+                throw new GhionException(CustomResponse.NotFound("truck not found!"));
             }
 
             return truck;

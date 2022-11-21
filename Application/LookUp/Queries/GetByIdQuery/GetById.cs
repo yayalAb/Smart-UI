@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Application.Common.Exceptions;
 
 namespace Application.LookUp.Query.GetByIdQuery;
 
@@ -30,7 +31,7 @@ public class GetByIdHandler: IRequestHandler<GetById, LookupDto> {
 
         var lookup = await _context.Lookups.Where(l => l.Id == request.Id).ProjectTo<LookupDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         if(lookup == null){
-            throw new Exception("lookup not found!");
+            throw new GhionException(CustomResponse.NotFound("lookup not found!"));
         }
 
         return lookup;

@@ -1,18 +1,19 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
 
 namespace Application.User.Commands.ChangePassword
 {
-    public record ChangePasswordCommand : IRequest<bool>
+    public record ChangePasswordCommand : IRequest<CustomResponse>
     {
         public string Email { get; init; }   
         public string OldPassword { get; init; }
         public string NewPassword { get; init; }
 
     }
-    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, bool>
+    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, CustomResponse>
     {
         private readonly IIdentityService _identityService;
 
@@ -20,14 +21,14 @@ namespace Application.User.Commands.ChangePassword
         {
             _identityService = identityService;
         }
-        public async Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-           var response = await _identityService.ChangePassword(request.Email,request.OldPassword,request.NewPassword);
+            var response = await _identityService.ChangePassword(request.Email,request.OldPassword,request.NewPassword);
             if (!response.Succeeded)
             {
-                throw new CustomBadRequestException(String.Join(" , ", response.Errors));
+                throw new GhionException(CustomResponse.Failed(response.Errors));
             }
-            return true;
+            return CustomResponse.Succeeded("password changed successfully");
         }
     }
 }

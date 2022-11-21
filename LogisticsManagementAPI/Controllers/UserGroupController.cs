@@ -1,4 +1,6 @@
 ﻿
+using Application.Common.Exceptions;
+using Application.Common.Models;
 using Application.UserGroupModule.Commands.CreateUserGroup;
 using Application.UserGroupModule.Commands.DeleteUserGroup;
 using Application.UserGroupModule.Commands.UpdateUserGroup;
@@ -7,7 +9,7 @@ using Application.UserGroupModule.Queries.GetUserGroupList;
 using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
-
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -19,21 +21,29 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] int? pageCount ,[FromQuery] int? pageSize)
         {
 
-            if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
-                var query = new GetUserGroupListQuery();
-                var response = await Mediator.Send(query);
-                return Ok(response);
-
+            try{
+                if(pageCount == 0 || pageCount == null || pageSize == 0 || pageSize == null ){
+                    return Ok(await Mediator.Send(new GetUserGroupListQuery()));
+                }
+                else{
+                    return Ok(
+                        await Mediator.Send(
+                            new GetUserGroupPaginatedListQuery{
+                                PageCount = (int)pageCount,
+                                PageSize = (int)pageSize
+                            }
+                        )
+                    );
+                }
             }
-            else{
-                var query = new GetUserGroupPaginatedListQuery{
-                    PageCount = (int)pageCount,
-                    PageSize = (int)pageSize
-                };
-                var response = await Mediator.Send(query);
-            return Ok(response);
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
             }
-
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
             
         }
 
@@ -41,24 +51,37 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserGroupById(int id)
         {
-            var query = new GetUserGroupByIdQuery
+            
+            try{
+                return Ok(await Mediator.Send(new GetUserGroupByIdQuery {Id = id}));
+            }
+            catch (GhionException ex)
             {
-                Id = id
-            };
-            var response = await Mediator.Send(query);  
-            return Ok(response);    
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
 
         // POST api/<UserGroupController>
         [HttpPost]
         public async Task<IActionResult> CreateUserGroup([FromBody] CreateUserGroupCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                Message = "userGroup created successfully"
-            };
-            return StatusCode(StatusCodes.Status201Created, responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
 
         }
 
@@ -66,12 +89,19 @@ namespace WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUserGroup( [FromBody] UpdateUserGroupCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+            
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                Message = $"userGroup with id : {response} is updated successfully"
-            };
-            return Ok(responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
         }
 
         // DELETE api/<UserGroupController>/5
@@ -96,8 +126,14 @@ namespace WebApi.Controllers
             
             try{
                 return Ok(await Mediator.Send(new UserGroupLookup()));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }

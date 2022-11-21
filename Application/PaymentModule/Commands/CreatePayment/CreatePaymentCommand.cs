@@ -1,13 +1,14 @@
 ﻿
 
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.PaymentModule.Commands.CreatePayment
 {
-    public record CreatePaymentCommand : IRequest<int>
+    public record CreatePaymentCommand : IRequest<CustomResponse>
     {
         public string Type { get; init; }
         public string Name { get; init; }
@@ -20,7 +21,7 @@ namespace Application.PaymentModule.Commands.CreatePayment
         public int OperationId { get; init; }
         public int? ShippingAgentId { get; init; }
     }
-    public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, int>
+    public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
@@ -30,12 +31,12 @@ namespace Application.PaymentModule.Commands.CreatePayment
             _context = context;
             _mapper = mapper;
         }
-        public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var newPayment = _mapper.Map<Payment>(request);
             await _context.Payments.AddAsync(newPayment);
             await _context.SaveChangesAsync(cancellationToken);
-            return newPayment.Id;
+            return CustomResponse.Succeeded("payment created successfully!");
         }
     }
 }

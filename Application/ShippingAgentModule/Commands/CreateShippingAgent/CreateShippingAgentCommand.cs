@@ -2,6 +2,7 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
@@ -11,14 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
 {
-    public record CreateShippingAgentCommand : IRequest<int>
+    public record CreateShippingAgentCommand : IRequest<CustomResponse>
     {
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
         public IFormFile? ImageFile { get; set; }
         public AddressDto Address { get; set; }
     }
-    public class CreateShippingAgentCommandHandler : IRequestHandler<CreateShippingAgentCommand, int>
+    public class CreateShippingAgentCommandHandler : IRequestHandler<CreateShippingAgentCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
@@ -30,7 +31,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
             _fileUploadService = fileUploadService;
             _mapper = mapper;
         }
-        public async Task<int> Handle(CreateShippingAgentCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(CreateShippingAgentCommand request, CancellationToken cancellationToken)
         {
           var executionStrategy = _context.database.CreateExecutionStrategy();
          return  await executionStrategy.ExecuteAsync(
@@ -46,7 +47,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
                     if (!response.result.Succeeded)
                     {
-                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                        throw new GhionException(CustomResponse.Failed(response.result.Errors));
                     }
                      imageByte = response.byteData;
                 }
@@ -67,7 +68,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
                 await _context.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync();
 
-                return shippingAgent.Id;
+                return CustomResponse.Succeeded("Shipping Agenet Create.");
 
 
             }

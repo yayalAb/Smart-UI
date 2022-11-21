@@ -31,7 +31,6 @@ public class DeleteDriverHandler : IRequestHandler<DeleteDriver, CustomResponse>
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        throw new Exception("lsjdfl");
         return CustomResponse.Succeeded("Driver deleted Successfully");
 
     }

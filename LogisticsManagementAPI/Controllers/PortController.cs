@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Application.PortModule.Queries.GetAllPortsQuery;
 using Application.PortModule.Queries.GetPort;
 using Application.PortModule.Commands.DeletePort;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,24 +20,35 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePort([FromBody] CreatePortCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+            
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                Id = response
-            };
-            return StatusCode(StatusCodes.Status201Created,responseObj);
-
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+            
         }
         // PUT api/<PortController>/
         [HttpPut]
         public async Task<IActionResult> UpdatePort([FromBody] UpdatePortCommand command)
         {
-            var response = await Mediator.Send(command);
-            var responseObj = new
+            try{
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
             {
-                Message = $"Port with id : {response} is updated successfully"
-            };
-            return Ok(responseObj);
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
 
         }
 
@@ -43,8 +57,13 @@ namespace WebApi.Controllers
         public async Task<ActionResult> get([FromQuery] GetAllPorts command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -52,8 +71,13 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getPort([FromQuery] GetPort command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+            }catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

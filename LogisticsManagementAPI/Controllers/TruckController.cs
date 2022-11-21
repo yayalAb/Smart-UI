@@ -5,6 +5,9 @@ using Application.TruckModule.Commands.UpdateTruckCommand;
 using Application.TruckModule.Queries.GetTruckQuery;
 using Application.TruckModule.Queries.GetAllTruckQuery;
 using Application.TruckModule.Commands.DeleteTruckCommand;
+using Application.Common.Exceptions;
+using WebApi.Models;
+using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -17,10 +20,15 @@ namespace WebApi.Controllers
         public async Task<ActionResult> create([FromForm] CreateTruckCommand command) {
 
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -29,30 +37,45 @@ namespace WebApi.Controllers
         [Route("change_image")]
         public async Task<ActionResult> changeImage([FromForm] ChangeTruckImageCommand command){
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
         [HttpPut]
         public async Task<ActionResult> update([FromForm] UpdateTruckCommand command){
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> get(int id){
             try{
-                var response = await Mediator.Send(new GetTruckQuery(id));
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(new GetTruckQuery(id)));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -60,8 +83,14 @@ namespace WebApi.Controllers
         public async Task<ActionResult> getAll([FromQuery] GetAllTrucks command){
             try {
                 return Ok(await Mediator.Send(command));
-            } catch(Exception ex) {
-                return NotFound(ex.Message);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

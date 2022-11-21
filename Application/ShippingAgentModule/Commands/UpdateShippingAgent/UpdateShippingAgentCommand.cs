@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using AutoMapper;
 using Domain.Enums;
@@ -26,7 +27,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         private readonly IFileUploadService _fileUploadService;
         private readonly IMapper _mapper;
 
-        public UpdateShippingAgentCommandHandler(IAppDbContext context , IFileUploadService fileUploadService , IMapper mapper)
+        public UpdateShippingAgentCommandHandler(IAppDbContext context, IFileUploadService fileUploadService, IMapper mapper)
         {
             _context = context;
             _fileUploadService = fileUploadService;
@@ -34,75 +35,77 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         }
         public async Task<int> Handle(UpdateShippingAgentCommand request, CancellationToken cancellationToken)
         {
-            
+
             var executionStrategy = _context.database.CreateExecutionStrategy();
-            return await executionStrategy.ExecuteAsync(async()=>{
-
-            using( var transaction = _context.database.BeginTransaction()){
-            try
+            return await executionStrategy.ExecuteAsync(async () =>
             {
-                /// check if shipping agent exists
-                var oldShippingAgent = await _context.ShippingAgents.FindAsync(request.Id);
-                if (oldShippingAgent == null)
-                {
-                    throw new NotFoundException("shippingAgnet", new { Id = request.Id });
-                }
 
-
-                /// update image 
-                byte[]? newImage = oldShippingAgent.Image;
-                if (request.ImageFile != null)
+                using (var transaction = _context.database.BeginTransaction())
                 {
-                    var response = await _fileUploadService.GetFileByte(request.ImageFile , FileType.Image);
-                    if (!response.result.Succeeded)
+                    try
                     {
-                        throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
+                        /// check if shipping agent exists
+                        var oldShippingAgent = await _context.ShippingAgents.FindAsync(request.Id);
+                        if (oldShippingAgent == null)
+                        {
+                            throw new GhionException(CustomResponse.NotFound("shippingAgnet not found!"));
+                        }
+
+
+                        /// update image 
+                        byte[]? newImage = oldShippingAgent.Image;
+                        if (request.ImageFile != null)
+                        {
+                            var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
+                            if (!response.result.Succeeded)
+                            {
+                                throw new GhionException(CustomResponse.Failed(response.result.Errors));
+                            }
+                            newImage = response.byteData;
+
+                        }
+                        /// update address  
+                        var newAddress = request.Address;
+                        var oldAddress = await _context.Addresses.FindAsync(request.AddressId);
+                        if (oldAddress == null)
+                        {
+                            throw new GhionException(CustomResponse.NotFound("Address not found!"));
+                        }
+
+                        oldAddress.Email = newAddress.Email;
+                        oldAddress.City = newAddress.City;
+                        oldAddress.Subcity = newAddress.Subcity;
+                        oldAddress.Country = newAddress.Country;
+                        oldAddress.Phone = newAddress.Phone;
+                        oldAddress.POBOX = newAddress.POBOX;
+
+                        _context.Addresses.Update(oldAddress);
+                        await _context.SaveChangesAsync(cancellationToken);
+
+                        // update shipping agent 
+
+                        oldShippingAgent.FullName = request.FullName;
+                        oldShippingAgent.CompanyName = request.CompanyName;
+                        oldShippingAgent.Image = newImage;
+                        _context.ShippingAgents.Update(oldShippingAgent);
+                        await _context.SaveChangesAsync(cancellationToken);
+                        await transaction.CommitAsync();
+
+                        return oldShippingAgent.Id;
+
+
                     }
-                    newImage = response.byteData;
-                   
-                }
-                /// update address  
-                var newAddress = request.Address;
-                var oldAddress = await _context.Addresses.FindAsync(request.AddressId);
-                if(oldAddress == null)
-                {
-                    throw new NotFoundException("Address" , new {Id=request.AddressId});
+                    catch (Exception)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+
                 }
 
-                oldAddress.Email =newAddress.Email;
-                oldAddress.City =newAddress.City;
-                oldAddress.Subcity = newAddress.Subcity;
-                oldAddress.Country =newAddress.Country; 
-                oldAddress.Phone = newAddress.Phone;
-                oldAddress.POBOX = newAddress.POBOX;
+            });
 
-                _context.Addresses.Update(oldAddress);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                // update shipping agent 
-              
-                oldShippingAgent.FullName = request.FullName;
-                oldShippingAgent.CompanyName = request.CompanyName;
-                oldShippingAgent.Image = newImage;
-                 _context.ShippingAgents.Update(oldShippingAgent);
-                await _context.SaveChangesAsync(cancellationToken);
-                await transaction.CommitAsync();
-
-                return oldShippingAgent.Id;
-
-
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        
-            }
-         
-   });
-
-   }
+        }
     }
 
 }

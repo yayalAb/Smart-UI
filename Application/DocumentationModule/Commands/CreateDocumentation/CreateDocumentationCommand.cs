@@ -1,13 +1,14 @@
 ﻿
 
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.DocumentationModule.Commands.CreateDocumentation
 {
-    public record CreateDocumentationCommand : IRequest<int>
+    public record CreateDocumentationCommand : IRequest<CustomResponse>
     {
         
         public int OperationId { get; init; }
@@ -24,7 +25,7 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
         public string? Source { get; init; }
         public string? Destination { get; init; }
     }
-    public class CreateDocumentationCommandHandler : IRequestHandler<CreateDocumentationCommand, int>
+    public class CreateDocumentationCommandHandler : IRequestHandler<CreateDocumentationCommand, CustomResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
@@ -34,12 +35,12 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
             _context = context;
            _mapper = mapper;
         }
-        public async  Task<int> Handle(CreateDocumentationCommand request, CancellationToken cancellationToken)
+        public async  Task<CustomResponse> Handle(CreateDocumentationCommand request, CancellationToken cancellationToken)
         {
             Documentation newDocumentation = _mapper.Map<Documentation>(request);
             await _context.Documentations.AddAsync(newDocumentation);
             await _context.SaveChangesAsync(cancellationToken);
-            return newDocumentation.Id;
+            return CustomResponse.Succeeded("documentation created successfully");
 
         }
     }

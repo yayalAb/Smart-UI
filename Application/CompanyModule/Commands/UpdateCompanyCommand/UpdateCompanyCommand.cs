@@ -9,10 +9,12 @@ using Application.AddressModule.Commands.AddressUpdateCommand;
 using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
-    public class UpdateCompanyCommand : IRequest<Company> {
+    public class UpdateCompanyCommand : IRequest<CustomResponse> {
         public int Id { get; init; }
         public string Name { get; init; }
         public string TinNumber { get; init; }
@@ -22,7 +24,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
     }
 
 
-    public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, Company> {
+    public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, CustomResponse> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -36,7 +38,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
         }
 
-        public async Task<Company> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken){
+        public async Task<CustomResponse> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken){
             
             var comp = _context.Companies
                         .Include(c => c.Address)
@@ -46,7 +48,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
             // var comp = _context.Companies.Find(request.Id);
 
             if(comp == null){
-                throw new Exception("Company not found!");
+                throw new GhionException(CustomResponse.NotFound("Company not found!"));
             }
 
             comp.Name = request.Name;
@@ -74,7 +76,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return comp;
+            return CustomResponse.Succeeded("Company Updated");
 
         }
 

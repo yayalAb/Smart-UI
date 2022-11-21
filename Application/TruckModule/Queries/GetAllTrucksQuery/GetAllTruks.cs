@@ -17,9 +17,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
 
     public class GetAllTrucksHandler: IRequestHandler<GetAllTrucks, PaginatedList<TruckDto>> {
 
-        private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
-        private readonly ILogger<GetAllTrucksHandler> _logger;
         private readonly IMapper _mapper;
 
         public GetAllTrucksHandler(
@@ -28,9 +26,7 @@ namespace Application.TruckModule.Queries.GetAllTruckQuery
             ILogger<GetAllTrucksHandler> logger,
             IMapper mapper
         ){
-            _identityService = identityService;
             _context = context;
-            _logger = logger;
             _mapper = mapper;
         }
 

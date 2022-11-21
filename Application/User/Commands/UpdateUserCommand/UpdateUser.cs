@@ -8,10 +8,11 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressUpdateCommand;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Models;
 
 namespace Application.User.Commands.UpdateUserCommand;
 
-public record UpdateUser : IRequest<string>
+public record UpdateUser : IRequest<CustomResponse>
 {
     public string Id { get; init; }
     public string FullName { get; init; }
@@ -22,7 +23,7 @@ public record UpdateUser : IRequest<string>
 
 }
 
-public class UpdateUserHandler : IRequestHandler<UpdateUser, string>
+public class UpdateUserHandler : IRequestHandler<UpdateUser, CustomResponse>
 {
     private readonly IIdentityService _identityService;
     private readonly IAppDbContext _context;
@@ -42,57 +43,56 @@ public class UpdateUserHandler : IRequestHandler<UpdateUser, string>
         _mapper = mapper;
     }
 
-    public async Task<string> Handle(UpdateUser request, CancellationToken cancellationToken)
+    public async Task<CustomResponse> Handle(UpdateUser request, CancellationToken cancellationToken)
     {
 
-        // _context.database.BeginTransaction();
         var executionStrategy = _context.database.CreateExecutionStrategy();
         return await executionStrategy.ExecuteAsync(
             async () =>
-           {
+            {
 
-               using (var transaction = _context.database.BeginTransaction())
-               {
+                using (var transaction = _context.database.BeginTransaction())
+                {
 
-                   try
-                   {
+                    try
+                    {
 
-                       var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Address.Email, request.State, request.UserGroupId);
+                        var response = await _identityService.UpdateUser(request.Id, request.FullName, request.UserName, request.Address.Email, request.State, request.UserGroupId);
 
-                       if (!response.Succeeded)
-                       {
-                           throw new CannotUpdateUserException(response.Errors.ToList());
-                       }
+                        if (!response.Succeeded)
+                        {
+                            throw new GhionException(CustomResponse.Failed(response.Errors.ToList()));
+                        }
 
-                       Address found_address = await _context.Addresses.FindAsync(request.Address.Id);
+                        var found_address = await _context.Addresses.FindAsync(request.Address.Id);
 
-                       if (found_address == null)
-                       {
-                           throw new Exception("address not found!");
-                       }
+                        if (found_address == null)
+                        {
+                            throw new GhionException(CustomResponse.NotFound("address not found!"));
+                        }
 
-                       found_address.Email = request.Address.Email;
-                       found_address.Phone = request.Address.Phone;
-                       found_address.Region = request.Address.Region;
-                       found_address.City = request.Address.City;
-                       found_address.Subcity = request.Address.Subcity;
-                       found_address.Country = request.Address.Country;
-                       found_address.POBOX = request.Address.POBOX ?? "";
+                        found_address.Email = request.Address.Email;
+                        found_address.Phone = request.Address.Phone;
+                        found_address.Region = request.Address.Region;
+                        found_address.City = request.Address.City;
+                        found_address.Subcity = request.Address.Subcity;
+                        found_address.Country = request.Address.Country;
+                        found_address.POBOX = request.Address.POBOX ?? "";
 
-                       await _context.SaveChangesAsync(cancellationToken);
-                       await transaction.CommitAsync();
+                        await _context.SaveChangesAsync(cancellationToken);
+                        await transaction.CommitAsync();
 
-                       return "User updated successfully";
+                        return CustomResponse.Succeeded("User updated successfully");
 
-                   }
-                   catch (Exception ex)
-                   {
-                       await transaction.RollbackAsync();
-                       throw ex;
-                   }
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        throw ex;
+                    }
 
-               }
-           }
+                }
+            }
         );
 
     }

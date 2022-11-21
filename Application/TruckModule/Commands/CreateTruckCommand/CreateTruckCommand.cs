@@ -8,17 +8,19 @@ using Domain.Enums;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Application.TruckModule.Commands.CreateTruckCommand
 {
-    public record CreateTruckCommand : IRequest<Truck> {
+    public record CreateTruckCommand : IRequest<CustomResponse> {
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
         public IFormFile? ImageFile { get; set; }
     }
 
-    public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, Truck> {
+    public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, CustomResponse> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -37,13 +39,13 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             _fileUploadService = fileUploadService;
         }
 
-        public async Task<Truck> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
+        public async Task<CustomResponse> Handle(CreateTruckCommand request, CancellationToken cancellationToken) {
 
             //image uploading
             var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
             if (!response.result.Succeeded)
             {
-                throw new Exception(String.Join(" , ", response.result.Errors));
+                throw new GhionException(CustomResponse.Failed(response.result.Errors));
             }
 
             Truck truck = new Truck();
@@ -55,7 +57,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return truck;
+            return CustomResponse.Succeeded("Truck Created!");
 
         }
 

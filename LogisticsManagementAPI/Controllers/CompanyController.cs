@@ -6,6 +6,7 @@ using Application.CompanyModule.Queries.GetAllCompanyQuery;
 using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
+using WebApi.Models;
 
 namespace WebApi.Controllers {
     public class CompanyController : ApiControllerBase
@@ -15,10 +16,12 @@ namespace WebApi.Controllers {
         public async Task<ActionResult> create([FromBody] CreateCompanyCommand command) {
 
             try{
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+                return Ok(await Mediator.Send(command));
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -28,8 +31,11 @@ namespace WebApi.Controllers {
 
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -38,8 +44,11 @@ namespace WebApi.Controllers {
         public async Task<ActionResult> view(int id){
             try{
                 return Ok(await Mediator.Send(new GetCompanyQuery(id)));
-            }catch(Exception ex) {
-                return NotFound(ex.Message);
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -47,19 +56,22 @@ namespace WebApi.Controllers {
         public async Task<ActionResult> list([FromQuery] GetAllCompanies command){
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException gx){
-                return NotFound(gx.Response);
-            }catch(Exception ex){
-                return NotFound(CustomResponse.Failed(ex.Message));
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
         [HttpDelete]
-        public async Task<ActionResult> delete([FromQuery] DeleteCompany command){
+        public async Task<ActionResult> delete([FromQuery] DeleteCompany command) {
             try{
                 return Ok(await Mediator.Send(command));
-            }catch(Exception ex){
-                return NotFound(CustomResponse.Failed(ex.Message));
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

@@ -1,13 +1,14 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.DocumentationModule.Commands.UpdateDocumentation
 {
-    public record UpdateDocumentationCommand : IRequest<int>
+    public record UpdateDocumentationCommand : IRequest<CustomResponse>
     {
          public int Id { get; init; }
         public int OperationId { get; init; }
@@ -24,8 +25,8 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
         public string? Source { get; init; }
         public string? Destination { get; init; }
     }
-    public class UpdateDocumentationCommandHandler : IRequestHandler<UpdateDocumentationCommand, int>
-    {
+    public class UpdateDocumentationCommandHandler : IRequestHandler<UpdateDocumentationCommand, CustomResponse> {
+        
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
@@ -34,13 +35,13 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
             _context = context;
             _mapper = mapper;
         }
-        public async Task<int> Handle(UpdateDocumentationCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdateDocumentationCommand request, CancellationToken cancellationToken)
         {
             //check if Documentation exists
             var oldDoc = await _context.Documentations.FindAsync(request.Id);
             if (oldDoc == null)
             {
-                throw new NotFoundException("Documentation", new { id = request.Id });
+                throw new GhionException(CustomResponse.NotFound("Documentation not found!"));
             }
             // update documentation
             oldDoc.OperationId = request.OperationId;
@@ -60,7 +61,7 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
 
             _context.Documentations.Update(oldDoc);
             await _context.SaveChangesAsync(cancellationToken);
-            return oldDoc.Id;
+            return CustomResponse.Succeeded("documentation updated");
         }
     }
 

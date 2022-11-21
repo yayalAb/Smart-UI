@@ -3,6 +3,8 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Models;
+using Application.Common.Exceptions;
 
 namespace Application.DriverModule.Queries.GetDriverQuery;
 
@@ -25,9 +27,9 @@ public class GetDriverHandler : IRequestHandler<GetDriver, Driver> {
 
     public async Task<Driver> Handle(GetDriver request, CancellationToken cancellationToken) {
         
-        var truck = await _context.Drivers.Where(t => t.Id == request.Id).FirstOrDefaultAsync();
+        var truck = await _context.Drivers.Include(d => d.Address).Where(t => t.Id == request.Id).FirstOrDefaultAsync();
         if(truck == null){
-            throw new Exception("truck not found!");
+            throw new GhionException(CustomResponse.NotFound("truck not found!"));
         }
 
         return truck;

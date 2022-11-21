@@ -1,5 +1,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -20,14 +21,13 @@ public class GetOperationByIdQuery : IRequest<OperationDto>{
         }
         public async Task<OperationDto> Handle(GetOperationByIdQuery request, CancellationToken cancellationToken)
         {
-            var operation =  _context.Operations
+            var operation = _context.Operations
                 .ProjectTo<OperationDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefault(s => s.Id == request.Id);
                 
-
             if(operation == null)
             {
-                throw new NotFoundException("Operation", new { request.Id });
+                throw new GhionException(CustomResponse.NotFound("Operation not found"));
             }
             return operation;
         }
