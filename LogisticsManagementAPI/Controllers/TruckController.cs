@@ -22,7 +22,6 @@ namespace WebApi.Controllers
         public async Task<ActionResult> create([FromBody] CreateTruckCommand command)
         {
 
-<<<<<<< HEAD
             try{
                 return Ok(await Mediator.Send(command));
             }
@@ -33,16 +32,6 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-=======
-            try
-            {
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
->>>>>>> dd25959 (feat: dropdown lookups done)
             }
 
         }
@@ -64,7 +53,6 @@ namespace WebApi.Controllers
         // }
 
         [HttpPut]
-<<<<<<< HEAD
         public async Task<ActionResult> update([ FromBody] UpdateTruckCommand command){
             try{
                 return Ok(await Mediator.Send(command));
@@ -76,23 +64,10 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-=======
-        public async Task<ActionResult> update([FromBody] UpdateTruckCommand command)
-        {
-            try
-            {
-                var response = await Mediator.Send(command);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
->>>>>>> dd25959 (feat: dropdown lookups done)
             }
         }
 
         [HttpGet("{id}")]
-<<<<<<< HEAD
         public async Task<ActionResult> get(int id){
             try{
                 return Ok(await Mediator.Send(new GetTruckQuery(id)));
@@ -104,18 +79,6 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-=======
-        public async Task<ActionResult> get(int id)
-        {
-            try
-            {
-                var response = await Mediator.Send(new GetTruckQuery(id));
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
->>>>>>> dd25959 (feat: dropdown lookups done)
             }
         }
 
@@ -126,7 +89,6 @@ namespace WebApi.Controllers
             {
                 return Ok(await Mediator.Send(command));
             }
-<<<<<<< HEAD
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
@@ -134,11 +96,6 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-=======
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
->>>>>>> dd25959 (feat: dropdown lookups done)
             }
         }
 

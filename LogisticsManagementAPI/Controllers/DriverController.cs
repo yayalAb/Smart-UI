@@ -62,7 +62,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> getDriver(int id){
             try{
-                return Ok(await Mediator.Send(command));
+                return Ok(await Mediator.Send(new GetDriver{Id = id}));
             }catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);

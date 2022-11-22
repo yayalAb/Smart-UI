@@ -20,7 +20,15 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDocumentationList([FromQuery] GetDocumentationPaginatedListQuery query)
         {
+            try
+            {
             return Ok(await Mediator.Send(query));
+                
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
             }
 
             

@@ -70,7 +70,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> getPort(int id){
             try{
-                return Ok(await Mediator.Send(command));
+                return Ok(await Mediator.Send(new GetPort{Id = id}));
             }catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
@@ -78,9 +78,7 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-                return Ok(await Mediator.Send(new GetPort{Id=id}));
-            }catch(Exception ex){
-                return NotFound(ex.Message);
+               
             }
         }
 

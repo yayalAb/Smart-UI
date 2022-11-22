@@ -1,11 +1,9 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Models;
-using Application.LookUp.Commands.DeleteLookup;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Application.ShippingAgentModule.Commands.DeleteShippingAgent;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Application.ShippingAgentModule.Queries.GetShippingAgentById;
-using Application.ShippingAgentModule.Queries.GetShippingAgentList;
 using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 using Application.UserGroupModule.Queries.GetShippingAgentLookupQuery;
 using Microsoft.AspNetCore.Mvc;
