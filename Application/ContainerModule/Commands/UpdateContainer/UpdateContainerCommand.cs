@@ -17,7 +17,6 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         public int LocationPortId { get; init; }
         public int OperationId { get; init; }
         public DateTime? ManufacturedDate { get; init; }
-        public byte[]? Image { get; init; }
     }
     public class UpdateContainerCommandHandler : IRequestHandler<UpdateContainerCommand, CustomResponse>
     {
@@ -54,7 +53,6 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             oldContainer.Size = request.Size;
             oldContainer.OperationId = request.OperationId;
             oldContainer.ManufacturedDate = request.ManufacturedDate;
-            oldContainer.Image = request.Image;
             _context.Containers.Update(oldContainer);
             await  _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Container Updated");

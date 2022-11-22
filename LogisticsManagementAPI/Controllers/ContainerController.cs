@@ -19,7 +19,7 @@ namespace WebApi.Controllers
 
         // POST api/<ContainerController>
         [HttpPost]
-        public async Task<IActionResult> CreateContainer([FromForm] CreateContainerCommand command) {
+        public async Task<IActionResult> CreateContainer([FromBody] CreateContainerCommand command) {
 
             try {
                 return Ok(await Mediator.Send(command));

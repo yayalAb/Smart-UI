@@ -18,8 +18,6 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
-        public byte[]? Image { get; set; }
-
         public ICollection<CreateGoodCommand> Goods {get; set;}
     }
 
@@ -59,8 +57,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
                     Owner = request.Owner,
                     LocationPortId = request.LocationPortId,
                     ManufacturedDate = request.ManufacturedDate,
-                    OperationId = request.OperationId,
-                    Image = request.Image,    
+                    OperationId = request.OperationId, 
                 };
 
                 _context.Containers.Add(newContainer);
