@@ -1,23 +1,24 @@
 
 using MediatR;
 using Domain.Entities;
-using Domain.Enums;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 
 namespace Application.GoodModule.Commands.CreateGoodCommand {
 
-    public record CreateGoodCommand : IRequest<Good> {
-        public string? Description { get; init; }
-        public string? HSCode { get; init; }
-        public string? Manufacturer { get; init; }
-        public string? CBM { get; init; }
-        public float? Weight { get; init; }
-        public float? Quantity { get; init; }
-        public float? UnitPrice { get; init; }
-        public string? UnitOfMeasurnment { get; init; }
-        public int ContainerId { get; set; }
+    public record CreateGoodCommand : IRequest<Good> {    
+    public string? Description { get; set; }
+    public string? HSCode { get; set; }
+    public string? Manufacturer { get; set; }
+    public float? Weight { get; set; }
+    public float? Quantity { get; set; }
+    public int? NumberOfPackages {get; set;}
+    public string Type {get; set;} 
+    public string ChasisNumber {get; set; }
+    public string EngineNumber {get; set;}
+    public string ModelCode { get; set; }
+    public int? ContainerId { get; set; }
     }
 
     public class CreateGoodCommandHandler : IRequestHandler<CreateGoodCommand, Good>

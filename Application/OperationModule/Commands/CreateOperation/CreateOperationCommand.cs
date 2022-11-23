@@ -17,10 +17,10 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? NameOnPermit { get; set; }
         public string? Consignee { get; set; }
         public string? NotifyParty { get; set; }
-        public string? BillNumber { get; set; }
+        public string BillNumber { get; set; }
         public string? ShippingLine { get; set; }
         public string? GoodsDescription { get; set; }
-        public float Quantity { get; set; }
+        public float? Quantity { get; set; }
         public float? GrossWeight { get; set; }
         public string? ATA { get; set; }
         public string? FZIN { get; set; }
@@ -31,8 +31,7 @@ namespace Application.OperationModule.Commands.CreateOperation
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
         public string? TypeOfMerchandise { get; set; }
-        public DateTime OpenedDate { get; set; }
-        public string Status { get; set; } = null!;
+        public DateTime? OpenedDate { get; set; }
         public byte[]? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
@@ -65,6 +64,8 @@ namespace Application.OperationModule.Commands.CreateOperation
                         //create operation with empty operation number
                         Operation newOperation = _mapper.Map<Operation>(request);
                         newOperation.OperationNumber = "";
+                        newOperation.Status = Enum.GetName(typeof(Status) , Status.Opened);
+                        newOperation.OpenedDate =  newOperation.OpenedDate != null ? newOperation.OpenedDate: DateTime.Now;
                         await _context.Operations.AddAsync(newOperation);
                         await _context.SaveChangesAsync(cancellationToken);
                         

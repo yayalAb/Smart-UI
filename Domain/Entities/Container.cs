@@ -9,12 +9,13 @@ public class Container : BaseAuditableEntity
         Goods = new HashSet<Good>();
     }
     public string ContianerNumber { get; set; } = null!;
-    public float Size { get; set; }
-    public string? Owner { get; set; }
-    public int  LocationPortId { get; set; }
-    public DateTime? ManufacturedDate { get; set; }
+    public string SealNumber {get; set;} =null!;
+    public string Location {get; set;}
+    public int?  LocationPortId { get; set; }
+    public bool IsAssigned { get; set; } = false;
     public int OperationId { get; set; }    
     public int? TruckAssignmentId { get; set; }
+
     
 
     public virtual ICollection<Good> Goods { get; set; }

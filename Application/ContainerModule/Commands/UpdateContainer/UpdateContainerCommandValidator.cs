@@ -11,35 +11,32 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         {
             _context = context;
 
-            RuleFor(c => c.Id)
-                .NotNull()
-                .NotEmpty();
-            RuleFor(c => c.Size)
-                .NotNull()
-                .NotEmpty();
-            RuleFor(c => c.ContianerNumber)
+                
+            RuleFor(c => c.ContainerNumber)
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(45)
                 .WithMessage("container number is not in the correct format!");
-            RuleFor(c => c.Owner)
+            RuleFor(c => c.SealNumber)
                 .NotNull()
-                .NotEmpty()
-                .MaximumLength(45)
-                .WithMessage("owner is not in the correct format!");
-            RuleFor(c => c.ManufacturedDate)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("name is not in the correct format!");
+                .NotEmpty();
             RuleFor(c => c.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
-
+            RuleFor(c => c.LocationPortId)
+                .NotNull()
+                .Must(BeFoundInPort).WithMessage("port not found with the provided id");
+            
         }
 
         private bool BeFoundInDb(int operationId)
         {
             return _context.UserGroups.Find(operationId) != null;
+        }
+
+        private bool BeFoundInPort(int? PortId)
+        {
+            return PortId == null || _context.Ports.Find(PortId) != null;
         }
     }
 }

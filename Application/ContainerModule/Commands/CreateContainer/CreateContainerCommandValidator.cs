@@ -2,8 +2,6 @@
 
 using Application.Common.Interfaces;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
@@ -15,23 +13,14 @@ namespace Application.ContainerModule.Commands.CreateContainer
         {
             _context = context;
             
-            RuleFor(c => c.ContianerNumber)
+            RuleFor(c => c.ContainerNumber)
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(45)
                 .WithMessage("container number is not in the correct format!");
-            RuleFor(c => c.Size)
+            RuleFor(c => c.SealNumber)
                 .NotNull()
                 .NotEmpty();
-            RuleFor(c => c.Owner)
-                .NotNull()
-                .NotEmpty()
-                .MaximumLength(45)
-                .WithMessage("owner is not in the correct format!");
-            RuleFor(c => c.ManufacturedDate)
-                .NotEmpty()
-                .NotNull()
-                .WithMessage("name is not in the correct format!");
             RuleFor(c => c.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");

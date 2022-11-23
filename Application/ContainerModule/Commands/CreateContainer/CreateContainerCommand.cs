@@ -12,12 +12,11 @@ namespace Application.ContainerModule.Commands.CreateContainer
 {
     public record  CreateContainerCommand : IRequest<CustomResponse>
     {
-        public string ContianerNumber { get; set; }
-        public float Size { get; set; }
-        public string? Owner { get; set; }
+        public string ContainerNumber { get; set; }
+        public string SealNumber {get; set;}
+        public string Location {get; set;}
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
-        public DateTime? ManufacturedDate { get; set; }
         public ICollection<CreateGoodCommand> Goods {get; set;}
     }
 
@@ -38,28 +37,8 @@ namespace Application.ContainerModule.Commands.CreateContainer
 
             try
             {
-                // byte[]? imageData = null;
-                // //get imagebyte data
-                // if (request.ImageFile != null)
-                // {
-                //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                //     if (!response.result.Succeeded)
-                //     {
-                //         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
-                //     }
-                //     imageData = response.byteData;
-                // }
 
-                Container newContainer = new Container()
-                {
-                    ContianerNumber = request.ContianerNumber,
-                    Size = request.Size,
-                    Owner = request.Owner,
-                    LocationPortId = request.LocationPortId,
-                    ManufacturedDate = request.ManufacturedDate,
-                    OperationId = request.OperationId, 
-                };
-
+                Container newContainer = _mapper.Map<Container>(request);
                 _context.Containers.Add(newContainer);
                 await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,7 +1,5 @@
 ﻿using Domain.Common;
 using Domain.Enums;
-using MediatR;
-using System.Text.RegularExpressions;
 
 namespace Domain.Entities
 {

@@ -12,23 +12,20 @@ namespace Application.OperationModule.Commands.CreateOperation
         public CreateOperationCommandValidator(IAppDbContext context)
         {
             _context = context;
-            RuleFor(o => o.OpenedDate)
-                .NotNull();
-            RuleFor(o => o.Quantity)
-                .NotNull();
-            RuleFor(o => o.Status)
+            RuleFor(o => o.BillNumber)
                 .NotNull()
                 .NotEmpty();
-            RuleFor(o => o.ShippingAgentId)
-                .Must(BeFoundInShippingAgentsTable).WithMessage("shippingAgent with the provided id is not found");
-            RuleFor(o => o.PortOfLoadingId)
-               .Must(BeFoundInPortsTable).WithMessage("port with the provided id is not found");
+            RuleFor(o => o.DestinationType)
+                .NotNull()
+                .NotEmpty();
             RuleFor(o =>o.CompanyId)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInCompanyTable).WithMessage("company with the provided id is not found");
-
-
+            RuleFor(o => o.ShippingAgentId)
+                .Must(BeFoundInShippingAgentsTable).WithMessage("shippingAgent with the provided id is not found");
+            RuleFor(o => o.PortOfLoadingId)
+               .Must(BeFoundInPortsTable).WithMessage("port with the provided id is not found");
 
         }
   

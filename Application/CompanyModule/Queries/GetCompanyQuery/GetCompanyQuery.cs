@@ -35,7 +35,6 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
         }
 
         public async Task<CompanyDto> Handle(GetCompanyQuery request, CancellationToken cancellationToken) {
-            
             var company = await _context.Companies
             .Include(c => c.Address)
             .Include(c => c.ContactPerson)
@@ -44,7 +43,6 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
             if(company == null){
                 throw new GhionException(CustomResponse.NotFound("company not found!"));
             }
-
             return company;
 
         }

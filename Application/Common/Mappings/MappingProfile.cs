@@ -1,4 +1,5 @@
-﻿using Application.DocumentationModule.Commands.CreateDocumentation;
+﻿using Application.ContainerModule.Commands.CreateContainer;
+using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.OperationModule.Commands.CreateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
@@ -33,6 +34,7 @@ namespace Application.Common.Mappings
             CreateMap<UpdatePymentCommand, Payment>();
             CreateMap<CreatePaymentCommand , Payment>();
             CreateMap<CreateOperationCommand, Operation>();
+            CreateMap<CreateContainerCommand, Container>();
 
             
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class init : Migration
+    public partial class changegoodsandcontainers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -347,7 +347,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Companies_ContactPeople_ContactPersonId",
                         column: x => x.ContactPersonId,
                         principalTable: "ContactPeople",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -448,21 +449,21 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NotifyParty = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BillNumber = table.Column<string>(type: "longtext", nullable: true)
+                    BillNumber = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ShippingLine = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GoodsDescription = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantity = table.Column<float>(type: "float", nullable: false),
-                    GrossWeight = table.Column<float>(type: "float", nullable: true),
+                    Quantity = table.Column<float>(type: "float", maxLength: 45, nullable: true),
+                    GrossWeight = table.Column<float>(type: "float", maxLength: 45, nullable: false),
                     ATA = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FZIN = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FZOUT = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DestinationType = table.Column<string>(type: "longtext", nullable: true)
+                    DestinationType = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SourceDocument = table.Column<byte[]>(type: "longblob", nullable: true),
                     ActualDateOfDeparture = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -655,7 +656,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Documentations_Operations_OperationId",
                         column: x => x.OperationId,
                         principalTable: "Operations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -685,7 +687,8 @@ namespace Infrastructure.Migrations
                         name: "FK_OperationStatuses_Operations_OperationId",
                         column: x => x.OperationId,
                         principalTable: "Operations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -725,7 +728,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Payments_Operations_OperationId",
                         column: x => x.OperationId,
                         principalTable: "Operations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Payments_ShippingAgents_ShippingAgentId",
                         column: x => x.ShippingAgentId,
@@ -764,7 +768,8 @@ namespace Infrastructure.Migrations
                         name: "FK_TruckAssignments_Operations_OperationId",
                         column: x => x.OperationId,
                         principalTable: "Operations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TruckAssignments_Ports_DestinationPortId",
                         column: x => x.DestinationPortId,
@@ -791,14 +796,14 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ContianerNumber = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Size = table.Column<float>(type: "float", nullable: false),
-                    Owner = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    SealNumber = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LocationPortId = table.Column<int>(type: "int", nullable: false),
-                    ManufacturedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Location = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LocationPortId = table.Column<int>(type: "int", nullable: true),
+                    IsAssigned = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     OperationId = table.Column<int>(type: "int", nullable: false),
                     TruckAssignmentId = table.Column<int>(type: "int", nullable: true),
-                    Image = table.Column<byte[]>(type: "longblob", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -813,7 +818,8 @@ namespace Infrastructure.Migrations
                         name: "FK_Containers_Operations_OperationId",
                         column: x => x.OperationId,
                         principalTable: "Operations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Containers_Ports_LocationPortId",
                         column: x => x.LocationPortId,
@@ -839,14 +845,19 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Manufacturer = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CBM = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Weight = table.Column<float>(type: "float", nullable: true),
                     Quantity = table.Column<float>(type: "float", nullable: true),
-                    UnitPrice = table.Column<float>(type: "float", nullable: true),
-                    UnitOfMeasurnment = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: true)
+                    NumberOfPackages = table.Column<int>(type: "int", nullable: true),
+                    Type = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContainerId = table.Column<int>(type: "int", nullable: false),
+                    ChasisNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EngineNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModelCode = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsAssigned = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ContainerId = table.Column<int>(type: "int", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -904,7 +915,8 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_AddressId",
                 table: "AspNetUsers",
-                column: "AddressId");
+                column: "AddressId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserGroupId",
@@ -964,6 +976,12 @@ namespace Infrastructure.Migrations
                 name: "IX_Operations_CompanyId",
                 table: "Operations",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Operations_OperationNumber",
+                table: "Operations",
+                column: "OperationNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Operations_PortOfLoadingId",
