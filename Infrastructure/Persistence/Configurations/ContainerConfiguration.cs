@@ -13,9 +13,8 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.Property(e => e.ContianerNumber)
             .IsRequired()
             .HasMaxLength(45);
-         entity.Property(e => e.Size)
-            .IsRequired(); 
-        entity.Property(e => e.Owner)
+        entity.Property(e => e.SealNumber)
+            .IsRequired()
             .HasMaxLength(45);
         entity.HasOne(c => c.Operation)
             .WithMany(o => o.Containers)
@@ -24,6 +23,7 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.HasOne(c => c.LocationPort)
             .WithMany(p => p.Containers)
             .HasForeignKey(c => c.LocationPortId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(c => c.TruckAssignment)
             .WithMany(ta => ta.Containers)

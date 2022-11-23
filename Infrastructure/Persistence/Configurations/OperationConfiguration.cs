@@ -15,6 +15,24 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.Property(e => e.OperationNumber)
             .IsRequired(true)
             .HasMaxLength(45);
+        entity.HasIndex(e => e.OperationNumber)
+               .IsUnique();
+
+        entity.Property(e => e.BillNumber)
+            .IsRequired(true)
+            .HasMaxLength(45);
+
+        entity.Property(e => e.Quantity)
+            .IsRequired(false)
+            .HasMaxLength(45);
+
+        entity.Property(e => e.GrossWeight)
+            .IsRequired(true)
+            .HasMaxLength(45);
+
+        entity.Property(e => e.DestinationType)
+            .IsRequired(true)
+            .HasMaxLength(45);
 
         entity.Property(e => e.Status)
             .IsRequired(true    ) 

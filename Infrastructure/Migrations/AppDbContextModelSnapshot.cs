@@ -242,27 +242,29 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsAssigned")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("LocationPortId")
-                        .HasColumnType("int");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ManufacturedDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int?>("LocationPortId")
+                        .HasColumnType("int");
 
                     b.Property<int>("OperationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Owner")
+                    b.Property<string>("SealNumber")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
-
-                    b.Property<float>("Size")
-                        .HasColumnType("float");
 
                     b.Property<int?>("TruckAssignmentId")
                         .HasColumnType("int");
@@ -402,11 +404,11 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CBM")
-                        .HasMaxLength(45)
-                        .HasColumnType("varchar(45)");
+                    b.Property<string>("ChasisNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("ContainerId")
+                    b.Property<int?>("ContainerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -419,9 +421,16 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("EngineNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("HSCode")
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
+
+                    b.Property<bool>("IsAssigned")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -433,15 +442,19 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
+                    b.Property<string>("ModelCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("NumberOfPackages")
+                        .HasColumnType("int");
+
                     b.Property<float?>("Quantity")
                         .HasColumnType("float");
 
-                    b.Property<string>("UnitOfMeasurnment")
-                        .HasMaxLength(45)
-                        .HasColumnType("varchar(45)");
-
-                    b.Property<float?>("UnitPrice")
-                        .HasColumnType("float");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<float?>("Weight")
                         .HasColumnType("float");
@@ -502,7 +515,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("BillNumber")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -517,7 +532,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("DestinationType")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
 
                     b.Property<byte[]>("ECDDocument")
                         .HasColumnType("longblob");
@@ -535,6 +552,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<float?>("GrossWeight")
+                        .IsRequired()
+                        .HasMaxLength(45)
                         .HasColumnType("float");
 
                     b.Property<DateTime?>("LastModified")
@@ -560,7 +579,8 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("PortOfLoadingId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Quantity")
+                    b.Property<float?>("Quantity")
+                        .HasMaxLength(45)
                         .HasColumnType("float");
 
                     b.Property<int?>("ShippingAgentId")
@@ -586,6 +606,9 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("OperationNumber")
+                        .IsUnique();
 
                     b.HasIndex("PortOfLoadingId");
 
@@ -1011,7 +1034,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1166,9 +1190,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
                         .WithOne("Company")
-                        .HasForeignKey("Domain.Entities.Company", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Domain.Entities.Company", "AddressId");
 
                     b.HasOne("Domain.Entities.ContactPerson", "ContactPerson")
                         .WithOne("Company")
@@ -1185,8 +1207,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Port", "LocationPort")
                         .WithMany("Containers")
-                        .HasForeignKey("LocationPortId")
-                        .IsRequired();
+                        .HasForeignKey("LocationPortId");
 
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("Containers")
@@ -1229,8 +1250,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Container", "Container")
                         .WithMany("Goods")
-                        .HasForeignKey("ContainerId")
-                        .IsRequired();
+                        .HasForeignKey("ContainerId");
 
                     b.Navigation("Container");
                 });
@@ -1299,28 +1319,25 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Port", "DestinationPort")
                         .WithMany("DestinationPortTruckAssignments")
-                        .HasForeignKey("DestinationPortId")
-                        .IsRequired();
+                        .HasForeignKey("DestinationPortId");
 
                     b.HasOne("Domain.Entities.Driver", "Driver")
                         .WithMany("TruckAssignments")
-                        .HasForeignKey("DriverId")
-                        .IsRequired();
+                        .HasForeignKey("DriverId");
 
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("TruckAssignments")
                         .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Port", "SourcePort")
                         .WithMany("SourcePortTruckAssignments")
-                        .HasForeignKey("SourcePortId")
-                        .IsRequired();
+                        .HasForeignKey("SourcePortId");
 
                     b.HasOne("Domain.Entities.Truck", "Truck")
                         .WithMany("TruckAssignments")
-                        .HasForeignKey("TruckId")
-                        .IsRequired();
+                        .HasForeignKey("TruckId");
 
                     b.Navigation("DestinationPort");
 
@@ -1336,9 +1353,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .IsRequired();
+                        .WithOne()
+                        .HasForeignKey("Infrastructure.Identity.ApplicationUser", "AddressId");
 
                     b.HasOne("Domain.Entities.UserGroup", "UserGroup")
                         .WithMany()

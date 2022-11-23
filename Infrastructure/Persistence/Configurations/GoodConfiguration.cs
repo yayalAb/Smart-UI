@@ -10,14 +10,12 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-
-        entity.Property(e => e.Id)
-            .ValueGeneratedOnAdd();
             
-        entity.Property(e => e.CBM)
-            .HasMaxLength(45);
+        // entity.Property(e => e.CBM)
+        //     .HasMaxLength(45);
 
         entity.Property(e => e.Description)
+            
             .HasMaxLength(100);
 
         entity.Property(e => e.HSCode)
@@ -26,12 +24,13 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         entity.Property(e => e.Manufacturer)
             .HasMaxLength(45);
 
-        entity.Property(e => e.UnitOfMeasurnment)
-            .HasMaxLength(45);
+        // entity.Property(e => e.UnitOfMeasurnment)
+        //     .HasMaxLength(45);
 
         entity.HasOne(d => d.Container)
             .WithMany(p => p.Goods)
             .HasForeignKey(d => d.ContainerId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
 
