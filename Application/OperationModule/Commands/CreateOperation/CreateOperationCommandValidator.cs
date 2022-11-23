@@ -12,10 +12,6 @@ namespace Application.OperationModule.Commands.CreateOperation
         public CreateOperationCommandValidator(IAppDbContext context)
         {
             _context = context;
-            RuleFor(o => o.OperationNumber)
-                .NotNull()
-                .NotEmpty()
-                .Must(BeUniqueOperationNumber).WithMessage("operation number should be unique");
             RuleFor(o => o.OpenedDate)
                 .NotNull();
             RuleFor(o => o.Quantity)
@@ -37,10 +33,7 @@ namespace Application.OperationModule.Commands.CreateOperation
         }
   
   
-        private bool BeUniqueOperationNumber(string operationNumber)
-        {
-            return !_context.Operations.Where(o => o.OperationNumber == operationNumber).Any();
-        }
+
         private bool BeFoundInShippingAgentsTable(int? shippingAgentId)
         {
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
