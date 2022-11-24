@@ -22,6 +22,11 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand {
                 .MaximumLength(45)
                 .NotEmpty()
                 .WithMessage("codenif is not in the correct format!");
+            RuleFor(u => u.address.Email)
+                .NotNull()
+                .NotEmpty()
+                .EmailAddress()
+                .WithMessage("invalid email address");
             
         }
 

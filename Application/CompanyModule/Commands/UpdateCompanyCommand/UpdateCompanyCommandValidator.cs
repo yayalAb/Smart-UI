@@ -14,20 +14,22 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
                 .NotNull()
                 .MaximumLength(45)
                 .NotEmpty()
-                .WithMessage("name is not in the corrrect format!");
+                .WithMessage("name is not in the correct format!");
             RuleFor(u => u.TinNumber)
                 .NotNull()
                 .MaximumLength(45)
                 .NotEmpty()
-                .WithMessage("tin number is not in the corrrect format!");
+                .WithMessage("tin number is not in the correct format!");
             RuleFor(u => u.CodeNIF)
                 .NotNull()
                 .MaximumLength(45)
                 .NotEmpty()
-                .WithMessage("codenif is not in the corrrect format!");
-            RuleFor(u => u.Id)
+                .WithMessage("codenif is not in the correct format!");
+            RuleFor(u => u.address.Email)
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .EmailAddress()
+                .WithMessage("invalid email address");
 
         }
     }

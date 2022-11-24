@@ -18,5 +18,18 @@ public class UpdateDriverCommandValidator : AbstractValidator<UpdateDriverComman
             .NotNull()
             .NotEmpty()
             .WithMessage("id is not set");
+        RuleFor(u => u.Fullname)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("fullname is not in the correct format");
+        RuleFor(u => u.LicenceNumber)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("licence number is not in the correct format");
+        RuleFor(u => u.address.Email)
+                .NotNull()
+                .NotEmpty()
+                .EmailAddress()
+                .WithMessage("invalid email address");
     }
 }
