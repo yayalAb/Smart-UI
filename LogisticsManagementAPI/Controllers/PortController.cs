@@ -16,83 +16,74 @@ namespace WebApi.Controllers
 {
     public class PortController : ApiControllerBase
     {
-      
+
         // POST api/<PortController>
         [HttpPost]
         public async Task<IActionResult> CreatePort([FromBody] CreatePortCommand command)
         {
-            
-            try{
+
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-            
+
         }
         // PUT api/<PortController>/
         [HttpPut]
         public async Task<IActionResult> UpdatePort([FromBody] UpdatePortCommand command)
         {
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
 
         }
 
         [HttpGet]
-        public async Task<ActionResult> get([FromQuery] GetAllPorts command){
-            try{
+        public async Task<ActionResult> get([FromQuery] GetAllPorts command)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            }catch (GhionException ex)
+            }
+            catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> getPort(int id){
-            try{
-                return Ok(await Mediator.Send(new GetPort{Id = id}));
-            }catch (GhionException ex)
+        public async Task<ActionResult> getPort(int id)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetPort { Id = id }));
+            }
+            catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-               
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> delete(int id) {
-            try{
+        public async Task<ActionResult> delete(int id)
+        {
+            try
+            {
 
-                return Ok( await Mediator.Send(new DeletePort{Id = id})) ;
+                return Ok(await Mediator.Send(new DeletePort { Id = id }));
             }
-            catch(GhionException ex){
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
         [HttpGet]
@@ -104,9 +95,9 @@ namespace WebApi.Controllers
             {
                 return Ok(await Mediator.Send(new GetPortLookupQuery()));
             }
-            catch (Exception ex)
+            catch (GhionException ex)
             {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, ex.Response);
             }
 
         }

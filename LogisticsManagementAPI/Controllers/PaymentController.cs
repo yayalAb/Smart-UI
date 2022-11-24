@@ -27,10 +27,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
             
         }
 
@@ -45,10 +41,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
         }
 
         // POST api/<PaymentController>
@@ -62,10 +54,6 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -82,10 +70,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
             
         }
 
@@ -100,9 +84,6 @@ namespace WebApi.Controllers
             }
             catch(GhionException ex){
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message ));
             }
         }
 

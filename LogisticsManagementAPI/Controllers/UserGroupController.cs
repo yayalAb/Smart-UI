@@ -29,17 +29,14 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserGroupById(int id)
         {
-            
-            try{
-                return Ok(await Mediator.Send(new GetUserGroupByIdQuery {Id = id}));
+
+            try
+            {
+                return Ok(await Mediator.Send(new GetUserGroupByIdQuery { Id = id }));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -49,16 +46,13 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateUserGroup([FromBody] CreateUserGroupCommand command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -67,17 +61,14 @@ namespace WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUserGroup([FromBody] UpdateUserGroupCommand command)
         {
-            
-            try{
+
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -95,10 +86,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
 
         }
 
@@ -114,10 +101,6 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }

@@ -22,12 +22,7 @@ public class SettingController : ApiControllerBase
         {
             return AppdiveResponse.Response(this, ex.Response);
         }
-        catch (Exception ex)
-        {
-            return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-        }
-
-    }
+ }
 
     [HttpPost]
     public async Task<ActionResult> create(CreateSetting command)
@@ -39,10 +34,6 @@ public class SettingController : ApiControllerBase
         catch (GhionException ex)
         {
             return AppdiveResponse.Response(this, ex.Response);
-        }
-        catch (Exception ex)
-        {
-            return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
         }
     }
 
@@ -56,10 +47,6 @@ public class SettingController : ApiControllerBase
         catch (GhionException ex)
         {
             return AppdiveResponse.Response(this, ex.Response);
-        }
-        catch (Exception ex)
-        {
-            return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
         }
     }
 

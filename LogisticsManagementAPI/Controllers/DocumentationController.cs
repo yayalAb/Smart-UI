@@ -26,8 +26,6 @@ namespace WebApi.Controllers
                 
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
             }
 
@@ -45,8 +43,6 @@ namespace WebApi.Controllers
                 return Ok(await Mediator.Send(command));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -59,8 +55,6 @@ namespace WebApi.Controllers
                 return Ok(await Mediator.Send(new GetDocumentationByIdQuery { Id = id }));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -78,10 +72,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+            
 
         }
 
@@ -98,11 +89,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-
+        
         }
     }
 }

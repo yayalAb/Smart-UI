@@ -41,10 +41,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
 
         }
 
@@ -62,10 +58,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
             
         }
 
@@ -81,10 +73,6 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -103,10 +91,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
         }
           [HttpGet]
         [Route("lookup")]
@@ -117,9 +101,9 @@ namespace WebApi.Controllers
             {
                 return Ok(await Mediator.Send(new GetOperationLookupQuery()));
             }
-            catch (Exception ex)
+            catch (GhionException ex)
             {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, ex.Response);
             }
 
         }

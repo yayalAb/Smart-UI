@@ -22,16 +22,13 @@ namespace WebApi.Controllers
         public async Task<ActionResult> create([FromBody] CreateTruckCommand command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -53,32 +50,28 @@ namespace WebApi.Controllers
         // }
 
         [HttpPut]
-        public async Task<ActionResult> update([ FromBody] UpdateTruckCommand command){
-            try{
+        public async Task<ActionResult> update([FromBody] UpdateTruckCommand command)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> get(int id){
-            try{
+        public async Task<ActionResult> get(int id)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(new GetTruckQuery(id)));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -92,10 +85,6 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -111,10 +100,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
         }
 
         [HttpGet]
@@ -126,9 +111,9 @@ namespace WebApi.Controllers
             {
                 return Ok(await Mediator.Send(new GetTruckLookupQuery()));
             }
-            catch (Exception ex)
+            catch (GhionException ex)
             {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, ex.Response);
             }
 
         }

@@ -25,10 +25,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
 
         }
 
@@ -41,23 +37,8 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
 
         }
-
-        // [HttpPut]
-        // [Route("change_image")]
-        // public async Task<ActionResult> changeImage([ FromBody] ChangeDriverImage command){
-        //     try{
-        //         var response = await Mediator.Send(command);
-        //         return Ok(response);
-        //     }catch(Exception ex) {
-        //         return NotFound(ex.Message);
-        //     }
-        // }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> getDriver(int id){
@@ -67,10 +48,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+
         }
 
         [HttpGet]
@@ -81,10 +59,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+
         }
 
         [HttpDelete("{id}")]
@@ -94,9 +69,7 @@ namespace WebApi.Controllers
             }catch(GhionException ex){
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch(Exception ex) {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+
         }
 
     }

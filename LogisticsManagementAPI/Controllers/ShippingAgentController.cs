@@ -30,16 +30,13 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            try{
-                return Ok(await Mediator.Send(new GetShippingAgentByIdQuery {Id = id}));
+            try
+            {
+                return Ok(await Mediator.Send(new GetShippingAgentByIdQuery { Id = id }));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -47,16 +44,13 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateShippingAgent([FromBody] CreateShippingAgentCommand command)
         {
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
@@ -64,16 +58,13 @@ namespace WebApi.Controllers
         [HttpPut()]
         public async Task<IActionResult> updateShippingAgent([FromBody] UpdateShippingAgentCommand command)
         {
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
@@ -91,10 +82,6 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
         }
         [HttpGet]
         [Route("lookup")]
@@ -105,9 +92,9 @@ namespace WebApi.Controllers
             {
                 return Ok(await Mediator.Send(new GetShippingAgentLookupQuery()));
             }
-            catch (Exception ex)
+            catch (GhionException ex)
             {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+                return AppdiveResponse.Response(this, ex.Response);
             }
 
         }
