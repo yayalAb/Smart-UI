@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
+using Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -58,6 +59,19 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
+
+        [HttpGet]
+        [Route("Bylocation")]
+        public async Task<ActionResult> ContainListByLocation([FromQuery] GetContainersByLocationQuery query)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(query));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } 
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetContainer(int id)
