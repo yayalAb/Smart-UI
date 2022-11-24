@@ -60,7 +60,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Bylocation")]
-        public async Task<ActionResult> ContainListByLocation([FromQuery] GetContainersByLocationQuery query)
+        public async Task<ActionResult> ContainerListByLocation([FromQuery] GetContainersByLocationQuery query)
         {
             try
             {

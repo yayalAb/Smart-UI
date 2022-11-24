@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.GoodModule.Commands.AssignGoodsCommand;
+using Application.ContainerModule.Queries.GetGoodsByLocationQueryQuery;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,6 +23,19 @@ namespace WebApi.Controllers
             } 
 
         }
+
+        [HttpGet]
+        [Route("Bylocation")]
+        public async Task<ActionResult> GoodListByLocation([FromQuery] GetGoodsByLocationQuery query)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(query));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } 
+        }
+
     
     }
 }
