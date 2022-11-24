@@ -8,6 +8,7 @@ public class Driver : BaseAuditableEntity
     public string LicenceNumber { get; set; } = null!;
     public int AddressId { get; set; }
     public byte[]? Image { get; set; }
+    public bool IsAssigned { get; set; } = false;
     
     //has one
     public virtual Address Address { get; set; }

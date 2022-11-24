@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,29 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221124094401_isAssigned-column-added-on-driver-and-truck")]
+    partial class isAssignedcolumnaddedondriverandtruck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("ContainerTruckAssignment", b =>
-                {
-                    b.Property<int>("ContainersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TruckAssignmentsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContainersId", "TruckAssignmentsId");
-
-                    b.HasIndex("TruckAssignmentsId");
-
-                    b.ToTable("ContainerTruckAssignment");
-                });
 
             modelBuilder.Entity("Domain.Entities.Address", b =>
                 {
@@ -290,6 +277,8 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OperationId");
 
+                    b.HasIndex("TruckAssignmentId");
+
                     b.ToTable("Containers");
                 });
 
@@ -472,9 +461,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<float?>("Quantity")
                         .HasColumnType("float");
-
-                    b.Property<int>("TruckAssignmentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -996,21 +982,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("GoodTruckAssignment", b =>
-                {
-                    b.Property<int>("GoodsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TruckAssignmentsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GoodsId", "TruckAssignmentsId");
-
-                    b.HasIndex("TruckAssignmentsId");
-
-                    b.ToTable("GoodTruckAssignment");
-                });
-
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -1221,21 +1192,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ContainerTruckAssignment", b =>
-                {
-                    b.HasOne("Domain.Entities.Container", null)
-                        .WithMany()
-                        .HasForeignKey("ContainersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.TruckAssignment", null)
-                        .WithMany()
-                        .HasForeignKey("TruckAssignmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.AppUserRole", b =>
                 {
                     b.HasOne("Domain.Entities.UserGroup", null)
@@ -1274,9 +1230,15 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.TruckAssignment", "TruckAssignment")
+                        .WithMany("Containers")
+                        .HasForeignKey("TruckAssignmentId");
+
                     b.Navigation("LocationPort");
 
                     b.Navigation("Operation");
+
+                    b.Navigation("TruckAssignment");
                 });
 
             modelBuilder.Entity("Domain.Entities.Documentation", b =>
@@ -1407,21 +1369,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("SourcePort");
 
                     b.Navigation("Truck");
-                });
-
-            modelBuilder.Entity("GoodTruckAssignment", b =>
-                {
-                    b.HasOne("Domain.Entities.Good", null)
-                        .WithMany()
-                        .HasForeignKey("GoodsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.TruckAssignment", null)
-                        .WithMany()
-                        .HasForeignKey("TruckAssignmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
@@ -1559,6 +1506,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Truck", b =>
                 {
                     b.Navigation("TruckAssignments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TruckAssignment", b =>
+                {
+                    b.Navigation("Containers");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserGroup", b =>

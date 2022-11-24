@@ -25,11 +25,8 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
             .HasForeignKey(c => c.LocationPortId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
-        entity.HasOne(c => c.TruckAssignment)
-            .WithMany(ta => ta.Containers)
-            .HasForeignKey(c => c.TruckAssignmentId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        entity.HasMany<TruckAssignment>(c => c.TruckAssignments)
+            .WithMany(ta => ta.Containers);
 
 
 

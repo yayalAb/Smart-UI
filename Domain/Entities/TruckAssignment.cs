@@ -18,7 +18,8 @@ namespace Domain.Entities
         public virtual Port SourcePort { get; set; }    
         public virtual Port DestinationPort { get; set; }   
 
-        public virtual ICollection<Container> Containers { get; set; }   
+        public virtual ICollection<Container>? Containers { get; set; }   
+        public virtual ICollection<Good>? Goods { get; set; }
 
     }
 }

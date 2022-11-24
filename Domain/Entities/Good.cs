@@ -18,8 +18,10 @@ public class Good : BaseAuditableEntity
     public bool IsAssigned { get; set; } = false;
     public int? ContainerId { get; set; }
     public int OperationId {get; set; }
+    public int TruckAssignmentId { get; set; }
     
     public virtual Container Container { get; set; } = null!; 
     public virtual Operation Operation { get; set; } = null!;
+    public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } =  null!;
 
 }
