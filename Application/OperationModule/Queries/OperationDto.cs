@@ -28,4 +28,5 @@ public class OperationDto : IMapFrom<Operation>{
     public int? ShippingAgentId { get; set; }
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }
+    public virtual ICollection<FetchGoodDto> Goods {get; set;}
 }

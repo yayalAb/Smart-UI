@@ -4,6 +4,7 @@ namespace WebApi.Models
 {
     public class ErrorDetail
     {
+        public bool Status { get; set; } = false;
         public int StatusCode { get; set; }
         public string Message { get; set; }
 

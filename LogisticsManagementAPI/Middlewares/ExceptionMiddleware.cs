@@ -77,7 +77,7 @@ namespace WebApi.Middlewares
             }
           
             await context.Response.WriteAsync(new ErrorDetail()
-            {
+            {   
                 StatusCode = context.Response.StatusCode,
                 Message = message,
             }.ToString());

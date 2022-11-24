@@ -1,6 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using Application.User.Commands.AuthenticateUser;
-using Domain.Enums;
 using FluentValidation;
 
 namespace Application.User.Commands.CreateUser

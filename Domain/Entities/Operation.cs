@@ -34,6 +34,7 @@ public class Operation : BaseAuditableEntity {
     //has many
     public virtual ICollection<Payment> Payments { get; set; }
     public virtual ICollection<Container>? Containers { get; set; }
+    public virtual ICollection<Good>? Goods { get; set; }
     public virtual ICollection<Documentation>? Documentaions { get; set; }
     public virtual ICollection<OperationStatus>? OperationStatuses { get; set; }
     public virtual ICollection<TruckAssignment>? TruckAssignments { get; set; }

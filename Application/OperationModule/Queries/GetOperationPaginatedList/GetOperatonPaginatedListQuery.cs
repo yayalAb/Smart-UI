@@ -5,6 +5,7 @@ using AutoMapper;
 using Application.Common.Models;
 using AutoMapper.QueryableExtensions;
 using Application.Common.Mappings;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationModule.Queries.GetOperationPaginatedList;
 
@@ -25,6 +26,7 @@ public class GetOperationPaginatedListQueryHandler : IRequestHandler<GetOperatio
 
     public async Task<PaginatedList<OperationDto>> Handle(GetOperationPaginatedListQuery request, CancellationToken cancellationToken) {
         return await _context.Operations
+        .Include(o => o.Goods)
         .ProjectTo<OperationDto>(_mapper.ConfigurationProvider)
         .PaginatedListAsync(request.PageCount , request.PageSize);
     }
