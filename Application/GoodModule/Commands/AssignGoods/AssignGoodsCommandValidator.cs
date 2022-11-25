@@ -15,23 +15,23 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
         RuleFor(ag => ag.Goods)
             .NotNull()
             .NotEmpty();
-        RuleFor(ag => ag.Goods.Select(g => g.Description))
+        RuleFor(ag => ag.Goods!.Select(g => g.Description))
             .NotNull()
             .NotEmpty();
-        RuleFor(ag => ag.Goods.Select(g => g.Weight))
+        RuleFor(ag => ag.Goods!.Select(g => g.Weight))
             .NotNull()
             .NotEmpty();
-        RuleFor(ag => ag.Goods.Select(g => g.NumberOfPackages))
+        RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
             .NotNull()
             .NotEmpty();
-        When(ag => ag.Container != null, () => {
-            RuleFor(ag => ag.Container!.SealNumber)
+        When(ag => ag.Containers != null, () => {
+            RuleFor(ag => ag.Containers!.Select(c =>c.SealNumber))
                 .NotNull()
                 .NotEmpty();
-            RuleFor(ag => ag.Container!.ContianerNumber)
+            RuleFor(ag => ag.Containers!.Select(c =>c.ContianerNumber))
                 .NotNull()
                 .NotEmpty();
-            RuleFor(ag => ag.Container!.Location)
+            RuleFor(ag => ag.Containers!.Select(c =>c.Location))
                 .NotNull()
                 .NotEmpty();
         });

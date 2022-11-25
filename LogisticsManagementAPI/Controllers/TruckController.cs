@@ -9,6 +9,7 @@ using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
 using Application.UserGroupModule.Queries.GetTruckLookupQuery;
+using Application.UserGroupModule.Queries.GetUnassignedTrucks;
 
 namespace WebApi.Controllers
 {
@@ -32,22 +33,6 @@ namespace WebApi.Controllers
             }
 
         }
-
-        // [HttpPut]
-        // [Route("change_image")]
-        // public async Task<ActionResult> changeImage([FromForm] ChangeTruckImageCommand command){
-        //     try{
-        //         return Ok(await Mediator.Send(command));
-        //     }
-        //     catch (GhionException ex)
-        //     {
-        //         return AppdiveResponse.Response(this, ex.Response);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-        //     }
-        // }
 
         [HttpPut]
         public async Task<ActionResult> update([FromBody] UpdateTruckCommand command)
@@ -87,6 +72,21 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
+
+        [HttpGet]
+        [Route("unassigned")]
+        public async Task<ActionResult> getUnassigned()
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetUnassignedTrucksQuery()));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> deleteTruck(int id)

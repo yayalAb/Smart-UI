@@ -10,5 +10,6 @@ public class ContainerDto : IMapFrom<Container>
     public string SealNumber { get; set; } = null!;
     public string Location { get; set; }
     public int? LocationPortId { get; set; }
+    public List<GoodDto> Goods { get; set; }
 
 }

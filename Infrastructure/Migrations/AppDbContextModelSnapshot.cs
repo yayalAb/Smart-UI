@@ -457,6 +457,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("LocationPortId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Manufacturer")
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
@@ -486,6 +489,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContainerId");
+
+                    b.HasIndex("LocationPortId");
 
                     b.HasIndex("OperationId");
 
@@ -1305,11 +1310,17 @@ namespace Infrastructure.Migrations
                         .WithMany("Goods")
                         .HasForeignKey("ContainerId");
 
+                    b.HasOne("Domain.Entities.Port", "LocationPort")
+                        .WithMany("Goods")
+                        .HasForeignKey("LocationPortId");
+
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("Goods")
                         .HasForeignKey("OperationId");
 
                     b.Navigation("Container");
+
+                    b.Navigation("LocationPort");
 
                     b.Navigation("Operation");
                 });
@@ -1543,6 +1554,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Containers");
 
                     b.Navigation("DestinationPortTruckAssignments");
+
+                    b.Navigation("Goods");
 
                     b.Navigation("Operations");
 
