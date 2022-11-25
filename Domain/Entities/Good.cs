@@ -3,7 +3,6 @@ namespace Domain.Entities;
 
 public class Good : BaseAuditableEntity
 {
-    public int Id {get; set;}
     public string Description { get; set; }
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
@@ -19,9 +18,11 @@ public class Good : BaseAuditableEntity
     public int? ContainerId { get; set; }
     public int OperationId {get; set; }
     public int TruckAssignmentId { get; set; }
+    public int?  LocationPortId { get; set; }
     
     public virtual Container Container { get; set; } = null!; 
     public virtual Operation Operation { get; set; } = null!;
+    public virtual Port? LocationPort { get; set; }
     public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } =  null!;
 
 }
