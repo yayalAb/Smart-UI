@@ -4,11 +4,14 @@ namespace Domain.Entities
 {
     public  class TruckAssignment : BaseAuditableEntity
     {
+        
         public int DriverId { get; set; }   
         public int TruckId { get; set; }    
         public int OperationId { get; set; }
-        public int SourcePortId { get; set; }
-        public int DestinationPortId { get; set; }
+        public string SourceLocation {get; set; }
+        public string DestinationLocation { get; set; }
+        public int? SourcePortId { get; set; }
+        public int? DestinationPortId { get; set; }
         
         public virtual Driver Driver { get; set; }
         public virtual Truck Truck { get; set; }

@@ -10,6 +10,12 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<TruckAssignment> entity)
         {
+            entity.Property(e => e.SourceLocation)
+                .IsRequired(true);
+
+            entity.Property(e => e.DestinationLocation)
+                .IsRequired(true);
+
             entity.HasOne(d => d.Driver)
                 .WithMany(p => p.TruckAssignments)
                 .HasForeignKey(d => d.DriverId)
