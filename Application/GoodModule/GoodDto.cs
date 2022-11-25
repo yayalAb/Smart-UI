@@ -17,4 +17,5 @@ public class GoodDto : IMapFrom<Good>
     public string? ChasisNumber { get; set; }
     public string? EngineNumber { get; set; }
     public string? ModelCode { get; set; }
+    public int? LocationPortId { get; set; }
 }
