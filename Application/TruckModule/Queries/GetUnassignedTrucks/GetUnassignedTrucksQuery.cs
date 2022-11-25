@@ -7,7 +7,7 @@ using Domain.Entities;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Application.TruckModule;
 
-namespace Application.UserGroupModule.Queries.GetUnassignedTrucks;
+namespace Application.TruckModule.Queries.GetUnassignedTrucks;
 
 public record GetUnassignedTrucksQuery : IRequest<List<TruckDto>> {}
 

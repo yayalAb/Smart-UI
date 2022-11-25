@@ -9,7 +9,7 @@ using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
 using Application.UserGroupModule.Queries.GetTruckLookupQuery;
-using Application.UserGroupModule.Queries.GetUnassignedTrucks;
+using Application.TruckModule.Queries.GetUnassignedTrucks;
 
 namespace WebApi.Controllers
 {
