@@ -8,12 +8,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 namespace Application.GoodModule.Queries.GetAllGoodQuery {
-    public class GetAllGoodQuery : IRequest<PaginatedList<GoodDto>> {
+    public class GetAllGoodQuery : IRequest<PaginatedList<FetchGoodDto>> {
         public int? PageCount {get; set;} = 1!;
         public int? PageSize {get; set;} = 10!;
     }
 
-    public class GetAllGoodQueryHandler: IRequestHandler<GetAllGoodQuery, PaginatedList<GoodDto>> {
+    public class GetAllGoodQueryHandler: IRequestHandler<GetAllGoodQuery, PaginatedList<FetchGoodDto>> {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -29,8 +29,8 @@ namespace Application.GoodModule.Queries.GetAllGoodQuery {
             _mapper = mapper;
         }
 
-        public async Task<PaginatedList<GoodDto>> Handle(GetAllGoodQuery request, CancellationToken cancellationToken) {
-            return await PaginatedList<GoodDto>.CreateAsync(_context.Goods.Include(c => c.Container).ProjectTo<GoodDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
+        public async Task<PaginatedList<FetchGoodDto>> Handle(GetAllGoodQuery request, CancellationToken cancellationToken) {
+            return await PaginatedList<FetchGoodDto>.CreateAsync(_context.Goods.Include(c => c.Container).ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
         }
 
     }

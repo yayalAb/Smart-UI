@@ -931,7 +931,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DestinationPortId")
+                    b.Property<string>("DestinationLocation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("DestinationPortId")
                         .HasColumnType("int");
 
                     b.Property<int>("DriverId")
@@ -946,7 +950,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("OperationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SourcePortId")
+                    b.Property<string>("SourceLocation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("SourcePortId")
                         .HasColumnType("int");
 
                     b.Property<int>("TruckId")
