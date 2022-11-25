@@ -27,12 +27,12 @@ public class GetDriverHandler : IRequestHandler<GetDriver, Driver> {
 
     public async Task<Driver> Handle(GetDriver request, CancellationToken cancellationToken) {
         
-        var truck = await _context.Drivers.Include(d => d.Address).Where(t => t.Id == request.Id).FirstOrDefaultAsync();
-        if(truck == null){
-            throw new GhionException(CustomResponse.NotFound("truck not found!"));
+        var driver = await _context.Drivers.Include(d => d.Address).Where(t => t.Id == request.Id).FirstOrDefaultAsync();
+        if(driver == null){
+            throw new GhionException(CustomResponse.NotFound("driver not found!"));
         }
 
-        return truck;
+        return driver;
 
     }
 

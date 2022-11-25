@@ -1,4 +1,5 @@
 using Application.Common.Mappings;
+using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Domain.Entities;
 
 namespace Application.DriverModule;
@@ -10,5 +11,6 @@ public class DriverDto : IMapFrom<Driver> {
     public int AddressId { get; set; }
     public byte[]? Image { get; set; }
     public bool IsAssigned { get; set; }
+    public AddressDto Address {get; set;}
 
 }
