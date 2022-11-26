@@ -24,8 +24,7 @@ public class GetStatusByOperationHandler : IRequestHandler<GetStatusByOperation,
         _mapper = mapper;
     }
     
-    public async Task<List<OperationStatus>> Handle(GetStatusByOperation request, CancellationToken cancellationToken)
-    {
+    public async Task<List<OperationStatus>> Handle(GetStatusByOperation request, CancellationToken cancellationToken) {
         return await _context.OperationStatuses.Where(o => o.OperationId == request.OperationId).ToListAsync();
     }
 
