@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.GoodModule.Commands.AssignGoodsCommand;
-using Application.ContainerModule.Queries.GetGoodsByLocationQueryQuery;
+using Application.GoodModule.Queries.GetGoodsByLocation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

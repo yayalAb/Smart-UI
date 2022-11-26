@@ -8,16 +8,17 @@ using Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
 
-namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
+namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
 {
 
-    public record CreateTruckAssignmentCommand : IRequest<CustomResponse>
+    public record UpdateTruckAssignmentCommand : IRequest<CustomResponse>
     {
+        public int Id { get; set; }
         public int OperationId { get; set; }
         public int DriverId { get; set; }
         public int TruckId { get; set; }
         public string SourceLocation { get; set; }
-        public string DestinationLocation {get; set;}
+        public string DestinationLocation { get; set; }
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
         public List<int>? ContainerIds { get; set; }
@@ -28,18 +29,18 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 
     }
 
-    public class CreateTruckAssignmentCommandHandler : IRequestHandler<CreateTruckAssignmentCommand, CustomResponse>
+    public class UpdateTruckAssignmentCommandHandler : IRequestHandler<UpdateTruckAssignmentCommand, CustomResponse>
     {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
-        private readonly ILogger<CreateTruckAssignmentCommandHandler> _logger;
+        private readonly ILogger<UpdateTruckAssignmentCommandHandler> _logger;
         private readonly IMapper _mapper;
 
-        public CreateTruckAssignmentCommandHandler(
+        public UpdateTruckAssignmentCommandHandler(
             IIdentityService identityService,
             IAppDbContext context,
-            ILogger<CreateTruckAssignmentCommandHandler> logger,
+            ILogger<UpdateTruckAssignmentCommandHandler> logger,
             IMapper mapper
         )
         {
@@ -49,7 +50,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             _mapper = mapper;
         }
 
-        public async Task<CustomResponse> Handle(CreateTruckAssignmentCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdateTruckAssignmentCommand request, CancellationToken cancellationToken)
         {
 
             var executionStrategy = _context.database.CreateExecutionStrategy();
@@ -61,6 +62,15 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                     {
                         List<Container> containers = new List<Container>();
                         List<Good> goods = new List<Good>();
+
+                        //fetch existing truck assignment 
+                        var existingTruckAssignment = await _context.TruckAssignments.FindAsync(request.Id);
+                        if (existingTruckAssignment == null)
+                        {
+                            throw new GhionException(CustomResponse.BadRequest($"TruckAssignment with id = {request.Id} is not found"));
+                        }
+
+                        //fetch containers
                         if (request.ContainerIds != null)
                         {
                             for (int i = 0; i < request.ContainerIds.Count; i++)
@@ -73,6 +83,8 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                                 containers.Add(container);
                             }
                         }
+
+                        //fetch goods
                         if (request.GoodIds != null)
                         {
                             for (int j = 0; j < request.GoodIds.Count; j++)
@@ -82,30 +94,25 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                                 {
                                     throw new GhionException(CustomResponse.BadRequest($"good with id = {request.GoodIds[j]}  is not found"));
                                 }
-
                                 goods.Add(good);
                             }
                         }
-                        //Create new TruckAssignment
-                        TruckAssignment newTruckAssignment = new TruckAssignment
-                        {
-                            OperationId = request.OperationId,
-                            DriverId = request.DriverId,
-                            TruckId = request.TruckId,
-                            SourceLocation = request.SourceLocation,
-                            DestinationLocation = request.DestinationLocation,
-                            SourcePortId = request.SourcePortId,
-                            DestinationPortId = request.DestinationPortId,
-                            Containers = containers,
-                            Goods = goods
-                            
-                        };
-                        await _context.TruckAssignments.AddAsync(newTruckAssignment);
+                        //Update  TruckAssignment
+
+                        existingTruckAssignment.OperationId = request.OperationId;
+                        existingTruckAssignment.DriverId = request.DriverId;
+                        existingTruckAssignment.TruckId = request.TruckId;
+                        existingTruckAssignment.SourcePortId = request.SourcePortId;
+                        existingTruckAssignment.DestinationPortId = request.DestinationPortId;
+                        existingTruckAssignment.Containers = containers;
+                        existingTruckAssignment.Goods = goods;
+
+
+                        _context.TruckAssignments.Update(existingTruckAssignment);
                         await _context.SaveChangesAsync(cancellationToken);
-                        await ChangeIsAssignedFlag(request.TruckId , request.DriverId , cancellationToken);
 
                         await transaction.CommitAsync();
-                        return CustomResponse.Succeeded("truck assignment created successfully", 201);
+                        return CustomResponse.Succeeded("truck assignment Updated successfully");
 
                     }
                     catch (System.Exception)
@@ -113,24 +120,12 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                         await transaction.RollbackAsync();
                         throw;
                     }
+
+
+
+
                 }
             });
-
-        }
-
-        private async Task ChangeIsAssignedFlag(int truckId , int driverId , CancellationToken cancellationToken){
-            var truck = await _context.Trucks.FindAsync(truckId);
-
-            truck!.IsAssigned = true; 
-            _context.Trucks.Update(truck);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            var driver = await _context.Drivers.FindAsync(driverId);
-            driver!.IsAssigned = true; 
-             _context.Drivers.Update(driver);
-             await _context.SaveChangesAsync(cancellationToken);
-
-
 
         }
 

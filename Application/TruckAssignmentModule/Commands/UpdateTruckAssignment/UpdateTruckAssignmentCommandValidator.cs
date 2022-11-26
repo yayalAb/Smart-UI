@@ -1,14 +1,14 @@
 using Application.Common.Interfaces;
 using FluentValidation;
 
-namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
+namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
 {
 
-    public class CreateTruckAssignmentCommandValidator : AbstractValidator<CreateTruckAssignmentCommand>
+    public class UpdateTruckAssignmentCommandValidator : AbstractValidator<UpdateTruckAssignmentCommand>
     {
         private readonly IAppDbContext _context;
 
-        public CreateTruckAssignmentCommandValidator(IAppDbContext context)
+        public UpdateTruckAssignmentCommandValidator(IAppDbContext context)
         {
             _context = context;
 

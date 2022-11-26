@@ -1,6 +1,6 @@
 using Application.Common.Mappings;
 using Domain.Entities;
-using Application.GoodModule;
+using Application.GoodModule.Queries;
 
 namespace Application.ContainerModule;
 
@@ -16,5 +16,5 @@ public class ContainerDto : IMapFrom<Container> {
     public int? TruckAssignmentId { get; set; }
     public byte[]? Image { get; set; }
 
-    public List<GoodDto> Goods {get; set;}
+    public List<FetchGoodDto> Goods {get; set;}
 }

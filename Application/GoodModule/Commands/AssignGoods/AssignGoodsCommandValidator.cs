@@ -2,7 +2,8 @@ using Application.Common.Interfaces;
 using FluentValidation;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand;
-public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>{
+public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
+{
     private readonly IAppDbContext _context;
 
     public AssignGoodsCommandValidator(IAppDbContext context)
@@ -15,6 +16,10 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
         RuleFor(ag => ag.Goods)
             .NotNull()
             .NotEmpty();
+        RuleFor(ag => ag.Goods!.Select(g => g.LocationPortId))
+            .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
+
+
         RuleFor(ag => ag.Goods!.Select(g => g.Description))
             .NotNull()
             .NotEmpty();
@@ -24,21 +29,40 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
         RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
             .NotNull()
             .NotEmpty();
-        When(ag => ag.Containers != null, () => {
-            RuleFor(ag => ag.Containers!.Select(c =>c.SealNumber))
-                .NotNull()
-                .NotEmpty();
-            RuleFor(ag => ag.Containers!.Select(c =>c.ContianerNumber))
-                .NotNull()
-                .NotEmpty();
-            RuleFor(ag => ag.Containers!.Select(c =>c.Location))
-                .NotNull()
-                .NotEmpty();
-        });
-    
-    }
-    private bool BeFoundInDb(int operationId)
+        When(ag => ag.Containers != null, () =>
         {
-            return  _context.Operations.Find(operationId) != null;
+            RuleFor(ag => ag.Containers!.Select(c => c.SealNumber))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Containers!.Select(c => c.ContianerNumber))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Containers!.Select(c => c.Location))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Containers!.Select(c => c.LocationPortId))
+            .Must(BeFoundInPortTable).WithMessage($"one or more location port of a container with the provided id is not found ");
+            
+        });
+
+    }
+
+    private bool BeFoundInDb(int operationId)
+    {
+        return _context.Operations.Find(operationId) != null;
+    }
+    private bool BeFoundInPortTable(IEnumerable<int?> locationPortIds)
+    {
+        if(locationPortIds == null ){
+            return true; 
         }
+
+        for(int i = 0; i<locationPortIds.ToList().Count; i++){
+            if(_context.Ports.Find(locationPortIds.ToList()[i]) == null){
+                return false; 
+            }
+           
+        }
+        return true; 
+    }
 }
