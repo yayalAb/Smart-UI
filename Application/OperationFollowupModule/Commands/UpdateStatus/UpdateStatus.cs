@@ -9,7 +9,7 @@ namespace Application.OperationFollowupModule.Commands.UpdateStatus;
 
 public record UpdateStatus : IRequest<CustomResponse> {
     public string GeneratedDocumentName { get; init; }
-    public DateTime GeneratedDate { get; init; }
+    public DateTime? GeneratedDate { get; init; }
     public bool IsApproved { get; init; } = false;
     public DateTime? ApprovedDate { get; init; } = null!;
     public int Id { get; init; }
@@ -35,7 +35,7 @@ public class UpdateStatusHandler : IRequestHandler<UpdateStatus, CustomResponse>
         }
 
         status.GeneratedDocumentName = request.GeneratedDocumentName;
-        status.GeneratedDate = request.GeneratedDate;
+        status.GeneratedDate = request.GeneratedDate ?? DateTime.Now;
         status.IsApproved = request.IsApproved;
         status.ApprovedDate = request.ApprovedDate;
 
