@@ -7,8 +7,9 @@ using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Application.OperationFollowupModule;
 
-namespace Application.DocumentModule.Commands.GenerateGatepass;
+namespace Application.OperationDocuments.Queries.GenerateGatepass;
 
 public record GenerateGatepassCommand : IRequest<GatepassDto>
 {
@@ -21,34 +22,28 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
 
     private readonly IAppDbContext _context;
     private readonly ILogger logger;
+    private readonly OperationEventHandler _operationEventHandler;
 
-    public GenerateGatepassCommandHandler(IAppDbContext context, ILogger<GenerateGatepassCommandHandler> logger)
+    public GenerateGatepassCommandHandler(IAppDbContext context, ILogger<GenerateGatepassCommandHandler> logger , OperationEventHandler operationEventHandler) 
     {
         _context = context;
         this.logger = logger;
+        _operationEventHandler = operationEventHandler;
     }
 
     public async Task<GatepassDto> Handle(GenerateGatepassCommand request, CancellationToken cancellationToken)
     {
-        // find if gate pass already generated for the operation
-        var name = Enum.GetName(typeof(Documents), Documents.GatePass);
-        var existing = _context.OperationStatuses
-            .FirstOrDefault(
-                os => os.OperationId == request.OperationId
-                && os.GeneratedDocumentName == name);
+        //generate gatepass operation status 
+        var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
+        var statusName = Enum.GetName(typeof(Status) , Status.GatePassGenerated);
+        var newOperationStatus = new OperationStatus{
+            GeneratedDocumentName = DocumentName!,
+            GeneratedDate = DateTime.Now,
+            OperationId = request.OperationId
+        };
+      await  _operationEventHandler.DocumentGenerationEventAsync(cancellationToken , newOperationStatus , statusName!);
 
-        if (existing == null)
-        {
-
-            var newOpreationStatus = new OperationStatus
-            {
-                GeneratedDocumentName = name!,
-                GeneratedDate = DateTime.Now,
-                OperationId = request.OperationId
-            };
-            await _context.OperationStatuses.AddAsync(newOpreationStatus);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+      //fetch gatepass form data 
         var data = _context.TruckAssignments
            .Where(ta => ta.Id == request.TruckAssignmentId)
            .Include(ta => ta.Containers)
@@ -68,7 +63,7 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
         int Quantity = 0;
         float weight = 0;
         List<string> descriptions = new List<string>();
-        List<int> containerNumbers = new List<int>();
+        List<string> containerNumbers = new List<string>();
         if (data.Containers != null)
         {
 
@@ -80,7 +75,7 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
                     .SelectMany(c => c.Goods.Select(g => g.Description)));
                     
 
-            containerNumbers.AddRange(data.Containers.Select(c => c.Id));
+            containerNumbers.AddRange(data.Containers.Select(c => c.ContianerNumber));
         }
         if (data.Goods != null)
         {
@@ -91,7 +86,6 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
                 .AddRange(data.Goods
                    .Select(g => g.Description));
         }
-        logger.LogCritical($"{containerNumbers.First()}");
         return new GatepassDto{
             Date = data.Date,
             OperationNumber = data.OperationNumber,
@@ -99,14 +93,9 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
             Quantity = Quantity,
             Weight = weight,
             Descriptions = descriptions,
-            // ContainerNumbers = containerNumbers,
+            ContainerNumbers = containerNumbers,
             Localization = ""
         };
-
-
-
-
-
         
     }
 

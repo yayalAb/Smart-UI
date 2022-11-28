@@ -39,12 +39,12 @@ public class PackageListHandler : IRequestHandler<PackageList, PackageListDto>
 
         var containers = await _context.Containers.Where(c => c.OperationId == doc.OperationId).ToListAsync();
 
-        _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
-            GeneratedDocumentName = "Package List",
-            GeneratedDate = DateTime.Now,
-            IsApproved = true,
-            OperationId = doc.OperationId
-        });
+        // _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
+        //     GeneratedDocumentName = "Package List",
+        //     GeneratedDate = DateTime.Now,
+        //     IsApproved = true,
+        //     OperationId = doc.OperationId
+        // });
 
         return new PackageListDto {
             documentation = doc,
