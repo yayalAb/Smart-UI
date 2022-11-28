@@ -6,6 +6,7 @@ using Application.Common.Models;
 using Application.TruckAssignmentModule.Commands.CreateTruckAssignment;
 using Application.TruckAssignmentModule.Commands.UpdateTruckAssignment;
 using Application.TruckAssignmentModule.Queries;
+using Application.DocumentModule.Commands.GenerateGatepass;
 
 namespace WebApi.Controllers
 {
@@ -20,7 +21,13 @@ namespace WebApi.Controllers
 
             try
             {
-                return Ok(await Mediator.Send(command));
+                var createResponse = await Mediator.Send(command);
+                var command2  = new GenerateGatepassCommand{
+                    OperationId = createResponse.operationId,
+                    TruckAssignmentId = createResponse.truckAssignmentId
+                };
+
+                return Ok(await Mediator.Send(command2));
             }
             catch (GhionException ex)
             {
