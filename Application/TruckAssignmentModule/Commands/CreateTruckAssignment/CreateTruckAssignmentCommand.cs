@@ -11,7 +11,7 @@ using Application.Common.Exceptions;
 namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 {
 
-    public record CreateTruckAssignmentCommand : IRequest<CustomResponse>
+    public record CreateTruckAssignmentCommand : IRequest<(int operationId , int truckAssignmentId)>
     {
         public int OperationId { get; set; }
         public int DriverId { get; set; }
@@ -28,7 +28,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 
     }
 
-    public class CreateTruckAssignmentCommandHandler : IRequestHandler<CreateTruckAssignmentCommand, CustomResponse>
+    public class CreateTruckAssignmentCommandHandler : IRequestHandler<CreateTruckAssignmentCommand, (int operationId , int truckAssignmentId)>
     {
 
         private readonly IIdentityService _identityService;
@@ -49,7 +49,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             _mapper = mapper;
         }
 
-        public async Task<CustomResponse> Handle(CreateTruckAssignmentCommand request, CancellationToken cancellationToken)
+        public async Task<(int operationId , int truckAssignmentId)> Handle(CreateTruckAssignmentCommand request, CancellationToken cancellationToken)
         {
 
             var executionStrategy = _context.database.CreateExecutionStrategy();
@@ -103,9 +103,9 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                         await _context.TruckAssignments.AddAsync(newTruckAssignment);
                         await _context.SaveChangesAsync(cancellationToken);
                         await ChangeIsAssignedFlag(request.TruckId , request.DriverId , cancellationToken);
-
+                    
                         await transaction.CommitAsync();
-                        return CustomResponse.Succeeded("truck assignment created successfully", 201);
+                        return (newTruckAssignment.OperationId , newTruckAssignment.Id);
 
                     }
                     catch (System.Exception)

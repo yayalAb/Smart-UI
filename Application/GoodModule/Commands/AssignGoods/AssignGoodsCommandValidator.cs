@@ -13,22 +13,23 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             .NotNull()
             .NotEmpty()
             .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
-        RuleFor(ag => ag.Goods)
-            .NotNull()
-            .NotEmpty();
-        RuleFor(ag => ag.Goods!.Select(g => g.LocationPortId))
-            .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
+        When(ag => ag.Goods != null, () => 
+        {
+            RuleFor(ag => ag.Goods!.Select(g => g.LocationPortId))
+                .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
 
 
-        RuleFor(ag => ag.Goods!.Select(g => g.Description))
-            .NotNull()
-            .NotEmpty();
-        RuleFor(ag => ag.Goods!.Select(g => g.Weight))
-            .NotNull()
-            .NotEmpty();
-        RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
-            .NotNull()
-            .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.Description))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.Weight))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
+                .NotNull()
+                .NotEmpty();
+        });
+       
         When(ag => ag.Containers != null, () =>
         {
             RuleFor(ag => ag.Containers!.Select(c => c.SealNumber))
@@ -58,6 +59,9 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
         }
 
         for(int i = 0; i<locationPortIds.ToList().Count; i++){
+            if(locationPortIds.ToList()[i] == null){
+                return true;
+            }
             if(_context.Ports.Find(locationPortIds.ToList()[i]) == null){
                 return false; 
             }
