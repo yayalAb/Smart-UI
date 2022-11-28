@@ -20,7 +20,7 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList
     private readonly IAppDbContext _context;
 
     public GetAllDriversHandler(
-        IMapper mapper, 
+        IMapper mapper,
         IAppDbContext context
     ){
         _mapper = mapper;
@@ -30,10 +30,10 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList
     public async Task<PaginatedList<DriverDto>> Handle(GetAllDrivers request, CancellationToken cancellationToken) {
         return await PaginatedList<DriverDto>
             .CreateAsync(
-                _context.Drivers
-                .Include(t => t.Address)
-                .ProjectTo<DriverDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10
-                );
+                _context.Drivers.Include(t => t.Address).ProjectTo<DriverDto>(_mapper.ConfigurationProvider),
+                request.PageCount ?? 1,
+                request.PageSize ?? 10
+            );
     }
 
 }

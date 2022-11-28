@@ -89,6 +89,21 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("dashboard")]
+        public async Task<ActionResult> driversListDashboard([FromQuery] AllDrivers command)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> delete(int id)

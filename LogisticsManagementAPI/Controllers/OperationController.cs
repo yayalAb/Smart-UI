@@ -12,6 +12,7 @@ using Application.UserGroupModule.Queries.GetOperationLookupQuery;
 using Application.OperationFollowupModule.Queries.GetStatusByOperation;
 using Application.OperationFollowupModule.Commands.UpdateStatus;
 using Application.OperationFollowupModule.Queries.GetSingleStatus;
+using Application.OperationModule.Queries.OperationDashboard;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -151,6 +152,33 @@ namespace WebApi.Controllers
             }catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }catch (Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet]
+        [Route("Dashboard/operationCount")]
+        public async Task<IActionResult> operationCount() {
+
+            try {
+                return Ok(await Mediator.Send(new OperationDashboardInfo()));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("Dashboard/graph/{year}")]
+        public async Task<IActionResult> operationGrph(int year) {
+
+            try {
+                return Ok(await Mediator.Send(new OperationCountGraph{year = year}));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
