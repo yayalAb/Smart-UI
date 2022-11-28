@@ -1,4 +1,6 @@
 using Application.Common.Mappings;
+using Application.ContainerModule;
+using Application.OperationModule.Queries;
 using Domain.Entities;
 
 namespace Application.GoodModule.Queries;
@@ -18,4 +20,7 @@ public class FetchGoodDto : IMapFrom<Good>
     public string? EngineNumber { get; set; }
     public string? ModelCode { get; set; }
     public int? LocationPortId { get; set; }
+    public ContainerDto2? Container { get; set; }
+    public OperationDto2 Operation { get; set; }
+    
 }
