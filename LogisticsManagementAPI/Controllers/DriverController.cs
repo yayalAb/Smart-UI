@@ -9,6 +9,7 @@ using Application.Common.Models;
 using WebApi.Models;
 using Application.Common.Exceptions;
 using Application.DriverModule.Queries.GetUnassignedDrivers;
+using Application.DriverModule.Queries.DriverLookUpQuery;
 
 namespace WebApi.Controllers
 {
@@ -74,6 +75,20 @@ namespace WebApi.Controllers
             }
 
         }
+
+        [HttpGet("lookup")]
+        public async Task<ActionResult> driverLookup()
+        {
+            try {
+                return Ok(await Mediator.Send(new DriverLookUp()));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
         [HttpGet]
         [Route("unassigned")]
         public async Task<ActionResult> getUnassigned()

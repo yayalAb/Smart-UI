@@ -22,9 +22,7 @@ namespace WebApi.Controllers
             
             try{
                 return Ok(await Mediator.Send(query));
-            }
-            catch (GhionException ex)
-            {
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
             
@@ -36,9 +34,7 @@ namespace WebApi.Controllers
         {
             try{
                 return Ok(await Mediator.Send(new GetPaymentByIdQuery{Id = id}));
-            }
-            catch (GhionException ex)
-            {
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
