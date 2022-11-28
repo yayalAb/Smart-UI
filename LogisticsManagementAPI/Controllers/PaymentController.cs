@@ -6,6 +6,7 @@ using Application.PaymentModule.Commands.DeletePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.PaymentModule.Queries.GetPaymentById;
 using Application.PaymentModule.Queries.GetPaymentList;
+using Application.PaymentModule.Queries.TotalPayments;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
@@ -17,8 +18,7 @@ namespace WebApi.Controllers
     
   // GET api/<PaymentController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query)
-        {
+        public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query) {
             
             try{
                 return Ok(await Mediator.Send(query));
@@ -39,6 +39,15 @@ namespace WebApi.Controllers
             }
             catch (GhionException ex)
             {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("Dashboard")]
+        public async Task<IActionResult> TotalPayment() {
+            try{
+                return Ok(await Mediator.Send(new TotalPayments()));
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -78,11 +87,9 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-         try{
-
+            try{
                 return Ok( await Mediator.Send(new DeletePaymentCommand{Id = id})) ;
-            }
-            catch(GhionException ex){
+            } catch(GhionException ex){
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
