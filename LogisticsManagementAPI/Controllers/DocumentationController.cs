@@ -141,12 +141,25 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GenerateT1(int operationId)
         {
 
-            try
-            {
+            try {
                 return Ok(await Mediator.Send(new T1Document {OperationId = operationId}));
             }
-            catch (GhionException ex)
-            {
+            catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("CommercialInvoice/{docId}")]
+        public async Task<IActionResult> GenerateCommercialInvoice(int docId)
+        {
+
+            try {
+                return Ok(await Mediator.Send(new Application.OperationDocuments.Queries.CommercialInvoice.CommercialInvoice { docId = docId}));
+            }
+            catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }catch(Exception ex){
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
