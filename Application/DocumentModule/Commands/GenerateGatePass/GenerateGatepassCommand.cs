@@ -65,8 +65,6 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
                Goods = ta.Goods
            }).First();
 
-    
-        // logger.LogCritical($"data isssss ---------------- {operationData.First().Quantity}");
         int Quantity = 0;
         float weight = 0;
         List<string> descriptions = new List<string>();
@@ -80,7 +78,6 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
             descriptions
                 .AddRange(data.Containers
                     .SelectMany(c => c.Goods.Select(g => g.Description)));
-            logger.LogCritical($"{data.Containers.First().Goods.Count}");
                     
 
             containerNumbers.AddRange(data.Containers.Select(c => c.Id));
