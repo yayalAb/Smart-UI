@@ -7,7 +7,6 @@ using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
 using WebApi.Models;
-using Application.DocumentModule.Commands.GenerateGatepass;
 
 namespace WebApi.Controllers
 {

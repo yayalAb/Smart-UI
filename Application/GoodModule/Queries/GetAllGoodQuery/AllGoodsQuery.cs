@@ -30,7 +30,11 @@ namespace Application.GoodModule.Queries.GetAllGoodQuery {
         }
 
         public async Task<PaginatedList<FetchGoodDto>> Handle(GetAllGoodQuery request, CancellationToken cancellationToken) {
-            return await PaginatedList<FetchGoodDto>.CreateAsync(_context.Goods.Include(c => c.Container).ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
+            return await PaginatedList<FetchGoodDto>
+            .CreateAsync(_context.Goods
+                .Include(g => g.Container)
+                .Include(g => g.Operation)
+                .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
         }
 
     }

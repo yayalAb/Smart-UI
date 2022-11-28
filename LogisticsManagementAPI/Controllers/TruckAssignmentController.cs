@@ -6,7 +6,7 @@ using Application.Common.Models;
 using Application.TruckAssignmentModule.Commands.CreateTruckAssignment;
 using Application.TruckAssignmentModule.Commands.UpdateTruckAssignment;
 using Application.TruckAssignmentModule.Queries;
-using Application.DocumentModule.Commands.GenerateGatepass;
+using Application.OperationDocuments.Queries.GenerateGatepass;
 
 namespace WebApi.Controllers
 {
