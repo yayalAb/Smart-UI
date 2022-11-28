@@ -6,6 +6,9 @@ using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
+using Application.OperationDocuments.Queries.PackageList;
+using Application.OperationDocuments.Queries.T1Document;
+using Application.OperationDocuments.Queries.TruckWayBill;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
@@ -22,15 +25,17 @@ namespace WebApi.Controllers
         {
             try
             {
-            return Ok(await Mediator.Send(query));
-                
-            } catch (GhionException ex) {
+                return Ok(await Mediator.Send(query));
+
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            }
+        }
 
-            
-        
+
+
 
 
 
@@ -39,9 +44,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateDocumentation([FromBody] CreateDocumentationCommand command)
         {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -51,9 +59,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetDocumentationById(int id)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(new GetDocumentationByIdQuery { Id = id }));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -72,7 +83,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            
+
 
         }
 
@@ -83,13 +94,65 @@ namespace WebApi.Controllers
 
             try
             {
-                return Ok(await Mediator.Send(new DeleteDocumentationCommand {Id = id}));
+                return Ok(await Mediator.Send(new DeleteDocumentationCommand { Id = id }));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-        
+
         }
+
+        [HttpGet("packageLists/{docId}")]
+        public async Task<IActionResult> GeneratePackageList(int docId)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new PackageList() { documentationId = docId }));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("truckWayBill/{docId}")]
+        public async Task<IActionResult> GenerateTrackWayBill([FromQuery] TruckWayBill command)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("t1/{operationId}")]
+        public async Task<IActionResult> GenerateT1(int operationId)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new T1Document {OperationId = operationId}));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
     }
 }
