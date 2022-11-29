@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.PaymentModule.Queries.GetPaymentByOperation;
 
-public record PaymentByOperation : IRequest<OperationPaymentDto> {
+public record PaymentByOperation : IRequest<ICollection<OperationPaymentDto>> {
     public int OperationId {get; init;}
 }
 
-public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, OperationPaymentDto>
-{
+public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, ICollection<OperationPaymentDto>> {
 
     private readonly IAppDbContext _context;
 
@@ -20,13 +19,22 @@ public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, Ope
         _context = context;
     }
 
-    public async Task<OperationPaymentDto> Handle(PaymentByOperation request, CancellationToken cancellationToken)
+    public async Task<ICollection<OperationPaymentDto>> Handle(PaymentByOperation request, CancellationToken cancellationToken)
     {
         List<Payment> payments = await _context.Payments.Where(p => p.OperationId == request.OperationId).Include(o => o.ShippingAgent).ToListAsync();
 
-        return new OperationPaymentDto {
-            ShippingAgnetFee = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Name) select payment,
-            TerminalPortFee = from payment in payments where TerminalPortPaymentType.Types.Contains(payment.Name) select payment
-        };
+        ICollection<OperationPaymentDto> reports = new List<OperationPaymentDto>();
+
+        reports.Add(new OperationPaymentDto {
+            Name = "Shipping Agent Fee",
+            Data = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Name) select payment,
+        });
+
+        reports.Add(new OperationPaymentDto {
+            Name = "Terminal Port Fee",
+            Data = from payment in payments where TerminalPortPaymentType.Types.Contains(payment.Name) select payment,
+        });
+
+        return reports;
     }
 }
