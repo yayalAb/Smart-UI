@@ -19,6 +19,7 @@ namespace Application.PaymentModule.Queries
         public string? Description { get; set; }
         public int OperationId { get; set; }
         public int ShippingAgentId { get; set; }
+        public string? DONumber { get; set; }
         public GetPaymentOperationDto Operation{get; set;}
         public GetPaymentShippingAgentDto ShippingAgent {get; set;}
     }

@@ -5,7 +5,7 @@ namespace Application.OperationModule.Queries;
 
 public class FetchGoodDto : IMapFrom<Good>
 {
-    public int Id {get; set; }
+    public int Id { get; set; }
     public string Description { get; set; }
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
@@ -19,4 +19,14 @@ public class FetchGoodDto : IMapFrom<Good>
 
     public bool IsAssigned { get; set; } = false;
     public int? ContainerId { get; set; }
+    /////------------Additionals------
+    public string? SNumber { get; set; } // operation
+    public DateTime? SDate { get; set; } //operation
+    public string? RecepientName { get; set; }
+    public string? VesselName { get; set; } // operation
+    public DateTime? ArrivalDate { get; set; } // operation
+    public string? ConnaissementNumber { get; set; } // operation
+    public string? CountryOfOrigin { get; set; } // operation
+    public float? REGTax { get; set; }//
+    //--------------------------------------//
 }

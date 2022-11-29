@@ -35,9 +35,33 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasMaxLength(45);
 
         entity.Property(e => e.Status)
-            .IsRequired(true    ) 
+            .IsRequired(true) 
             .HasMaxLength(45);
+//---------------------------------------------------------------------
+        entity.Property(e => e.SNumber)
+            .IsRequired(false);   
 
+        entity.Property(e => e.SDate)
+            .IsRequired(false)   
+            .HasColumnType("datetime");
+
+        entity.Property(e => e.RecepientName)
+            .IsRequired(false); 
+
+        entity.Property(e => e.VesselName)
+            .IsRequired(false); 
+
+        entity.Property(e => e.ArrivalDate)
+            .IsRequired(false)   
+            .HasColumnType("datetime");
+        entity.Property(e => e.ConnaissementNumber)
+            .IsRequired(false);
+        entity.Property(e => e.CountryOfOrigin)
+            .IsRequired(false);
+        entity.Property(e => e.REGTax)
+            .IsRequired(false);
+
+//--------------------------------------------------------------------------------------
         entity.HasOne(d => d.Company)
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.CompanyId);

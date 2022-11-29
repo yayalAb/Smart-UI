@@ -34,6 +34,8 @@ namespace Infrastructure.Persistence.Configurations
 
             entity.Property(e => e.Amount)
                 .IsRequired();
+            entity.Property(e => e.DONumber)
+                .IsRequired(false);
 
             entity.HasOne(p => p.Operation)
                 .WithMany(o => o.Payments)

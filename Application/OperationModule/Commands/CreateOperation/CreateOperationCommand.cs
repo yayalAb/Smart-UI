@@ -36,6 +36,16 @@ namespace Application.OperationModule.Commands.CreateOperation
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
         public int CompanyId { get; set; }
+        /////------------Additionals------
+        public string? SNumber { get; set; }
+        public DateTime? SDate { get; set; }
+        public string? RecepientName { get; set; }
+        public string? VesselName { get; set; }
+        public DateTime? ArrivalDate { get; set; }
+        public string? ConnaissementNumber { get; set; }
+        public string? CountryOfOrigin { get; set; }
+        public float? REGTax { get; set; }
+        //--------------------------------------//
     }
     public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, CustomResponse>
     {
@@ -64,11 +74,11 @@ namespace Application.OperationModule.Commands.CreateOperation
                         //create operation with empty operation number
                         Operation newOperation = _mapper.Map<Operation>(request);
                         newOperation.OperationNumber = "";
-                        newOperation.Status = Enum.GetName(typeof(Status) , Status.Opened);
-                        newOperation.OpenedDate =  newOperation.OpenedDate != null ? newOperation.OpenedDate: DateTime.Now;
+                        newOperation.Status = Enum.GetName(typeof(Status), Status.Opened);
+                        newOperation.OpenedDate = newOperation.OpenedDate != null ? newOperation.OpenedDate : DateTime.Now;
                         await _context.Operations.AddAsync(newOperation);
                         await _context.SaveChangesAsync(cancellationToken);
-                        
+
                         // update operation number to a unique value
                         newOperation.OperationNumber = GenerateOperationNumber(newOperation.Id, request.DestinationType);
                         _context.Operations.Update(newOperation);
