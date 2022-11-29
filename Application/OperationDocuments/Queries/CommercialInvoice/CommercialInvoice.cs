@@ -39,13 +39,6 @@ public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, Comme
 
         var containers = await _context.Containers.Where(c => c.OperationId == doc.OperationId).ToListAsync();
 
-        // _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
-        //     GeneratedDocumentName = "Package List",
-        //     GeneratedDate = DateTime.Now,
-        //     IsApproved = true,
-        //     OperationId = doc.OperationId
-        // });
-
         return new CommercialInvoiceDto {
             Document = doc,
             Operation = doc.Operation,

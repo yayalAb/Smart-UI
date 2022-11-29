@@ -31,8 +31,7 @@ namespace Application.PaymentModule.Commands.CreatePayment
             _context = context;
             _mapper = mapper;
         }
-        public async Task<CustomResponse> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
-        {
+        public async Task<CustomResponse> Handle(CreatePaymentCommand request, CancellationToken cancellationToken) {
             var newPayment = _mapper.Map<Payment>(request);
             await _context.Payments.AddAsync(newPayment);
             await _context.SaveChangesAsync(cancellationToken);

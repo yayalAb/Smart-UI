@@ -1,6 +1,7 @@
 ﻿
 
 using Application.Common.Interfaces;
+using Domain.Common.PaymentTypes;
 using FluentValidation;
 
 namespace Application.PaymentModule.Commands.CreatePayment
@@ -9,9 +10,10 @@ namespace Application.PaymentModule.Commands.CreatePayment
     {
         private readonly IAppDbContext _context;
 
-        public CreatePaymentCommandValidator(IAppDbContext context)
-        {
+        public CreatePaymentCommandValidator(IAppDbContext context) {
+
             _context = context;
+            
             RuleFor(s => s.Type)
                  .NotNull()
                  .NotEmpty();
@@ -44,9 +46,12 @@ namespace Application.PaymentModule.Commands.CreatePayment
         }
         private bool BeRegisteredShippingAgentId(int? shippingAgentId)
         {
-            return shippingAgentId == null||_context.ShippingAgents.Find(shippingAgentId) != null;
+            return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
+        private bool OfType(string Type) {
+            return ShippingAgentPaymentType.Types.Contains(Type) || TerminalPortPaymentType.Types.Contains(Type);
+        }
 
     }
 }

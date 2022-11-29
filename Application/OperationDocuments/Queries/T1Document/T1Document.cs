@@ -1,4 +1,3 @@
-
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -52,18 +51,14 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
             throw new GhionException(CustomResponse.NotFound("There is no Truck Assignment!"));
         }
         var statusName = Enum.GetName(typeof(Status), Status.T1Generated);
-       await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-        {
-            GeneratedDocumentName = "T1 Document",
+        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
+            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.T1),
             GeneratedDate = DateTime.Now,
             IsApproved = false,
             OperationId = request.OperationId
-        },
-        statusName!
-        );
+        }, statusName!);
 
-        return new T1DocumentDto
-        {
+        return new T1DocumentDto {
             TruckAssignments = truckAssignment,
             Operation = operation
         };
