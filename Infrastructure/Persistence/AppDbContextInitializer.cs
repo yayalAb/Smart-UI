@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-
+using Domain.Common.PaymentTypes;
 using Domain.Entities;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -46,6 +46,7 @@ namespace Infrastructure.Persistence
             try
             {
                 await TrySeedAsync();
+                // await TrySeedPaymentTypes();
             }
             catch (Exception ex)
             {
@@ -141,5 +142,34 @@ namespace Infrastructure.Persistence
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task TrySeedPaymentTypes() {
+
+            Lookup[] paymentTypes = {
+                new Lookup {
+                    Key = "key",
+                    Value = "Payment"
+                },
+                new Lookup {
+                    Key = "Payment",
+                    Value = "Shipping Agent"
+                },
+                new Lookup {
+                    Key = "Payment",
+                    Value = "Terminal Port"
+                }
+            };
+            _context.Lookups.AddRange(paymentTypes);
+
+            var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup {Key = "Shipping Agent", Value = type};
+            _context.Lookups.AddRange(shippingAgentPaymentNames);
+
+            var terminalPortPaymentNames = from type in TerminalPortPaymentType.Types select new Lookup {Key = "Terminal Port", Value = type};
+            _context.Lookups.AddRange(terminalPortPaymentNames);
+
+            await _context.SaveChangesAsync();
+
+        }
+
     }
 }
