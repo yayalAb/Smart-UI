@@ -17,10 +17,11 @@ namespace Application.PaymentModule.Commands.CreatePayment
             RuleFor(s => s.Type)
                  .NotNull()
                  .NotEmpty()
-                 .Must(OfType);
+                 .Must(BeOfType);
             RuleFor(s => s.Name)
                  .NotNull()
-                 .NotEmpty();
+                 .NotEmpty()
+                 .Must(OfType);
             RuleFor(s => s.PaymentMethod)
                  .NotNull()
                  .NotEmpty();
@@ -51,8 +52,12 @@ namespace Application.PaymentModule.Commands.CreatePayment
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
-        private bool OfType(string Type) {
-            return ShippingAgentPaymentType.Types.Contains(Type) || TerminalPortPaymentType.Types.Contains(Type);
+        private bool OfType(string Name) {
+            return ShippingAgentPaymentType.Types.Contains(Name) || TerminalPortPaymentType.Types.Contains(Name);
+        }
+
+        private bool BeOfType(string Type) {
+            return Type == ShippingAgentPaymentType.Name || Type == TerminalPortPaymentType.Name;
         }
 
     }

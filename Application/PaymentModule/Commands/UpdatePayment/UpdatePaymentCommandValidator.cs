@@ -16,10 +16,11 @@ namespace Application.PaymentModule.Commands.UpdatePayment {
             RuleFor(s => s.Type)
                  .NotNull()
                  .NotEmpty()
-                 .Must(OfType);
+                 .Must(BeOfType);
             RuleFor(s => s.Name)
                  .NotNull()
-                 .NotEmpty();
+                 .NotEmpty()
+                 .Must(OfType);
             RuleFor(s => s.PaymentMethod)
                  .NotNull()
                  .NotEmpty();
@@ -40,20 +41,22 @@ namespace Application.PaymentModule.Commands.UpdatePayment {
                  .NotNull()
                  .NotEmpty()
                  .Must(BeRegisteredShippingAgentId).WithMessage("shipping agent with the provided id is not found");
-
         }
-        private bool BeRegisteredOperationId(int operationId)
-        {
+        
+        private bool BeRegisteredOperationId(int operationId) {
             return _context.Operations.Find(operationId) != null;
         }
         
-        private bool BeRegisteredShippingAgentId(int shippingAgentId)
-        {
+        private bool BeRegisteredShippingAgentId(int shippingAgentId) {
             return _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
         private bool OfType(string Type) {
             return ShippingAgentPaymentType.Types.Contains(Type) || TerminalPortPaymentType.Types.Contains(Type);
+        }
+
+        private bool BeOfType(string Type) {
+            return Type == ShippingAgentPaymentType.Name || Type == TerminalPortPaymentType.Name;
         }
 
     }

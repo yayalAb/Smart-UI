@@ -9,6 +9,8 @@ public class ShippingAgentPaymentType {
         "Final Demurrage",
         "Amendment"
     };
+
+    public static string Name = "Shipping Agent";
     public static string DeliveryOrder = "Delivery Order";
     public static string AdvancedDemurrage = "Advanced Demurrage";
     public static string ContainerDeposit = "Container Deposit";
@@ -25,8 +27,10 @@ public class TerminalPortPaymentType {
         "Complimentary"
     };
 
+    public static string Name = "Terminal Port";
+
     public static string Facture = "Facture";
     public static string Storage = "Storage";
     public static string Complimentary = "Complimentary";
-    
+
 }
