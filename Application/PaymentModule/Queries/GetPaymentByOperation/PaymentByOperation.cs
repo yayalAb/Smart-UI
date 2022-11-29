@@ -36,5 +36,6 @@ public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, ICo
         });
 
         return reports;
+        
     }
 }
