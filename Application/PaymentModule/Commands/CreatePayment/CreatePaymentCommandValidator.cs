@@ -13,10 +13,11 @@ namespace Application.PaymentModule.Commands.CreatePayment
         public CreatePaymentCommandValidator(IAppDbContext context) {
 
             _context = context;
-            
+
             RuleFor(s => s.Type)
                  .NotNull()
-                 .NotEmpty();
+                 .NotEmpty()
+                 .Must(OfType);
             RuleFor(s => s.Name)
                  .NotNull()
                  .NotEmpty();
@@ -44,6 +45,7 @@ namespace Application.PaymentModule.Commands.CreatePayment
         {
             return _context.Operations.Find(operationId) != null;
         }
+        
         private bool BeRegisteredShippingAgentId(int? shippingAgentId)
         {
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;

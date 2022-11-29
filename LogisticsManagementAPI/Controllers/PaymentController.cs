@@ -5,6 +5,7 @@ using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.DeletePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.PaymentModule.Queries.GetPaymentById;
+using Application.PaymentModule.Queries.GetPaymentByOperation;
 using Application.PaymentModule.Queries.GetPaymentList;
 using Application.PaymentModule.Queries.TotalPayments;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,17 @@ namespace WebApi.Controllers
                 return Ok(await Mediator.Send(new TotalPayments()));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("ByOperation/{operationId}")]
+        public async Task<IActionResult> paymentByOperation(int operationId) {
+            try{
+                return Ok(await Mediator.Send(new PaymentByOperation { OperationId = operationId }));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 

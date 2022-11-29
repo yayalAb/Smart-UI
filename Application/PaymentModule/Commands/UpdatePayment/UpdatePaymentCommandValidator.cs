@@ -1,21 +1,22 @@
 ﻿
 using Application.Common.Interfaces;
+using Domain.Common.PaymentTypes;
 using FluentValidation;
 
-namespace Application.PaymentModule.Commands.UpdatePayment
-{
-    public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePymentCommand>
-    {
+namespace Application.PaymentModule.Commands.UpdatePayment {
+    public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePymentCommand> {
         private readonly IAppDbContext _context;
 
-        public UpdatePaymentCommandValidator(IAppDbContext context)
-        {
+        public UpdatePaymentCommandValidator(IAppDbContext context) {
+
             _context = context;
+            
             RuleFor(s => s.Id)
                 .NotNull();
             RuleFor(s => s.Type)
                  .NotNull()
-                 .NotEmpty();
+                 .NotEmpty()
+                 .Must(OfType);
             RuleFor(s => s.Name)
                  .NotNull()
                  .NotEmpty();
@@ -32,9 +33,9 @@ namespace Application.PaymentModule.Commands.UpdatePayment
                  .NotNull()
                  .NotEmpty();
             RuleFor(s => s.OperationId)
-                    .NotNull()
-                    .NotEmpty()
-                    .Must(BeRegisteredOperationId).WithMessage("Operation with the provided id is not found");
+                 .NotNull()
+                 .NotEmpty()
+                 .Must(BeRegisteredOperationId).WithMessage("Operation with the provided id is not found");
             RuleFor(s => s.ShippingAgentId)
                  .NotNull()
                  .NotEmpty()
@@ -45,11 +46,15 @@ namespace Application.PaymentModule.Commands.UpdatePayment
         {
             return _context.Operations.Find(operationId) != null;
         }
+        
         private bool BeRegisteredShippingAgentId(int shippingAgentId)
         {
             return _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
+        private bool OfType(string Type) {
+            return ShippingAgentPaymentType.Types.Contains(Type) || TerminalPortPaymentType.Types.Contains(Type);
+        }
 
     }
 }
