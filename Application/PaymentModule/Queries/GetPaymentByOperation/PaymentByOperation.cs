@@ -22,7 +22,7 @@ public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, Ope
 
     public async Task<OperationPaymentDto> Handle(PaymentByOperation request, CancellationToken cancellationToken)
     {
-        List<Payment> payments = await _context.Payments.Where(p => p.OperationId == request.OperationId).ToListAsync();
+        List<Payment> payments = await _context.Payments.Where(p => p.OperationId == request.OperationId).Include(o => o.ShippingAgent).ToListAsync();
 
         return new OperationPaymentDto {
             ShippingAgnetFee = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Name) select payment,
