@@ -6,6 +6,7 @@ public class Truck : BaseAuditableEntity {
 
     public string TruckNumber { get; set; } = null!;
     public string Type { get; set; } = null!;
+    public string PlateNumber  { get; set; } = null!;
     public float? Capacity { get; set; }
     public byte[]? Image { get; set; }
     public bool IsAssigned { get; set; } = false;

@@ -17,6 +17,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
+        public string PlateNumber  { get; set; } 
         public byte[]? Image { get; set; }
     }
 

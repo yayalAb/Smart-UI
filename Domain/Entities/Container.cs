@@ -12,6 +12,7 @@ public class Container : BaseAuditableEntity
     public string ContianerNumber { get; set; } = null!;
     public string SealNumber {get; set;} =null!;
     public string Location {get; set;} =null!;
+    public float Size { get; set; } 
     public int?  LocationPortId { get; set; }
     public bool IsAssigned { get; set; } = false;
     public int OperationId { get; set; }    

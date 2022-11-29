@@ -23,7 +23,7 @@ public class GetTruckAssignmentsByOperationIdQueryHandler : IRequestHandler<GetT
     {
        return await _context.TruckAssignments
         .Include(ta => ta.Goods)
-        .Include(ta => ta.Containers)!
+        .Include(ta => ta.Containers)
         .ThenInclude(c =>c.Goods)
         .Where(ta => ta.OperationId == request.OperationId)
         .ProjectTo<TruckAssignmentDto>(_mapper.ConfigurationProvider)

@@ -35,6 +35,9 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Containers!.Select(c => c.SealNumber))
                 .NotNull()
                 .NotEmpty();
+            RuleFor(ag => ag.Containers!.Select(c => c.Size))
+                .NotNull()
+                .NotEmpty();
             RuleFor(ag => ag.Containers!.Select(c => c.ContianerNumber))
                 .NotNull()
                 .NotEmpty();
