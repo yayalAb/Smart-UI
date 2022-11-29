@@ -6,6 +6,8 @@ using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
+using Application.OperationDocuments.Queries.Number4;
+using Application.OperationDocuments.Queries.Number9;
 using Application.OperationDocuments.Queries.PackageList;
 using Application.OperationDocuments.Queries.T1Document;
 using Application.OperationDocuments.Queries.TruckWayBill;
@@ -162,6 +164,32 @@ namespace WebApi.Controllers
             catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("Number9")]
+        public async Task<IActionResult> GenerateNumber9([FromQuery] Number9 command) {
+
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("Number4/{operationId}")]
+        public async Task<IActionResult> GenerateNumber4(int operationId) {
+
+            try {
+                return Ok(await Mediator.Send(new Number4 { OperationId = operationId}));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch(Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
