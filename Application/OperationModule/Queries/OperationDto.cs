@@ -2,9 +2,10 @@ using Application.Common.Mappings;
 using Domain.Entities;
 
 namespace Application.OperationModule.Queries;
-public class OperationDto : IMapFrom<Operation>{
-    public int Id {get; set;}
-     public string? NameOnPermit { get; set; }
+public class OperationDto : IMapFrom<Operation>
+{
+    public int Id { get; set; }
+    public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }
     public string? NotifyParty { get; set; }
     public string? BillNumber { get; set; }
@@ -28,5 +29,15 @@ public class OperationDto : IMapFrom<Operation>{
     public int? ShippingAgentId { get; set; }
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }
-    public virtual ICollection<FetchGoodDto> Goods {get; set;}
+    /////------------Additionals------
+    public string? SNumber { get; set; } // operation
+    public DateTime? SDate { get; set; } //operation
+    public string? RecepientName { get; set; }
+    public string? VesselName { get; set; } // operation
+    public DateTime? ArrivalDate { get; set; } // operation
+    public string? ConnaissementNumber { get; set; } // operation
+    public string? CountryOfOrigin { get; set; } // operation
+    public float? REGTax { get; set; }//
+    //--------------------------------------//
+    public virtual ICollection<FetchGoodDto> Goods { get; set; }
 }

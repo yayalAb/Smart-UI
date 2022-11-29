@@ -14,6 +14,7 @@ namespace Domain.Entities
         public string? Description { get; set; }
         public int OperationId { get; set; }
         public int? ShippingAgentId { get; set; }
+        public string? DONumber { get; set; }
     
         public Operation Operation { get; set; }
         public ShippingAgent ShippingAgent { get; set; }

@@ -2,6 +2,8 @@
 using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
+using Application.GoodModule.Queries;
+using Application.OperationDocuments.Queries;
 using Application.OperationModule.Commands.CreateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
@@ -39,6 +41,7 @@ namespace Application.Common.Mappings
             CreateMap<CreateContainerCommand, Container>();
             CreateMap<GoodDto , Good>();
             CreateMap<ContainerDto , Container>();
+            CreateMap<Good, DocGoodDto>().ReverseMap();
 
             
 

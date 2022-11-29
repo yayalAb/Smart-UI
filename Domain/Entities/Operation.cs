@@ -1,7 +1,8 @@
 using Domain.Common;
 namespace Domain.Entities;
 
-public class Operation : BaseAuditableEntity {
+public class Operation : BaseAuditableEntity
+{
 
     public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }
@@ -27,8 +28,18 @@ public class Operation : BaseAuditableEntity {
     public int? ShippingAgentId { get; set; }
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }
+    /////------------Additionals------
+    public string? SNumber { get; set; } // operation
+    public DateTime? SDate { get; set; } //operation
+    public string? RecepientName { get; set; }
+    public string? VesselName { get; set; } // operation
+    public DateTime? ArrivalDate { get; set; } // operation
+    public string? ConnaissementNumber { get; set; } // operation
+    public string? CountryOfOrigin { get; set; } // operation
+    public float? REGTax { get; set; }//
+    //--------------------------------------//
     // has one
-    public virtual Port PortOfLoading { get; set; } = null!;    
+    public virtual Port PortOfLoading { get; set; } = null!;
     public virtual ShippingAgent? ShippingAgent { get; set; } = null!;
     public virtual Company Company { get; set; } = null!;
     //has many

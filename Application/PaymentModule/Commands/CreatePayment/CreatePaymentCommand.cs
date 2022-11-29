@@ -20,6 +20,7 @@ namespace Application.PaymentModule.Commands.CreatePayment
         public string? Description { get; init; }
         public int OperationId { get; init; }
         public int? ShippingAgentId { get; init; }
+        public string? DONumber { get; set; }
     }
     public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, CustomResponse>
     {

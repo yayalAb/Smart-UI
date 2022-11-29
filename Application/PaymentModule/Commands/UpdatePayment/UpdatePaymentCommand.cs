@@ -23,6 +23,7 @@ namespace Application.PaymentModule.Commands.UpdatePayment
         public string? Description { get; init; }
         public int OperationId { get; init; }
         public int ShippingAgentId { get; init; }
+        public string? DONumber { get; set; }
     }
     public class UpdatePymentCommandHandler : IRequestHandler<UpdatePymentCommand, CustomResponse>
     {
