@@ -17,12 +17,12 @@ namespace Application.PaymentModule.Commands.CreatePayment
             RuleFor(s => s.Type)
                  .NotNull()
                  .NotEmpty()
-                 .Must(OfType)
+                 .Must(BeOfType)
                  .WithMessage("invalid payment type!");
             RuleFor(s => s.Name)
                  .NotNull()
                  .NotEmpty()
-                 .Must(BeOfType)
+                 .Must(OfType)
                  .WithMessage("invalid payment name!");
             RuleFor(s => s.PaymentMethod)
                  .NotNull()

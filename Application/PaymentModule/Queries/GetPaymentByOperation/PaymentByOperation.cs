@@ -25,8 +25,8 @@ public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, Ope
         List<Payment> payments = await _context.Payments.Where(p => p.OperationId == request.OperationId).ToListAsync();
 
         return new OperationPaymentDto {
-            ShippingAgnetFee = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Type) select payment,
-            TerminalPortFee = from payment in payments where TerminalPortPaymentType.Types.Contains(payment.Type) select payment
+            ShippingAgnetFee = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Name) select payment,
+            TerminalPortFee = from payment in payments where TerminalPortPaymentType.Types.Contains(payment.Name) select payment
         };
     }
 }
