@@ -7,6 +7,7 @@ using Application.TruckAssignmentModule.Commands.CreateTruckAssignment;
 using Application.TruckAssignmentModule.Commands.UpdateTruckAssignment;
 using Application.TruckAssignmentModule.Queries;
 using Application.OperationDocuments.Queries.GenerateGatepass;
+using Application.TruckAssignmentModule.Queries.GetTruckAssignmentPaginatedList;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +23,8 @@ namespace WebApi.Controllers
             try
             {
                 var createResponse = await Mediator.Send(command);
-                var command2  = new GenerateGatepassCommand{
+                var command2 = new GenerateGatepassCommand
+                {
                     OperationId = createResponse.operationId,
                     TruckAssignmentId = createResponse.truckAssignmentId
                 };
@@ -50,7 +52,22 @@ namespace WebApi.Controllers
 
         }
         [HttpGet]
+        [Route("byOperation")]
         public async Task<ActionResult> GetTruckAssignmentByOperationId([FromQuery] GetTruckAssignmentsByOperationIdQuery query)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(query));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetTruckAssignmentList([FromQuery] GetTruckAssignmentPaginatedListQuery query)
         {
 
             try
