@@ -7,6 +7,7 @@ using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
 using WebApi.Models;
+using Application.DriverModule.Queries.GetCompanyLookup;
 
 namespace WebApi.Controllers
 {
@@ -51,7 +52,17 @@ namespace WebApi.Controllers
             }
 
         }
-
+        [HttpGet]
+        [Route("lookup")]
+        public async Task<ActionResult> lookup( )
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetCompanyLookupQuery ()));
+            }catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
         [HttpGet]
         public async Task<ActionResult> list([FromQuery] GetAllCompanies command)
         {
