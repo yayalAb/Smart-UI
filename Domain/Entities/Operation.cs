@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Domain.Common;
 namespace Domain.Entities;
 
@@ -16,7 +17,7 @@ public class Operation : BaseAuditableEntity
     public string? FZIN { get; set; }
     public string? FZOUT { get; set; }
     public string DestinationType { get; set; }
-    public byte[]? SourceDocument { get; set; }
+    public string? SourceDocument { get; set; }
     public DateTime? ActualDateOfDeparture { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }
@@ -24,7 +25,7 @@ public class Operation : BaseAuditableEntity
     public string OperationNumber { get; set; } = null!;
     public DateTime OpenedDate { get; set; }
     public string Status { get; set; } = null!;
-    public byte[]? ECDDocument { get; set; }
+    public string? ECDDocument { get; set; }
     public int? ShippingAgentId { get; set; }
     public int? PortOfLoadingId { get; set; }
     public int CompanyId { get; set; }

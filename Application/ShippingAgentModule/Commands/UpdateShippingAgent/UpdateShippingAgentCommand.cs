@@ -1,4 +1,5 @@
 ﻿
+using System.Reflection.Metadata;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -17,7 +18,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
         public int AddressId { get; set; }
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
         public AddressDto Address { get; set; }
 
     }

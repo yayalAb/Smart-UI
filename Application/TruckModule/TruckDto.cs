@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Application.Common.Mappings;
 using Domain.Entities;
 
@@ -8,7 +9,7 @@ public class TruckDto : IMapFrom<Truck> {
     public string TruckNumber { get; set; } = null!;
     public string Type { get; set; } = null!;
     public float? Capacity { get; set; }
-    public byte[]? Image { get; set; }
+    public string? Image { get; set; }
     public bool IsAssigned { get; set; }
     public string PlateNumber  { get; set; } 
 }

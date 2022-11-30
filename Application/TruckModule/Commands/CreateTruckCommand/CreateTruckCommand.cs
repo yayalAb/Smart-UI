@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Application.Common.Exceptions;
 using Application.Common.Models;
+using System.Reflection.Metadata;
 
 namespace Application.TruckModule.Commands.CreateTruckCommand
 {
@@ -18,7 +19,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
         public string Type { get; init; }
         public float Capacity { get; init; }
         public string PlateNumber  { get; set; } 
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
     }
 
     public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, CustomResponse> {

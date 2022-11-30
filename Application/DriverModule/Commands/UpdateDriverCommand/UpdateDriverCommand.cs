@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
+using System.Reflection.Metadata;
 
 namespace Application.DriverModule.Commands.UpdateDriverCommand
 {
@@ -18,7 +19,7 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
         public AddressCreateCommand address { get; init; }
-        public byte[]? Image {get; init; }
+        public string? Image {get; init; }
     }
 
     public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, CustomResponse> {

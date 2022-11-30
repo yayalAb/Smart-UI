@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
 using Application.Common.Exceptions;
+using System.Reflection.Metadata;
 
 namespace Application.DriverModule.Commands.CreateDriverCommand
 {
@@ -15,7 +16,7 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
     {
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
         public AddressCreateCommand address { get; init; }
     }
 
@@ -45,22 +46,9 @@ namespace Application.DriverModule.Commands.CreateDriverCommand
                 using (var transaction = _context.database.BeginTransaction())
                 {
 
-                    // byte[]? image;
-
                     try
 
                     {
-
-                        // //image uploading
-                        // var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                        // if (!response.result.Succeeded)
-                        // {
-                        //     throw new Exception(String.Join(" , ", response.result.Errors));
-                        // }
-
-                        // image = response.byteData;
-
-
                         //address insertion
                         Address new_address = new Address();
                         new_address.Email = request.address.Email;

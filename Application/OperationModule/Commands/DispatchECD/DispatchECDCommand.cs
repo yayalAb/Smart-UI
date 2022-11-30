@@ -1,4 +1,5 @@
 
+using System.Reflection.Metadata;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -10,7 +11,7 @@ namespace Application.OperationModule.Commands.DispatchECD
     public record DsipatchECDCommand : IRequest<CustomResponse>
     {
         public int OperationId { get; set; }
-        public byte[]? ECDDocument { get; set; }
+        public string? ECDDocument { get; set; }
 
     }
     public class DsipatchECDCommandHandler : IRequestHandler<DsipatchECDCommand, CustomResponse>

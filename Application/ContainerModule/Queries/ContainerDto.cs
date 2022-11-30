@@ -14,7 +14,6 @@ public class ContainerDto : IMapFrom<Container> {
     public DateTime? ManufacturedDate { get; set; }
     public int OperationId { get; set; }
     public int? TruckAssignmentId { get; set; }
-    public byte[]? Image { get; set; }
 
     public List<FetchGoodDto> Goods {get; set;}
 }
