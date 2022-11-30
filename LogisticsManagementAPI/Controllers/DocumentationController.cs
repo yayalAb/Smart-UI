@@ -95,12 +95,9 @@ namespace WebApi.Controllers
         public async Task<IActionResult> DeleteDocumentation(int id)
         {
 
-            try
-            {
+            try {
                 return Ok(await Mediator.Send(new DeleteDocumentationCommand { Id = id }));
-            }
-            catch (GhionException ex)
-            {
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
