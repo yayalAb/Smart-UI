@@ -22,14 +22,7 @@ namespace WebApi.Controllers
 
             try
             {
-                var createResponse = await Mediator.Send(command);
-                var command2 = new GenerateGatepassCommand
-                {
-                    OperationId = createResponse.operationId,
-                    TruckAssignmentId = createResponse.truckAssignmentId
-                };
-
-                return Ok(await Mediator.Send(command2));
+                return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {

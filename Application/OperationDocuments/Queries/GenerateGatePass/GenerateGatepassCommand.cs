@@ -8,45 +8,58 @@ using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Application.OperationFollowupModule;
+using Application.Common.Exceptions;
 
 namespace Application.OperationDocuments.Queries.GenerateGatepass;
 
-public record GenerateGatepassCommand : IRequest<GatepassDto>
+public record GatepassService
 {
-    public int OperationId { get; set; }
-    public int TruckAssignmentId { get; set; }
-}
 
-public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCommand, GatepassDto>
-{
 
     private readonly IAppDbContext _context;
     private readonly ILogger logger;
     private readonly OperationEventHandler _operationEventHandler;
 
-    public GenerateGatepassCommandHandler(IAppDbContext context, ILogger<GenerateGatepassCommandHandler> logger , OperationEventHandler operationEventHandler) 
+    public GatepassService(IAppDbContext context, ILogger<GatepassService> logger, OperationEventHandler operationEventHandler)
     {
         _context = context;
         this.logger = logger;
         _operationEventHandler = operationEventHandler;
     }
 
-    public async Task<GatepassDto> Handle(GenerateGatepassCommand request, CancellationToken cancellationToken)
+    public async Task<GatepassDto> GenerateGatePass(int OperationId, int TruckAssignmentId , CancellationToken cancellationToken)
     {
+        if (!await _context.Operations.AnyAsync(o => o.Id == OperationId))
+        {
+            throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
+        }
+        if (!await _context.TruckAssignments.AnyAsync(o => o.Id == TruckAssignmentId))
+        {
+            throw new GhionException(CustomResponse.NotFound("There is no TruckAssignment with the given Id!"));
+        }
+
+        //checking preconditions before generating gatepass
+        if (!await _operationEventHandler.IsDocumentApproved(OperationId, Enum.GetName(typeof(Documents), Documents.ImportNumber9)!))
+        {
+            throw new GhionException(CustomResponse.BadRequest($"Import number9 must be approved before generating gatepass document"));
+        }
+
+
         //generate gatepass operation status 
         var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
-        var statusName = Enum.GetName(typeof(Status) , Status.GatePassGenerated);
-        var newOperationStatus = new OperationStatus{
+        var statusName = Enum.GetName(typeof(Status), Status.GatePassGenerated);
+        var newOperationStatus = new OperationStatus
+        {
             GeneratedDocumentName = DocumentName!,
             GeneratedDate = DateTime.Now,
-            OperationId = request.OperationId
+            OperationId = OperationId
         };
-      await  _operationEventHandler.DocumentGenerationEventAsync(cancellationToken , newOperationStatus , statusName!);
+        await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, newOperationStatus, statusName!);
 
-      //fetch gatepass form data 
+        //fetch gatepass form data 
         var data = _context.TruckAssignments
-           .Where(ta => ta.Id == request.TruckAssignmentId)
-           .Include(ta => ta.Containers)
+           .Where(ta => ta.Id == TruckAssignmentId)
+           .Include(ta => ta.Containers)!
                .ThenInclude(c => c.Goods)
            .Include(ta => ta.Truck)
            .Include(ta => ta.Goods)
@@ -73,7 +86,7 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
             descriptions
                 .AddRange(data.Containers
                     .SelectMany(c => c.Goods.Select(g => g.Description)));
-                    
+
 
             containerNumbers.AddRange(data.Containers.Select(c => c.ContianerNumber));
         }
@@ -86,7 +99,8 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
                 .AddRange(data.Goods
                    .Select(g => g.Description));
         }
-        return new GatepassDto{
+        return new GatepassDto
+        {
             Date = data.Date,
             OperationNumber = data.OperationNumber,
             TruckNumber = data.TruckNumber,
@@ -96,7 +110,7 @@ public class GenerateGatepassCommandHandler : IRequestHandler<GenerateGatepassCo
             ContainerNumbers = containerNumbers,
             Localization = ""
         };
-        
+
     }
 
 }

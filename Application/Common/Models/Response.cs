@@ -55,7 +55,7 @@ public class CustomResponse
         {
             Status = false,
             Message = message,
-            StatusCode = 400
+            StatusCode = 404
         };
     }
     public static CustomResponse BadRequest(string message)
@@ -64,7 +64,7 @@ public class CustomResponse
         {
             Status = false,
             Message = message,
-            StatusCode = 404
+            StatusCode = 400
         };
     }
 
