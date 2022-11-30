@@ -4,6 +4,8 @@ using WebApi.Models;
 using Application.GoodModule.Commands.AssignGoodsCommand;
 using Application.GoodModule.Queries.GetGoodsByLocation;
 using Application.GoodModule.Queries.GetAllGoodQuery;
+using Application.GoodModule.Queries.GetGoodQuery;
+using Application.GoodModule.Commands.UpdateGoodCommand;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,13 +17,17 @@ namespace WebApi.Controllers
         // POST api/<GoodsController>
         [HttpPost]
         [Route("assign")]
-        public async Task<IActionResult> AssignGoods([FromBody] AssignGoodsCommand command) {
+        public async Task<IActionResult> AssignGoods([FromBody] AssignGoodsCommand command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } 
+            }
 
         }
 
@@ -32,22 +38,50 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(query));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } 
+            }
         }
 
-    
         [HttpGet]
         public async Task<ActionResult> GoodList([FromQuery] GetAllGoodQuery query)
         {
             try
             {
                 return Ok(await Mediator.Send(query));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } 
+            }
         }
 
+        [HttpGet("{operationId}")]
+        public async Task<ActionResult> SingleGood(int operationId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetAssignedGoodQuery{OperationId = operationId}));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> update([FromBody] UpdateGoodCommand command)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
     }
 }

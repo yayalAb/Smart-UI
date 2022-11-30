@@ -31,13 +31,13 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
             .WithMany(p => p.Goods)
             .HasForeignKey(d => d.ContainerId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.Goods)
             .HasForeignKey(d => d.OperationId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         entity.HasOne(d => d.LocationPort)
             .WithMany(p => p.Goods)

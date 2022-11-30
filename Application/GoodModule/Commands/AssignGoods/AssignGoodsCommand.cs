@@ -15,7 +15,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
     public record AssignGoodsCommand : IRequest<CustomResponse>
     {
         public int OperationId { get; set; }
-        public List<ContainerDto>? Containers { get; set; }
+        public List<ASgContainerDto>? Containers { get; set; }
         public List<GoodDto>? Goods { get; set; }
 
 
