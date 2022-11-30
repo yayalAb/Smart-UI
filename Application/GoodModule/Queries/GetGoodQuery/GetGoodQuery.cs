@@ -3,45 +3,50 @@ using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Exceptions;
+using Application.Common.Models;
+using Application.GoodModule.Queries.GetAllGoodQuery;
+using AutoMapper;
+using Application.ContainerModule;
 
 namespace Application.GoodModule.Queries.GetGoodQuery
 {
 
-    public class GetGoodQuery : IRequest<Good> {
-        
-        public int Id {get; init;}
-
-        public GetGoodQuery(int id){
-            this.Id = id;
-        }
-
+    public class GetAssignedGoodQuery : IRequest<AssignedGoodDto> {
+        public int OperationId {get; init;}
     }
 
-    public class GetGoodQueryHandler: IRequestHandler<GetGoodQuery, Good> {
+    public class GetAssignedGoodQueryHandler: IRequestHandler<GetAssignedGoodQuery, AssignedGoodDto> {
 
-        private readonly IIdentityService _identityService;
+        private readonly IMapper _mapper;
         private readonly IAppDbContext _context;
-        private readonly ILogger<GetGoodQueryHandler> _logger;
+        private readonly ILogger<GetAssignedGoodQueryHandler> _logger;
 
-        public GetGoodQueryHandler(
-            IIdentityService identityService, 
+        public GetAssignedGoodQueryHandler(
+            IMapper mapper, 
             IAppDbContext context, 
-            ILogger<GetGoodQueryHandler> logger
+            ILogger<GetAssignedGoodQueryHandler> logger
         ){
-            _identityService = identityService;
+            _mapper = mapper;
             _context = context;
             _logger = logger;
         }
 
-        public async Task<Good> Handle(GetGoodQuery request, CancellationToken cancellationToken) {
-            
-            var good = await _context.Goods.Include(c => c.Container).Where(c => c.Id == request.Id ).FirstOrDefaultAsync();
-            if(good == null){
-                throw new Exception("good not found!");
+        public async Task<AssignedGoodDto> Handle(GetAssignedGoodQuery request, CancellationToken cancellationToken) {
+            var operation = await _context.Operations
+                .Include(o => o.Containers)
+                    .ThenInclude(c => c.Goods)
+                .Include(o => o.Goods)
+                .Where(o => o.Id == request.OperationId)
+                 .Select(o => new AssignedGoodDto{
+                    OperationId = o.Id,
+                    Containers = _mapper.Map<ICollection<ContainerDto>>(o.Containers),
+                    Goods = _mapper.Map<ICollection<FetchGoodDto>>(o.Goods.Where(g =>g.ContainerId == null))
+                }).FirstOrDefaultAsync();
+            if(operation == null){
+                throw new GhionException(CustomResponse.NotFound($"operation with id = {request.OperationId} is not found"));
             }
-
-            return good;
-
+            return operation;
         }
 
     }

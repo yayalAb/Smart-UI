@@ -1,32 +1,28 @@
-using System.Reflection.Metadata;
+
 using MediatR;
-using Domain.Entities;
-using Domain.Enums;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Application.Common.Models;
+using Microsoft.EntityFrameworkCore;
+using Application.Common.Exceptions;
+using Domain.Entities;
+using Application.GoodModule.Commands.AssignGoodsCommand;
 
 namespace Application.GoodModule.Commands.UpdateGoodCommand
 {
 
-    public record UpdateGoodCommand : IRequest<Good>
+    public record UpdateGoodCommand : IRequest<CustomResponse>
     {
-        public int Id { get; set; }
-        public string? Description { get; set; }
-        public string? HSCode { get; set; }
-        public string? Manufacturer { get; set; }
-        public float Weight { get; set; }
-        public float? Quantity { get; set; }
-        public int NumberOfPackages { get; set; }
-        public string Type { get; set; }
-        public string ChasisNumber { get; set; }
-        public string EngineNumber { get; set; }
-        public string ModelCode { get; set; }
-        public int? ContainerId { get; set; }
+        public int OperationId { get; set; }
+        public List<ASgContainerDto>? Containers { get; set; }
+        public List<GoodDto>? Goods { get; set; }
+
     }
 
 
-    public class UpdateGoodCommandHandler : IRequestHandler<UpdateGoodCommand, Good>
+
+    public class UpdateGoodCommandHandler : IRequestHandler<UpdateGoodCommand, CustomResponse>
     {
 
         private readonly IIdentityService _identityService;
@@ -47,52 +43,39 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
             _mapper = mapper;
         }
 
-        public async Task<Good> Handle(UpdateGoodCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdateGoodCommand request, CancellationToken cancellationToken)
         {
 
-            Good found_good = await _context.Goods.FindAsync(request.Id);
+            var operation = await _context.Operations
+                  .Include(o => o.Containers)
+                      .ThenInclude(c => c.Goods)
+                  .Include(o => o.Goods)
+                  .Where(o => o.Id == request.OperationId).FirstOrDefaultAsync();
 
-            if (found_good == null)
+            if (operation == null)
             {
-                throw new Exception("Good not found");
+                throw new GhionException(CustomResponse.NotFound($"operation with id = {request.OperationId} is not found"));
             }
-
-            //check if the container is Changed
-            if (found_good.ContainerId != request.ContainerId)
+            if (request.Containers != null)
             {
-
-                Container found_container = await _context.Containers.FindAsync(request.ContainerId);
-
-                if (found_container == null)
-                {
-                    throw new Exception("Container not found");
-                }
-
-                found_good.ContainerId = request.ContainerId;
+                operation.Containers = _mapper.Map<ICollection<Container>>(request.Containers);
+                operation.Containers.ToList().ForEach(container =>{
+                    container.OperationId = request.OperationId;
+                     container.Goods.ToList().ForEach(good =>{
+                                    good.OperationId = request.OperationId;
+                                    good.Location = container.Location;
+                                    });
+            });
+            }
+            if (request.Goods != null)
+            {
+                operation.Goods = _mapper.Map<ICollection<Good>>(request.Goods);
+                operation.Goods.ToList().ForEach(g => g.OperationId = request.OperationId);
 
             }
-            found_good.Description = request.Description;
-            found_good.HSCode = request.HSCode;
-            found_good.Manufacturer = request.Manufacturer;
-            found_good.Weight = request.Weight;
-            found_good.Quantity = request.Quantity;
-            found_good.NumberOfPackages = request.NumberOfPackages;
-            found_good.Type = request.Type;
-            found_good.ChasisNumber = request.ChasisNumber;
-            found_good.EngineNumber = request.EngineNumber;
-            found_good.ModelCode = request.ModelCode;
-
-
-
-
-
-
-            Good new_good = _mapper.Map<Good>(request);
-            _context.Goods.Add(new_good);
+            _context.Operations.Update(operation);
             await _context.SaveChangesAsync(cancellationToken);
-
-            return new_good;
-
+            return CustomResponse.Succeeded("assign goods updated successfully");
         }
 
     }

@@ -4,8 +4,9 @@ using Application.BillOfLoadingModule;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand;
 
-public class ContainerDto : IMapFrom<Container>
+public class ASgContainerDto : IMapFrom<Container>
 {
+    public int? Id { get; set; }
     public string ContianerNumber { get; set; } = null!;
     public string SealNumber { get; set; } = null!;
     public float Size { get; set; }
