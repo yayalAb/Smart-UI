@@ -9,7 +9,7 @@ namespace Domain.Enums
         Number4,
         T1,
         GatePass,
-        TransitApplication,
+        GoodsRemoval,
         Waybill,
     }
 }

@@ -15,7 +15,7 @@ namespace Domain.Enums
         Number4Generated,
         Number4Approved,
         T1Generated,
-        TransitApplicationGenerated,
+        GoodsRemovalGenerated,
         ECDDispatched,
         WaybillIssued,
         Closed

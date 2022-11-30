@@ -14,6 +14,7 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand
         public string TruckNumber { get; init; }
         public string Type { get; init; }
         public float Capacity { get; init; }
+        public string PlateNumber  { get; set; } 
         public byte[]? Image { get; set; }
         
     }

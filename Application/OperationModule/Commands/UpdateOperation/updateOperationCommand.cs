@@ -48,6 +48,8 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? ConnaissementNumber { get; set; }
         public string? CountryOfOrigin { get; set; }
         public float? REGTax { get; set; }
+        public string? BillOfLoadingNumber { get; set; }
+
         //--------------------------------------//
     }
     public class UpdateOperationCommandHandler : IRequestHandler<UpdateOperationCommand, CustomResponse>

@@ -10,22 +10,24 @@ using Application.Common.Models;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
-    public record  CreateContainerCommand : IRequest<CustomResponse>
+    public record CreateContainerCommand : IRequest<CustomResponse>
     {
         public string ContainerNumber { get; set; }
-        public string SealNumber {get; set;}
-        public string Location {get; set;}
+        public string SealNumber { get; set; }
+        public string Location { get; set; }
+        public float Size { get; set; }
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
-        public ICollection<CreateGoodCommand> Goods {get; set;}
+        public ICollection<CreateGoodCommand> Goods { get; set; }
     }
 
-    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, CustomResponse> {
+    public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, CustomResponse>
+    {
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
         private readonly IMapper _mapper;
 
-        public CreateContainerCommandHandler(IAppDbContext context , IFileUploadService fileUploadService, IMapper mapper)
+        public CreateContainerCommandHandler(IAppDbContext context, IFileUploadService fileUploadService, IMapper mapper)
         {
             _context = context;
             _fileUploadService = fileUploadService;
@@ -44,7 +46,8 @@ namespace Application.ContainerModule.Commands.CreateContainer
 
                 //inserting goods
 
-                foreach(var good in request.Goods){
+                foreach (var good in request.Goods)
+                {
                     good.ContainerId = newContainer.Id;
                     _context.Goods.Add(_mapper.Map<Good>(good));
                 }
@@ -54,12 +57,14 @@ namespace Application.ContainerModule.Commands.CreateContainer
                 await transaction.CommitAsync();
                 return CustomResponse.Succeeded("Container Created");
 
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 transaction.Rollback();
                 throw;
             }
 
-            
+
         }
     }
 }

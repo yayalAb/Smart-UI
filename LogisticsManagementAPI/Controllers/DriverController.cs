@@ -10,6 +10,7 @@ using WebApi.Models;
 using Application.Common.Exceptions;
 using Application.DriverModule.Queries.GetUnassignedDrivers;
 using Application.DriverModule.Queries.DriverLookUpQuery;
+using Application.DriverModule.Commands.ReleaseDriver;
 
 namespace WebApi.Controllers
 {
@@ -40,6 +41,21 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
+        [HttpPut]
+        [Route("release/{id}")]
+        public async Task<ActionResult> release(int id)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new ReleaseDriverCommand{Id = id}));
             }
             catch (GhionException ex)
             {
@@ -79,11 +95,16 @@ namespace WebApi.Controllers
         [HttpGet("lookup")]
         public async Task<ActionResult> driverLookup()
         {
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(new DriverLookUp()));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 

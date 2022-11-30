@@ -20,6 +20,9 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             RuleFor(c => c.SealNumber)
                 .NotNull()
                 .NotEmpty();
+            RuleFor(c => c.Size)
+                .NotNull()
+                .NotEmpty();
             RuleFor(c => c.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");

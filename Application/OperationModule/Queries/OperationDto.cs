@@ -38,6 +38,8 @@ public class OperationDto : IMapFrom<Operation>
     public string? ConnaissementNumber { get; set; } // operation
     public string? CountryOfOrigin { get; set; } // operation
     public float? REGTax { get; set; }//
+    public string? BillOfLoadingNumber { get; set; }
+
     //--------------------------------------//
     public virtual ICollection<FetchGoodDto> Goods { get; set; }
 }

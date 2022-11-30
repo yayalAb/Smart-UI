@@ -13,6 +13,7 @@ using Application.OperationFollowupModule.Queries.GetStatusByOperation;
 using Application.OperationFollowupModule.Commands.UpdateStatus;
 using Application.OperationFollowupModule.Queries.GetSingleStatus;
 using Application.OperationModule.Queries.OperationDashboard;
+using Application.OperationModule.Commands.DispatchECD;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -52,6 +53,23 @@ namespace WebApi.Controllers
         // POST api/<OperationController>
         [HttpPost]
         public async Task<IActionResult> CreateOperation([FromBody] CreateOperationCommand command)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            
+        }
+
+        // POST api/<OperationController>
+        [HttpPost]
+        [Route("dispatchECD")]
+        public async Task<IActionResult> DispatchECD([FromBody] DsipatchECDCommand command)
         {
 
             try

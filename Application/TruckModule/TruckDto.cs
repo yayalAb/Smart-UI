@@ -10,4 +10,5 @@ public class TruckDto : IMapFrom<Truck> {
     public float? Capacity { get; set; }
     public byte[]? Image { get; set; }
     public bool IsAssigned { get; set; }
+    public string PlateNumber  { get; set; } 
 }

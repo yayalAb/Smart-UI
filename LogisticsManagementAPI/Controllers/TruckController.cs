@@ -10,6 +10,7 @@ using WebApi.Models;
 using Application.Common.Models;
 using Application.UserGroupModule.Queries.GetTruckLookupQuery;
 using Application.TruckModule.Queries.GetUnassignedTrucks;
+using Application.TruckModule.Commands.ReleaseTruck;
 
 namespace WebApi.Controllers
 {
@@ -32,6 +33,20 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
+        }
+
+        [HttpPut]
+        [Route("release/{id}")]
+        public async Task<ActionResult> Release(int id)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new ReleaseTruckCommand{Id = id}));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
         }
 
         [HttpPut]

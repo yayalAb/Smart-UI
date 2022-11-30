@@ -17,6 +17,9 @@ namespace Application.TruckModule.Commands.CreateTruckCommand {
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("type is not in the correct format");
+            RuleFor(u => u.PlateNumber)
+                .NotNull()
+                .NotEmpty();
         }
     }
 
