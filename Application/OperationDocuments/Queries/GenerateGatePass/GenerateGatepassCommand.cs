@@ -14,8 +14,6 @@ namespace Application.OperationDocuments.Queries.GenerateGatepass;
 
 public record GatepassService
 {
-
-
     private readonly IAppDbContext _context;
     private readonly ILogger logger;
     private readonly OperationEventHandler _operationEventHandler;

@@ -15,8 +15,8 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
     public record UpdateGoodCommand : IRequest<CustomResponse>
     {
         public int OperationId { get; set; }
-        public List<ASgContainerDto>? Containers { get; set; }
-        public List<GoodDto>? Goods { get; set; }
+        public List<UpdateGoodContainerDto>? Containers { get; set; }
+        public List<UpdateGoodDto>? Goods { get; set; }
 
     }
 
