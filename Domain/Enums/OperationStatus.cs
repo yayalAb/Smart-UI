@@ -17,7 +17,8 @@ namespace Domain.Enums
         T1Generated,
         TransitApplicationGenerated,
         ECDDispatched,
-        WaybillIssued
+        WaybillIssued,
+        Closed
 
     }
 }

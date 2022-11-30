@@ -12,15 +12,9 @@ public class UpdateOperationCommandValidator : AbstractValidator<UpdateStatus>
     {
         _context = context;
 
-        RuleFor(o => o.GeneratedDocumentName)
+        RuleFor(o => o.Id)
             .NotNull()
-            .NotEmpty()
-            .MinimumLength(3)
-            .MaximumLength(100)
-            .WithMessage("Generated document name is requiered!");
-        RuleFor(o => o.IsApproved)
-            .NotNull()
-            .WithMessage("approval is requiered!");
+            .WithMessage("status id is requiered!");
 
     }
 }

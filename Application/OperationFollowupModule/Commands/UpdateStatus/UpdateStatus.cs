@@ -8,22 +8,17 @@ using MediatR;
 namespace Application.OperationFollowupModule.Commands.UpdateStatus;
 
 public record UpdateStatus : IRequest<CustomResponse> {
-    public string GeneratedDocumentName { get; init; }
-    public DateTime? GeneratedDate { get; init; }
-    public bool IsApproved { get; init; } = false;
-    public DateTime? ApprovedDate { get; init; } = null!;
     public int Id { get; init; }
 }
 
 public class UpdateStatusHandler : IRequestHandler<UpdateStatus, CustomResponse> {
 
     private readonly IAppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly OperationEventHandler _operationEvent;
 
-    public UpdateStatusHandler(IAppDbContext context , IMapper mapper)
-    {
+    public UpdateStatusHandler(IAppDbContext context , OperationEventHandler operationEvent) {
         _context = context;
-        _mapper = mapper;
+        _operationEvent = operationEvent;
     }
 
     public async Task<CustomResponse> Handle(UpdateStatus request, CancellationToken cancellationToken) {
@@ -34,13 +29,18 @@ public class UpdateStatusHandler : IRequestHandler<UpdateStatus, CustomResponse>
             throw new GhionException(CustomResponse.NotFound("Operation status not found"));
         }
 
-        status.GeneratedDocumentName = request.GeneratedDocumentName;
-        status.GeneratedDate = request.GeneratedDate ?? DateTime.Now;
-        status.IsApproved = request.IsApproved;
-        status.ApprovedDate = request.ApprovedDate;
+        if(status.IsApproved == true){
+            status.IsApproved = false;
+            status.ApprovedDate = null;
+            await _operationEvent.DisapproveDocumentEventAsync(status.GeneratedDocumentName, status.OperationId, cancellationToken);    
+            return CustomResponse.Succeeded("Document has already been approved!");
+        }
 
+        status.IsApproved = true;
+        status.ApprovedDate = DateTime.Now;
+        await _operationEvent.ApproveDocumentEventAsync(status.GeneratedDocumentName, status.OperationId, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        return CustomResponse.Succeeded("Operation status updated!");
+        return CustomResponse.Succeeded("Document approved!");
 
     }
 
