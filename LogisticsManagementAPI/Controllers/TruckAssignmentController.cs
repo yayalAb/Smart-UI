@@ -73,5 +73,19 @@ namespace WebApi.Controllers
             }
 
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetTruckAssignmentById(int id)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new GetTruckAssignmentByIdQuery{Id = id}));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
     }
 }
