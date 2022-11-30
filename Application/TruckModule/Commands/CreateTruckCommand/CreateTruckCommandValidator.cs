@@ -11,7 +11,6 @@ namespace Application.TruckModule.Commands.CreateTruckCommand {
                 .WithMessage("truck number is not in the correct format");
             RuleFor(u => u.Capacity)
                 .NotNull()
-                .NotEmpty()
                 .WithMessage("capacity is not in the correct format");
             RuleFor(u => u.Type)
                 .NotNull()

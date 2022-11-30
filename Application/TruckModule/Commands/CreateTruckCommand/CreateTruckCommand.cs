@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Application.Common.Exceptions;
 using Application.Common.Models;
 using System.Reflection.Metadata;
+using AutoMapper;
 
 namespace Application.TruckModule.Commands.CreateTruckCommand
 {
@@ -24,18 +25,18 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
 
     public class CreateTruckCommandHandler : IRequestHandler<CreateTruckCommand, CustomResponse> {
 
-        private readonly IIdentityService _identityService;
+        private readonly IMapper _mapper;
         private readonly IAppDbContext _context;
         private readonly ILogger<CreateTruckCommandHandler> _logger;
         private readonly IFileUploadService _fileUploadService;
 
         public CreateTruckCommandHandler(
-            IIdentityService identityService, 
+            IMapper mapper, 
             IAppDbContext context, 
             ILogger<CreateTruckCommandHandler> logger, 
             IFileUploadService fileUploadService
         ) {
-            _identityService = identityService;
+            _mapper = mapper;
             _context = context;
             _logger = logger;
             _fileUploadService = fileUploadService;
@@ -50,11 +51,7 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             //     throw new Exception(String.Join(" , ", response.result.Errors));
             // }
 
-            Truck truck = new Truck();
-            truck.TruckNumber = request.TruckNumber;
-            truck.Type = request.Type;
-            truck.Capacity = request.Capacity;
-            truck.Image = request.Image;
+            Truck truck = _mapper.Map<Truck>(request);
 
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync(cancellationToken);

@@ -1,4 +1,5 @@
-﻿using Application.ContainerModule.Commands.CreateContainer;
+﻿using Application.ContainerModule;
+using Application.ContainerModule.Commands.CreateContainer;
 using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
@@ -8,6 +9,7 @@ using Application.OperationModule.Commands.CreateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Application.TruckModule.Commands.CreateTruckCommand;
 using Application.UserGroupModule.Commands;
 using AutoMapper;
 using Domain.Entities;
@@ -40,7 +42,9 @@ namespace Application.Common.Mappings
             CreateMap<CreateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
             CreateMap<GoodDto , Good>();
+            CreateMap<ASgContainerDto , Container>();
             CreateMap<ContainerDto , Container>();
+            CreateMap<CreateTruckCommand , Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
 
             
