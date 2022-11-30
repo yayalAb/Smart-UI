@@ -42,8 +42,8 @@ namespace Application.Common.Mappings
             CreateMap<CreateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
             CreateMap<GoodDto , Good>();
-            CreateMap<ASgContainerDto , Container>();
-            CreateMap<ContainerDto , Container>();
+            CreateMap<ASgContainerDto, Container>();
+            CreateMap<ContainerDto, Container>();
             CreateMap<CreateTruckCommand , Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
 
@@ -59,8 +59,8 @@ namespace Application.Common.Mappings
 
             var argumentTypes = new Type[] { typeof(Profile) };
 
-            foreach (var type in types)
-            {
+            foreach (var type in types) {
+
                 var instance = Activator.CreateInstance(type);
 
                 var methodInfo = type.GetMethod(mappingMethodName);
@@ -83,6 +83,7 @@ namespace Application.Common.Mappings
                         }
                     }
                 }
+
             }
         }
     }

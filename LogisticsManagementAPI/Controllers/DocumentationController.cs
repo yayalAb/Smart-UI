@@ -104,8 +104,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("packageLists/{operationId}")]
-        public async Task<IActionResult> GeneratePackageList(int operationId)
-        {
+        public async Task<IActionResult> GeneratePackageList(int operationId) {
 
             try
             {
