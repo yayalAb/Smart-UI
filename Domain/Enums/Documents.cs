@@ -13,6 +13,7 @@ namespace Domain.Enums
         Waybill,
         CommercialInvoice,
         PackageList,
-        TruckWayBill
+        TruckWayBill,
+        ProformaInvoice
     }
 }

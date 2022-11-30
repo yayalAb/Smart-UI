@@ -13,6 +13,8 @@ namespace Application.OperationDocuments.Queries.CommercialInvoice;
 
 public record CommercialInvoice : IRequest<CommercialInvoiceDto> {
     public int operationId {get; init;}
+    //if type is false it means Commercia invoice if it is true it means Proforma invoice
+    public bool Type {get; init;} = false;
 }
 
 public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, CommercialInvoiceDto> {
@@ -33,7 +35,7 @@ public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, Comme
             throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
         }
 
-        var doc = _context.Documentations.Where(d => d.OperationId == request.operationId && d.Type == Enum.GetName(typeof(Documents), Documents.CommercialInvoice)).FirstOrDefault();
+        var doc = _context.Documentations.Where(d => d.OperationId == request.operationId && d.Type == Enum.GetName(typeof(Documents), !request.Type ? Documents.CommercialInvoice : Documents.ProformaInvoice)).FirstOrDefault();
         
         if(doc == null){
             throw new GhionException(CustomResponse.Failed("Documentaion Not found!", 450));
