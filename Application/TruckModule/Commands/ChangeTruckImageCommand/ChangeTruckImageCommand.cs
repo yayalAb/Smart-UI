@@ -46,7 +46,7 @@ namespace Application.TruckModule.Commands.ChangeTruckImageCommand
                 throw new Exception(String.Join(" , ", response.result.Errors));
             }
 
-            found_truck.Image = response.byteData;
+            // found_truck.Image = response.byteData;
             await _context.SaveChangesAsync(cancellationToken);
 
             return found_truck;

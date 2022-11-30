@@ -1,5 +1,6 @@
 ﻿
 
+using System.Reflection.Metadata;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -16,7 +17,7 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
     {
         public string FullName { get; set; } = null!;
         public string? CompanyName { get; set; }
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
         public AddressDto Address { get; set; }
     }
     public class CreateShippingAgentCommandHandler : IRequestHandler<CreateShippingAgentCommand, CustomResponse>
@@ -42,17 +43,6 @@ namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
 
                        try
                        {
-                           // byte[]? imageByte = null; 
-                           // /// save image to db and retrive id
-                           //  if(request.ImageFile != null)
-                           // {
-                           //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                           //     if (!response.result.Succeeded)
-                           //     {
-                           //         throw new CustomBadRequestException(String.Join(" , ", response.result.Errors));
-                           //     }
-                           //      imageByte = response.byteData;
-                           // }
                            /// save address to db 
                            Address address = _mapper.Map<Address>(request.Address);
                            await _context.Addresses.AddAsync(address);

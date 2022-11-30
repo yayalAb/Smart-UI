@@ -1,4 +1,5 @@
 ﻿
+using System.Reflection.Metadata;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -26,13 +27,13 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? FZIN { get; set; }
         public string? FZOUT { get; set; }
         public string DestinationType { get; set; }
-        public byte[]? SourceDocument { get; set; }
+        public string? SourceDocument { get; set; }
         public DateTime? ActualDateOfDeparture { get; set; }
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
         public string? TypeOfMerchandise { get; set; }
         public DateTime? OpenedDate { get; set; }
-        public byte[]? ECDDocument { get; set; }
+        public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
         public int CompanyId { get; set; }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Application.Common.Models;
 using Application.Common.Exceptions;
+using System.Reflection.Metadata;
 
 namespace Application.TruckModule.Commands.UpdateTruckCommand
 {
@@ -15,7 +16,7 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand
         public string Type { get; init; }
         public float Capacity { get; init; }
         public string PlateNumber  { get; set; } 
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
         
     }
 

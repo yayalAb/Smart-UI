@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Application.Common.Mappings;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Domain.Entities;
@@ -9,7 +10,7 @@ public class DriverDto : IMapFrom<Driver> {
     public string Fullname { get; set; } = null!;
     public string LicenceNumber { get; set; } = null!;
     public int AddressId { get; set; }
-    public byte[]? Image { get; set; }
+    public string? Image { get; set; }
     public bool IsAssigned { get; set; }
     public AddressDto Address {get; set;}
 
