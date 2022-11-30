@@ -6,6 +6,7 @@ using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
+using Application.OperationDocuments.Queries.CertificateOfOrigin;
 using Application.OperationDocuments.Queries.Number4;
 using Application.OperationDocuments.Queries.Number9;
 using Application.OperationDocuments.Queries.PackageList;
@@ -117,6 +118,19 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }catch(Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet("certificateOfOrigin/{operationId}")]
+        public async Task<IActionResult> GenerateCertificateOfOrigin(int operationId) {
+
+            try {
+                return Ok(await Mediator.Send(new CertificateOfOrigin() { operationId = operationId }));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch(Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
