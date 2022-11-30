@@ -161,15 +161,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [Route("status")]
-        public async Task<IActionResult> updateStatus(UpdateStatus command)
-        {
-            try
-            {
-                return Ok(await Mediator.Send(command));
-            }catch (GhionException ex) {
+        [Route("status/{operationId}")]
+        public async Task<IActionResult> updateStatus(int operationId) {
+
+            try {
+                return Ok(await Mediator.Send(new UpdateStatus {Id = operationId}));
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch (Exception ex) {
+            } catch (Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
