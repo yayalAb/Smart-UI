@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Domain.Common.DocumentType;
 using Domain.Common.PaymentTypes;
 using Domain.Entities;
 using Infrastructure.Identity;
@@ -162,41 +163,49 @@ namespace Infrastructure.Persistence
                 new Lookup {
                     Key = "key",
                     Value = "Document"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "ImportNumber9"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "TransferNumber9"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "T1"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "Number4"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "Number1"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "PackageList"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "TruckWayBill"
-                },
-                new Lookup {
-                    Key = "Document",
-                    Value = "CommercialInvoice"
                 }
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "ImportNumber9"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "TransferNumber9"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "T1"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "Number4"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "Number1"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "PackageList"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "TruckWayBill"
+                // },
+                // new Lookup {
+                //     Key = "Document",
+                //     Value = "CommercialInvoice"
+                // }
             };
+
             _context.Lookups.AddRange(paymentTypes);
+
+            var document_type_list = from type in DocumentType.Types select new Lookup {
+                    Key = "Document",
+                    Value = type
+                };
+
+            _context.Lookups.AddRange(document_type_list);
 
             var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup {Key = ShippingAgentPaymentType.Name, Value = type};
             _context.Lookups.AddRange(shippingAgentPaymentNames);

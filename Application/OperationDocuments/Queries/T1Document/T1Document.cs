@@ -34,9 +34,10 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
 
         var operation = await _context.Operations.FindAsync(request.OperationId);
 
-        if (operation == null)
-        {
+        if (operation == null) {
             throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
+        }else if(operation.Status != Enum.GetName(typeof(Status), Status.Number4Approved)){
+            throw new GhionException(CustomResponse.NotFound("Number 4 Document should be approved!"));
         }
 
         List<TruckAssignment> truckAssignment = await _context.TruckAssignments
@@ -46,17 +47,16 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                             .Include(t => t.Goods)
                             .ToListAsync();
 
-        if (truckAssignment.Count == 0)
-        {
+        if (truckAssignment.Count == 0) {
             throw new GhionException(CustomResponse.NotFound("There is no Truck Assignment!"));
         }
-        var statusName = Enum.GetName(typeof(Status), Status.T1Generated);
+        
         await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
             GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.T1),
             GeneratedDate = DateTime.Now,
             IsApproved = false,
             OperationId = request.OperationId
-        }, statusName!);
+        }, Enum.GetName(typeof(Status), Status.T1Generated)!);
 
         return new T1DocumentDto {
             TruckAssignments = truckAssignment,

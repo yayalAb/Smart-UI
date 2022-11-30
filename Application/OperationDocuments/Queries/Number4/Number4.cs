@@ -33,14 +33,16 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
         
         if(operation == null){
             throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
+        }else if(operation.Status != Enum.GetName(typeof(Status), Status.GatePassGenerated)){
+            throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
         }
 
         var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).ToListAsync();
 
-        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Type == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
+        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
 
-        if(operation == null){
-            throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
+        if(payment == null){
+            throw new GhionException(CustomResponse.NotFound("Payment Not found! either payment not made or payment is not filled on the system"));
         }
 
         await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {

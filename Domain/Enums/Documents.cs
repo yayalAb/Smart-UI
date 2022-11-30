@@ -11,5 +11,8 @@ namespace Domain.Enums
         GatePass,
         GoodsRemoval,
         Waybill,
+        CommercialInvoice,
+        PackageList,
+        TruckWayBill
     }
 }

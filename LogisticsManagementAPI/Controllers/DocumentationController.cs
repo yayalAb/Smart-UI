@@ -105,13 +105,13 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("packageLists/{docId}")]
-        public async Task<IActionResult> GeneratePackageList(int docId)
+        [HttpGet("packageLists/{operationId}")]
+        public async Task<IActionResult> GeneratePackageList(int operationId)
         {
 
             try
             {
-                return Ok(await Mediator.Send(new PackageList() { documentationId = docId }));
+                return Ok(await Mediator.Send(new PackageList() { operationId = operationId }));
             }
             catch (GhionException ex)
             {
@@ -122,7 +122,7 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("truckWayBill/{docId}")]
+        [HttpGet("truckWayBill")]
         public async Task<IActionResult> GenerateTrackWayBill([FromQuery] TruckWayBill command)
         {
 
@@ -154,16 +154,15 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("CommercialInvoice/{docId}")]
-        public async Task<IActionResult> GenerateCommercialInvoice(int docId)
+        [HttpGet("CommercialInvoice/{operationId}")]
+        public async Task<IActionResult> GenerateCommercialInvoice(int operationId)
         {
 
             try {
-                return Ok(await Mediator.Send(new Application.OperationDocuments.Queries.CommercialInvoice.CommercialInvoice { docId = docId}));
-            }
-            catch (GhionException ex) {
+                return Ok(await Mediator.Send(new Application.OperationDocuments.Queries.CommercialInvoice.CommercialInvoice { operationId = operationId}));
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch(Exception ex){
+            } catch(Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 

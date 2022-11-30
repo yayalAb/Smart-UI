@@ -36,10 +36,10 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
 
         var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).ToListAsync();
 
-        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Type == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
+        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder ).FirstOrDefault();
 
-        if(operation == null){
-            throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
+        if(payment == null){
+            throw new GhionException(CustomResponse.NotFound("Payment for the operation not found!"));
         }
 
         await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
@@ -47,7 +47,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
             GeneratedDate = DateTime.Now,
             IsApproved = false,
             OperationId = request.OperationId
-        }, ((request.Type.ToLower() == "import") ? Enum.GetName(typeof(Status), Status.ImportNumber9Generated) : Enum.GetName(typeof(Status), Status.TransferNumber9Generated)));
+        }, ((request.Type.ToLower() == "import") ? Enum.GetName(typeof(Status), Status.ImportNumber9Generated) : Enum.GetName(typeof(Status), Status.Closed)));
 
         return new Number9Dto {
             company = operation.Company,

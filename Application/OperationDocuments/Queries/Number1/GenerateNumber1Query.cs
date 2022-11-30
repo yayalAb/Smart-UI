@@ -76,15 +76,12 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
 
         // update operation status and generate doc
         var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
-        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-        {
+        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
             GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number1)!,
             GeneratedDate = date,
             IsApproved = false,
             OperationId = request.OperationId
-        },
-         statusName!
-         );
+        }, statusName!);
 
         return data;
 

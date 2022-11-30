@@ -1,5 +1,6 @@
 ﻿
 using Application.Common.Interfaces;
+using Domain.Common.DocumentType;
 using FluentValidation;
 
 namespace Application.DocumentationModule.Commands.CreateDocumentation
@@ -23,6 +24,7 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
                 .NotNull()
                 .NotEmpty()
                 .MaximumLength(45)
+                .Must(BeOfType)
                 .WithMessage("type is not in the correct format!");
             RuleFor(d => d.BankPermit)
                 .MaximumLength(45)
@@ -58,6 +60,10 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
         private bool BeFoundInDb(int operationId)
         {
             return _context.Operations.Find(operationId) != null;
+        }
+
+        private bool BeOfType(string Type){
+            return DocumentType.Types.Contains(Type);
         }
     }
 }

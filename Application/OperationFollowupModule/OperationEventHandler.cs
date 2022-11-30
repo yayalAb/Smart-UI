@@ -69,8 +69,7 @@ public class OperationEventHandler
 
         if(documentName == Enum.GetName(typeof(Documents), Documents.Number4)){
             operation.Status = Enum.GetName(typeof(Status), Status.Number4Approved);
-        }
-        else if(documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9)){
+        }else if(documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9)){
             operation.Status = Enum.GetName(typeof(Status), Status.ImportNumber9Approved);
         }else if(documentName == Enum.GetName(typeof(Documents), Documents.TransferNumber9)){
             operation.Status = Enum.GetName(typeof(Status), Status.Closed);
