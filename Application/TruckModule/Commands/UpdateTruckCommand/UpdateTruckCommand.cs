@@ -48,6 +48,7 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand
             found_truck.Type = request.Type;
             found_truck.Capacity = request.Capacity;
             found_truck.Image = request.Image;
+            found_truck.PlateNumber = request.PlateNumber;
 
             await _context.SaveChangesAsync(cancellationToken);
 
