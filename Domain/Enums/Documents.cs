@@ -14,6 +14,7 @@ namespace Domain.Enums
         CommercialInvoice,
         PackageList,
         TruckWayBill,
-        ProformaInvoice
+        ProformaInvoice,
+        CirtificateOfOrigin
     }
 }
