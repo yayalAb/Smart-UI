@@ -2,7 +2,7 @@ using Application.ContainerModule;
 
 namespace Application.GoodModule.Queries.GetAllGoodQuery
 {
-    public class AssignedGoodDto
+    public class AssignedGoodDto : FetchGoodDto
     {
         public int OperationId { get; set; }
         public ICollection<ContainerDto>? Containers { get; set; }

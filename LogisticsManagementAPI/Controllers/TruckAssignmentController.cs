@@ -22,14 +22,7 @@ namespace WebApi.Controllers
 
             try
             {
-                var createResponse = await Mediator.Send(command);
-                var command2 = new GenerateGatepassCommand
-                {
-                    OperationId = createResponse.operationId,
-                    TruckAssignmentId = createResponse.truckAssignmentId
-                };
-
-                return Ok(await Mediator.Send(command2));
+                return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
@@ -73,6 +66,20 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(query));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetTruckAssignmentById(int id)
+        {
+
+            try
+            {
+                return Ok(await Mediator.Send(new GetTruckAssignmentByIdQuery{Id = id}));
             }
             catch (GhionException ex)
             {

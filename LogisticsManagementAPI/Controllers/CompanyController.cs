@@ -74,10 +74,10 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> delete([FromQuery] DeleteCompany command) {
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id ) {
             try{
-                return Ok(await Mediator.Send(command));
+                return Ok(await Mediator.Send(new DeleteCompany{Id = id}));
             }catch(GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }

@@ -18,7 +18,7 @@ public class OperationEventHandler
         _context = context;
     }
 
-    public async Task<bool> DocumentGenerationEventAsync(CancellationToken cancellationToken, OperationStatus status , string statusName)
+    public async Task<bool> DocumentGenerationEventAsync(CancellationToken cancellationToken, OperationStatus status, string statusName)
     {
         var executionStrategy = _context.database.CreateExecutionStrategy();
         return await executionStrategy.ExecuteAsync(async () =>
@@ -36,7 +36,8 @@ public class OperationEventHandler
                         await _context.SaveChangesAsync(cancellationToken);
 
                         var operation = await _context.Operations.FindAsync(status.OperationId);
-                        if(operation == null){
+                        if (operation == null)
+                        {
                             throw new GhionException(CustomResponse.NotFound($"operation with id {status.OperationId} is not found while generating document "));
                         }
                         // change status of the operation
@@ -47,7 +48,7 @@ public class OperationEventHandler
 
                     }
 
-                    return true; 
+                    return true;
                 }
                 catch (System.Exception)
                 {
@@ -59,21 +60,30 @@ public class OperationEventHandler
 
     }
 
-    public async Task ApproveDocumentEventAsync(string documentName, int operationId, CancellationToken cancellationToken) {
-        
+    public async Task ApproveDocumentEventAsync(string documentName, int operationId, CancellationToken cancellationToken)
+    {
+
         var operation = await _context.Operations.FindAsync(operationId);
-        
-        if(operation == null){
+
+        if (operation == null)
+        {
             throw new GhionException(CustomResponse.NotFound("Operation doesn't exist!"));
         }
 
-        if(documentName == Enum.GetName(typeof(Documents), Documents.Number4)){
+        if (documentName == Enum.GetName(typeof(Documents), Documents.Number4))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.Number4Approved);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.ImportNumber9Approved);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.TransferNumber9)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.TransferNumber9))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.Closed);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.Number1)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.Number1))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.Closed);
         }
 
@@ -81,21 +91,30 @@ public class OperationEventHandler
 
     }
 
-    public async Task DisapproveDocumentEventAsync(string documentName, int operationId, CancellationToken cancellationToken) {
-        
+    public async Task DisapproveDocumentEventAsync(string documentName, int operationId, CancellationToken cancellationToken)
+    {
+
         var operation = await _context.Operations.FindAsync(operationId);
-        
-        if(operation == null){
+
+        if (operation == null)
+        {
             throw new GhionException(CustomResponse.NotFound("Operation doesn't exist!"));
         }
 
-        if(documentName == Enum.GetName(typeof(Documents), Documents.Number4)){
+        if (documentName == Enum.GetName(typeof(Documents), Documents.Number4))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.Number4Generated);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.ImportNumber9))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.ImportNumber9Generated);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.TransferNumber9)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.TransferNumber9))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.TransferNumber9Generated);
-        }else if(documentName == Enum.GetName(typeof(Documents), Documents.Number1)){
+        }
+        else if (documentName == Enum.GetName(typeof(Documents), Documents.Number1))
+        {
             operation.Status = Enum.GetName(typeof(Status), Status.Number1Generated);
         }
 
@@ -103,4 +122,14 @@ public class OperationEventHandler
 
     }
 
+    public async Task<bool> IsDocumentGenerated(int operationId, string documentName)
+    {
+        return await _context.OperationStatuses
+            .Where(os => os.OperationId == operationId && os.GeneratedDocumentName == documentName).AnyAsync();
+    }
+    public async Task<bool> IsDocumentApproved(int operationId, string documentName)
+    {
+        return await _context.OperationStatuses
+            .Where(os => os.OperationId == operationId && os.GeneratedDocumentName == documentName && os.IsApproved).AnyAsync();
+    }
 }

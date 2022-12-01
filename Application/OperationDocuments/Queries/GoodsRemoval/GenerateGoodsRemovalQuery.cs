@@ -29,6 +29,11 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
         {
             throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
         }
+        //checking preconditions before generating goods removal
+        if (!await _operationEventHandler.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.T1)!))
+        {
+            throw new GhionException(CustomResponse.BadRequest($"T1 must be approved before generating goods removal document "));
+        }
         List<TruckAssignmentDto> truckAssignments = new List<TruckAssignmentDto>();
         var operationData = await _context.Operations.Where(o => o.Id == request.OperationId)
                                 .Include(o => o.PortOfLoading)
