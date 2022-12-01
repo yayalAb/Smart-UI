@@ -1,96 +1,44 @@
 using Application.Common.Interfaces;
-using Application.Common.Exceptions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
-using Application.AddressModule.Commands.AddressCreateCommand;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
+using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using AutoMapper;
 
 namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 
 public record CreateCompanyCommand : IRequest<CustomResponse>
 {
 
-    public string Name { get; init; }
-    public string TinNumber { get; init; }
-    public string CodeNIF { get; init; }
-    public ContactPersonCreateCommand contactPerson { get; init; }
-    public AddressCreateCommand address { get; init; }
+    public string Name { get; init; } = null!;
+    public string TinNumber { get; init; } = null!;
+    public string CodeNIF { get; init; } = null!;
+    public ContactPersonCreateCommand? contactPerson { get; init; }
+    public AddressDto address { get; init; } = null!;
 
 }
 
 public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, CustomResponse>
 {
 
-    private readonly IIdentityService _identityService;
+    private readonly IMapper _mapper;
     private readonly IAppDbContext _context;
     private readonly ILogger<CreateCompanyCommandHandler> _logger;
 
-    public CreateCompanyCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<CreateCompanyCommandHandler> logger)
+    public CreateCompanyCommandHandler(IMapper mapper, IAppDbContext context, ILogger<CreateCompanyCommandHandler> logger)
     {
-        _identityService = identityService;
+        _mapper = mapper;
         _context = context;
         _logger = logger;
     }
 
     public async Task<CustomResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var executionStrategy = _context.database.CreateExecutionStrategy();
-        return await executionStrategy.ExecuteAsync(async () => {
-            using (var transaction = _context.database.BeginTransaction()) {
-                try {
-
-                    Address new_address = new Address();
-
-                    new_address.Email = request.address.Email;
-                    new_address.Phone = request.address.Phone;
-                    new_address.Region = request.address.Region;
-                    new_address.City = request.address.City;
-                    new_address.Subcity = request.address.Subcity;
-                    new_address.Country = request.address.Country;
-                    new_address.POBOX = request.address.POBOX;
-
-                    _context.Addresses.Add(new_address);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    ContactPerson new_contact_person = new ContactPerson();
-
-                    new_contact_person.Name = request.contactPerson.Name;
-                    new_contact_person.Email = request.contactPerson.Email;
-                    new_contact_person.Phone = request.contactPerson.Phone;
-
-                    _context.ContactPeople.Add(new_contact_person);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    Company new_company = new Company();
-
-                    new_company.Name = request.Name;
-                    new_company.TinNumber = request.TinNumber;
-                    new_company.CodeNIF = request.CodeNIF;
-                    new_company.ContactPersonId = new_contact_person.Id;
-                    new_company.AddressId = new_address.Id;
-                    new_company.ContactPerson = new_contact_person;
-                    new_company.Address = new_address;
-
-                    _context.Companies.Add(new_company);
-                    await _context.SaveChangesAsync(cancellationToken);
-                    await transaction.CommitAsync();
-
-                    return CustomResponse.Succeeded("Company Created");
-
-                }
-                catch (Exception ex) {
-                    await transaction.RollbackAsync();
-                    throw new GhionException(CustomResponse.Failed(ex.Message));
-                }
-
-            }
-
-
-        });
-
+        _context.Companies.Add(_mapper.Map<Company>(request));
+        await _context.SaveChangesAsync(cancellationToken);
+        return CustomResponse.Succeeded("Company Created");
 
     }
 }

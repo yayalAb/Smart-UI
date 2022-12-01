@@ -22,6 +22,7 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
         entity.HasOne(d => d.ContactPerson)
             .WithOne(p => p.Company)
             .HasForeignKey<Company>(d => d.ContactPersonId)
+                .IsRequired(false)
             .OnDelete(DeleteBehavior. Cascade);
         
         entity.HasOne(d => d.Address)

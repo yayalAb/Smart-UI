@@ -10,7 +10,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
     public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand> {
         public UpdateCompanyCommandValidator(){
             
-            RuleFor(u => u.Name)
+             RuleFor(u => u.Name)
                 .NotNull()
                 .MaximumLength(45)
                 .NotEmpty()
@@ -25,11 +25,28 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
                 .MaximumLength(45)
                 .NotEmpty()
                 .WithMessage("codenif is not in the correct format!");
+            RuleFor( u => u.address)
+                .NotNull();
             RuleFor(u => u.address.Email)
                 .NotNull()
                 .NotEmpty()
                 .EmailAddress()
                 .WithMessage("invalid email address");
+            When(u => u.contactPerson != null, () =>
+            {
+                RuleFor( u => u.contactPerson!.Name)
+                    .NotNull()
+                    .NotEmpty(); 
+                RuleFor( u => u.contactPerson!.Email)
+                    .NotNull()
+                    .NotEmpty()
+                    .EmailAddress()
+                    .WithMessage("invalid contact person email address");                
+                RuleFor( u => u.contactPerson!.Phone)
+                    .NotNull()
+                    .NotEmpty(); 
+            });
+            
 
         }
     }
