@@ -64,6 +64,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 container.OperationId = request.OperationId;
                                 container.Goods.ToList().ForEach(good =>{
                                     good.OperationId = request.OperationId;
+                                    good.ContainerId = container.Id;
                                     good.Location = container.Location;
                                 });
                             });

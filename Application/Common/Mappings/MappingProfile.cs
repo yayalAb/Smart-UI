@@ -1,8 +1,13 @@
-﻿using Application.ContainerModule;
+﻿using Application.CompanyModule.Commands.CreateCompanyCommand;
+using Application.CompanyModule.Commands.UpdateCompanyCommand;
+using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
+using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
+using Application.ContainerModule;
 using Application.ContainerModule.Commands.CreateContainer;
 using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
+using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries;
 using Application.OperationDocuments.Queries;
 using Application.OperationModule.Commands.CreateOperation;
@@ -27,11 +32,15 @@ namespace Application.Common.Mappings
 
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
-            //TODO: add mapping configs here
+          
             CreateMap<UserRoleDto, AppUserRole>();
             CreateMap<FetchUserRoleDto, AppUserRole>();
 
             CreateMap<AddressDto, Address>().ReverseMap();
+            CreateMap<ContactPersonCreateCommand , ContactPerson>();
+            CreateMap<ContactPersonUpdateCommand , ContactPerson>();
+            CreateMap<CreateCompanyCommand , Company>();
+            CreateMap<UpdateCompanyCommand , Company>();
 
             CreateMap<CreateDocumentationCommand, Documentation>();
 
@@ -46,6 +55,8 @@ namespace Application.Common.Mappings
             CreateMap<ContainerDto, Container>();
             CreateMap<CreateTruckCommand , Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
+            CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
+            CreateMap<UpdateGoodDto , Good>().ReverseMap();
 
             
 

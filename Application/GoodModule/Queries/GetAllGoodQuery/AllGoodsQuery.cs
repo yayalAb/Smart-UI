@@ -33,14 +33,16 @@ namespace Application.GoodModule.Queries.GetAllGoodQuery {
         public async Task<PaginatedList<AssignedGoodDto>> Handle(GetAllGoodQuery request, CancellationToken cancellationToken) {
             return await PaginatedList<AssignedGoodDto>
             .CreateAsync(_context.Operations
-                .Include(o => o.Containers)
+                .Include(o => o.Containers)!
                     .ThenInclude(o => o.Goods)
-                .Include(o => o.Goods)
+                        .ThenInclude(g => g.Operation)
+                .Include(o => o.Goods)!
+                    .ThenInclude(g => g.Operation)
                 .Where(o => (o.Containers != null && o.Containers.Count > 0) || (o.Goods != null && o.Goods.Count > 0))
                 .Select(o => new AssignedGoodDto{
                     OperationId = o.Id,
                     Containers = _mapper.Map<ICollection<ContainerDto>>(o.Containers),
-                    Goods = _mapper.Map<ICollection<FetchGoodDto>>(o.Goods.Where(g =>g.ContainerId == null))
+                    Goods = _mapper.Map<ICollection<FetchGoodDto>>(o.Goods!.Where(g =>g.ContainerId == null))
                 }), request.PageCount ?? 1, request.PageSize ?? 10);
         }
 

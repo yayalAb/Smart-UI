@@ -12,7 +12,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
     {
         public int Id { get; init; }
         public string ContainerNumber { get; init; } = null!;
-        public string Location {get; init;}
+        public string Location {get; init;} = null!;
         public string SealNumber { get; init; } = null!;
         public float Size { get; set; }
         public int? LocationPortId { get; init; }

@@ -24,6 +24,9 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
                 RuleFor(ag => ag.Goods!.Select(g => g.Description))
                     .NotNull()
                     .NotEmpty();
+                RuleFor(ag => ag.Goods!.Select(g => g.Type))
+                    .NotNull()
+                    .NotEmpty();
                 RuleFor(ag => ag.Goods!.Select(g => g.Weight))
                     .NotNull()
                     .NotEmpty();
@@ -34,7 +37,7 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
 
             When(ag => ag.Containers != null, () =>
             {
-                RuleFor(ag => ag.Containers.Select(c => c.Id))
+                RuleFor(ag => ag.Containers!.Select(c => c.Id))
                     .Must(c => BeFoundInDbList(c , "container")).WithMessage("one or more good with the provided id is not found ");;
                 RuleFor(ag => ag.Containers!.Select(c => c.SealNumber))
                     .NotNull()
@@ -52,19 +55,22 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
                 .Must(ag => BeFoundInDbList(ag , "port")).WithMessage($"one or more location port of a container with the provided id is not found ");
                 //validation for goods inside containers 
 
-                RuleFor(ag => ag.Containers.SelectMany(c =>c.Goods!.Select(g => g.LocationPortId)))
+                RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.LocationPortId)))
                     .Must(ag => BeFoundInDbList(ag ,"port")).WithMessage("one or more location port of a good with the provided id is not found ");
 
-               RuleFor(ag => ag.Containers.SelectMany(c =>c.Goods!.Select(g => g.Id)))
+               RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.Id)))
                     .Must(g => BeFoundInDbList(g ,"good")).WithMessage("one or more good with the provided id is not found ");
 
-               RuleFor(ag => ag.Containers.SelectMany(c =>c.Goods!.Select(g => g.Description)))
+               RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.Description)))
                     .NotNull()
                     .NotEmpty();
-               RuleFor(ag => ag.Containers.SelectMany(c =>c.Goods!.Select(g => g.Weight)))
+               RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.Weight)))
                     .NotNull()
                     .NotEmpty();
-               RuleFor(ag => ag.Containers.SelectMany(c =>c.Goods!.Select(g => g.NumberOfPackages)))
+               RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.Type)))
+                    .NotNull()
+                    .NotEmpty();
+               RuleFor(ag => ag.Containers!.SelectMany(c =>c.Goods!.Select(g => g.NumberOfPackages)))
                     .NotNull()
                     .NotEmpty();
            

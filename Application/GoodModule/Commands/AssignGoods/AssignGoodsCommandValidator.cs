@@ -13,13 +13,14 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             .NotNull()
             .NotEmpty()
             .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
-        When(ag => ag.Goods != null, () => 
+        When(ag => ag.Goods != null, () =>
         {
             RuleFor(ag => ag.Goods!.Select(g => g.LocationPortId))
                 .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
-
-
             RuleFor(ag => ag.Goods!.Select(g => g.Description))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.Type))
                 .NotNull()
                 .NotEmpty();
             RuleFor(ag => ag.Goods!.Select(g => g.Weight))
@@ -29,7 +30,7 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
                 .NotNull()
                 .NotEmpty();
         });
-       
+
         When(ag => ag.Containers != null, () =>
         {
             RuleFor(ag => ag.Containers!.Select(c => c.SealNumber))
@@ -45,8 +46,24 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
                 .NotNull()
                 .NotEmpty();
             RuleFor(ag => ag.Containers!.Select(c => c.LocationPortId))
-            .Must(BeFoundInPortTable).WithMessage($"one or more location port of a container with the provided id is not found ");
-            
+                .Must(BeFoundInPortTable).WithMessage($"one or more location port of a container with the provided id is not found ");
+
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.LocationPortId)))
+                    .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
+
+
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Description)))
+                    .NotNull()
+                    .NotEmpty();
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Weight)))
+                    .NotNull()
+                    .NotEmpty();
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
+                    .NotNull()
+                    .NotEmpty();
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
+                    .NotNull()
+                    .NotEmpty();
         });
 
     }
@@ -57,19 +74,23 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
     }
     private bool BeFoundInPortTable(IEnumerable<int?> locationPortIds)
     {
-        if(locationPortIds == null ){
-            return true; 
+        if (locationPortIds == null)
+        {
+            return true;
         }
 
-        for(int i = 0; i<locationPortIds.ToList().Count; i++){
-            if(locationPortIds.ToList()[i] == null){
+        for (int i = 0; i < locationPortIds.ToList().Count; i++)
+        {
+            if (locationPortIds.ToList()[i] == null)
+            {
                 return true;
             }
-            if(_context.Ports.Find(locationPortIds.ToList()[i]) == null){
-                return false; 
+            if (_context.Ports.Find(locationPortIds.ToList()[i]) == null)
+            {
+                return false;
             }
-           
+
         }
-        return true; 
+        return true;
     }
 }

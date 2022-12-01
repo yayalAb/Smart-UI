@@ -47,7 +47,7 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
         {
 
             var operation = await _context.Operations
-                  .Include(o => o.Containers)
+                  .Include(o => o.Containers)!
                       .ThenInclude(c => c.Goods)
                   .Include(o => o.Goods)
                   .Where(o => o.Id == request.OperationId).FirstOrDefaultAsync();
@@ -64,6 +64,7 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
                      container.Goods.ToList().ForEach(good =>{
                                     good.OperationId = request.OperationId;
                                     good.Location = container.Location;
+                                    good.ContainerId = container.Id;
                                     });
             });
             }

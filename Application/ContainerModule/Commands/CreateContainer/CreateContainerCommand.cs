@@ -1,24 +1,22 @@
-﻿using Application.Common.Exceptions;
+﻿
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Application.GoodModule.Commands.CreateGoodCommand;
 using AutoMapper;
 using Application.Common.Models;
+using Application.GoodModule;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
     public record CreateContainerCommand : IRequest<CustomResponse>
     {
-        public string ContainerNumber { get; set; }
-        public string SealNumber { get; set; }
-        public string Location { get; set; }
+        public string ContainerNumber { get; set; } = null!;
+        public string SealNumber { get; set; } = null!;
+        public string Location { get; set; } = null!;
         public float Size { get; set; }
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
-        public ICollection<CreateGoodCommand> Goods { get; set; }
+        public ICollection<GoodDto> Goods { get; set; }= null!;
     }
 
     public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, CustomResponse>
@@ -48,8 +46,9 @@ namespace Application.ContainerModule.Commands.CreateContainer
 
                 foreach (var good in request.Goods)
                 {
-                    good.ContainerId = newContainer.Id;
-                    _context.Goods.Add(_mapper.Map<Good>(good));
+                    var mappedGood = _mapper.Map<Good>(good);
+                    mappedGood.ContainerId = newContainer.Id;
+                    _context.Goods.Add(mappedGood);
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
