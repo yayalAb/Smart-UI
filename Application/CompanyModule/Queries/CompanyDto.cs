@@ -1,5 +1,6 @@
 using Application.Common.Mappings;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Domain.Entities;
 
 namespace Application.CompanyModule.Queries;
@@ -13,5 +14,5 @@ public class CompanyDto : IMapFrom<Company>
     public int AddressId { get; set; }
     
     public virtual ContactPersonDto ContactPerson { get; set; } = null!;
-    public virtual AddressDto Address { get; set; } = null!;
+    public virtual UpdateAddressDto Address { get; set; } = null!;
 }

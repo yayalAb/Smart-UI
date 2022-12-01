@@ -14,6 +14,7 @@ using Application.OperationModule.Commands.CreateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Application.TruckModule.Commands.CreateTruckCommand;
 using Application.UserGroupModule.Commands;
 using AutoMapper;
@@ -37,6 +38,7 @@ namespace Application.Common.Mappings
             CreateMap<FetchUserRoleDto, AppUserRole>();
 
             CreateMap<AddressDto, Address>().ReverseMap();
+            CreateMap<UpdateAddressDto , Address>().ReverseMap();
             CreateMap<ContactPersonCreateCommand , ContactPerson>();
             CreateMap<ContactPersonUpdateCommand , ContactPerson>();
             CreateMap<CreateCompanyCommand , Company>();

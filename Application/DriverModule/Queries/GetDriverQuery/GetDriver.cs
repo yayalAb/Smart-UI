@@ -5,29 +5,35 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Models;
 using Application.Common.Exceptions;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Application.DriverModule.Queries.GetDriverQuery;
 
-public record GetDriver : IRequest<Driver> {
+public record GetDriver : IRequest<DriverDto> {
     public int Id {get; init;}
 }
 
-public class GetDriverHandler : IRequestHandler<GetDriver, Driver> {
+public class GetDriverHandler : IRequestHandler<GetDriver, DriverDto> {
 
-    private readonly IIdentityService _identityService;
+    private readonly IMapper _mapper;
     private readonly IAppDbContext _context;
 
     public GetDriverHandler(
-        IIdentityService identityService, 
+        IMapper mapper, 
         IAppDbContext context
     ){
-        _identityService = identityService;
+        _mapper = mapper;
         _context = context;
     }
 
-    public async Task<Driver> Handle(GetDriver request, CancellationToken cancellationToken) {
+    public async Task<DriverDto> Handle(GetDriver request, CancellationToken cancellationToken) {
         
-        var driver = await _context.Drivers.Include(d => d.Address).Where(t => t.Id == request.Id).FirstOrDefaultAsync();
+        var driver = await _context.Drivers
+        .Include(d => d.Address)
+        .Where(t => t.Id == request.Id)
+        .ProjectTo<DriverDto>(_mapper.ConfigurationProvider)
+        .FirstOrDefaultAsync();
         if(driver == null){
             throw new GhionException(CustomResponse.NotFound("driver not found!"));
         }

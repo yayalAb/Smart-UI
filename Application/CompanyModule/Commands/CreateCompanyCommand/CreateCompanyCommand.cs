@@ -38,7 +38,7 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
     {
         _context.Companies.Add(_mapper.Map<Company>(request));
         await _context.SaveChangesAsync(cancellationToken);
-        return CustomResponse.Succeeded("Company Created");
+        return CustomResponse.Succeeded("Company Created",201);
 
     }
 }

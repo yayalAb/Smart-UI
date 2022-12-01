@@ -11,6 +11,7 @@ using Application.AddressModule.Commands.AddressCreateCommand;
 using Application.Common.Models;
 using Application.Common.Exceptions;
 using System.Reflection.Metadata;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 
 namespace Application.DriverModule.Commands.UpdateDriverCommand
 {
@@ -18,7 +19,7 @@ namespace Application.DriverModule.Commands.UpdateDriverCommand
         public int Id {get; init;}
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
-        public AddressCreateCommand address { get; init; }
+        public UpdateAddressDto address { get; init; }
         public string? Image {get; init; }
     }
 

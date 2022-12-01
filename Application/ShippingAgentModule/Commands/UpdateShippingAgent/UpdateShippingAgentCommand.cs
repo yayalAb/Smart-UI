@@ -19,7 +19,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
         public string? CompanyName { get; set; }
         public int AddressId { get; set; }
         public string? Image { get; set; }
-        public AddressDto Address { get; set; }
+        public UpdateAddressDto Address { get; set; }
 
     }
     public class UpdateShippingAgentCommandHandler : IRequestHandler<UpdateShippingAgentCommand, int>

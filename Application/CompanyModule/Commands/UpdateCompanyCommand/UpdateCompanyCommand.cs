@@ -13,6 +13,7 @@ using Application.Common.Models;
 using Application.Common.Exceptions;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using AutoMapper;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 
 namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
@@ -22,7 +23,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string TinNumber { get; init; }
         public string CodeNIF { get; init; }
         public ContactPersonUpdateCommand contactPerson { get; init; }
-        public AddressDto address { get; init; }
+        public UpdateAddressDto address { get; init; }
     }
 
 

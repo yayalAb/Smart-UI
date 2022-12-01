@@ -20,6 +20,9 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
 
         entity.Property(e => e.Phone)
             .HasMaxLength(45);
+        entity.HasOne(e => e.Company)
+            .WithOne(c => c.ContactPerson)
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 }

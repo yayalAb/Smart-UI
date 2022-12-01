@@ -1,6 +1,6 @@
-using System.Reflection.Metadata;
+
 using Application.Common.Mappings;
-using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Domain.Entities;
 
 namespace Application.DriverModule;
@@ -12,6 +12,6 @@ public class DriverDto : IMapFrom<Driver> {
     public int AddressId { get; set; }
     public string? Image { get; set; }
     public bool IsAssigned { get; set; }
-    public AddressDto Address {get; set;}
+    public UpdateAddressDto Address {get; set;}
 
 }
