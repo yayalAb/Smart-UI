@@ -47,7 +47,7 @@ namespace Infrastructure.Persistence
             try
             {
                 await TrySeedAsync();
-                // await TrySeedLookup();
+                await TrySeedLookup();
                 // await updateLookup();
             }
             catch (Exception ex)
