@@ -86,16 +86,18 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     OperationId = g.OperationId,
                     TruckAssignmentId = g.TruckAssignmentId,
                     LocationPortId = g.LocationPortId,
-                    Container = new Container {
-                        ContianerNumber = g.Container.ContianerNumber,
-                        SealNumber = g.Container.SealNumber,
-                        Location = g.Container.Location,
-                        Size = g.Container.Size,
-                        LocationPortId = g.Container.LocationPortId,
-                        IsAssigned = g.Container.IsAssigned,
-                        OperationId = g.Container.OperationId,
-                        TruckAssignmentId = g.Container.TruckAssignmentId
-                    }
+                    Container = g.Container == null 
+                                    ? null 
+                                    : new Container {
+                                        ContianerNumber = g.Container.ContianerNumber,
+                                        SealNumber = g.Container.SealNumber,
+                                        Location = g.Container.Location,
+                                        Size = g.Container.Size,
+                                        LocationPortId = g.Container.LocationPortId,
+                                        IsAssigned = g.Container.IsAssigned,
+                                        OperationId = g.Container.OperationId,
+                                        TruckAssignmentId = g.Container.TruckAssignmentId
+                                    }
                 }).ToList() : null,
             }).FirstOrDefault();
         
