@@ -15,12 +15,17 @@ public class Good : BaseAuditableEntity
     public string? EngineNumber {get; set;}
     public string? ModelCode { get; set; }
     public bool IsAssigned { get; set; } = false;
+    // additionals 
+    public string? Unit { get; set; } 
+    public float? UnitPrice { get; set; }
+    public float? CBM { get; set; }
+    //////
     public int? ContainerId { get; set; }
     public int OperationId {get; set; }
     public int TruckAssignmentId { get; set; }
     public int? LocationPortId { get; set; }
     
-    public virtual Container Container { get; set; } = null!; 
+    public virtual Container? Container { get; set; } = null!; 
     public virtual Operation Operation { get; set; } = null!;
     public virtual Port? LocationPort { get; set; }
     public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } =  null!;

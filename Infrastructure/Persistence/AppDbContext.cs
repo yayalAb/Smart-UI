@@ -43,6 +43,8 @@ namespace Infrastructure.Persistence
         public virtual DbSet<TruckAssignment> TruckAssignments { get; set; } = null!;
         public virtual DbSet<Setting> Settings {get; set;} = null!;
         public virtual DbSet<Blacklist> Blacklists {get; set;} = null!;
+        public virtual DbSet<BankInformation> BankInformation {get; set;} = null!;
+
 
 
 

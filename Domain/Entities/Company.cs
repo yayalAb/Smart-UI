@@ -15,6 +15,7 @@ public class Company : BaseAuditableEntity {
     
     public virtual ContactPerson ContactPerson { get; set; } = null!;
     public virtual Address Address { get; set; } = null!;
+    public virtual ICollection<BankInformation> BankInformation { get; set; } = null!;
     
     public ICollection<Operation> Operations { get; set; }
     
