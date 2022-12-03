@@ -17,6 +17,7 @@ public record CreateCompanyCommand : IRequest<CustomResponse>
     public string CodeNIF { get; init; } = null!;
     public ContactPersonCreateCommand? contactPerson { get; init; }
     public AddressDto address { get; init; } = null!;
+    public BankInformationDto BankInformationDto { get; init; } = null!;
 
 }
 
