@@ -38,6 +38,7 @@ namespace Application.CompanyModule.Queries.GetCompanyQuery
             var company = await _context.Companies
             .Include(c => c.Address)
             .Include(c => c.ContactPerson)
+            .Include(c => c.BankInformation)
             .ProjectTo<CompanyDto>(_mapper.ConfigurationProvider)
             .Where(c => c.Id == request.Id).FirstOrDefaultAsync();
             if(company == null){

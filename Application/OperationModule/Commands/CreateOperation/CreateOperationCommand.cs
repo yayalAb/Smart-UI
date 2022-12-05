@@ -47,6 +47,8 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? CountryOfOrigin { get; set; }
         public float? REGTax { get; set; }
         public string? BillOfLoadingNumber { get; set; }
+        public string? FinalDestination { get; set; }
+        public string? Localization { get; set; }
         //--------------------------------------//
     }
     public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, CustomResponse>
