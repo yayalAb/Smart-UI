@@ -31,16 +31,25 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPut]
+        [Route("reassign")]
+        public async Task<IActionResult> ReassignGoods([FromBody] ReassignGoodsCommand command) {
+
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
+
         [HttpGet]
         [Route("Bylocation")]
         public async Task<ActionResult> GoodListByLocation([FromQuery] GetGoodsByLocationQuery query)
         {
-            try
-            {
+            try {
                 return Ok(await Mediator.Send(query));
-            }
-            catch (GhionException ex)
-            {
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
