@@ -6,6 +6,8 @@ public class Company : BaseAuditableEntity {
     public Company()
     {
         Operations = new HashSet<Operation>();
+        BankInformation = new HashSet<BankInformation>();
+
     }
     public string? Name { get; set; }
     public string? TinNumber { get; set; }
@@ -15,7 +17,7 @@ public class Company : BaseAuditableEntity {
     
     public virtual ContactPerson ContactPerson { get; set; } = null!;
     public virtual Address Address { get; set; } = null!;
-    public virtual ICollection<BankInformation> BankInformation { get; set; } = null!;
+    public virtual ICollection<BankInformation> BankInformation { get; set; }
     
     public ICollection<Operation> Operations { get; set; }
     

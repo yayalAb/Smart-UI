@@ -44,6 +44,8 @@ namespace Application.Common.Mappings
             CreateMap<ContactPersonUpdateCommand , ContactPerson>();
             CreateMap<CreateCompanyCommand , Company>();
             CreateMap<UpdateCompanyCommand , Company>();
+            CreateMap<BankInformationDto , BankInformation>();
+            CreateMap<UpdateBankInformationDto , BankInformation>();
 
             CreateMap<CreateDocumentationCommand, Documentation>();
 

@@ -24,7 +24,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string CodeNIF { get; init; }
         public ContactPersonUpdateCommand contactPerson { get; init; }
         public UpdateAddressDto address { get; init; }
-        public UpdateBankInformationDto BankInformationDto { get; init; }
+        public ICollection<UpdateBankInformationDto> BankInformation { get; init; }
     }
 
 
