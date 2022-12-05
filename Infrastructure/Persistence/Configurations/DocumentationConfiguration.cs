@@ -16,12 +16,6 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.Property(e => e.BankPermit)
             .HasMaxLength(45);
 
-        entity.Property(e => e.City)
-            .HasMaxLength(45);
-
-        entity.Property(e => e.Country)
-            .HasMaxLength(45);
-
         entity.Property(e => e.Date)
             .HasColumnType("datetime")
             .IsRequired();
@@ -29,20 +23,14 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.Property(e => e.Destination)
             .HasMaxLength(45);
 
-        entity.Property(e => e.ImporterName)
-            .HasMaxLength(45);
 
         entity.Property(e => e.InvoiceNumber)
             .HasMaxLength(45);
 
-        entity.Property(e => e.Phone)
-            .HasMaxLength(45);
 
         entity.Property(e => e.Source)
             .HasMaxLength(45);
 
-        entity.Property(e => e.TinNumber)
-            .HasMaxLength(45);
 
         entity.Property(e => e.TransportationMethod)
             .HasMaxLength(45);
