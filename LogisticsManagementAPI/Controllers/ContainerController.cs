@@ -11,6 +11,7 @@ using WebApi.Models;
 using Application.Common.Models;
 using Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
 using Application.ContainerModule.Commands.CreateSingleContainer;
+using Application.ContainerModule.Queries.ContainerByOperation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -68,6 +69,16 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("ByOperation/{OperationId}")]
+        public async Task<ActionResult> ContainerListByOperation(int OperationId)
+        {
+            try {
+                return Ok(await Mediator.Send(new GetByOperation{ OperationId = OperationId}));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
