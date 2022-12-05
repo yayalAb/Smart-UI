@@ -12,6 +12,7 @@ namespace Domain.Entities
         public string DestinationLocation { get; set; }
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
+        public string? TransportationMethod { get; set; }
         
         public virtual Driver Driver { get; set; }
         public virtual Truck Truck { get; set; }

@@ -14,6 +14,7 @@ namespace Domain.Enums
         company,
         operation_followup,
         assign_goods,
+        reassign_goods,
         documentation,
         gate_pass,
         users,

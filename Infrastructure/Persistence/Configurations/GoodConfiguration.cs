@@ -24,6 +24,15 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         entity.Property(e => e.Manufacturer)
             .HasMaxLength(45);
 
+        entity.Property(e => e.Unit)
+            .IsRequired(false);
+
+        entity.Property(e => e.UnitPrice)
+            .IsRequired(false);
+            
+        entity.Property(e => e.CBM)
+            .IsRequired(false);
+
         // entity.Property(e => e.UnitOfMeasurnment)
         //     .HasMaxLength(45);
 

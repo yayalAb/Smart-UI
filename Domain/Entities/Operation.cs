@@ -39,6 +39,9 @@ public class Operation : BaseAuditableEntity
     public string? CountryOfOrigin { get; set; } // operation
     public float? REGTax { get; set; }//
     public string? BillOfLoadingNumber { get; set; }
+    public string? PINumber { get; set; }
+    public string? FinalDestination { get; set; }
+    public string? Localization { get; set; }
     //--------------------------------------//
     // has one
     public virtual Port PortOfLoading { get; set; } = null!;

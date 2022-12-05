@@ -86,16 +86,18 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     OperationId = g.OperationId,
                     TruckAssignmentId = g.TruckAssignmentId,
                     LocationPortId = g.LocationPortId,
-                    Container = new Container {
-                        ContianerNumber = g.Container.ContianerNumber,
-                        SealNumber = g.Container.SealNumber,
-                        Location = g.Container.Location,
-                        Size = g.Container.Size,
-                        LocationPortId = g.Container.LocationPortId,
-                        IsAssigned = g.Container.IsAssigned,
-                        OperationId = g.Container.OperationId,
-                        TruckAssignmentId = g.Container.TruckAssignmentId
-                    }
+                    Container = g.Container == null 
+                                    ? null 
+                                    : new Container {
+                                        ContianerNumber = g.Container.ContianerNumber,
+                                        SealNumber = g.Container.SealNumber,
+                                        Location = g.Container.Location,
+                                        Size = g.Container.Size,
+                                        LocationPortId = g.Container.LocationPortId,
+                                        IsAssigned = g.Container.IsAssigned,
+                                        OperationId = g.Container.OperationId,
+                                        TruckAssignmentId = g.Container.TruckAssignmentId
+                                    }
                 }).ToList() : null,
             }).FirstOrDefault();
         
@@ -106,7 +108,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
         var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder ).FirstOrDefault();
 
         if(payment == null){
-            throw new GhionException(CustomResponse.NotFound("Payment for the operation not found!"));
+            throw new GhionException(CustomResponse.NotFound(" Delivery Order Payment for the operation not found!"));
         }
 
         await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {

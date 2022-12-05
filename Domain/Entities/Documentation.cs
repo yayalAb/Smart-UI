@@ -16,6 +16,12 @@ public class Documentation : BaseAuditableEntity
     public string? TransportationMethod { get; set; }
     public string? Source { get; set; }
     public string? Destination { get; set; }
+    /// additionals 
+    public string? PurchaseOrderNumber { get; set; }
+    public string? PaymentTerm { get; set; }
+    public bool? IsPartialShipmentAllowed { get; set; }
+    public string? Fright { get; set; }
+    ///////
     
     public virtual Operation Operation { get; set; } = null!;
 }
