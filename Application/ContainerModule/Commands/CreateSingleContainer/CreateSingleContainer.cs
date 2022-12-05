@@ -34,7 +34,7 @@ public class CreateSingleContainerHandler : IRequestHandler<CreateSingleContaine
 
     public async Task<CustomResponse> Handle(CreateSingleContainer request, CancellationToken cancellationToken) {
         
-        var operation = _context.Operations.FindAsync(request.OperationId);
+        var operation = await _context.Operations.FindAsync(request.OperationId);
 
         if(operation == null){
             throw new GhionException(CustomResponse.NotFound("operation not found"));
