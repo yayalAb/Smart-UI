@@ -101,6 +101,9 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                     OperationId = g.OperationId,
                     TruckAssignmentId = g.TruckAssignmentId,
                     LocationPortId = g.LocationPortId,
+                    Unit = g.Unit,
+                    UnitPrice = g.UnitPrice,
+                    CBM = g.CBM,
                     Container = g.Container == null 
                                     ? null 
                                     : new Container {
@@ -134,7 +137,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
             Description = p.Description,
             OperationId = p.OperationId,
             ShippingAgentId = p.ShippingAgentId,
-            DONumber = p.DONumber,
+            DONumber = p.DONumber
         }).FirstOrDefault();
 
         if(payment == null){
