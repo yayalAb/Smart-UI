@@ -10,6 +10,7 @@ using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
 using Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
+using Application.ContainerModule.Commands.CreateSingleContainer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +22,20 @@ namespace WebApi.Controllers
         // POST api/<ContainerController>
         [HttpPost]
         public async Task<IActionResult> CreateContainer([FromBody] CreateContainerCommand command) {
+
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex){
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpPost]
+        [Route("single")]
+        public async Task<IActionResult> CreateSingle([FromBody] CreateSingleContainer command) {
 
             try {
                 return Ok(await Mediator.Send(command));
