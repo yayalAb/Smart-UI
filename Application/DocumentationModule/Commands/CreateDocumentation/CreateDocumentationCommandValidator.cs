@@ -33,9 +33,6 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
                 .MaximumLength(45)
                 .WithMessage("Invoice Number is not in the correct format!");
 
-            RuleFor(d => d.TransportationMethod)
-                .MaximumLength(45)
-                .WithMessage("transportation method name is not in the correct format!");
             RuleFor(d => d.Source)
                 .MaximumLength(45)
                 .WithMessage("source is not in the correct format!");

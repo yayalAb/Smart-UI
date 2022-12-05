@@ -165,12 +165,12 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("CommercialInvoice/{operationId}")]
-        public async Task<IActionResult> GenerateCommercialInvoice(int operationId)
+        [HttpGet("CommercialInvoice")]
+        public async Task<IActionResult> GenerateCommercialInvoice([FromQuery] CommercialInvoice command)
         {
 
             try {
-                return Ok(await Mediator.Send(new CommercialInvoice { operationId = operationId}));
+                return Ok(await Mediator.Send(command));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             } catch(Exception ex) {

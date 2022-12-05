@@ -111,7 +111,7 @@ public class PackageListHandler : IRequestHandler<PackageList, PackageListDto> {
             // Country = d.Country,
             // City = d.City,
             // TinNumber = d.TinNumber,
-            TransportationMethod = d.TransportationMethod,
+
             Source = d.Source,
             Destination = d.Destination
         }).FirstOrDefault();
