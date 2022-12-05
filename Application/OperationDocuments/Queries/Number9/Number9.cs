@@ -16,8 +16,7 @@ public record Number9 : IRequest<Number9Dto> {
     public string Type {get; init;}
 }
 
-public class Number9Handler : IRequestHandler<Number9, Number9Dto>
-{
+public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     private readonly IAppDbContext _context;
     private readonly OperationEventHandler _operationEvent;
 
@@ -32,6 +31,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
             .Include(o => o.Company)
             .Include(o => o.Goods)
             .Include(o => o.Containers)
+            .Include(o => o.Company.Address)
             .Select(o => new Operation {
                 Id = o.Id,
                 NameOnPermit = o.NameOnPermit,
@@ -68,7 +68,22 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                 CountryOfOrigin = o.CountryOfOrigin, // operation
                 REGTax = o.REGTax,//
                 BillOfLoadingNumber = o.BillOfLoadingNumber,
-                Company = o.Company,
+                Company = new Company {
+                    Name = o.Company.Name,
+                    TinNumber = o.Company.TinNumber,
+                    CodeNIF = o.Company.CodeNIF,
+                    ContactPersonId = o.Company.ContactPersonId,
+                    AddressId = o.Company.AddressId,
+                    Address = new Address{
+                        Email = o.Company.Address.Email,
+                        Phone = o.Company.Address.Phone,
+                        Region = o.Company.Address.Region,
+                        City = o.Company.Address.City,
+                        Subcity = o.Company.Address.Subcity,
+                        Country = o.Company.Address.Country,
+                        POBOX = o.Company.Address.POBOX,
+                    }
+                },
                 Goods = (o.Goods != null) ? o.Goods.Select(g => new Good {
                     Description = g.Description,
                     HSCode = g.HSCode,
@@ -99,13 +114,28 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         TruckAssignmentId = g.Container.TruckAssignmentId
                                     }
                 }).ToList() : null,
-            }).FirstOrDefault();
+            }).First();
         
         if(operation == null){
             throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
         }
 
-        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder ).FirstOrDefault();
+        var goods = operation.Goods;
+        operation.Goods = null;
+
+        var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder ).Select(p => new Payment {
+            Name = p.Name,
+            Type = p.Type,
+            PaymentDate = p.PaymentDate,
+            PaymentMethod = p.PaymentMethod,
+            BankCode = p.BankCode,
+            Amount = p.Amount,
+            Currency = p.Currency,
+            Description = p.Description,
+            OperationId = p.OperationId,
+            ShippingAgentId = p.ShippingAgentId,
+            DONumber = p.DONumber,
+        }).FirstOrDefault();
 
         if(payment == null){
             throw new GhionException(CustomResponse.NotFound(" Delivery Order Payment for the operation not found!"));
@@ -121,7 +151,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
         return new Number9Dto {
             company = operation.Company,
             operation = operation,
-            goods = operation.Goods,
+            goods = goods,
             doPayment = payment
         };
 
