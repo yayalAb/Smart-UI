@@ -10,7 +10,7 @@ namespace Application.ContainerModule.Commands.CreateSingleContainer;
 
 public record CreateSingleContainer : IRequest<CustomResponse>
 {
-    public string ContainerNumber { get; set; } = null!;
+    public string ContianerNumber { get; set; } = null!;
     public string SealNumber { get; set; } = null!;
     public string Location { get; set; } = null!;
     public float Size { get; set; }
