@@ -12,6 +12,7 @@ using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries;
 using Application.OperationDocuments.Queries;
 using Application.OperationModule.Commands.CreateOperation;
+using Application.OperationModule.Commands.UpdateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
@@ -44,6 +45,8 @@ namespace Application.Common.Mappings
             CreateMap<ContactPersonUpdateCommand , ContactPerson>();
             CreateMap<CreateCompanyCommand , Company>();
             CreateMap<UpdateCompanyCommand , Company>();
+            CreateMap<BankInformationDto , BankInformation>();
+            CreateMap<UpdateBankInformationDto , BankInformation>();
 
             CreateMap<CreateDocumentationCommand, Documentation>();
 
@@ -52,6 +55,7 @@ namespace Application.Common.Mappings
             CreateMap<UpdatePymentCommand, Payment>();
             CreateMap<CreatePaymentCommand , Payment>();
             CreateMap<CreateOperationCommand, Operation>();
+            CreateMap<UpdateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
             CreateMap<CreateSingleContainer, Container>();
             CreateMap<GoodDto , Good>();

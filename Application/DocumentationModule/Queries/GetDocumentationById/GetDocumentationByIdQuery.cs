@@ -6,7 +6,6 @@ using Application.Common.Models;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Entities;
 using MediatR;
 
 namespace Application.DocumentationModule.Queries.GetDocumentationById
@@ -32,7 +31,7 @@ namespace Application.DocumentationModule.Queries.GetDocumentationById
             .FirstOrDefault(d => d.Id == request.Id);
             if(doc == null)
             {
-                throw new GhionException(CustomResponse.NotFound("Documentation"));
+                throw new GhionException(CustomResponse.NotFound($"Documentation with Id {request.Id} is not found"));
             }
             return doc;
         }

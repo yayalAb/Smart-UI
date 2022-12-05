@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221205072943_bankInfo-company-relation")]
+    partial class bankInfocompanyrelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,6 +169,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CompanyId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
@@ -186,6 +191,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("CompanyId1");
 
                     b.ToTable("BankInformation");
                 });
@@ -366,6 +373,14 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
+                    b.Property<string>("City")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
+                    b.Property<string>("Country")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
@@ -381,6 +396,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Fright")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ImporterName")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
 
                     b.Property<string>("InvoiceNumber")
                         .HasMaxLength(45)
@@ -401,13 +420,18 @@ namespace Infrastructure.Migrations
                     b.Property<string>("PaymentTerm")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("PurchaseOrderDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Phone")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
 
                     b.Property<string>("PurchaseOrderNumber")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Source")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)");
+
+                    b.Property<string>("TinNumber")
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
@@ -691,9 +715,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
-
-                    b.Property<DateTime?>("PIDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("PINumber")
                         .HasColumnType("longtext");
@@ -1376,9 +1397,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.BankInformation", b =>
                 {
-                    b.HasOne("Domain.Entities.Company", "Company")
+                    b.HasOne("Domain.Entities.Company", null)
                         .WithMany("BankInformation")
                         .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

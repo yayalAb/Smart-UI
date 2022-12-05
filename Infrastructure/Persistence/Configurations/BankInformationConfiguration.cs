@@ -11,10 +11,9 @@ public class BankInformationConfiguration : IEntityTypeConfiguration<BankInforma
             .ValueGeneratedOnAdd();
 
 
-        entity.HasOne<Company>()
+        entity.HasOne(bi => bi.Company)
             .WithMany(c => c.BankInformation)
             .HasForeignKey(bi=>bi.CompanyId)
-            .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
     
     }

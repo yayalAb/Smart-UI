@@ -7,6 +7,7 @@ using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using Application.OperationDocuments.Queries.CertificateOfOrigin;
+using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Number4;
 using Application.OperationDocuments.Queries.Number9;
 using Application.OperationDocuments.Queries.PackageList;
@@ -169,7 +170,7 @@ namespace WebApi.Controllers
         {
 
             try {
-                return Ok(await Mediator.Send(new Application.OperationDocuments.Queries.CommercialInvoice.CommercialInvoice { operationId = operationId}));
+                return Ok(await Mediator.Send(new CommercialInvoice { operationId = operationId}));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             } catch(Exception ex) {

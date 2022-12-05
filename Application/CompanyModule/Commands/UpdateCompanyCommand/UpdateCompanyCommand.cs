@@ -24,6 +24,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string CodeNIF { get; init; }
         public ContactPersonUpdateCommand contactPerson { get; init; }
         public UpdateAddressDto address { get; init; }
+        public ICollection<UpdateBankInformationDto> BankInformation { get; init; }
     }
 
 
@@ -46,6 +47,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
             bool isCompanyFound = _context.Companies
                         .Include(c => c.Address)
                         .Include(c => c.ContactPerson)
+                        .Include( c => c.BankInformation)
                         .Where(c => c.Id == request.Id).AsNoTracking()
                         .Any();
             // var comp = _context.Companies.Find(request.Id);
@@ -53,29 +55,6 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
             if(!isCompanyFound){
                 throw new GhionException(CustomResponse.NotFound("Company not found!"));
             }
-
-            // comp.Name = request.Name;
-            // comp.TinNumber = request.TinNumber;
-            // comp.CodeNIF = request.CodeNIF;
-
-            // if(comp.ContactPerson == null){
-            //     comp.ContactPerson = new ContactPerson();
-            //     comp.ContactPerson.Name = request.contactPerson.Name;
-            //     comp.ContactPerson.Email = request.contactPerson.Email;
-            //     comp.ContactPerson.Phone = request.contactPerson.Phone;
-            // }else{
-            //     comp.ContactPerson.Name = request.contactPerson.Name;
-            //     comp.ContactPerson.Email = request.contactPerson.Email;
-            //     comp.ContactPerson.Phone = request.contactPerson.Phone;
-            // }
-
-            // comp.Address.Email = request.address.Email;
-            // comp.Address.Phone = request.address.Phone;
-            // comp.Address.Region = request.address.Region;
-            // comp.Address.City = request.address.City;
-            // comp.Address.Subcity = request.address.Subcity;
-            // comp.Address.Country = request.address.Country;
-            // comp.Address.POBOX = request.address.POBOX;
             _context.Companies.Update(_mapper.Map<Company>(request));
             await _context.SaveChangesAsync(cancellationToken);
 

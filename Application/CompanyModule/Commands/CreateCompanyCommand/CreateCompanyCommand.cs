@@ -6,6 +6,7 @@ using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.Common.Models;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 
@@ -17,6 +18,7 @@ public record CreateCompanyCommand : IRequest<CustomResponse>
     public string CodeNIF { get; init; } = null!;
     public ContactPersonCreateCommand? contactPerson { get; init; }
     public AddressDto address { get; init; } = null!;
+    public ICollection<BankInformationDto> BankInformation { get; init; } = null!;
 
 }
 
@@ -36,9 +38,32 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
 
     public async Task<CustomResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        _context.Companies.Add(_mapper.Map<Company>(request));
-        await _context.SaveChangesAsync(cancellationToken);
-        return CustomResponse.Succeeded("Company Created",201);
+
+        var executionStrategy = _context.database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
+
+            using (var transaction = _context.database.BeginTransaction())
+            {
+
+                try
+
+                {
+                    await _context.Companies.AddAsync(_mapper.Map<Company>(request));
+                    await _context.SaveChangesAsync(cancellationToken);
+                    await transaction.CommitAsync();
+
+                    return CustomResponse.Succeeded("Company Created Successfully" , 201);
+
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+        });
 
     }
 }

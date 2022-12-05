@@ -14,6 +14,7 @@ namespace Application.OperationDocuments.Queries.CommercialInvoice;
 public record CommercialInvoice : IRequest<CommercialInvoiceDto> {
     public int operationId {get; init;}
     //if type is false it means Commercia invoice if it is true it means Proforma invoice
+    public string? PINumber { get; init; }
     public bool Type {get; init;} = false;
 }
 
@@ -78,11 +79,11 @@ public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, Comme
             Date = d.Date,
             BankPermit = d.BankPermit,
             InvoiceNumber = d.InvoiceNumber,
-            ImporterName = d.ImporterName,
-            Phone = d.Phone,
-            Country = d.Country,
-            City = d.City,
-            TinNumber = d.TinNumber,
+            // ImporterName = d.ImporterName,
+            // Phone = d.Phone,
+            // Country = d.Country,
+            // City = d.City,
+            // TinNumber = d.TinNumber,
             TransportationMethod = d.TransportationMethod,
             Source = d.Source,
             Destination = d.Destination,
