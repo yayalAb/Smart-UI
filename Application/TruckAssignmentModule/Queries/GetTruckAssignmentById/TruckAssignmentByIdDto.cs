@@ -10,6 +10,7 @@ public class TruckAssignmentByIdDto
     public int TruckId { get; set; }
     public string SourceLocation { get; set; }
     public string DestinationLocation { get; set; }
+    public string TransportationMethod { get; set; }
     public int? SourcePortId { get; set; }
     public int? DestinationPortId { get; set; }
     public List<int>? ContainerIds { get; set; }

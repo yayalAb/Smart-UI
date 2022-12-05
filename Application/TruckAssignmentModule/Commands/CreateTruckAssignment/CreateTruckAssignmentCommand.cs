@@ -21,6 +21,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         public string DestinationLocation {get; set;}
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
+        public string? TransportationMethod { get; set; }
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 
