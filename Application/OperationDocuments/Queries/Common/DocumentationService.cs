@@ -59,12 +59,6 @@ public class DocumentationService
                             PortOfLoading = o.PortOfLoading.Country,
                             FinalDestination = o.FinalDestination,
                             Consignee = o.Consignee,
-                            DriverName = o.TruckAssignments == null
-                                                ? null
-                                                : o.TruckAssignments.FirstOrDefault()!.Driver.Fullname,
-                            DriverPhone = o.TruckAssignments == null
-                                                ? null
-                                                : o.TruckAssignments.FirstOrDefault()!.Driver.Address.Phone,
                             PlaceOfDelivery = o.TruckAssignments == null
                                                 ? null
                                                 : o.TruckAssignments.FirstOrDefault()!.DestinationLocation,
@@ -104,13 +98,25 @@ public class DocumentationService
 
             if (doc == null)
             {
-                throw new GhionException(CustomResponse.Failed("Documentaion Not found!", 450));
+                throw new GhionException(CustomResponse.Failed("Documentation Not found!", 450));
             }
             data!.Date = doc.Date;
             data.PurchaseOrderDate = doc.PurchaseOrderDate;
             data.PurchaseOrderNumber = doc.PurchaseOrderNumber;
             data.PaymentTerm = doc.PaymentTerm;
             data.PartialShipment = (bool)doc.IsPartialShipmentAllowed! ? "TO BE ALLOWED" : "NOT ALLOWED";
+        }
+        else
+        {
+            var driverData = await _context.TruckAssignments
+                .Include(ta => ta.Driver)
+                .Where(ta => ta.Id == truckAssignmentId)
+                .Select(ta => new {
+                    name =ta.Driver == null?null: ta.Driver.Fullname,
+                    phone = ta.Driver == null? null: ta.Driver.Address.Phone
+                }).FirstOrDefaultAsync();
+                data!.DriverName = driverData!.name;
+                data.DriverPhone = driverData.phone;
         }
 
 
