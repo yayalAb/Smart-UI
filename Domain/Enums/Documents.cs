@@ -15,6 +15,7 @@ namespace Domain.Enums
         PackageList,
         TruckWayBill,
         ProformaInvoice,
-        CirtificateOfOrigin
+        CirtificateOfOrigin,
+        ECDDocument
     }
 }

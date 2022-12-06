@@ -4,8 +4,10 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.OperationFollowupModule;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationModule.Commands.DispatchECD
 {
@@ -27,28 +29,52 @@ namespace Application.OperationModule.Commands.DispatchECD
         }
         public async Task<CustomResponse> Handle(DsipatchECDCommand request, CancellationToken cancellationToken)
         {
-            var found_Operation = await _context.Operations.FindAsync(request.OperationId);
-            if (found_Operation == null)
+            var executionStrategy = _context.database.CreateExecutionStrategy();
+            return await executionStrategy.ExecuteAsync(async () =>
             {
-                throw new GhionException(CustomResponse.NotFound($"Operation with id = {request.OperationId} is not found"));
-            }
-            
-            //checking preconditions for dispatching ecd doc
-            if (!await _operationEventHandler.IsDocumentGenerated(found_Operation.Id, Enum.GetName(typeof(Documents), Documents.GoodsRemoval)!))
-            {
-                throw new GhionException(CustomResponse.BadRequest($"Goods removal document must be generated before dispatching ECD documnet"));
-            }
+                using (var transaction = _context.database.BeginTransaction())
+                {
+                    try
+                    {
+                        var found_Operation = await _context.Operations.FindAsync(request.OperationId);
+                        if (found_Operation == null)
+                        {
+                            throw new GhionException(CustomResponse.NotFound($"Operation with id = {request.OperationId} is not found"));
+                        }
 
-            if (request.ECDDocument != null)
-            {
-                found_Operation.ECDDocument = request.ECDDocument;
-            }
+                        //checking preconditions for dispatching ecd doc
+                        if (!await _operationEventHandler.IsDocumentGenerated(found_Operation.Id, Enum.GetName(typeof(Documents), Documents.GoodsRemoval)!))
+                        {
+                            throw new GhionException(CustomResponse.BadRequest($"Goods removal document must be generated before dispatching ECD documnet"));
+                        }
 
-            found_Operation.Status = Enum.GetName(typeof(Status), Status.ECDDispatched)!;
-            _context.Operations.Update(found_Operation);
-            await _context.SaveChangesAsync(cancellationToken);
+                        if (request.ECDDocument != null)
+                        {
+                            found_Operation.ECDDocument = request.ECDDocument;
+                        }
+                        // update operation status and generate doc
+                        var statusName = Enum.GetName(typeof(Status), Status.ECDDispatched);
+                        await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                        {
+                            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.ECDDocument)!,
+                            GeneratedDate = DateTime.Now,
+                            IsApproved = true,
+                            OperationId = request.OperationId
+                        }, statusName!);
 
-            return CustomResponse.Succeeded("ECD document dispatched  successfully!");
+                        _context.Operations.Update(found_Operation);
+                        await _context.SaveChangesAsync(cancellationToken);
+                        await transaction.CommitAsync();
+                        return CustomResponse.Succeeded("ECD document dispatched  successfully!");
+                    }
+                    catch (Exception)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+            });
+
         }
     }
 }
