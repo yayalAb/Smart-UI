@@ -12,6 +12,10 @@ using Application.GoodModule.Commands.AssignGoodsCommand;
 using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries;
 using Application.OperationDocuments.Queries;
+using Application.OperationDocuments.Queries.CommercialInvoice;
+using Application.OperationDocuments.Queries.Common;
+using Application.OperationDocuments.Queries.PackageList;
+using Application.OperationDocuments.Queries.TruckWayBill;
 using Application.OperationModule.Commands.CreateOperation;
 using Application.OperationModule.Commands.UpdateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
@@ -70,6 +74,10 @@ namespace Application.Common.Mappings
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
             CreateMap<AddressUpdateDto, Address>().ReverseMap();
             CreateMap<BankInformationUpdateDto, BankInformation>().ReverseMap();
+            CreateMap<AllDocDto , CommercialInvoiceDto2>();
+            CreateMap<AllDocDto , PackingListDto>();
+            CreateMap<AllDocDto , TruckWayBillDto2>();
+            CreateMap<AllDocDto , WaybillDto>();
 
 
             

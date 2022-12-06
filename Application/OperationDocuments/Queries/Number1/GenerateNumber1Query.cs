@@ -80,7 +80,7 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             SourceLocation = null,
                             DestinationLocation = null
                         }).First();
-
+    
                     // update operation status and generate doc
                     var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
                     await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus

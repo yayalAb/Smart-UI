@@ -51,6 +51,8 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
+        public string? PINumber { get; set; }
+        public DateTime? PIDate { get; set; }
 
         //--------------------------------------//
     }
@@ -68,11 +70,12 @@ namespace Application.OperationModule.Commands.UpdateOperation
         }
         public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
         {
-           
-            if (!_context.Operations.Any(o => o.Id == request.Id)){
+
+            if (!_context.Operations.Any(o => o.Id == request.Id))
+            {
                 throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
             }
-            
+
             Operation updatedOperation = _mapper.Map<Operation>(request);
             _context.Operations.Update(updatedOperation);
             await _context.SaveChangesAsync(cancellationToken);

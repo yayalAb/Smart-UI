@@ -1,4 +1,5 @@
 ﻿using Application.Common.Behaviours;
+using Application.OperationDocuments.Queries.Common;
 using Application.OperationDocuments.Queries.GenerateGatepass;
 using Application.OperationFollowupModule;
 using FluentValidation;
@@ -17,6 +18,7 @@ namespace Application
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<OperationEventHandler>();
             services.AddScoped<GatepassService>();
+            services.AddScoped<DocumentationService>();
            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));

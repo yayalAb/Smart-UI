@@ -104,12 +104,12 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("packageLists/{operationId}")]
-        public async Task<IActionResult> GeneratePackageList(int operationId) {
+        [HttpGet("packageLists")]
+        public async Task<IActionResult> GeneratePackageList([FromQuery] PackageList command) {
 
             try
             {
-                return Ok(await Mediator.Send(new PackageList() { operationId = operationId }));
+                return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
