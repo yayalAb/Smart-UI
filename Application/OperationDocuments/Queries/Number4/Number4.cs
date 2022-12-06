@@ -82,7 +82,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
-                    else if (operation.Status != Enum.GetName(typeof(Status), Status.GatePassGenerated))
+                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!))
                     {
                         throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     }
