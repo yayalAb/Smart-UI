@@ -16,7 +16,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
     public record UpdateOperationCommand : IRequest<CustomResponse>
     {
         public int Id { get; set; }
-        public string? NameOnPermit { get; set; }
         public string? Consignee { get; set; }
         public string? NotifyParty { get; set; }
         public string? BillNumber { get; set; }

@@ -30,7 +30,12 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
             .HasForeignKey<Company>(d => d.AddressId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior. ClientSetNull);
-        
+
+        entity.HasMany(c => c.DefaultSetting)
+            .WithOne(s => s.DefaultCompany)
+            .HasForeignKey(s => s.CompanyId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior. ClientSetNull);
     }
 
 }

@@ -9,4 +9,7 @@ public class Setting {
     public string Host {get; set;}
     public string Protocol {get; set;}
     public string Username {get; set;}
+    public int CompanyId {get; set;}
+
+    public Company DefaultCompany {get; set;} = null!;
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Common.Models;
 using Application.Common.Exceptions;
 using WebApi.Models;
+using Application.SettingModule.Queries.DefaultCompany;
 
 namespace WebApi.Controllers;
 
@@ -42,7 +43,7 @@ public class SettingController : ApiControllerBase
     {
         try
         {
-            return Ok(await Mediator.Send(new GetSettings()));
+            return Ok(await Mediator.Send(new GetDefaultCompany()));
         }
         catch (GhionException ex)
         {

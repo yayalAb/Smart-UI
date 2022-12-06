@@ -48,6 +48,7 @@ namespace Infrastructure.Persistence
             {
                 await TrySeedAsync();
                 await TrySeedLookup();
+                await TrySeedSettings();
                 // await updateLookup();
             }
             catch (Exception ex)
@@ -131,8 +132,7 @@ namespace Infrastructure.Persistence
 
                 //adding default user roles
                List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(groupId);
-                try
-                {
+                try {
                     await _context.AddRangeAsync(defaultRoles);
                     _logger.LogInformation("successfully added roles for the default user");
 
@@ -184,6 +184,89 @@ namespace Infrastructure.Persistence
             _context.Lookups.AddRange(terminalPortPaymentNames);
 
             await _context.SaveChangesAsync();
+
+        }
+
+        public async Task TrySeedSettings() {
+
+            if(_context.Settings.Any()){
+                return;
+            }
+
+            var executionStrategy = _context.database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () => {
+                using (var transaction = _context.database.BeginTransaction())
+                {
+                    try {
+
+                        var addressInfo = new Address {
+                                Email = "ghioninternationalfzco@gmail.com",
+                                Phone = "+25321353730",
+                                Region = "EAST AFRIC",
+                                City = "Djibouti",
+                                Subcity = "Djibouti",
+                                Country = "REPUBLIC DE DJIBOUTI",
+                                POBOX = "0000"
+                            };
+
+                        var contactPerson = new ContactPerson {
+                            Name = "Abnet Kebede",
+                            Email = "ab@absoft.net",
+                            Phone = "0987654321",
+                            TinNumber = "3478568",
+                            Country = "DEMOCRATIC REPUBLIC OF ETHIOPIA", 
+                            City = "ADDIS ABABA"
+                        };
+
+                        _context.Addresses.Add(addressInfo);
+                        _context.ContactPeople.Add(contactPerson);
+                        await _context.SaveChangesAsync();
+
+                        var defaultCompany = new Company {
+                                Name = "Ghion International",
+                                TinNumber = "111",
+                                CodeNIF = "code_nif",
+                                ContactPersonId = contactPerson.Id,
+                                AddressId = addressInfo.Id,
+                            };
+                        
+                        _context.Companies.Add(defaultCompany);
+                        await _context.SaveChangesAsync();
+
+                        var bankInfo = new BankInformation {
+                                AccountHolderName = "GHION INTERNATIONAL DJIBUTI",
+                                BankName = "CAC INTERNATIONAL BANK",
+                                AccountNumber = "1003499041",
+                                SwiftCode = "CACDDJJD",
+                                BankAddress = "DJIBOUTI, REPUBLIC DE DJIBOUTI",
+                                CompanyId = defaultCompany.Id
+                            };
+                        
+                        _context.BankInformation.Add(bankInfo);
+                        await _context.SaveChangesAsync();
+
+                        var setting = new Setting {
+                            Email = "tihitnatsegaye7@gmail.com",
+                            Password = "tiucpqdxigzogxco",
+                            Port = "465",
+                            Host = "smtp.gmail.com",
+                            Protocol = "SMTP",
+                            Username = "tihitnatsegaye7@gmail.com",
+                            CompanyId = defaultCompany.Id
+                        };
+
+                        _context.Settings.Add(setting);
+                        await _context.SaveChangesAsync();
+
+                        transaction.Commit();
+
+                    } catch (System.Exception) {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+
+                }
+            });
 
         }
 

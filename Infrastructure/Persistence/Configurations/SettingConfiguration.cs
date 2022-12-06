@@ -35,6 +35,14 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting> {
             .HasMaxLength(10)
             .IsRequired(true);
         
+        entity.Property(e => e.CompanyId)
+            .IsRequired(true);
+
+        // entity.HasOne(e => e.DefaultCompany)
+        //     .WithOne(c => c.DefaultSetting)
+        //     .HasForeignKey<Setting>(d => d.CompanyId)
+        //     .IsRequired(true)
+        //     .OnDelete(DeleteBehavior.ClientSetNull);
     }
 
 }

@@ -16,6 +16,7 @@ using Application.OperationModule.Commands.CreateOperation;
 using Application.OperationModule.Commands.UpdateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
+using Application.SettingModule.Command.UpdateSettingCommand;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 using Application.TruckModule.Commands.CreateTruckCommand;
@@ -66,7 +67,9 @@ namespace Application.Common.Mappings
             CreateMap<CreateTruckCommand , Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
             CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
-            CreateMap<UpdateGoodDto , Good>().ReverseMap();
+            CreateMap<CompanyUpdateDto, Company>().ReverseMap();
+            CreateMap<AddressUpdateDto, Address>().ReverseMap();
+            CreateMap<BankInformationUpdateDto, BankInformation>().ReverseMap();
 
 
             
