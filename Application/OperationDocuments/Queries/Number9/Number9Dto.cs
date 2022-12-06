@@ -8,4 +8,5 @@ public class Number9Dto {
     public Operation operation {get; set;}
     public Payment doPayment {get; set;}
     public ICollection<Good> goods {get; set;}
+    public IEnumerable<float> containerSize {get; set;}
 }
