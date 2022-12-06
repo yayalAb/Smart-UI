@@ -72,7 +72,6 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                 Type = t.Truck.Type,
                                 PlateNumber = t.Truck.PlateNumber,
                                 Capacity = t.Truck.Capacity,
-                                Image = t.Truck.Image,
                                 IsAssigned = t.Truck.IsAssigned
                             },
                             Containers = (t.Containers != null) ? t.Containers.Select(c => new Container()
