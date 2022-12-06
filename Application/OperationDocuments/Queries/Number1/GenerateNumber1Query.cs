@@ -35,55 +35,72 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
 
     public async Task<Number1Dto> Handle(GenerateNumber1Query request, CancellationToken cancellationToken)
     {
-        if (!await _context.Operations.AnyAsync(o => o.Id == request.OperationId))
+        var executionStrategy = _context.database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
-        }
-        var date = DateTime.Now;
-        // fetch number1 form data
-        Number1Dto data =  _context.Operations
-            .Include(o => o.Company)
-            .Include(o => o.Payments.Where(p => p.Name == "DO"))
-            .Include(o => o.Goods)
-            .Where(o => o.Id == request.OperationId )
-            .Select(o => new Number1Dto
+            using (var transaction = _context.database.BeginTransaction())
             {
-                Date = date,
-                CodeNIF = o.Company.CodeNIF,
-                SNumber = o.SNumber,
-                SDate = o.SDate,
-                DONumber = o.Payments == null || o.Payments.ToList().Count == 0
-                                    ? null
-                                    : o.Payments.First().DONumber,
-                DODate = o.Payments == null || o.Payments.ToList().Count == 0
-                                    ? null
-                                    : o.Payments.First().PaymentDate,
-                TotalNumberOfPackages = o.Goods == null || o.Goods.Count == 0
-                                    ? null
-                                    : o.Goods.Select(g => g.NumberOfPackages).Sum(),
-                RecepientName = o.RecepientName,
-                VesselName = o.VesselName,
-                ArrivalDate = o.ArrivalDate,
-                VoyageNumber = o.VoyageNumber,
-                ConnaissementNumber = o.ConnaissementNumber,
-                CountryOfOrigin = o.CountryOfOrigin,
-                REGTax = o.REGTax,
-                Goods = _mapper.Map<ICollection<DocGoodDto>>(o.Goods),
-                // TODO: find out source of ports data
-                SourceLocation = null,
-                DestinationLocation = null
-            }).First();
+                try
+                {
+                    if (!await _context.Operations.AnyAsync(o => o.Id == request.OperationId))
+                    {
+                        throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
+                    }
+                    var date = DateTime.Now;
+                    // fetch number1 form data
+                    Number1Dto data = _context.Operations
+                        .Include(o => o.Company)
+                        .Include(o => o.Payments.Where(p => p.Name == "DO"))
+                        .Include(o => o.Goods)
+                        .Where(o => o.Id == request.OperationId)
+                        .Select(o => new Number1Dto
+                        {
+                            Date = date,
+                            CodeNIF = o.Company.CodeNIF,
+                            SNumber = o.SNumber,
+                            SDate = o.SDate,
+                            DONumber = o.Payments == null || o.Payments.ToList().Count == 0
+                                                ? null
+                                                : o.Payments.First().DONumber,
+                            DODate = o.Payments == null || o.Payments.ToList().Count == 0
+                                                ? null
+                                                : o.Payments.First().PaymentDate,
+                            TotalNumberOfPackages = o.Goods == null || o.Goods.Count == 0
+                                                ? null
+                                                : o.Goods.Select(g => g.NumberOfPackages).Sum(),
+                            RecepientName = o.RecepientName,
+                            VesselName = o.VesselName,
+                            ArrivalDate = o.ArrivalDate,
+                            VoyageNumber = o.VoyageNumber,
+                            ConnaissementNumber = o.ConnaissementNumber,
+                            CountryOfOrigin = o.CountryOfOrigin,
+                            REGTax = o.REGTax,
+                            Goods = _mapper.Map<ICollection<DocGoodDto>>(o.Goods),
+                            // TODO: find out source of ports data
+                            SourceLocation = null,
+                            DestinationLocation = null
+                        }).First();
 
-        // update operation status and generate doc
-        var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
-        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
-            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number1)!,
-            GeneratedDate = date,
-            IsApproved = false,
-            OperationId = request.OperationId
-        }, statusName!);
+                    // update operation status and generate doc
+                    var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
+                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                    {
+                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number1)!,
+                        GeneratedDate = date,
+                        IsApproved = false,
+                        OperationId = request.OperationId
+                    }, statusName!);
+                    await transaction.CommitAsync();
+                    return data;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        });
 
-        return data;
 
     }
 }

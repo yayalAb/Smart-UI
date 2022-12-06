@@ -111,6 +111,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                        // generate gatepass (fetch gatepass data)
                         var gatepass =  await _gatepassService.GenerateGatePass(request.OperationId , newTruckAssignment.Id , cancellationToken);
                         await transaction.CommitAsync();
+                        
                         return gatepass;
 
                     }

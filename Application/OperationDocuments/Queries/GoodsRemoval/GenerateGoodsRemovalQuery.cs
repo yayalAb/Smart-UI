@@ -25,92 +25,109 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
     }
     public async Task<GoodsRemovalDto> Handle(GenerateGoodsRemovalQuery request, CancellationToken cancellationToken)
     {
-        if (!await _context.Operations.AnyAsync(o => o.Id == request.OperationId))
+        var executionStrategy = _context.database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
-        }
-        //checking preconditions before generating goods removal
-        if (!await _operationEventHandler.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.T1)!))
-        {
-            throw new GhionException(CustomResponse.BadRequest($"T1 must be approved before generating goods removal document "));
-        }
-        List<TruckAssignmentDto> truckAssignments = new List<TruckAssignmentDto>();
-        var operationData = await _context.Operations.Where(o => o.Id == request.OperationId)
-                                .Include(o => o.PortOfLoading)
-                                .Include(o => o.Company)
-                                .Include(o => o.ShippingAgent)
-                                .Select(o => new
-                                {
-                                    ImporterName = o.Company.Name,
-                                    ShippingAgnetName = o.ShippingAgent == null
-                                                                        ? null
-                                                                        : o.ShippingAgent.FullName,
-                                    BillOfLoadingNumber = o.BillOfLoadingNumber,
-                                    LocationOfLoading = o.PortOfLoading == null
-                                                                        ? null
-                                                                        : o.PortOfLoading.Country,
-                                    VoyageNumber = o.VoyageNumber
-                                }!
-                                ).FirstOrDefaultAsync();
-        for (int i = 0; i < request.TruckAssignmentIds.Count; i++)
-        {
-            var ta = await _context.TruckAssignments.Where(ta => ta.Id == request.TruckAssignmentIds[i])
-                        .Include(ta => ta.Truck)
-                        .Include(ta => ta.Driver)
-                        .Include(ta => ta.Containers)
-                            .ThenInclude(c => c.Goods)
-                        .Include(ta => ta.Goods)
-                        .Select(ta => new TruckAssignmentDto
-                        {
-                            PlateNumber = ta.Truck == null
-                                                            ? null
-                                                            : ta.Truck.PlateNumber,
-                            DriverName = ta.Driver == null
-                                                            ? null
-                                                            : ta.Driver.Fullname,
-                            DriverPhone = ta.Driver == null
-                                                            ? null
-                                                            : ta.Driver.Address.Phone,
-                            ContainerNumbers = ta.Containers == null || ta.Containers.Count == 0
-                                                            ? null
-                                                            : ta.Containers.Select(c => c.ContianerNumber).ToList(),
-                            Quantity = getQuantity(ta.Containers, ta.Goods),
-                            Weight = getWeight(ta.Containers, ta.Goods),
-                            Description = getDescription(ta.Containers, ta.Goods)
+            using (var transaction = _context.database.BeginTransaction())
+            {
+                try
+                {
+                    if (!await _context.Operations.AnyAsync(o => o.Id == request.OperationId))
+                    {
+                        throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
+                    }
+                    //checking preconditions before generating goods removal
+                    if (!await _operationEventHandler.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.T1)!))
+                    {
+                        throw new GhionException(CustomResponse.BadRequest($"T1 must be approved before generating goods removal document "));
+                    }
+                    List<TruckAssignmentDto> truckAssignments = new List<TruckAssignmentDto>();
+                    var operationData = await _context.Operations.Where(o => o.Id == request.OperationId)
+                                                .Include(o => o.PortOfLoading)
+                                                .Include(o => o.Company)
+                                                .Include(o => o.ShippingAgent)
+                                                .Select(o => new
+                                                {
+                                                    ImporterName = o.Company.Name,
+                                                    ShippingAgnetName = o.ShippingAgent == null
+                                                                                        ? null
+                                                                                        : o.ShippingAgent.FullName,
+                                                    BillOfLoadingNumber = o.BillOfLoadingNumber,
+                                                    LocationOfLoading = o.PortOfLoading == null
+                                                                                        ? null
+                                                                                        : o.PortOfLoading.Country,
+                                                    VoyageNumber = o.VoyageNumber
+                                                }!
+                                                ).FirstOrDefaultAsync();
+                    for (int i = 0; i < request.TruckAssignmentIds.Count; i++)
+                    {
+                        var ta = await _context.TruckAssignments.Where(ta => ta.Id == request.TruckAssignmentIds[i])
+                                        .Include(ta => ta.Truck)
+                                        .Include(ta => ta.Driver)
+                                        .Include(ta => ta.Containers)
+                                            .ThenInclude(c => c.Goods)
+                                        .Include(ta => ta.Goods)
+                                        .Select(ta => new TruckAssignmentDto
+                                        {
+                                            PlateNumber = ta.Truck == null
+                                                                            ? null
+                                                                            : ta.Truck.PlateNumber,
+                                            DriverName = ta.Driver == null
+                                                                            ? null
+                                                                            : ta.Driver.Fullname,
+                                            DriverPhone = ta.Driver == null
+                                                                            ? null
+                                                                            : ta.Driver.Address.Phone,
+                                            ContainerNumbers = ta.Containers == null || ta.Containers.Count == 0
+                                                                            ? null
+                                                                            : ta.Containers.Select(c => c.ContianerNumber).ToList(),
+                                            Quantity = getQuantity(ta.Containers, ta.Goods),
+                                            Weight = getWeight(ta.Containers, ta.Goods),
+                                            Description = getDescription(ta.Containers, ta.Goods)
 
-                        }).FirstOrDefaultAsync();
-            truckAssignments.Add(ta);
-        }
+                                        }).FirstOrDefaultAsync();
+                        truckAssignments.Add(ta);
+                    }
 
-        // update operation status and generate doc
-        var date = DateTime.Now;
-        var statusName = Enum.GetName(typeof(Status), Status.GoodsRemovalGenerated);
-        await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-        {
-            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.GoodsRemoval)!,
-            GeneratedDate = date,
-            IsApproved = false,
-            OperationId = request.OperationId
-        },
-         statusName!
-         );
+                // update operation status and generate doc
+                    var date = DateTime.Now;
+                    var statusName = Enum.GetName(typeof(Status), Status.GoodsRemovalGenerated);
 
-        return new GoodsRemovalDto
-        {
-            Date = date,
-            Declarant = null,
-            ImporterName = operationData?.ImporterName,
-            ShippingAgentName = operationData?.ShippingAgnetName,
-            BillOfloadingNumber = operationData?.BillOfLoadingNumber,
-            REFNumber = null,
-            ClearanceOffice = null,
-            FrontierOffice = null,
-            LocationOfLoading = operationData?.LocationOfLoading,
-            VoyageNumber = operationData?.VoyageNumber,
-            DeclarationNumber = null,
-            FinalDestination = null,
-            TruckAssignments = truckAssignments
-        };
+                    // transaction is used for this method
+                    await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                    {
+                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.GoodsRemoval)!,
+                        GeneratedDate = date,
+                        IsApproved = false,
+                        OperationId = request.OperationId
+                    },
+                         statusName!
+                         );
+                    await transaction.CommitAsync();
+                    return new GoodsRemovalDto
+                    {
+                        Date = date,
+                        Declarant = null,
+                        ImporterName = operationData?.ImporterName,
+                        ShippingAgentName = operationData?.ShippingAgnetName,
+                        BillOfloadingNumber = operationData?.BillOfLoadingNumber,
+                        REFNumber = null,
+                        ClearanceOffice = null,
+                        FrontierOffice = null,
+                        LocationOfLoading = operationData?.LocationOfLoading,
+                        VoyageNumber = operationData?.VoyageNumber,
+                        DeclarationNumber = null,
+                        FinalDestination = null,
+                        TruckAssignments = truckAssignments
+                    };
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+        });
 
     }
     private static string? getQuantity(ICollection<Container> containers, ICollection<Good> goods)
