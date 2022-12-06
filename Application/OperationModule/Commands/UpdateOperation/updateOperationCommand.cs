@@ -16,6 +16,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
     public record UpdateOperationCommand : IRequest<CustomResponse>
     {
         public int Id { get; set; }
+        public string? NameOnPermit { get; set; }
         public string? Consignee { get; set; }
         public string? NotifyParty { get; set; }
         public string? BillNumber { get; set; }
@@ -32,7 +33,9 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
         public string? TypeOfMerchandise { get; set; }
+        public string OperationNumber { get; set; } = null!;
         public DateTime OpenedDate { get; set; }
+        public string Status { get; set; } = null!;
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
@@ -67,10 +70,10 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
         {
            
-            if (!_context.Operations.Any(o => o.Id == request.Id))
-            {
+            if (!_context.Operations.Any(o => o.Id == request.Id)){
                 throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
             }
+            
             Operation updatedOperation = _mapper.Map<Operation>(request);
             _context.Operations.Update(updatedOperation);
             await _context.SaveChangesAsync(cancellationToken);
