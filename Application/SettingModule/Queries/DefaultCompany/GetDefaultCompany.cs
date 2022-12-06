@@ -34,12 +34,14 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                 Username = s.Username,
                 CompanyId = s.CompanyId,
                 DefaultCompany = new Company {
+                    Id = s.DefaultCompany.Id,
                     Name = s.DefaultCompany.Name,
                     TinNumber = s.DefaultCompany.Name,
                     CodeNIF = s.DefaultCompany.Name,
                     ContactPersonId = s.DefaultCompany.ContactPersonId,
                     AddressId = s.DefaultCompany.AddressId,
                     Address = new Address {
+                        Id = s.DefaultCompany.Address.Id,
                         Email = s.DefaultCompany.Address.Email,
                         Phone = s.DefaultCompany.Address.Phone,
                         Region = s.DefaultCompany.Address.Region,
@@ -49,6 +51,7 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                         POBOX = s.DefaultCompany.Address.POBOX
                     },
                     BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation {
+                        Id = b.Id,
                         AccountHolderName = b.AccountHolderName,
                         BankName = b.BankName,
                         AccountNumber = b.AccountNumber,

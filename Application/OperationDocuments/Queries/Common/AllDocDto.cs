@@ -22,5 +22,10 @@ public class AllDocDto
     public string? PartialShipment { get; set; }
     public string? DriverName { get; set; }
     public string? DriverPhone { get; set; }
+    public string AccountHolderName {get; set;}
+    public string BankName {get; set;}
+    public string AccountNumber {get; set;}
+    public string SwiftCode {get; set;}
+    public string BankAddress {get; set;}
     public IEnumerable<CIGoodsDto> Goods { get; set; } = null!;
 }

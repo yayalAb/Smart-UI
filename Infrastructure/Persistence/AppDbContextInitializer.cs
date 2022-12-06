@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Domain.Common.DestinationTypes;
 using Domain.Common.DocumentType;
 using Domain.Common.PaymentTypes;
 using Domain.Entities;
@@ -164,18 +165,29 @@ namespace Infrastructure.Persistence
                 new Lookup {
                     Key = "key",
                     Value = "Document"
+                },
+                new Lookup {
+                    Key = "key",
+                    Value = "DestinationType"
                 }
             };
 
             _context.Lookups.AddRange(paymentTypes);
 
+            
 
             var document_type_list = from type in DocumentType.Types select new Lookup {
                     Key = "Document",
                     Value = type
                 };
+            
+            var destination_type_list = from type in DestinationType.Types select new Lookup {
+                    Key = "DestinationType",
+                    Value = type
+                };
 
             _context.Lookups.AddRange(document_type_list);
+            _context.Lookups.AddRange(destination_type_list);
 
             var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup {Key = ShippingAgentPaymentType.Name, Value = type};
             _context.Lookups.AddRange(shippingAgentPaymentNames);
@@ -186,7 +198,6 @@ namespace Infrastructure.Persistence
             await _context.SaveChangesAsync();
 
         }
-
         public async Task TrySeedSettings() {
 
             if(_context.Settings.Any()){

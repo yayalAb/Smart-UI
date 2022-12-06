@@ -26,17 +26,7 @@ public class DocumentationService
         {
             throw new GhionException(CustomResponse.NotFound($"truck assignment with id = {truckAssignmentId} is not found "));
         }
-        var op = _context.Operations
-            .Where(d => d.Id == operationId).FirstOrDefault();
-        if (op == null)
-        {
-            throw new GhionException(CustomResponse.NotFound($"Operation with id = {operationId} is Not found!"));
-        }
-        if (op.PINumber == null)
-        {
-            throw new GhionException(CustomResponse.BadRequest("pi number cannot be null!"));
-
-        }
+        
         var data = await _context.Operations
                         .Include(o => o.Company)
                             .ThenInclude(c => c.ContactPerson)
@@ -90,8 +80,18 @@ public class DocumentationService
 
                         })
                         .FirstOrDefaultAsync();
-        if (docType != Documents.Waybill)
-        {
+
+        if (data == null) {
+            throw new GhionException(CustomResponse.NotFound($"Operation with id = {operationId} is Not found!"));
+        }
+        
+
+        if (docType != Documents.Waybill) {
+
+            if (data.PINumber == null) {
+                throw new GhionException(CustomResponse.BadRequest("pi number cannot be null!"));
+            }
+
             var doc = _context.Documentations.Where(d => d.OperationId == operationId && d.Type == Enum.GetName(typeof(Documents), docType)).Select(d => new Documentation
             {
                 Date = d.Date,
@@ -113,6 +113,33 @@ public class DocumentationService
             data.PartialShipment = (bool)doc.IsPartialShipmentAllowed! ? "TO BE ALLOWED" : "NOT ALLOWED";
         }
 
+        if(docType == Documents.CommercialInvoice){
+            var defaultInfo = await _context.Settings
+            .Include(s => s.DefaultCompany)
+            .Include(s => s.DefaultCompany.BankInformation)
+            .Select(s => new Setting {
+                DefaultCompany = new Company {
+                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation {
+                        AccountHolderName = b.AccountHolderName,
+                        BankName = b.BankName,
+                        AccountNumber = b.AccountNumber,
+                        SwiftCode = b.SwiftCode,
+                        BankAddress = b.BankAddress
+                    }).ToList()
+                },
+            }).FirstOrDefaultAsync();
+
+            if(defaultInfo == null){
+                throw new GhionException(CustomResponse.NotFound("ghion bank info not found"));
+            }
+
+            data.AccountHolderName = defaultInfo.DefaultCompany.BankInformation.First().AccountHolderName;
+            data.BankName = defaultInfo.DefaultCompany.BankInformation.First().BankName;
+            data.BankAddress = defaultInfo.DefaultCompany.BankInformation.First().BankAddress;
+            data.AccountNumber = defaultInfo.DefaultCompany.BankInformation.First().AccountNumber;
+            data.SwiftCode = defaultInfo.DefaultCompany.BankInformation.First().SwiftCode;
+
+        }
 
         switch (docType)
         {
