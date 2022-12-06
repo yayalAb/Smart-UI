@@ -15,7 +15,6 @@ public class Documentation : BaseAuditableEntity
     // public string? City { get; set; }
     // public string? TinNumber { get; set; }
     /////----------------------////
-    public string? TransportationMethod { get; set; }
     public string? Source { get; set; }
     public string? Destination { get; set; }
     /// additionals 

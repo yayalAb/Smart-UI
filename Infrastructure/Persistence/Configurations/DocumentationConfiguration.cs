@@ -31,10 +31,6 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.Property(e => e.Source)
             .HasMaxLength(45);
 
-
-        entity.Property(e => e.TransportationMethod)
-            .HasMaxLength(45);
-
         entity.Property(e => e.Type)
             .HasMaxLength(45);
 

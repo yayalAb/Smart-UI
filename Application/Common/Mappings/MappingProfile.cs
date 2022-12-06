@@ -4,8 +4,9 @@ using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
 using Application.ContainerModule;
 using Application.ContainerModule.Commands.CreateContainer;
-using Application.ContainerModule.Commands.CreateSingleContainer;
+// using Application.ContainerModule.Commands.CreateSingleContainer;
 using Application.DocumentationModule.Commands.CreateDocumentation;
+using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
 using Application.GoodModule.Commands.UpdateGoodCommand;
@@ -48,7 +49,8 @@ namespace Application.Common.Mappings
             CreateMap<BankInformationDto , BankInformation>();
             CreateMap<UpdateBankInformationDto , BankInformation>();
 
-            CreateMap<CreateDocumentationCommand, Documentation>();
+            CreateMap<CreateDocumentationCommand , Documentation>();
+            CreateMap<UpdateDocumentationCommand , Documentation>();
 
             CreateMap<CreateShippingAgentCommand, ShippingAgent>();
 
@@ -57,7 +59,7 @@ namespace Application.Common.Mappings
             CreateMap<CreateOperationCommand, Operation>();
             CreateMap<UpdateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
-            CreateMap<CreateSingleContainer, Container>();
+            // CreateMap<CreateSingleContainer, Container>();
             CreateMap<GoodDto , Good>();
             CreateMap<ASgContainerDto, Container>();
             CreateMap<ContainerDto, Container>();
@@ -65,6 +67,7 @@ namespace Application.Common.Mappings
             CreateMap<Good, DocGoodDto>().ReverseMap();
             CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
             CreateMap<UpdateGoodDto , Good>().ReverseMap();
+
 
             
 

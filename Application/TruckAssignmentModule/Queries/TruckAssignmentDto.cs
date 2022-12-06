@@ -1,5 +1,4 @@
 using Application.Common.Mappings;
-using Application.GoodModule.Queries;
 using Domain.Entities;
 
 namespace Application.TruckAssignmentModule.Queries;
@@ -11,7 +10,7 @@ public class TruckAssignmentDto : IMapFrom<TruckAssignment>
     public TaOperaitonDto Operation { get; set; }
     public string SourceLocation { get; set; }
     public string DestinationLocation { get; set; }
-    public string TransportationMethod { get;set ;}
+    public string TransportationMethod { get; set; }
     public TaPortDto SourcePort { get; set; }
     public TaPortDto DestinationPort { get; set; }
 

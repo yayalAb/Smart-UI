@@ -16,12 +16,11 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
         public DateTime Date { get; init; }
         public string? BankPermit { get; init; }
         public string? InvoiceNumber { get; init; }
-
-        public string? TransportationMethod { get; init; }
         public string? Source { get; init; }
         public string? Destination { get; init; }
 
         public string? PurchaseOrderNumber { get; set; }
+        public DateTime PurchaseOrderDate { get; set; }
         public string? PaymentTerm { get; set; }
         public bool? IsPartialShipmentAllowed { get; set; }
         public string? Fright { get; set; }
@@ -40,23 +39,11 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
         public async Task<CustomResponse> Handle(UpdateDocumentationCommand request, CancellationToken cancellationToken)
         {
             //check if Documentation exists
-            var oldDoc = await _context.Documentations.FindAsync(request.Id);
-            if (oldDoc == null)
+            if (!_context.Documentations.Where(d => d.Id == request.Id).Any())
             {
                 throw new GhionException(CustomResponse.NotFound("Documentation not found!"));
             }
-            // update documentation
-            oldDoc.OperationId = request.OperationId;
-            oldDoc.InvoiceNumber = request.InvoiceNumber;
-            oldDoc.Type = request.Type;
-            oldDoc.Date = request.Date;
-            oldDoc.BankPermit = request.BankPermit;
-            oldDoc.InvoiceNumber = request.InvoiceNumber;
-            oldDoc.TransportationMethod = request.TransportationMethod;
-            oldDoc.Source = request.Source;
-            oldDoc.Destination = request.Destination;
-
-            _context.Documentations.Update(oldDoc);
+            _context.Documentations.Update(_mapper.Map<Documentation>(request));
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("documentation updated");
         }

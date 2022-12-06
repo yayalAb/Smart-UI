@@ -10,11 +10,11 @@ public class DocumentationDto : IMapFrom<Documentation>
     public DateTime Date { get; set; }
     public string? BankPermit { get; set; }
     public string? InvoiceNumber { get; set; }
-    public string? TransportationMethod { get; set; }
     public string? Source { get; set; }
     public string? Destination { get; set; }
 
     public string? PurchaseOrderNumber { get; set; }
+    public DateTime PurchaseOrderDate { get; set; }
     public string? PaymentTerm { get; set; }
     public bool? IsPartialShipmentAllowed { get; set; }
     public string? Fright { get; set; }

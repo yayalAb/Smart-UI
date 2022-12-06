@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace Application.DocumentationModule.Commands.UpdateDocumentation
 {
-    public class UpdateDocumentationCommandValidator : AbstractValidator<UpdateDocumentationCommand>    
+    public class UpdateDocumentationCommandValidator : AbstractValidator<UpdateDocumentationCommand>
     {
         private readonly IAppDbContext _context;
 
@@ -35,12 +35,9 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
             RuleFor(d => d.InvoiceNumber)
                 .MaximumLength(45)
                 .WithMessage("Invoice Number is not in the correct format!");
-            RuleFor(d => d.TransportationMethod)
-                .MaximumLength(45)
-                .WithMessage("transportation method name is not in the correct format!");
             RuleFor(d => d.Source)
-                .MaximumLength(45)
-                .WithMessage("source is not in the correct format!");
+                          .MaximumLength(45)
+                          .WithMessage("source is not in the correct format!");
             RuleFor(d => d.Destination)
                 .MaximumLength(45)
                 .WithMessage("destination is not in the correct format!");
@@ -50,9 +47,10 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
             return _context.Operations.Find(operationId) != null;
         }
 
-        private bool BeOfType(string Type){
+        private bool BeOfType(string Type)
+        {
             return DocumentType.Types.Contains(Type);
         }
-    
+
     }
 }

@@ -16,11 +16,11 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
         public DateTime Date { get; init; }
         public string? BankPermit { get; init; }
         public string? InvoiceNumber { get; init; }
-        public string? TransportationMethod { get; init; }
         public string? Source { get; init; }
         public string? Destination { get; init; }
 
         public string? PurchaseOrderNumber { get; set; }
+        public DateTime PurchaseOrderDate { get; set; }
         public string? PaymentTerm { get; set; }
         public bool? IsPartialShipmentAllowed { get; set; }
         public string? Fright { get; set; }
