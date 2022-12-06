@@ -45,7 +45,7 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                     {
                         throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
                     }
-                    else if (operation.Status != Enum.GetName(typeof(Status), Status.Number4Approved))
+                    else if (!await _operationEvent.IsDocumentApproved(request.OperationId , Enum.GetName(typeof(Documents) , Documents.Number4)!))
                     {
                         throw new GhionException(CustomResponse.NotFound("Number 4 Document should be approved!"));
                     }
