@@ -26,6 +26,10 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Goods!.Select(g => g.Weight))
                 .NotNull()
                 .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.UnitPrice))
+                .NotNull();
+            RuleFor(ag => ag.Goods!.Select(g => g.Unit))
+                .NotNull();
             RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
                 .NotNull()
                 .NotEmpty();
@@ -64,6 +68,10 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
                 RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
                     .NotNull()
                     .NotEmpty();
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))
+                    .NotNull();
+                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
+                    .NotNull();
         });
 
     }

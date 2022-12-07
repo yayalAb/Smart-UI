@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Interfaces;
 using Domain.Common.DocumentType;
+using Domain.Enums;
 using FluentValidation;
 
 namespace Application.DocumentationModule.Commands.UpdateDocumentation
@@ -47,9 +48,8 @@ namespace Application.DocumentationModule.Commands.UpdateDocumentation
             return _context.Operations.Find(operationId) != null;
         }
 
-        private bool BeOfType(string Type)
-        {
-            return DocumentType.Types.Contains(Type);
+       private bool BeOfType(string Type){
+            return DocumentationType.Types.Contains(Type) && Type != Enum.GetName(typeof(Documents) , Documents.Waybill) ;
         }
 
     }

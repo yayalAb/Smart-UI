@@ -10,28 +10,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.CertificateOfOrigin;
 
-public record CertificateOfOrigin : IRequest<CertificateDto> {
-    public int operationId {get; set;}
+public record CertificateOfOrigin : IRequest<CertificateDto>
+{
+    public int operationId { get; set; }
 }
 
-public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, CertificateDto> {
+public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, CertificateDto>
+{
 
     private readonly IAppDbContext _context;
     private readonly OperationEventHandler _operationEvent;
 
-    public CertificateOfOriginHandler(IAppDbContext context, OperationEventHandler operationEvent) {
+    public CertificateOfOriginHandler(IAppDbContext context, OperationEventHandler operationEvent)
+    {
         _context = context;
         _operationEvent = operationEvent;
     }
-    
-    public async Task<CertificateDto> Handle(CertificateOfOrigin request, CancellationToken cancellationToken) {
-        
+
+    public async Task<CertificateDto> Handle(CertificateOfOrigin request, CancellationToken cancellationToken)
+    {
+        var IsTruckWaybillFound = await _context.Documentations
+                        .Where(d => d.OperationId == request.operationId && d.Type == Enum.GetName(typeof(Documents), Documents.TruckWayBill))
+                        .AnyAsync();
+        if (!IsTruckWaybillFound)
+        {
+            throw new GhionException(CustomResponse.BadRequest("Truck waybill document must be generated before certificate of origin"));
+        }
         var operation = _context.Operations.Where(d => d.Id == request.operationId)
             .Include(o => o.Company)
             .Include(o => o.Company.ContactPerson)
             .Include(o => o.Company.Address)
             .Include(o => o.Goods)
-            .Select(o => new Operation {
+            .Select(o => new Operation
+            {
                 Id = o.Id,
                 NameOnPermit = o.NameOnPermit,
                 Consignee = o.Consignee,
@@ -67,21 +78,25 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                 CountryOfOrigin = o.CountryOfOrigin, // operation
                 REGTax = o.REGTax,//
                 BillOfLoadingNumber = o.BillOfLoadingNumber,
-                Company = new Company {
+                Company = new Company
+                {
                     Name = o.Company.Name,
                     TinNumber = o.Company.TinNumber,
                     CodeNIF = o.Company.CodeNIF,
-                    Address = new Address {
+                    Address = new Address
+                    {
                         Phone = o.Company.Address.Phone,
                         City = o.Company.Address.City,
                         Country = o.Company.Address.Country
                     },
-                    ContactPerson = new ContactPerson {
+                    ContactPerson = new ContactPerson
+                    {
                         Name = o.Company.ContactPerson.Name,
                         TinNumber = o.Company.ContactPerson.TinNumber
                     }
                 },
-                Goods = (o.Goods != null) ? o.Goods.Select(g => new Good {
+                Goods = (o.Goods != null) ? o.Goods.Select(g => new Good
+                {
                     Description = g.Description,
                     HSCode = g.HSCode,
                     Manufacturer = g.Manufacturer,
@@ -110,13 +125,15 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                 }).ToList() : null,
             }).FirstOrDefault();
 
-        if(operation == null) {
+        if (operation == null)
+        {
             throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
         }
 
         // var goods = await _context.Goods.Where(g => g.OperationId == request.operationId).ToListAsync();
 
-        return new CertificateDto {
+        return new CertificateDto
+        {
             operation = operation,
             goods = operation.Goods
         };
