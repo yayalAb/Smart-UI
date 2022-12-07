@@ -42,6 +42,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     .Include(o => o.Company)
                     .Include(o => o.Company.ContactPerson)
                     .Include(o => o.Containers)
+                    .Include(o => o.PortOfLoading)
                     .Select(o => new Operation {
                         Id = o.Id,
                         NameOnPermit = o.NameOnPermit,
@@ -56,16 +57,12 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         FZIN = o.FZIN,
                         FZOUT = o.FZOUT,
                         DestinationType = o.DestinationType,
-                        SourceDocument = o.SourceDocument,
                         ActualDateOfDeparture = o.ActualDateOfDeparture,
                         EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                         VoyageNumber = o.VoyageNumber,
                         TypeOfMerchandise = o.TypeOfMerchandise,
                         OperationNumber = o.OperationNumber,
                         OpenedDate = o.OpenedDate,
-                        Status = o.Status,
-                        ECDDocument = o.ECDDocument,
-                        ShippingAgentId = o.ShippingAgentId,
                         PortOfLoadingId = o.PortOfLoadingId,
                         CompanyId = o.CompanyId,
                         /////------------Additionals------
@@ -78,6 +75,12 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         CountryOfOrigin = o.CountryOfOrigin, // operation
                         REGTax = o.REGTax,//
                         BillOfLoadingNumber = o.BillOfLoadingNumber,
+                        PortOfLoading = new Port {
+                            PortNumber = o.PortOfLoading.PortNumber,
+                            Country = o.PortOfLoading.Country,
+                            Region = o.PortOfLoading.Region,
+                            Vollume = o.PortOfLoading.Vollume
+                        },
                         Company = new Company {
                             Name = o.Company.Name,
                             TinNumber = o.Company.TinNumber,
@@ -92,16 +95,13 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         }).ToList()
                     }).FirstOrDefault();
 
-                    if (operation == null)
-                    {
+                    if (operation == null) {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
-                    }
-                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!)) {
+                    } else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!)) {
                         throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     }
 
-                    var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).Select(g => new Good
-                    {
+                    var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).Select(g => new Good {
                         Description = g.Description,
                         HSCode = g.HSCode,
                         Manufacturer = g.Manufacturer,
