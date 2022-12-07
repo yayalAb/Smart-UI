@@ -49,6 +49,8 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
+        public string? PINumber { get; set; } = null;
+        public DateTime? PIDate { get; set; } = null;
         //--------------------------------------//
     }
     public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, CustomResponse>
@@ -78,7 +80,7 @@ namespace Application.OperationModule.Commands.CreateOperation
                         //create operation with empty operation number
                         Operation newOperation = _mapper.Map<Operation>(request);
                         newOperation.OperationNumber = "";
-                        newOperation.Status = Enum.GetName(typeof(Status), Status.Opened);
+                        newOperation.Status = Enum.GetName(typeof(Status), Status.Opened)!;
                         newOperation.OpenedDate = newOperation.OpenedDate != null ? newOperation.OpenedDate : DateTime.Now;
                         await _context.Operations.AddAsync(newOperation);
                         await _context.SaveChangesAsync(cancellationToken);
