@@ -9,9 +9,9 @@ using Application.TruckModule;
 
 namespace Application.TruckModule.Queries.GetUnassignedTrucks;
 
-public record GetUnassignedTrucksQuery : IRequest<List<TruckDto>> {}
+public record GetUnassignedTrucksQuery : IRequest<List<UnAssignedTruckDto>> {}
 
-public class GetUnassignedTrucksQueryHandler : IRequestHandler<GetUnassignedTrucksQuery, List<TruckDto>> {
+public class GetUnassignedTrucksQueryHandler : IRequestHandler<GetUnassignedTrucksQuery, List<UnAssignedTruckDto>> {
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
@@ -21,10 +21,10 @@ public class GetUnassignedTrucksQueryHandler : IRequestHandler<GetUnassignedTruc
         _mapper = mapper;
     }
 
-    public async Task<List<TruckDto>> Handle(GetUnassignedTrucksQuery request, CancellationToken candellationToken) {
+    public async Task<List<UnAssignedTruckDto>> Handle(GetUnassignedTrucksQuery request, CancellationToken candellationToken) {
         return await _context.Trucks
             .Where(t => t.IsAssigned == false)
-            .ProjectTo<TruckDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<UnAssignedTruckDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
