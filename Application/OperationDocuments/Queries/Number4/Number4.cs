@@ -36,8 +36,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
         {
             using (var transaction = _context.database.BeginTransaction())
             {
-                try
-                {
+                try {
                     var operation = _context.Operations
                     .Where(d => d.Id == request.OperationId)
                     .Include(o => o.Company)
@@ -143,9 +142,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         goods = goods,
                         doPayment = payment
                     };
-                }
-                catch (Exception)
-                {
+                }catch (Exception) {
                     await transaction.RollbackAsync();
                     throw;
                 }

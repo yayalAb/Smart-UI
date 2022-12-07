@@ -32,9 +32,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
         public string? TypeOfMerchandise { get; set; }
-        public string OperationNumber { get; set; } = null!;
         public DateTime OpenedDate { get; set; }
-        public string Status { get; set; } = null!;
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
@@ -51,8 +49,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
-        public string? PINumber { get; set; }
-        public DateTime? PIDate { get; set; }
 
         //--------------------------------------//
     }
@@ -68,16 +64,57 @@ namespace Application.OperationModule.Commands.UpdateOperation
             _mapper = mapper;
             _fileUploadService = fileUploadService;
         }
-        public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
-        {
+        public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken) {
 
-            if (!_context.Operations.Any(o => o.Id == request.Id))
-            {
+            var found_operation = await _context.Operations.FindAsync(request.Id);
+
+            if (found_operation == null) {
                 throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
             }
 
-            Operation updatedOperation = _mapper.Map<Operation>(request);
-            _context.Operations.Update(updatedOperation);
+            var operation = new Operation {
+                NameOnPermit = found_operation.NameOnPermit,
+                Consignee = request.Consignee,
+                NotifyParty = request.NotifyParty,
+                BillNumber = request.BillNumber,
+                ShippingLine = request.ShippingLine,
+                GoodsDescription = request.GoodsDescription,
+                Quantity = request.Quantity,
+                GrossWeight = request.GrossWeight,
+                ATA = request.ATA,
+                FZIN = request.FZIN,
+                FZOUT = request.FZOUT,
+                DestinationType = request.DestinationType,
+                SourceDocument =  request.SourceDocument,
+                ActualDateOfDeparture = request.ActualDateOfDeparture,
+                EstimatedTimeOfArrival = request.EstimatedTimeOfArrival,
+                VoyageNumber = request.VoyageNumber,
+                TypeOfMerchandise = request.TypeOfMerchandise,
+                OperationNumber = found_operation.OperationNumber,
+                OpenedDate = request.OpenedDate,
+                Status = found_operation.Status,
+                ECDDocument = request.ECDDocument,
+                ShippingAgentId = request.ShippingAgentId,
+                PortOfLoadingId = request.PortOfLoadingId,
+                CompanyId = request.CompanyId,
+                /////------------Additionals------
+                SNumber = request.SNumber,
+                SDate = request.SDate,
+                RecepientName = request.RecepientName,
+                VesselName = request.VesselName,
+                ArrivalDate = request.ArrivalDate,
+                ConnaissementNumber = request.ConnaissementNumber,
+                CountryOfOrigin = request.CountryOfOrigin,
+                REGTax = request.REGTax,
+                BillOfLoadingNumber = request.BillOfLoadingNumber,
+                PINumber = found_operation.PINumber,
+                PIDate = found_operation.PIDate,
+                FinalDestination = request.FinalDestination,
+                Localization = request.Localization,
+            };
+
+            // Operation updatedOperation = _mapper.Map<Operation>(request);
+            _context.Operations.Update(operation);
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("operation updated successfully!");
 
