@@ -8,6 +8,7 @@ using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using Application.OperationDocuments.Queries.CertificateOfOrigin;
 using Application.OperationDocuments.Queries.CommercialInvoice;
+using Application.OperationDocuments.Queries.Gatepass;
 using Application.OperationDocuments.Queries.Number4;
 using Application.OperationDocuments.Queries.Number9;
 using Application.OperationDocuments.Queries.PackageList;
@@ -197,6 +198,20 @@ namespace WebApi.Controllers
 
             try {
                 return Ok(await Mediator.Send(new Number4 { OperationId = operationId}));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch(Exception ex) {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+
+        [HttpGet("Gatepass/{truckAssignmentId}")]
+        public async Task<IActionResult> PrintGatepass(int truckAssignmentId) {
+
+            try {
+                return Ok(await Mediator.Send(new PrintGatepassQuery { TruckAssignmentId = truckAssignmentId}));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             } catch(Exception ex) {

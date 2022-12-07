@@ -1,4 +1,4 @@
-namespace Application.OperationDocuments.Queries.GenerateGatepass
+namespace Application.OperationDocuments.Queries.Gatepass
 {
     public class GatepassDto
     {

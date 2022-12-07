@@ -10,53 +10,38 @@ using Microsoft.Extensions.Logging;
 using Application.OperationFollowupModule;
 using Application.Common.Exceptions;
 
-namespace Application.OperationDocuments.Queries.GenerateGatepass;
+namespace Application.OperationDocuments.Queries.Gatepass;
 
-public record GatepassService
+public record PrintGatepassQuery : IRequest<GatepassDto>
 {
+    public int TruckAssignmentId { get; set; }
+}
+public class PrintGatepassQueryHandler : IRequestHandler<PrintGatepassQuery, GatepassDto>
+{
+
     private readonly IAppDbContext _context;
     private readonly ILogger logger;
     private readonly OperationEventHandler _operationEventHandler;
-
-    public GatepassService(IAppDbContext context, ILogger<GatepassService> logger, OperationEventHandler operationEventHandler)
+    public PrintGatepassQueryHandler(IAppDbContext context, ILogger<PrintGatepassQuery> logger, OperationEventHandler operationEventHandler)
     {
         _context = context;
         this.logger = logger;
         _operationEventHandler = operationEventHandler;
     }
 
-    public async Task<GatepassDto> GenerateGatePass(int OperationId, int TruckAssignmentId , CancellationToken cancellationToken)
+    public async Task<GatepassDto> Handle(PrintGatepassQuery request, CancellationToken cancellationToken)
     {
-        if (!await _context.Operations.AnyAsync(o => o.Id == OperationId))
-        {
-            throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
-        }
-        if (!await _context.TruckAssignments.AnyAsync(o => o.Id == TruckAssignmentId))
+
+        if (!await _context.TruckAssignments.AnyAsync(o => o.Id == request.TruckAssignmentId))
         {
             throw new GhionException(CustomResponse.NotFound("There is no TruckAssignment with the given Id!"));
         }
 
-        //checking preconditions before generating gatepass
-        if (!await _operationEventHandler.IsDocumentApproved(OperationId, Enum.GetName(typeof(Documents), Documents.ImportNumber9)!))
-        {
-            throw new GhionException(CustomResponse.BadRequest($"Import number9 must be approved before generating gatepass document"));
-        }
 
-
-        //generate gatepass operation status 
-        var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
-        var statusName = Enum.GetName(typeof(Status), Status.GatePassGenerated);
-        var newOperationStatus = new OperationStatus
-        {
-            GeneratedDocumentName = DocumentName!,
-            GeneratedDate = DateTime.Now,
-            OperationId = OperationId
-        };
-        await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, newOperationStatus, statusName!);
 
         //fetch gatepass form data 
         var data = _context.TruckAssignments
-           .Where(ta => ta.Id == TruckAssignmentId)
+           .Where(ta => ta.Id == request.TruckAssignmentId)
            .Include(ta => ta.Containers)!
                .ThenInclude(c => c.Goods)
            .Include(ta => ta.Truck)
@@ -110,5 +95,7 @@ public record GatepassService
         };
 
     }
+
+
 
 }
