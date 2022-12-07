@@ -8,17 +8,20 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.OperationDocuments.Queries.Common;
 public class DocumentationService
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ILogger<DocumentationService> _logger;
 
-    public DocumentationService(IAppDbContext context, IMapper mapper)
+    public DocumentationService(IAppDbContext context, IMapper mapper , ILogger<DocumentationService> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
     public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId, CancellationToken cancellationToken)
     {
@@ -95,7 +98,6 @@ public class DocumentationService
                 Fright = d.Fright,
                 IsPartialShipmentAllowed = d.IsPartialShipmentAllowed
             }).FirstOrDefault();
-
             if (doc == null)
             {
                 throw new GhionException(CustomResponse.Failed("Documentation Not found!", 450));
@@ -104,7 +106,9 @@ public class DocumentationService
             data.PurchaseOrderDate = doc.PurchaseOrderDate;
             data.PurchaseOrderNumber = doc.PurchaseOrderNumber;
             data.PaymentTerm = doc.PaymentTerm;
-            data.PartialShipment = (bool)doc.IsPartialShipmentAllowed! ? "TO BE ALLOWED" : "NOT ALLOWED";
+            data.PartialShipment = doc.IsPartialShipmentAllowed == null
+                        ? null
+                        : (bool)doc.IsPartialShipmentAllowed! ? "TO BE ALLOWED" : "NOT ALLOWED";
         }
         else
         {
