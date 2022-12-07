@@ -9,6 +9,5 @@ public class ContainerGoodCountDto {
     public string Location { get; set; } = null!;
     public int? LocationPortId { get; set; }
     public int? OperationId { get; set; }
-    public int? TruckAssignmentId { get; set; }
     public int GoodCount {get; set;}
 }

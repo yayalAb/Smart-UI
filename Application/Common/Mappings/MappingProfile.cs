@@ -68,6 +68,7 @@ namespace Application.Common.Mappings
             CreateMap<GoodDto , Good>();
             CreateMap<ASgContainerDto, Container>();
             CreateMap<ContainerDto, Container>();
+            CreateMap<UpdateGoodDto , Good>().ReverseMap();
             CreateMap<CreateTruckCommand , Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
             CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
