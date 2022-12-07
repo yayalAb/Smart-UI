@@ -38,11 +38,11 @@ namespace Infrastructure
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
 
-            // --- mail service config
-            var emailConfig = configuration
-                    .GetSection("EmailConfiguration")
-                    .Get<EmailConfiguration>();
-           services.AddSingleton(emailConfig);
+        //     --- mail service config
+        //     var emailConfig = configuration
+        //             .GetSection("EmailConfiguration")
+        //             .Get<EmailConfiguration>();
+        //    services.AddSingleton(emailConfig);
            
 
 

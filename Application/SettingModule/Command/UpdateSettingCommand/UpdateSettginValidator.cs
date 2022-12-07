@@ -30,7 +30,6 @@ public class UpdateSettingValidator : AbstractValidator<UpdateSetting> {
         RuleFor(u => u.Port)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(10)
             .WithMessage("port is not in the correct format!");
         RuleFor(u => u.Password)
             .NotNull()
