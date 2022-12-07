@@ -38,8 +38,11 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
             {
                 try
                 {
-                    var operation = _context.Operations.Where(d => d.Id == request.OperationId).Include(o => o.Company).Select(o => new Operation
-                    {
+                    var operation = _context.Operations
+                    .Where(d => d.Id == request.OperationId)
+                    .Include(o => o.Company)
+                    .Include(o => o.Company.ContactPerson)
+                    .Select(o => new Operation {
                         Id = o.Id,
                         NameOnPermit = o.NameOnPermit,
                         Consignee = o.Consignee,
@@ -75,15 +78,21 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         CountryOfOrigin = o.CountryOfOrigin, // operation
                         REGTax = o.REGTax,//
                         BillOfLoadingNumber = o.BillOfLoadingNumber,
-                        Company = o.Company
+                        Company = new Company {
+                            Name = o.Company.Name,
+                            TinNumber = o.Company.TinNumber,
+                            CodeNIF = o.Company.CodeNIF,
+                            ContactPerson = new ContactPerson {
+                                Name = o.Company.ContactPerson.Name
+                            }
+                        }
                     }).FirstOrDefault();
 
                     if (operation == null)
                     {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
-                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!))
-                    {
+                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!)) {
                         throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     }
 

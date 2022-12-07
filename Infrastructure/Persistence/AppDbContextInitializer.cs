@@ -45,15 +45,12 @@ namespace Infrastructure.Persistence
 
         public async Task SeedAsync()
         {
-            try
-            {
-                await TrySeedAsync();
-                await TrySeedLookup();
-                await TrySeedSettings();
-                // await updateLookup();
-            }
-            catch (Exception ex)
-            {
+            try {
+                // await TrySeedAsync();
+                // await TrySeedLookup();
+                // await TrySeedSettings();
+                // await removeLookups();
+            } catch (Exception ex) {
                 _logger.LogError(ex, "An error occurred while seeding the database.");
                 throw;
             }
@@ -168,25 +165,33 @@ namespace Infrastructure.Persistence
                 },
                 new Lookup {
                     Key = "key",
+                    Value = "Documentation"
+                },
+                new Lookup {
+                    Key = "key",
                     Value = "DestinationType"
                 }
             };
 
             _context.Lookups.AddRange(paymentTypes);
 
-            
-
             var document_type_list = from type in DocumentType.Types select new Lookup {
                     Key = "Document",
                     Value = type
                 };
             
+            var documentation_type_list = from type in DocumentationType.Types select new Lookup {
+                    Key = "Documentation",
+                    Value = type
+                };
+
             var destination_type_list = from type in DestinationType.Types select new Lookup {
                     Key = "DestinationType",
                     Value = type
                 };
 
             _context.Lookups.AddRange(document_type_list);
+            _context.Lookups.AddRange(documentation_type_list);
             _context.Lookups.AddRange(destination_type_list);
 
             var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup {Key = ShippingAgentPaymentType.Name, Value = type};
@@ -198,6 +203,7 @@ namespace Infrastructure.Persistence
             await _context.SaveChangesAsync();
 
         }
+
         public async Task TrySeedSettings() {
 
             if(_context.Settings.Any()){
@@ -281,5 +287,11 @@ namespace Infrastructure.Persistence
 
         }
 
+        public async Task removeLookups(){
+            string[] types = {"Payment", "Document", "Documentation", "DestinationType"};
+            var key_list = _context.Lookups.Where(l => (l.Key == "key" && types.Contains(l.Value)) || types.Contains(l.Key) || ShippingAgentPaymentType.Types.Contains(l.Key) || TerminalPortPaymentType.Types.Contains(l.Key)).ToList();
+            _context.RemoveRange(key_list);
+            await _context.SaveChangesAsync();
+        }
     }
 }

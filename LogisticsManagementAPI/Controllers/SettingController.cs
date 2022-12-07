@@ -19,21 +19,7 @@ public class SettingController : ApiControllerBase
         {
             return Ok(await Mediator.Send(command));
         }
-        catch (GhionException ex)
-        {
-            return AppdiveResponse.Response(this, ex.Response);
-        }
- }
-
-    [HttpPost]
-    public async Task<ActionResult> create(CreateSetting command)
-    {
-        try
-        {
-            return Ok(await Mediator.Send(command));
-        }
-        catch (GhionException ex)
-        {
+        catch (GhionException ex) {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }
@@ -41,12 +27,9 @@ public class SettingController : ApiControllerBase
     [HttpGet]
     public async Task<ActionResult> read()
     {
-        try
-        {
+        try {
             return Ok(await Mediator.Send(new GetDefaultCompany()));
-        }
-        catch (GhionException ex)
-        {
+        } catch (GhionException ex) {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }
