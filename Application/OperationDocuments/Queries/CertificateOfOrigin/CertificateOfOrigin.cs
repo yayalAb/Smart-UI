@@ -28,6 +28,8 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
         
         var operation = _context.Operations.Where(d => d.Id == request.operationId)
             .Include(o => o.Company)
+            .Include(o => o.Company.ContactPerson)
+            .Include(o => o.Company.Address)
             .Include(o => o.Goods)
             .Select(o => new Operation {
                 Id = o.Id,
@@ -65,7 +67,20 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                 CountryOfOrigin = o.CountryOfOrigin, // operation
                 REGTax = o.REGTax,//
                 BillOfLoadingNumber = o.BillOfLoadingNumber,
-                Company = o.Company,
+                Company = new Company {
+                    Name = o.Company.Name,
+                    TinNumber = o.Company.TinNumber,
+                    CodeNIF = o.Company.CodeNIF,
+                    Address = new Address {
+                        Phone = o.Company.Address.Phone,
+                        City = o.Company.Address.City,
+                        Country = o.Company.Address.Country
+                    },
+                    ContactPerson = new ContactPerson {
+                        Name = o.Company.ContactPerson.Name,
+                        TinNumber = o.Company.ContactPerson.TinNumber
+                    }
+                },
                 Goods = (o.Goods != null) ? o.Goods.Select(g => new Good {
                     Description = g.Description,
                     HSCode = g.HSCode,
