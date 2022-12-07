@@ -22,7 +22,6 @@ public class Good : BaseAuditableEntity
     //////
     public int? ContainerId { get; set; }
     public int OperationId {get; set; }
-    public int TruckAssignmentId { get; set; }
     public int? LocationPortId { get; set; }
     
     public virtual Container? Container { get; set; } = null!; 

@@ -82,8 +82,7 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                 Size = c.Size,
                                 LocationPortId = c.LocationPortId,
                                 IsAssigned = c.IsAssigned,
-                                OperationId = c.OperationId,
-                                TruckAssignmentId = c.TruckAssignmentId
+                                OperationId = c.OperationId
                             }).ToList() : null,
                             Goods = (t.Goods != null) ? t.Goods.Select(g => new Good
                             {
@@ -101,7 +100,6 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                 IsAssigned = g.IsAssigned,
                                 ContainerId = g.ContainerId,
                                 OperationId = g.OperationId,
-                                TruckAssignmentId = g.TruckAssignmentId,
                                 LocationPortId = g.LocationPortId
                             }).ToList() : null
                         }).ToListAsync();

@@ -66,7 +66,6 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                 CBM = g.CBM,
                 ContainerId = request.ContainerId,
                 OperationId = g.OperationId,
-                TruckAssignmentId = g.TruckAssignmentId,
                 LocationPortId = g.LocationPortId,
             });
 

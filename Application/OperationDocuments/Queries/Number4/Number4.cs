@@ -117,7 +117,6 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         IsAssigned = g.IsAssigned,
                         ContainerId = g.ContainerId,
                         OperationId = g.OperationId,
-                        TruckAssignmentId = g.TruckAssignmentId,
                         LocationPortId = g.LocationPortId
                     }).ToListAsync();
 

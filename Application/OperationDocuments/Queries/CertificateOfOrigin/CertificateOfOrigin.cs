@@ -96,7 +96,6 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                     IsAssigned = g.IsAssigned,
                     ContainerId = g.ContainerId,
                     OperationId = g.OperationId,
-                    TruckAssignmentId = g.TruckAssignmentId,
                     LocationPortId = g.LocationPortId,
                     // Container = new Container {
                     //     ContianerNumber = g.Container.ContianerNumber,
