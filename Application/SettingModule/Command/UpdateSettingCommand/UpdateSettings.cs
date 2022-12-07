@@ -5,6 +5,7 @@ using MediatR;
 using Application.Common.Exceptions;
 using Application.Common.Models;
 using AutoMapper;
+using Application.AddressModule.Commands.AddressUpdateCommand;
 
 namespace Application.SettingModule.Command.UpdateSettingCommand;
 
@@ -18,6 +19,8 @@ public record UpdateSetting : IRequest<CustomResponse> {
     public string Username {get; set;}
     public int CompanyId {get; set;}
     public CompanyUpdateDto DefaultCompany {get; set;}
+    public AddressUpdateCommand Address {get; set;}
+    public BankInformationUpdateDto BankInformation {get; set;}
 }
 
 public class UpdateSettingHandler : IRequestHandler<UpdateSetting, CustomResponse> {
@@ -45,8 +48,11 @@ public class UpdateSettingHandler : IRequestHandler<UpdateSetting, CustomRespons
         setting.Protocol = request.Protocol;
         setting.Username = request.Username;
         setting.CompanyId = request.CompanyId;
-        setting.DefaultCompany = _mapper.Map<Company>(request.DefaultCompany);
-
+        
+        _context.Companies.Update(_mapper.Map<Company>(request.DefaultCompany));
+        _context.Addresses.Update(_mapper.Map<Address>(request.Address));
+        _context.BankInformation.Update(_mapper.Map<BankInformation>(request.BankInformation));
+        
         await _context.SaveChangesAsync(cancellationToken);
         
         return CustomResponse.Succeeded("Setting is Saved Successfully!");

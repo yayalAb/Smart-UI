@@ -1,6 +1,7 @@
 
 namespace Application.SettingModule.Command.UpdateSettingCommand;
 public class BankInformationUpdateDto {
+    public int Id {get; set;}
     public string AccountHolderName { get; set; } = null!;
     public string BankName { get; set; } = null!;
     public string AccountNumber { get; set; } = null!;

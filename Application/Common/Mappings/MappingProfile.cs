@@ -1,4 +1,5 @@
-﻿using Application.CompanyModule.Commands.CreateCompanyCommand;
+﻿using Application.AddressModule.Commands.AddressUpdateCommand;
+using Application.CompanyModule.Commands.CreateCompanyCommand;
 using Application.CompanyModule.Commands.UpdateCompanyCommand;
 using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
@@ -73,7 +74,7 @@ namespace Application.Common.Mappings
             CreateMap<Good, DocGoodDto>().ReverseMap();
             CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
-            CreateMap<AddressUpdateDto, Address>().ReverseMap();
+            CreateMap<AddressUpdateCommand, Address>().ReverseMap();
             CreateMap<BankInformationUpdateDto, BankInformation>().ReverseMap();
             CreateMap<AllDocDto , CommercialInvoiceDto2>();
             CreateMap<AllDocDto , PackingListDto>();
