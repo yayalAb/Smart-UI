@@ -42,6 +42,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     .Where(d => d.Id == request.OperationId)
                     .Include(o => o.Company)
                     .Include(o => o.Company.ContactPerson)
+                    .Include(o => o.Containers)
                     .Select(o => new Operation {
                         Id = o.Id,
                         NameOnPermit = o.NameOnPermit,
@@ -85,7 +86,11 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                             ContactPerson = new ContactPerson {
                                 Name = o.Company.ContactPerson.Name
                             }
-                        }
+                        },
+                        Containers = o.Containers == null ? null : o.Containers.Select(c => new Container {
+                            ContianerNumber = c.ContianerNumber,
+                            SealNumber = c.SealNumber
+                        }).ToList()
                     }).FirstOrDefault();
 
                     if (operation == null)
@@ -131,10 +136,10 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         OperationId = request.OperationId
                     }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
                    await transaction.CommitAsync();
-                    return new Number4Dto
-                    {
+                    return new Number4Dto {
                         company = operation.Company,
                         operation = operation,
+                        containers = operation.Containers,
                         goods = goods,
                         doPayment = payment
                     };
