@@ -1,5 +1,6 @@
-using System.ComponentModel;
+
 using Application.Common.Mappings;
+using Domain.Entities;
 
 namespace Application.GoodModule.Commands.UpdateGoodCommand;
 

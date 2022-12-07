@@ -265,7 +265,7 @@ namespace Infrastructure.Persistence
                         var setting = new Setting {
                             Email = "tihitnatsegaye7@gmail.com",
                             Password = "tiucpqdxigzogxco",
-                            Port = "465",
+                            Port = 456,
                             Host = "smtp.gmail.com",
                             Protocol = "SMTP",
                             Username = "tihitnatsegaye7@gmail.com",

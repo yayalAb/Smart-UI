@@ -113,7 +113,6 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         IsAssigned = g.IsAssigned,
                                         ContainerId = g.ContainerId,
                                         OperationId = g.OperationId,
-                                        TruckAssignmentId = g.TruckAssignmentId,
                                         LocationPortId = g.LocationPortId,
                                         Unit = g.Unit,
                                         UnitPrice = g.UnitPrice,
@@ -129,7 +128,6 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                                             LocationPortId = g.Container.LocationPortId,
                                                             IsAssigned = g.Container.IsAssigned,
                                                             OperationId = g.Container.OperationId,
-                                                            TruckAssignmentId = g.Container.TruckAssignmentId
                                                         }
                                     }).ToList() : null,
                                     Containers = (o.Containers == null) ? new List<Container>() : o.Containers.Select(c => new Container {

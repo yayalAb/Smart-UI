@@ -37,7 +37,6 @@ public class GetByOperationHandler: IRequestHandler<GetByOperation, List<Contain
             Location = c.Location,
             LocationPortId = c.LocationPortId,
             OperationId = c.OperationId,
-            TruckAssignmentId = c.TruckAssignmentId,
             GoodCount = c.Goods.Count
         }).ToListAsync();
 

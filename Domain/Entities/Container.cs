@@ -15,8 +15,7 @@ public class Container : BaseAuditableEntity
     public float Size { get; set; } 
     public int?  LocationPortId { get; set; }
     public bool IsAssigned { get; set; } = false;
-    public int OperationId { get; set; }    
-    public int? TruckAssignmentId { get; set; }
+    public int OperationId { get; set; } 
 
     
 

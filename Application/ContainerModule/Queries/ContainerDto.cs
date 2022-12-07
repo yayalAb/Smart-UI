@@ -13,7 +13,6 @@ public class ContainerDto : IMapFrom<Container>
     public string Location { get; set; } = null!;
     public int? LocationPortId { get; set; }
     public int? OperationId { get; set; }
-    public int? TruckAssignmentId { get; set; }
 
     public List<FetchGoodDto>? Goods { get; set; }
 }

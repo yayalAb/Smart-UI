@@ -1,8 +1,10 @@
 ﻿
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Entities;
 using Infrastructure.Common.Models;
 using MailKit.Net.Smtp;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 
@@ -11,30 +13,33 @@ namespace Infrastructure.Services
     public class EmailService : IEmailService
     {
 
+        private readonly IAppDbContext _context;
 
-        private readonly EmailConfiguration _emailConfig;
-
-        public EmailService(EmailConfiguration emailConfig )
+        public EmailService(IAppDbContext context)
         {
-            _emailConfig = emailConfig;
+            _context = context;
         }
-    
-     
+
+
 
 
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
+            var emailConfig = await _context.Settings.FirstOrDefaultAsync();
+            if(emailConfig == null ){
+                throw new Exception("email configuration not found");
+            }
+            var emailMessage =  CreateEmailMessage(mailRequest, emailConfig);
+            await Send(emailMessage, emailConfig);
 
-            var emailMessage = CreateEmailMessage(mailRequest);
-            await Send(emailMessage);
-            
         }
 
 
-        private MimeMessage CreateEmailMessage(MailRequest mailRequest)
+        private  MimeMessage CreateEmailMessage(MailRequest mailRequest, Setting emailConfig)
         {
+
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add( MailboxAddress.Parse(_emailConfig.From));
+            emailMessage.From.Add(MailboxAddress.Parse(emailConfig.Email));
             emailMessage.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             emailMessage.Subject = mailRequest.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = mailRequest.Body };
@@ -42,23 +47,23 @@ namespace Infrastructure.Services
             return emailMessage;
         }
 
-        private async Task<bool> Send(MimeMessage mailMessage)
+        private async Task<bool> Send(MimeMessage mailMessage, Setting emailConfig)
         {
             using (var client = new SmtpClient())
             {
                 try
                 {
-                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                    client.Connect(emailConfig.Host, emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                    client.Authenticate(emailConfig.Username, emailConfig.Password);
 
-                   await  client.SendAsync(mailMessage);
+                    await client.SendAsync(mailMessage);
                     return true;
                 }
                 catch
                 {
-                   
-                    throw ;
+
+                    throw;
                 }
                 finally
                 {
