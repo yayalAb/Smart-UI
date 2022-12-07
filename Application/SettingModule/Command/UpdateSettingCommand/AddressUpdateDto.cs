@@ -11,5 +11,4 @@ public class AddressUpdateDto {
     public string Subcity { get; set; } = null!;
     public string Country { get; set; } = null!;
     public string? POBOX { get; set; }
-    public ICollection<BankInformation> BankInformation {get; set;}
 }
