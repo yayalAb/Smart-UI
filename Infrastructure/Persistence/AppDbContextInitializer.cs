@@ -289,7 +289,7 @@ namespace Infrastructure.Persistence
 
         public async Task removeLookups(){
             string[] types = {"Payment", "Document", "Documentation", "DestinationType"};
-            var key_list = _context.Lookups.Where(l => (l.Key == "key" && types.Contains(l.Value)) || types.Contains(l.Key) || ShippingAgentPaymentType.Types.Contains(l.Key) || TerminalPortPaymentType.Types.Contains(l.Key)).ToList();
+            var key_list = _context.Lookups.Where(l => (l.Key == "key" && types.Contains(l.Value)) || types.Contains(l.Key) || l.Key == ShippingAgentPaymentType.Name || l.Key == TerminalPortPaymentType.Name || ShippingAgentPaymentType.Types.Contains(l.Key) || TerminalPortPaymentType.Types.Contains(l.Key)).ToList();
             _context.RemoveRange(key_list);
             await _context.SaveChangesAsync();
         }
