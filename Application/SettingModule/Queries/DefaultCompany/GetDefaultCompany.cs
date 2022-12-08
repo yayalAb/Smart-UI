@@ -2,23 +2,27 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.SettingModule.Command.UpdateSettingCommand;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.SettingModule.Queries.DefaultCompany;
 
-public record GetDefaultCompany : IRequest<Setting> {}
+public record GetDefaultCompany : IRequest<SettingDto> {}
 
-public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setting> {
+public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, SettingDto> {
 
     private readonly IAppDbContext _context;
+    private readonly IMapper _mapper;
     
-    public GetDefaultCompanyHandler(IAppDbContext context) {
+    public GetDefaultCompanyHandler(IAppDbContext context, IMapper mapper) {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<Setting> Handle(GetDefaultCompany request, CancellationToken cancellationToken) {
+    public async Task<SettingDto> Handle(GetDefaultCompany request, CancellationToken cancellationToken) {
 
         var setting = await _context.Settings
             .Include(s => s.DefaultCompany)
@@ -61,12 +65,16 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                     }).ToList()
                 },
             }).FirstOrDefaultAsync();
-        
+
         if(setting == null){
             throw new GhionException(CustomResponse.NotFound("Operation not found!"));
         }
 
-        return setting;
+        SettingDto ReturnSetting = _mapper.Map<SettingDto>(setting);
+        ReturnSetting.Address = _mapper.Map<AddressUpdateDto>(setting.DefaultCompany.Address);
+        ReturnSetting.BankInformation = _mapper.Map<BankInformationUpdateDto>(setting.DefaultCompany.BankInformation.First());
+
+        return ReturnSetting;
         
     }
 }

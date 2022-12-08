@@ -1,6 +1,8 @@
 
+using Application.Common.Mappings;
+using Domain.Entities;
 namespace Application.SettingModule.Command.UpdateSettingCommand;
-public class BankInformationUpdateDto {
+public class BankInformationUpdateDto : IMapFrom<BankInformation> {
     public int Id {get; set;}
     public string AccountHolderName { get; set; } = null!;
     public string BankName { get; set; } = null!;
