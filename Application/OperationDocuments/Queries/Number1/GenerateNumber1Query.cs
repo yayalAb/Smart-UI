@@ -56,7 +56,6 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                         .Select(o => new Number1Dto
                         {
                             Date = date,
-                            CodeNIF = o.Company.CodeNIF,
                             SNumber = o.SNumber,
                             SDate = o.SDate,
                             DONumber = o.Payments == null || o.Payments.ToList().Count == 0
@@ -80,6 +79,18 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             SourceLocation = null,
                             DestinationLocation = null
                         }).First();
+                        var settingData = await _context.Settings
+                                        .Include(s => s.DefaultCompany)
+                                        .Select(s => new {
+                                                    codeNIF = s.DefaultCompany.CodeNIF,
+                                                    name = s.DefaultCompany.Name
+                                        })
+                                        .FirstOrDefaultAsync();
+                        if(settingData == null ){
+                            throw new GhionException(CustomResponse.NotFound("default company is not found"));
+                        }
+                        data.DefaultCompanyName = settingData!.name;
+                        data.DefaultCompanyCodeNIF = settingData.codeNIF;
     
                     // update operation status and generate doc
                     var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);

@@ -7,7 +7,8 @@ namespace Application.OperationDocuments.Queries.Number1
     public class Number1Dto
     {
         public DateTime Date { get; set;} /// now
-        public string? CodeNIF { get; set; }  // company
+        public string? DefaultCompanyName { get; set; }
+        public string? DefaultCompanyCodeNIF { get; set; }
         public string? SNumber { get; set; } // operation
         public DateTime? SDate { get; set; } //operation
         public string? DONumber { get; set; } // payment
