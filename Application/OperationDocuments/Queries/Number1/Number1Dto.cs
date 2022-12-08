@@ -24,6 +24,7 @@ namespace Application.OperationDocuments.Queries.Number1
         public string? CountryOfOrigin { get; set; } // operation
         public float? REGTax { get; set; } // operation
         public ICollection<DocGoodDto> Goods { get; set;  }
+        public ICollection<No1ContainerDto> Containers { get; set; }
         public string? SourceLocation { get; set; }//??????????????
         public string? DestinationLocation { get; set; }//??????????
         

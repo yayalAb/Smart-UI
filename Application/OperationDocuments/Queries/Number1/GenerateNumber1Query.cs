@@ -55,6 +55,7 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                         .Include(o => o.Company)
                         .Include(o => o.Payments.Where(p => p.Name == "DO"))
                         .Include(o => o.Goods)
+                        .Include(o => o.Containers)
                         .Include (o => o.PortOfLoading)
                         .Where(o => o.Id == request.OperationId)
                         .Select(o => new Number1Dto
@@ -81,6 +82,12 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             CountryOfOrigin = o.CountryOfOrigin,
                             REGTax = o.REGTax,
                             Goods = _mapper.Map<ICollection<DocGoodDto>>(o.Goods),
+                            Containers = o.Containers == null 
+                                            ? null 
+                                            : o.Containers.Select(c => new No1ContainerDto {
+                                                ContianerNumber = c.ContianerNumber,
+                                                SealNumber = c.SealNumber
+                                            }).ToList(),
                             // TODO: find out source of ports data
                             SourceLocation = null,
                             DestinationLocation = null
