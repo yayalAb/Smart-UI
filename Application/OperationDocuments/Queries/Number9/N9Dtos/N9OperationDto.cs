@@ -25,6 +25,7 @@ public class N9OperationDto : IMapFrom<Operation> {
     public float? REGTax { get; set; }//
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
+    public virtual N9PortOfLoadingDto PortOfLoading { get; set; }
     public N9CompanyDto Company {get; set;}
     public ICollection<N9GoodDto>? Goods {get; set;}
 }

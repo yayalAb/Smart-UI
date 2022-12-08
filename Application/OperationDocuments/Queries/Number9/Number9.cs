@@ -45,7 +45,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     var operation = _context.Operations.Where(d => d.Id == request.OperationId)
                                 .Include(o => o.Company)
                                 .Include(o => o.Goods)
-                                .Include(o => o.Containers)
+                                .Include(o => o.PortOfLoading)
                                 .Include(o => o.Company.ContactPerson)
                                 .Select(o => new N9OperationDto {
                                     Id = o.Id,
@@ -71,7 +71,12 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     // Status = o.Status,
                                     // ECDDocument = o.ECDDocument,
                                     // ShippingAgentId = o.ShippingAgentId,
-                                    // PortOfLoadingId = o.PortOfLoadingId,
+                                    PortOfLoading = new N9PortOfLoadingDto {
+                                        PortNumber = o.PortOfLoading.PortNumber,
+                                        Country = o.PortOfLoading.Country,
+                                        Region = o.PortOfLoading.Region,
+                                        Vollume = o.PortOfLoading.Vollume
+                                    },
                                     CompanyId = o.CompanyId,
                                     /////------------Additionals------
                                     SNumber = o.SNumber, // operation
