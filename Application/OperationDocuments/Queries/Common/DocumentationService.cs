@@ -112,15 +112,24 @@ public class DocumentationService
         }
         else
         {
-            var driverData = await _context.TruckAssignments
+            // if waybill
+            var truckData = await _context.TruckAssignments
                 .Include(ta => ta.Driver)
+                .Include( ta => ta.Truck)
                 .Where(ta => ta.Id == truckAssignmentId)
                 .Select(ta => new {
-                    name =ta.Driver == null?null: ta.Driver.Fullname,
-                    phone = ta.Driver == null? null: ta.Driver.Address.Phone
+                    DriverName =ta.Driver == null?null: ta.Driver.Fullname,
+                    DriverPhone = ta.Driver == null? null: ta.Driver.Address.Phone,
+                    DriverLicense = ta.Driver == null? null: ta.Driver.LicenceNumber,
+                    TruckNumber = ta.Truck == null ? null : ta.Truck.TruckNumber,
+                    PlateNumber = ta.Truck == null ? null : ta.Truck.PlateNumber 
                 }).FirstOrDefaultAsync();
-                data!.DriverName = driverData!.name;
-                data.DriverPhone = driverData.phone;
+                data!.DriverName = truckData!.DriverName;
+                data.DriverPhone = truckData.DriverPhone;
+                data.DriverLicenceNumber = truckData.DriverLicense;
+                data.TruckNumber = truckData.TruckNumber;
+                data.PlateNumber = truckData.PlateNumber;
+            ////////
         }
 
         if(docType == Documents.CommercialInvoice){

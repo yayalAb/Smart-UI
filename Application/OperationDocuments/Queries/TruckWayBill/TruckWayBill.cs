@@ -51,6 +51,13 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                     //if truck waybill
                     if (!request.isWaybill)
                     {
+                        var IsPackageListFound = await _context.Documentations
+                                .Where(d => d.OperationId == request.operationId && d.Type == Enum.GetName(typeof(Documents), Documents.PackageList))
+                                .AnyAsync();
+                        if (!IsPackageListFound)
+                        {
+                            throw new GhionException(CustomResponse.BadRequest("PackageList document must be generated before truck way bill"));
+                        }
                         return await _documentationService
                                             .GetDocumentation(Documents.TruckWayBill, request.operationId, request.TruckAssignmentId, cancellationToken);
                     }
@@ -59,7 +66,7 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                     {
                         throw new GhionException(CustomResponse.NotFound("ECD Document should be dispatched before generating waybill!"));
                     }
-                     await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
                     {
                         GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Waybill)!,
                         GeneratedDate = DateTime.Now,
@@ -68,8 +75,8 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                     }, Enum.GetName(typeof(Status), Status.Closed)!);
                     var document = await _documentationService
                                     .GetDocumentation(Documents.Waybill, request.operationId, request.TruckAssignmentId, cancellationToken);
-                  await transaction.CommitAsync();
-                  return document;
+                    await transaction.CommitAsync();
+                    return document;
                 }
                 catch (Exception)
                 {

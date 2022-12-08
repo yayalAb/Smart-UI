@@ -27,5 +27,9 @@ public class AllDocDto
     public string AccountNumber {get; set;}
     public string SwiftCode {get; set;}
     public string BankAddress {get; set;}
+
+    public string? DriverLicenceNumber { get; set; }
+    public string? TruckNumber { get; set; }
+    public string? PlateNumber { get; set; }
     public IEnumerable<CIGoodsDto> Goods { get; set; } = null!;
 }
