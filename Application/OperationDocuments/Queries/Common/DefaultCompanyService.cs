@@ -13,6 +13,11 @@ public class DefaultCompanyService {
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
+
+    public DefaultCompanyService(IAppDbContext context, IMapper mapper) {
+        _context = context;
+        _mapper = mapper;
+    }
     
     public async Task<SettingDto> GetDefaultCompanyAsync() {
 
@@ -21,14 +26,6 @@ public class DefaultCompanyService {
             .Include(s => s.DefaultCompany.Address)
             .Include(s => s.DefaultCompany.BankInformation)
             .Select(s => new SettingDto {
-                Id = s.Id,
-                Email = s.Email,
-                Password = s.Password,
-                Port = s.Port,
-                Host = s.Host,
-                Protocol = s.Protocol,
-                Username = s.Username,
-                CompanyId = s.CompanyId,
                 DefaultCompany = new CompanyUpdateDto {
                     Id = s.DefaultCompany.Id,
                     Name = s.DefaultCompany.Name,
@@ -55,7 +52,7 @@ public class DefaultCompanyService {
                     Subcity = s.DefaultCompany.Address.Subcity,
                     Country = s.DefaultCompany.Address.Country,
                     POBOX = s.DefaultCompany.Address.POBOX
-                },
+                }
             }).FirstOrDefaultAsync();
 
         if(setting == null){
