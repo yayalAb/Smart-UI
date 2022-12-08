@@ -30,7 +30,7 @@ public class DefaultCompanyService {
                     Id = s.DefaultCompany.Id,
                     Name = s.DefaultCompany.Name,
                     TinNumber = s.DefaultCompany.Name,
-                    CodeNIF = s.DefaultCompany.Name,
+                    CodeNIF = s.DefaultCompany.CodeNIF,
                     ContactPersonId = s.DefaultCompany.ContactPersonId,
                     AddressId = s.DefaultCompany.AddressId
                 },
@@ -56,7 +56,7 @@ public class DefaultCompanyService {
             }).FirstOrDefaultAsync();
 
         if(setting == null){
-            throw new GhionException(CustomResponse.NotFound("Operation not found!"));
+            throw new GhionException(CustomResponse.NotFound("Default Company setting  not found!"));
         }
 
         return setting;
