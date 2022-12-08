@@ -8,8 +8,9 @@ public class DocumentType {
         Enum.GetName(typeof(Documents), Documents.Number4),
         Enum.GetName(typeof(Documents), Documents.T1),
         Enum.GetName(typeof(Documents), Documents.ImportNumber9),
+        Enum.GetName(typeof(Documents), Documents.TransferNumber9),
         Enum.GetName(typeof(Documents), Documents.Number1),
-        Enum.GetName(typeof(Documents), Documents.CirtificateOfOrigin),
+        Enum.GetName(typeof(Documents), Documents.CirtificateOfOrigin)
     };
 }
 
