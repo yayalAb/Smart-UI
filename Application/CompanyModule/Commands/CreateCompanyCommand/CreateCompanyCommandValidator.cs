@@ -42,7 +42,23 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand {
                 RuleFor( u => u.contactPerson!.Phone)
                     .NotNull()
                     .NotEmpty(); 
+                RuleFor(u => u.contactPerson!.TinNumber)
+                    .NotNull()
+                    .NotEmpty();
+                
             });
+            RuleFor( u => u.BankInformation)
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.AccountHolderName))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.AccountNumber))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.BankAddress))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.BankName))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.SwiftCode))
+                .NotNull();
             
 
             

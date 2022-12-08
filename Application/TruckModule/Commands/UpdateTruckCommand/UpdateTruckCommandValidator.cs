@@ -21,7 +21,7 @@ namespace Application.TruckModule.Commands.UpdateTruckCommand {
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("type is not in the correct format");
-            RuleFor(u => u.Capacity)
+            RuleFor(u => u.PlateNumber)
                 .NotNull()
                 .NotEmpty();
         }
