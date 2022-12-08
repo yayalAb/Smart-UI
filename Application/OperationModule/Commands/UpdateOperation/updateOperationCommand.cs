@@ -44,7 +44,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? RecepientName { get; set; }
         public string? VesselName { get; set; }
         public DateTime? ArrivalDate { get; set; }
-        public string? ConnaissementNumber { get; set; }
         public string? CountryOfOrigin { get; set; }
         public float? REGTax { get; set; }
         public string? BillOfLoadingNumber { get; set; }
@@ -61,8 +60,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
         private readonly IMapper _mapper;
         private readonly IFileUploadService _fileUploadService;
 
-        public UpdateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService)
-        {
+        public UpdateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService) {
             _context = context;
             _mapper = mapper;
             _fileUploadService = fileUploadService;
@@ -75,49 +73,42 @@ namespace Application.OperationModule.Commands.UpdateOperation
                 throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
             }
 
-            var operation = new Operation {
-                NameOnPermit = found_operation.NameOnPermit,
-                Consignee = request.Consignee,
-                NotifyParty = request.NotifyParty,
-                BillNumber = request.BillNumber,
-                ShippingLine = request.ShippingLine,
-                GoodsDescription = request.GoodsDescription,
-                Quantity = request.Quantity,
-                GrossWeight = request.GrossWeight,
-                ATA = request.ATA,
-                FZIN = request.FZIN,
-                FZOUT = request.FZOUT,
-                DestinationType = request.DestinationType,
-                SourceDocument =  request.SourceDocument,
-                ActualDateOfDeparture = request.ActualDateOfDeparture,
-                EstimatedTimeOfArrival = request.EstimatedTimeOfArrival,
-                VoyageNumber = request.VoyageNumber,
-                TypeOfMerchandise = request.TypeOfMerchandise,
-                OperationNumber = found_operation.OperationNumber,
-                OpenedDate = request.OpenedDate,
-                Status = found_operation.Status,
-                ECDDocument = request.ECDDocument,
-                ShippingAgentId = request.ShippingAgentId,
-                PortOfLoadingId = request.PortOfLoadingId,
-                CompanyId = request.CompanyId,
-                /////------------Additionals------
-                SNumber = request.SNumber,
-                SDate = request.SDate,
-                RecepientName = request.RecepientName,
-                VesselName = request.VesselName,
-                ArrivalDate = request.ArrivalDate,
-                ConnaissementNumber = request.ConnaissementNumber,
-                CountryOfOrigin = request.CountryOfOrigin,
-                REGTax = request.REGTax,
-                BillOfLoadingNumber = request.BillOfLoadingNumber,
-                PINumber = found_operation.PINumber,
-                PIDate = found_operation.PIDate,
-                FinalDestination = request.FinalDestination,
-                Localization = request.Localization,
-            };
+            // found_operation = _mapper.Map<Operation>(request);
+            found_operation.Consignee = request.Consignee;
+            found_operation.NotifyParty = request.NotifyParty;
+            found_operation.BillNumber = request.BillNumber;
+            found_operation.ShippingLine = request.ShippingLine;
+            found_operation.GoodsDescription = request.GoodsDescription;
+            found_operation.Quantity = request.Quantity;
+            found_operation.GrossWeight = request.GrossWeight;
+            found_operation.ATA = request.ATA;
+            found_operation.FZIN = request.FZIN;
+            found_operation.FZOUT = request.FZOUT;
+            found_operation.DestinationType = request.DestinationType;
+            found_operation.SourceDocument =  request.SourceDocument;
+            found_operation.ActualDateOfDeparture = request.ActualDateOfDeparture;
+            found_operation.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
+            found_operation.VoyageNumber = request.VoyageNumber;
+            found_operation.TypeOfMerchandise = request.TypeOfMerchandise;
+            found_operation.OpenedDate = request.OpenedDate;
+            found_operation.ECDDocument = request.ECDDocument;
+            found_operation.ShippingAgentId = request.ShippingAgentId;
+            found_operation.PortOfLoadingId = request.PortOfLoadingId;
+            found_operation.CompanyId = request.CompanyId;
+            /////------------Additionals------
+            found_operation.SNumber = request.SNumber;
+            found_operation.SDate = request.SDate;
+            found_operation.RecepientName = request.RecepientName;
+            found_operation.VesselName = request.VesselName;
+            found_operation.ArrivalDate = request.ArrivalDate;
+            found_operation.CountryOfOrigin = request.CountryOfOrigin;
+            found_operation.REGTax = request.REGTax;
+            found_operation.BillOfLoadingNumber = request.BillOfLoadingNumber;
+            found_operation.FinalDestination = request.FinalDestination;
+            found_operation.Localization = request.Localization;
 
             // Operation updatedOperation = _mapper.Map<Operation>(request);
-            _context.Operations.Update(operation);
+            // _context.Operations.Update(found_operation);
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("operation updated successfully!");
 
