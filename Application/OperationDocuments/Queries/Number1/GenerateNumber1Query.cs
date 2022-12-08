@@ -1,4 +1,5 @@
 
+using Application.Common;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -25,12 +26,14 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
     private readonly OperationEventHandler _operationEvent;
+    private readonly DefaultCompanyService _defaultCompanyService;
 
-    public GenerateNumber1QueryHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent)
+    public GenerateNumber1QueryHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent , DefaultCompanyService defaultCompanyService )
     {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
+        _defaultCompanyService = defaultCompanyService;
     }
 
     public async Task<Number1Dto> Handle(GenerateNumber1Query request, CancellationToken cancellationToken)
@@ -46,16 +49,19 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                     {
                         throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
                     }
-                    var date = DateTime.Now;
+                     var date = DateTime.Now;
                     // fetch number1 form data
                     Number1Dto data = _context.Operations
                         .Include(o => o.Company)
                         .Include(o => o.Payments.Where(p => p.Name == "DO"))
                         .Include(o => o.Goods)
+                        .Include (o => o.PortOfLoading)
                         .Where(o => o.Id == request.OperationId)
                         .Select(o => new Number1Dto
                         {
-                            Date = date,
+                            Date = o.ArrivalDate,
+                            BillOfLoadingNumber = o.BillOfLoadingNumber,
+                            PortOfLoadingCountry = o.PortOfLoading.Country,
                             SNumber = o.SNumber,
                             SDate = o.SDate,
                             DONumber = o.Payments == null || o.Payments.ToList().Count == 0
@@ -79,18 +85,9 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             SourceLocation = null,
                             DestinationLocation = null
                         }).First();
-                        var settingData = await _context.Settings
-                                        .Include(s => s.DefaultCompany)
-                                        .Select(s => new {
-                                                    codeNIF = s.DefaultCompany.CodeNIF,
-                                                    name = s.DefaultCompany.Name
-                                        })
-                                        .FirstOrDefaultAsync();
-                        if(settingData == null ){
-                            throw new GhionException(CustomResponse.NotFound("default company is not found"));
-                        }
-                        data.DefaultCompanyName = settingData!.name;
-                        data.DefaultCompanyCodeNIF = settingData.codeNIF;
+                        var settingData = await _defaultCompanyService.GetDefaultCompanyAsync();
+                        data.DefaultCompanyName = settingData!.DefaultCompany.Name;
+                        data.DefaultCompanyCodeNIF = settingData.DefaultCompany.CodeNIF;
     
                     // update operation status and generate doc
                     var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
