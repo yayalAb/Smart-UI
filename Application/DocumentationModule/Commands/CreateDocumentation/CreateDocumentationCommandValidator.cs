@@ -3,6 +3,7 @@ using Application.Common.Interfaces;
 using Domain.Common.DocumentType;
 using Domain.Enums;
 using FluentValidation;
+using static Domain.Common.DocumentType.DocumentType;
 
 namespace Application.DocumentationModule.Commands.CreateDocumentation
 {
@@ -47,7 +48,7 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
         }
 
         private bool BeOfType(string Type){
-            return DocumentationType.Types.Contains(Type) && Type != Enum.GetName(typeof(Documents) , Documents.Waybill) ;
+            return DocumentationType.Types.Contains(Type) || Type == Enum.GetName(typeof(Documents) , Documents.Waybill) ;
         }
     }
 }

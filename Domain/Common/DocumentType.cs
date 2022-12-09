@@ -9,10 +9,8 @@ public class DocumentType {
         Enum.GetName(typeof(Documents), Documents.T1),
         Enum.GetName(typeof(Documents), Documents.ImportNumber9),
         Enum.GetName(typeof(Documents), Documents.TransferNumber9),
-        Enum.GetName(typeof(Documents), Documents.Number1),
-        Enum.GetName(typeof(Documents), Documents.CirtificateOfOrigin)
-    };
-}
+        Enum.GetName(typeof(Documents), Documents.Number1)
+};
 
 public class DocumentationType {
     public static string[] Types = {
@@ -22,7 +20,9 @@ public class DocumentationType {
         Enum.GetName(typeof(Documents), Documents.CommercialInvoice),
         Enum.GetName(typeof(Documents), Documents.PackageList),
         Enum.GetName(typeof(Documents), Documents.TruckWayBill),
-        Enum.GetName(typeof(Documents), Documents.ProformaInvoice)
+        Enum.GetName(typeof(Documents), Documents.ProformaInvoice),
+        Enum.GetName(typeof(Documents), Documents.CirtificateOfOrigin)
+    };
 
     };
 }
