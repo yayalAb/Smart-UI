@@ -78,7 +78,6 @@ namespace WebApi.Controllers
         {
             try
             {
-
                 return Ok(await Mediator.Send(new DeletePort { Id = id }));
             }
             catch (GhionException ex)

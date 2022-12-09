@@ -1,5 +1,4 @@
 ﻿
-
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -7,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using System.Web;
 
 namespace Application.User.Commands.ResetPassword
 {

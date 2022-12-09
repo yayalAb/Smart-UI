@@ -39,11 +39,6 @@ namespace WebApi.Controllers
             }
         }
 
-
-
-
-
-
         // POST api/<DocumentationController>
         [HttpPost]
         public async Task<IActionResult> CreateDocumentation([FromBody] CreateDocumentationCommand command)

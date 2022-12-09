@@ -26,9 +26,6 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 
-
-
-
     }
 
     public class CreateTruckAssignmentCommandHandler : IRequestHandler<CreateTruckAssignmentCommand, CustomResponse>

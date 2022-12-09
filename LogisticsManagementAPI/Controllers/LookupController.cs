@@ -27,7 +27,6 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
-
         }
 
         [HttpPost]
@@ -40,7 +39,6 @@ namespace WebApi.Controllers
             }catch(GhionException ex){
                 return AppdiveResponse.Response(this, ex.Response);
             }
-
 
         }
 

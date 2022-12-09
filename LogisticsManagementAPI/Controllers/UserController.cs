@@ -25,10 +25,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Login([FromBody] AuthenticateUserCommand command)
         {
             var response = await Mediator.Send(command);
-
-
             return Ok(response);
-
 
         }
         // POST api/<UserController>
@@ -43,7 +40,6 @@ namespace WebApi.Controllers
             };
 
             return StatusCode(StatusCodes.Status201Created, responseObj);
-
 
         }
         // POST api/<UserController>
@@ -60,6 +56,7 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
+
         // POST api/<UserController>
         [HttpPost]
         [Route("reset-password")]
@@ -74,6 +71,7 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
+
         // POST api/<UserController>
         [HttpPost]
         [Route("change-password")]
@@ -90,6 +88,7 @@ namespace WebApi.Controllers
             }
 
         }
+
         // POST api/<UserController>
         [HttpPost]
         [Route("logout")]
@@ -105,6 +104,7 @@ namespace WebApi.Controllers
             }
 
         }
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUser command)
         {
@@ -144,6 +144,7 @@ namespace WebApi.Controllers
             }
 
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> deleteUser(string id)
         {
@@ -158,5 +159,6 @@ namespace WebApi.Controllers
             }
 
         }
+        
     }
 }

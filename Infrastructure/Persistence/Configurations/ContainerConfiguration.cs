@@ -28,8 +28,5 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.HasMany<TruckAssignment>(c => c.TruckAssignments)
             .WithMany(ta => ta.Containers);
 
-
-
-
     }
 }

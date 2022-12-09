@@ -33,9 +33,6 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         entity.Property(e => e.CBM)
             .IsRequired(false);
 
-        // entity.Property(e => e.UnitOfMeasurnment)
-        //     .HasMaxLength(45);
-
         entity.HasOne(d => d.Container)
             .WithMany(p => p.Goods)
             .HasForeignKey(d => d.ContainerId)
@@ -56,9 +53,6 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
 
         entity.HasMany(c => c.TruckAssignments)
             .WithMany(ta => ta.Goods);
-
-
-
 
     }
 }

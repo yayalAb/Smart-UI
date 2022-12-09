@@ -14,8 +14,8 @@ using WebApi.Models;
 namespace WebApi.Controllers
 {
 
-    public class UserGroupController : ApiControllerBase
-    {
+    public class UserGroupController : ApiControllerBase {
+
         // GET api/<UserGroupController>/
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetUserGroupPaginatedListQuery query)
@@ -23,7 +23,6 @@ namespace WebApi.Controllers
 
             return Ok(await Mediator.Send(query));
         }
-
 
         // GET api/<UserGroupController>/5
         [HttpGet("{id}")]
@@ -104,5 +103,6 @@ namespace WebApi.Controllers
             }
 
         }
+
     }
 }

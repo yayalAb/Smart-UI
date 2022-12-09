@@ -1,9 +1,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.User.Commands.AuthenticateUser;
 using AutoMapper;
-using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressUpdateCommand;
