@@ -48,7 +48,7 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
         }
 
         private bool BeOfType(string Type){
-            return DocumentationType.Types.Contains(Type) || Type == Enum.GetName(typeof(Documents) , Documents.Waybill) ;
+            return DocumentationType.Types.Contains(Type) && Type != Enum.GetName(typeof(Documents) , Documents.Waybill);
         }
     }
 }
