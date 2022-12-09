@@ -10,7 +10,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
     public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand> {
         public UpdateCompanyCommandValidator(){
             
-             RuleFor(u => u.Name)
+            RuleFor(u => u.Name)
                 .NotNull()
                 .MaximumLength(45)
                 .NotEmpty()
@@ -45,9 +45,28 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
                 RuleFor( u => u.contactPerson!.Phone)
                     .NotNull()
                     .NotEmpty(); 
+                RuleFor(u => u.contactPerson!.TinNumber)
+                    .NotNull()
+                    .NotEmpty();
+                
             });
+            RuleFor( u => u.BankInformation)
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.AccountHolderName))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.AccountNumber))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.BankAddress))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.BankName))
+                .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.SwiftCode))
+                .NotNull();
             
 
+            
         }
+
     }
+
 }

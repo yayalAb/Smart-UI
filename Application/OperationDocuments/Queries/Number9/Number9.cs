@@ -10,6 +10,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Application.OperationDocuments.Number9.N9Dtos;
 using AutoMapper;
+using Application.Common;
 
 namespace Application.OperationDocuments.Queries.Number9;
 
@@ -24,12 +25,15 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
     private readonly OperationEventHandler _operationEvent;
+    private readonly DefaultCompanyService _defaultCompanyService;
 
-    public Number9Handler(IAppDbContext context, OperationEventHandler operationEvent, IMapper mapper)
+
+    public Number9Handler(IAppDbContext context, OperationEventHandler operationEvent , DefaultCompanyService defaultCompanyService , IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
+        _defaultCompanyService = defaultCompanyService;
     }
 
     public async Task<Number9Dto> Handle(Number9 request, CancellationToken cancellationToken)
@@ -160,6 +164,9 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                         DONumber = p.DONumber
                     }).FirstOrDefault();
 
+                    var companySetting = await _defaultCompanyService.GetDefaultCompanyAsync();
+
+
                     if (payment == null) {
                         throw new GhionException(CustomResponse.NotFound(" Delivery Order Payment for the operation not found!"));
                     }
@@ -174,11 +181,14 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     await transaction.CommitAsync();
                     return new Number9Dto
                     {
+                        defaultCompanyCodeNIF = companySetting.DefaultCompany.CodeNIF,
+                        defaultCompanyName = companySetting.DefaultCompany.Name,
                         company = company,
                         operation = operation,
                         goods = goods,
-                        doPayment = payment
+                        doPayment = payment,
                         // containerSize = size
+            
                     };
 
                 }

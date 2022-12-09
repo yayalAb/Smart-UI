@@ -14,6 +14,8 @@ namespace Application.DriverModule.Commands.CreateDriverCommand {
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("licence number is not in the correct format");
+            RuleFor(u => u.address)
+                .NotNull();
             RuleFor(u => u.address.Email)
                 .NotNull()
                 .NotEmpty()
