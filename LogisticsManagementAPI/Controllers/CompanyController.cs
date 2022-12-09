@@ -1,10 +1,10 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Application.CompanyModule.Commands.CreateCompanyCommand;
 using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.CompanyModule.Commands.UpdateCompanyCommand;
 using Application.CompanyModule.Queries.GetAllCompanyQuery;
 using Application.CompanyModule.Commands.DeleteCompanyCommand;
-using Application.Common.Models;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.DriverModule.Queries.GetCompanyLookup;

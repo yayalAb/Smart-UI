@@ -5,6 +5,8 @@ using Infrastructure.Persistence;
 using Serilog;
 using WebApi.Extensions;
 using WebApi.Services;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,11 +26,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 //-----//
 
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-    }
-    );
+builder.Services.AddSwaggerGen(options => {
+
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme{
+        
+        Description = "Standard Authorization scheme using Brearer Scheme",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+});
+
+builder.Services.AddControllers().AddNewtonsoftJson(options => {
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
