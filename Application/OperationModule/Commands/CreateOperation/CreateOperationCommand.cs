@@ -94,9 +94,6 @@ namespace Application.OperationModule.Commands.CreateOperation
                         throw;
                     }
 
-
-
-
                 }
             });
 

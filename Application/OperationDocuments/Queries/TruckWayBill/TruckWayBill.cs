@@ -36,21 +36,18 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
     public async Task<DocsDto> Handle(TruckWayBill request, CancellationToken cancellationToken)
     {
         var executionStrategy = _context.database.CreateExecutionStrategy();
-        return await executionStrategy.ExecuteAsync(async () =>
-        {
-            using (var transaction = _context.database.BeginTransaction())
-            {
-                try
-                {
+        return await executionStrategy.ExecuteAsync(async () => {
+            using (var transaction = _context.database.BeginTransaction()) {
+                try {
+
                     var operation = _context.Operations.Where(d => d.Id == request.operationId).FirstOrDefault();
 
-                    if (operation == null)
-                    {
+                    if (operation == null) {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
                     //if truck waybill
-                    if (!request.isWaybill)
-                    {
+                    if (!request.isWaybill) {
+
                         var IsPackageListFound = await _context.Documentations
                                 .Where(d => d.OperationId == request.operationId && d.Type == Enum.GetName(typeof(Documents), Documents.PackageList))
                                 .AnyAsync();
@@ -58,16 +55,14 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                         {
                             throw new GhionException(CustomResponse.BadRequest("PackageList document must be generated before truck way bill"));
                         }
-                        return await _documentationService
-                                            .GetDocumentation(Documents.TruckWayBill, request.operationId, request.TruckAssignmentId, cancellationToken);
+                        return await _documentationService.GetDocumentation(Documents.TruckWayBill, request.operationId, request.TruckAssignmentId, cancellationToken);
+
                     }
                     //if waybill
-                    if (!await _operationEvent.IsDocumentGenerated(request.operationId, Enum.GetName(typeof(Documents), Documents.ECDDocument)!))
-                    {
+                    if (!await _operationEvent.IsDocumentGenerated(request.operationId, Enum.GetName(typeof(Documents), Documents.ECDDocument)!)) {
                         throw new GhionException(CustomResponse.NotFound("ECD Document should be dispatched before generating waybill!"));
                     }
-                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-                    {
+                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
                         GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Waybill)!,
                         GeneratedDate = DateTime.Now,
                         IsApproved = false,
@@ -77,9 +72,8 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                                     .GetDocumentation(Documents.Waybill, request.operationId, request.TruckAssignmentId, cancellationToken);
                     await transaction.CommitAsync();
                     return document;
-                }
-                catch (Exception)
-                {
+
+                } catch (Exception) {
                     await transaction.RollbackAsync();
                     throw;
                 }

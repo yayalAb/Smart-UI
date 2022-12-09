@@ -65,16 +65,6 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                                 AssignedTruck = new T1TruckDto {
                                                     TruckNumber = t.Truck.TruckNumber
                                                 },
-                                                // Containers = (t.Containers != null) ? t.Containers.Select(c => new Container()
-                                                // {
-                                                //     ContianerNumber = c.ContianerNumber,
-                                                //     SealNumber = c.SealNumber,
-                                                //     Location = c.Location,
-                                                //     Size = c.Size,
-                                                //     LocationPortId = c.LocationPortId,
-                                                //     IsAssigned = c.IsAssigned,
-                                                //     OperationId = c.OperationId
-                                                // }).ToList() : null,
                                                 AssignedGood = (t.Goods != null) ? t.Goods.Select(g => new T1GoodDto {
                                                     HSCode = g.HSCode,
                                                     Weight = g.Weight,

@@ -52,19 +52,6 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
                             throw new GhionException(CustomResponse.NotFound("shippingAgnet not found!"));
                         }
 
-
-                        /// update image 
-                        // byte[]? newImage = oldShippingAgent.Image;
-                        // if (request.ImageFile != null)
-                        // {
-                        //     var response = await _fileUploadService.GetFileByte(request.ImageFile, FileType.Image);
-                        //     if (!response.result.Succeeded)
-                        //     {
-                        //         throw new GhionException(CustomResponse.Failed(response.result.Errors));
-                        //     }
-                        //     newImage = response.byteData;
-
-                        // }
                         /// update address  
                         var newAddress = request.Address;
                         var oldAddress = await _context.Addresses.FindAsync(request.AddressId);

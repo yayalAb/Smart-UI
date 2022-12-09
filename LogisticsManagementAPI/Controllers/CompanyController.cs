@@ -16,8 +16,8 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("create")]
         public async Task<ActionResult> create([FromBody] CreateCompanyCommand command)
-        {
 
+        {
             try{
                 return Ok(await Mediator.Send(command));
             }catch(GhionException ex) {

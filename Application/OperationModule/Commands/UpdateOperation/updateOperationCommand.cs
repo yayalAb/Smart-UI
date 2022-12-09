@@ -1,14 +1,9 @@
 
-using System.Reflection.Metadata;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
-using Domain.Entities;
-using Domain.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationModule.Commands.UpdateOperation
 

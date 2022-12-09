@@ -53,28 +53,16 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                 .Include(o => o.Company.ContactPerson)
                                 .Select(o => new N9OperationDto {
                                     Id = o.Id,
-                                    // NameOnPermit = o.NameOnPermit,
-                                    // Consignee = o.Consignee,
-                                    // NotifyParty = o.NotifyParty,
-                                    // BillNumber = o.BillNumber,
                                     ShippingLine = o.ShippingLine,
                                     GoodsDescription = o.GoodsDescription,
                                     Quantity = o.Quantity,
                                     GrossWeight = o.GrossWeight,
-                                    // ATA = o.ATA,
-                                    // FZIN = o.FZIN,
-                                    // FZOUT = o.FZOUT,
                                     DestinationType = o.DestinationType,
                                     SourceDocument = o.SourceDocument,
-                                    // ActualDateOfDeparture = o.ActualDateOfDeparture,
                                     EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                                     VoyageNumber = o.VoyageNumber,
                                     TypeOfMerchandise = o.TypeOfMerchandise,
                                     OperationNumber = o.OperationNumber,
-                                    // OpenedDate = o.OpenedDate,
-                                    // Status = o.Status,
-                                    // ECDDocument = o.ECDDocument,
-                                    // ShippingAgentId = o.ShippingAgentId,
                                     PortOfLoading = new N9PortOfLoadingDto {
                                         PortNumber = o.PortOfLoading.PortNumber,
                                         Country = o.PortOfLoading.Country,
@@ -85,13 +73,10 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     /////------------Additionals------
                                     SNumber = o.SNumber, // operation
                                     SDate = o.SDate, //operation
-                                    // RecepientName = o.RecepientName,
                                     VesselName = o.VesselName, // operation
                                     ArrivalDate = o.ArrivalDate, // operation
-                                    // ConnaissementNumber = o.ConnaissementNumber, // operation
                                     CountryOfOrigin = o.CountryOfOrigin, // operation
                                     REGTax = o.REGTax,//
-                                    // BillOfLoadingNumber = o.BillOfLoadingNumber,
                                     Company = new N9CompanyDto {
                                         Name = o.Company.Name,
                                         TinNumber = o.Company.TinNumber,
@@ -99,43 +84,16 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         ContactPersonId = o.Company.ContactPersonId,
                                         ContactPerson = _mapper.Map<N9NameOnPermitDto>(o.Company.ContactPerson),
                                     },
-                                    Goods = (o.Goods != null) ? o.Goods.Select(g => new N9GoodDto
-                                    {
+                                    Goods = (o.Goods != null) ? o.Goods.Select(g => new N9GoodDto {
                                         Description = g.Description,
                                         HSCode = g.HSCode,
-                                        Manufacturer = g.Manufacturer,
                                         Weight = g.Weight,
                                         Quantity = g.Quantity,
                                         NumberOfPackages = g.NumberOfPackages,
-                                        ChasisNumber = g.ChasisNumber,
-                                        EngineNumber = g.EngineNumber,
-                                        ModelCode = g.ModelCode,
                                         Unit = g.Unit,
                                         UnitPrice = g.UnitPrice,
-                                        CBM = g.CBM,
-                                        // Container = g.Container == null
-                                        //                 ? null
-                                        //                 : new Container
-                                        //                 {
-                                        //                     ContianerNumber = g.Container.ContianerNumber,
-                                        //                     SealNumber = g.Container.SealNumber,
-                                        //                     Location = g.Container.Location,
-                                        //                     Size = g.Container.Size,
-                                        //                     LocationPortId = g.Container.LocationPortId,
-                                        //                     IsAssigned = g.Container.IsAssigned,
-                                        //                     OperationId = g.Container.OperationId,
-                                        //                 }
-                                    }).ToList() : null,
-                                    // Containers = (o.Containers == null) ? new List<Container>() : o.Containers.Select(c => new Container {
-                                    //     ContianerNumber = c.ContianerNumber,
-                                    //     SealNumber = c.SealNumber,
-                                    //     Location = c.Location,
-                                    //     Size = c.Size,
-                                    //     LocationPortId = c.LocationPortId,
-                                    //     IsAssigned = c.IsAssigned,
-                                    //     OperationId = c.OperationId,
-                                    //     TruckAssignmentId = c.TruckAssignmentId
-                                    // }).ToList()
+                                        CBM = g.CBM
+                                    }).ToList() : null
                                 }).First();
 
                     if (operation == null) {

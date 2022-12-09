@@ -25,9 +25,6 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 
-
-
-
     }
 
     public class UpdateTruckAssignmentCommandHandler : IRequestHandler<UpdateTruckAssignmentCommand, CustomResponse>
@@ -122,9 +119,6 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
                         await transaction.RollbackAsync();
                         throw;
                     }
-
-
-
 
                 }
             });
