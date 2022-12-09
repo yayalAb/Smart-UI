@@ -7,6 +7,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static Domain.Common.DocumentType.DocumentType;
 
 namespace Infrastructure.Persistence
 {
