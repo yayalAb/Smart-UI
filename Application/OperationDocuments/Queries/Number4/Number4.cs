@@ -36,14 +36,16 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
         {
             using (var transaction = _context.database.BeginTransaction())
             {
-                try {
+                try
+                {
                     var operation = _context.Operations
                     .Where(d => d.Id == request.OperationId)
                     .Include(o => o.Company)
-                    .Include(o => o.Company.ContactPerson)
+                    .Include(o => o.Company.ContactPeople)
                     .Include(o => o.Containers)
                     .Include(o => o.PortOfLoading)
-                    .Select(o => new Operation {
+                    .Select(o => new Operation
+                    {
                         Id = o.Id,
                         Consignee = o.Consignee,
                         BillNumber = o.BillNumber,
@@ -63,33 +65,42 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         CountryOfOrigin = o.CountryOfOrigin, // operation
                         REGTax = o.REGTax,//
                         BillOfLoadingNumber = o.BillOfLoadingNumber,
-                        PortOfLoading = new Port {
+                        PortOfLoading = new Port
+                        {
                             PortNumber = o.PortOfLoading.PortNumber,
                             Country = o.PortOfLoading.Country,
                             Region = o.PortOfLoading.Region,
                             Vollume = o.PortOfLoading.Vollume
                         },
-                        Company = new Company {
+                        Company = new Company
+                        {
                             Name = o.Company.Name,
                             TinNumber = o.Company.TinNumber,
                             CodeNIF = o.Company.CodeNIF,
-                            ContactPerson = new ContactPerson {
-                                Name = o.Company.ContactPerson.Name
-                            }
+                            ContactPeople = o.Company.ContactPeople.Select(cp => new ContactPerson
+                            {
+
+                                Name = cp.Name
+                            }).ToList()
                         },
-                        Containers = o.Containers == null ? null : o.Containers.Select(c => new Container {
+                        Containers = o.Containers == null ? null : o.Containers.Select(c => new Container
+                        {
                             ContianerNumber = c.ContianerNumber,
                             SealNumber = c.SealNumber
                         }).ToList()
                     }).FirstOrDefault();
 
-                    if (operation == null) {
+                    if (operation == null)
+                    {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
-                    } else if (!await _operationEvent.IsDocumentGenerated(request.OperationId,Enum.GetName(typeof(Documents) , Documents.GatePass)!)) {
+                    }
+                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
+                    {
                         throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     }
 
-                    var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).Select(g => new Good {
+                    var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).Select(g => new Good
+                    {
                         Description = g.Description,
                         HSCode = g.HSCode,
                         Weight = g.Weight,
@@ -109,21 +120,25 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         throw new GhionException(CustomResponse.NotFound("Payment Not found! either payment not made or payment is not filled on the system"));
                     }
 
-                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
+                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                    {
                         GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number4)!,
                         GeneratedDate = DateTime.Now,
                         IsApproved = false,
                         OperationId = request.OperationId
                     }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
-                   await transaction.CommitAsync();
-                    return new Number4Dto {
+                    await transaction.CommitAsync();
+                    return new Number4Dto
+                    {
                         company = operation.Company,
                         operation = operation,
                         containers = operation.Containers,
                         goods = goods,
                         doPayment = payment
                     };
-                }catch (Exception) {
+                }
+                catch (Exception)
+                {
                     await transaction.RollbackAsync();
                     throw;
                 }

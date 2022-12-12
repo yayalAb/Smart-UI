@@ -9,6 +9,7 @@ public class ContactPerson : BaseAuditableEntity
     public string TinNumber { get; set; } = null!;
     public string Country { get; set; } = null!; 
     public string City { get; set; } = null!;
+    public int CompanyId { get; set; }
 
     
     //has one

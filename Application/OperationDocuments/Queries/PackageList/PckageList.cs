@@ -13,6 +13,7 @@ public record PackageList : IRequest<PackingListDto>
 {
     public int operationId { get; init; }
     public int TruckAssignmentId { get; init; }
+    public int ContactPersonId { get; init; }
 }
 
 public class PackageListHandler : IRequestHandler<PackageList, PackingListDto>
@@ -37,6 +38,6 @@ public class PackageListHandler : IRequestHandler<PackageList, PackingListDto>
             throw new GhionException(CustomResponse.BadRequest("Commercial Invoice document must be generated before packing list"));
         }
         return (PackingListDto)await _documentationService
-                     .GetDocumentation(Documents.PackageList, request.operationId, request.TruckAssignmentId, cancellationToken);
+                     .GetDocumentation(Documents.PackageList, request.operationId, request.TruckAssignmentId, request.ContactPersonId, cancellationToken);
     }
 }

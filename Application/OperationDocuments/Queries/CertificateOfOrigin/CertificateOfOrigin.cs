@@ -38,7 +38,7 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
         }
         var operation = _context.Operations.Where(d => d.Id == request.operationId)
             .Include(o => o.Company)
-            .Include(o => o.Company.ContactPerson)
+            .Include(o => o.Company.ContactPeople)
             .Include(o => o.Company.Address)
             .Include(o => o.Goods)
             .Select(o => new Operation
@@ -89,11 +89,10 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                         City = o.Company.Address.City,
                         Country = o.Company.Address.Country
                     },
-                    ContactPerson = new ContactPerson
-                    {
-                        Name = o.Company.ContactPerson.Name,
-                        TinNumber = o.Company.ContactPerson.TinNumber
-                    }
+                    ContactPeople = o.Company.ContactPeople.Select(cp => new ContactPerson{
+                        TinNumber = cp.TinNumber,
+                        Name = cp.Name
+                    }).ToList()
                 },
                 Goods = (o.Goods != null) ? o.Goods.Select(g => new Good
                 {

@@ -25,14 +25,14 @@ namespace Infrastructure.Persistence
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        
+
         public async Task InitialiseAsync()
         {
             try
             {
                 // if (_context.Database.IsSqlServer())
                 // {
-                    
+
                 // }
 
                 await _context.Database.MigrateAsync();
@@ -46,12 +46,15 @@ namespace Infrastructure.Persistence
 
         public async Task SeedAsync()
         {
-            try {
+            try
+            {
                 // await TrySeedAsync();
                 // await TrySeedLookup();
                 // await TrySeedSettings();
                 // await removeLookups();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, "An error occurred while seeding the database.");
                 throw;
             }
@@ -60,16 +63,17 @@ namespace Infrastructure.Persistence
         public async Task TrySeedAsync()
         {
             // Adding Default userGroup
-            int groupId  =0 ;
+            int groupId = 0;
             UserGroup defaultGroup = new UserGroup
             {
                 Name = "AdminGroup",
                 Responsiblity = "adminstration",
 
             };
-            var found_group = _context.UserGroups.Where(ug=>ug.Name == defaultGroup.Name).FirstOrDefault();
-            if (found_group == null) {
-        
+            var found_group = _context.UserGroups.Where(ug => ug.Name == defaultGroup.Name).FirstOrDefault();
+            if (found_group == null)
+            {
+
                 try
                 {
                     await _context.UserGroups.AddAsync(defaultGroup);
@@ -81,7 +85,9 @@ namespace Infrastructure.Persistence
                     _logger.LogError($"error creating default userGroup: {e}");
                 }
 
-            }else{
+            }
+            else
+            {
                 groupId = found_group.Id;
             }
 
@@ -98,10 +104,13 @@ namespace Infrastructure.Persistence
                 POBOX = ""
             };
 
-            try {
+            try
+            {
                 await _context.Addresses.AddAsync(defaultAddress);
                 await _context.SaveChangesAsync();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 _logger.LogError($"error creating default address: {e}");
             }
 
@@ -130,21 +139,24 @@ namespace Infrastructure.Persistence
                 await _context.SaveChangesAsync();
 
                 //adding default user roles
-               List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(groupId);
-                try {
+                List<AppUserRole> defaultRoles = AppUserRole.createDefaultRoles(groupId);
+                try
+                {
                     await _context.AddRangeAsync(defaultRoles);
                     _logger.LogInformation("successfully added roles for the default user");
 
-                }catch(Exception)
+                }
+                catch (Exception)
                 {
                     _logger.LogError("could not add roles ");
                 }
- 
+
             }
             await _context.SaveChangesAsync();
         }
 
-        public async Task TrySeedLookup() {
+        public async Task TrySeedLookup()
+        {
 
             Lookup[] paymentTypes = {
                 new Lookup {
@@ -176,94 +188,113 @@ namespace Infrastructure.Persistence
 
             _context.Lookups.AddRange(paymentTypes);
 
-            var document_type_list = from type in DocumentType.Types select new Lookup {
-                    Key = "Document",
-                    Value = type
-                };
-            
-            var documentation_type_list = from type in DocumentationType.Types select new Lookup {
-                    Key = "Documentation",
-                    Value = type
-                };
+            var document_type_list = from type in DocumentType.Types
+                                     select new Lookup
+                                     {
+                                         Key = "Document",
+                                         Value = type
+                                     };
 
-            var destination_type_list = from type in DestinationType.Types select new Lookup {
-                    Key = "DestinationType",
-                    Value = type
-                };
+            var documentation_type_list = from type in DocumentationType.Types
+                                          select new Lookup
+                                          {
+                                              Key = "Documentation",
+                                              Value = type
+                                          };
+
+            var destination_type_list = from type in DestinationType.Types
+                                        select new Lookup
+                                        {
+                                            Key = "DestinationType",
+                                            Value = type
+                                        };
 
             _context.Lookups.AddRange(document_type_list);
             _context.Lookups.AddRange(documentation_type_list);
             _context.Lookups.AddRange(destination_type_list);
 
-            var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup {Key = ShippingAgentPaymentType.Name, Value = type};
+            var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup { Key = ShippingAgentPaymentType.Name, Value = type };
             _context.Lookups.AddRange(shippingAgentPaymentNames);
 
-            var terminalPortPaymentNames = from type in TerminalPortPaymentType.Types select new Lookup {Key = TerminalPortPaymentType.Name, Value = type};
+            var terminalPortPaymentNames = from type in TerminalPortPaymentType.Types select new Lookup { Key = TerminalPortPaymentType.Name, Value = type };
             _context.Lookups.AddRange(terminalPortPaymentNames);
 
             await _context.SaveChangesAsync();
 
         }
 
-        public async Task TrySeedSettings() {
+        public async Task TrySeedSettings()
+        {
 
-            if(_context.Settings.Any()){
+            if (_context.Settings.Any())
+            {
                 return;
             }
 
             var executionStrategy = _context.database.CreateExecutionStrategy();
-            await executionStrategy.ExecuteAsync(async () => {
+            await executionStrategy.ExecuteAsync(async () =>
+            {
                 using (var transaction = _context.database.BeginTransaction())
                 {
-                    try {
+                    try
+                    {
 
-                        var addressInfo = new Address {
-                                Email = "ghioninternationalfzco@gmail.com",
-                                Phone = "+25321353730",
-                                Region = "EAST AFRIC",
-                                City = "Djibouti",
-                                Subcity = "Djibouti",
-                                Country = "REPUBLIC DE DJIBOUTI",
-                                POBOX = "0000"
-                            };
+                        var addressInfo = new Address
+                        {
+                            Email = "ghioninternationalfzco@gmail.com",
+                            Phone = "+25321353730",
+                            Region = "EAST AFRIC",
+                            City = "Djibouti",
+                            Subcity = "Djibouti",
+                            Country = "REPUBLIC DE DJIBOUTI",
+                            POBOX = "0000"
+                        };
+                        _context.Addresses.Add(addressInfo);
+                        await _context.SaveChangesAsync();
+                        var defaultCompany = new Company
+                        {
+                            Name = "Ghion International",
+                            TinNumber = "111",
+                            CodeNIF = "code_nif",
+                            // ContactPersonId = contactPerson.Id,
+                            AddressId = addressInfo.Id,
+                        };
+                        _context.Companies.Add(defaultCompany);
+                        await _context.SaveChangesAsync();
 
-                        var contactPerson = new ContactPerson {
+                        var contactPerson = new ContactPerson
+                        {
                             Name = "Abnet Kebede",
                             Email = "ab@absoft.net",
                             Phone = "0987654321",
                             TinNumber = "3478568",
-                            Country = "DEMOCRATIC REPUBLIC OF ETHIOPIA", 
-                            City = "ADDIS ABABA"
-                        };
+                            Country = "DEMOCRATIC REPUBLIC OF ETHIOPIA",
+                            City = "ADDIS ABABA",
+                            CompanyId = defaultCompany.Id
 
-                        _context.Addresses.Add(addressInfo);
+                        };
                         _context.ContactPeople.Add(contactPerson);
                         await _context.SaveChangesAsync();
 
-                        var defaultCompany = new Company {
-                                Name = "Ghion International",
-                                TinNumber = "111",
-                                CodeNIF = "code_nif",
-                                ContactPersonId = contactPerson.Id,
-                                AddressId = addressInfo.Id,
-                            };
-                        
-                        _context.Companies.Add(defaultCompany);
-                        await _context.SaveChangesAsync();
 
-                        var bankInfo = new BankInformation {
-                                AccountHolderName = "GHION INTERNATIONAL DJIBUTI",
-                                BankName = "CAC INTERNATIONAL BANK",
-                                AccountNumber = "1003499041",
-                                SwiftCode = "CACDDJJD",
-                                BankAddress = "DJIBOUTI, REPUBLIC DE DJIBOUTI",
-                                CompanyId = defaultCompany.Id
-                            };
-                        
+
+
+
+                        var bankInfo = new BankInformation
+                        {
+                            AccountHolderName = "GHION INTERNATIONAL DJIBUTI",
+                            BankName = "CAC INTERNATIONAL BANK",
+                            AccountNumber = "1003499041",
+                            SwiftCode = "CACDDJJD",
+                            BankAddress = "DJIBOUTI, REPUBLIC DE DJIBOUTI",
+                            CompanyId = defaultCompany.Id
+                        };
+
                         _context.BankInformation.Add(bankInfo);
                         await _context.SaveChangesAsync();
 
-                        var setting = new Setting {
+                        var setting = new Setting
+                        {
                             Email = "tihitnatsegaye7@gmail.com",
                             Password = "tiucpqdxigzogxco",
                             Port = 456,
@@ -278,7 +309,9 @@ namespace Infrastructure.Persistence
 
                         transaction.Commit();
 
-                    } catch (System.Exception) {
+                    }
+                    catch (System.Exception)
+                    {
                         await transaction.RollbackAsync();
                         throw;
                     }
@@ -288,8 +321,9 @@ namespace Infrastructure.Persistence
 
         }
 
-        public async Task removeLookups(){
-            string[] types = {"Payment", "Document", "Documentation", "DestinationType"};
+        public async Task removeLookups()
+        {
+            string[] types = { "Payment", "Document", "Documentation", "DestinationType" };
             var key_list = _context.Lookups.Where(l => (l.Key == "key" && types.Contains(l.Value)) || types.Contains(l.Key) || l.Key == ShippingAgentPaymentType.Name || l.Key == TerminalPortPaymentType.Name || ShippingAgentPaymentType.Types.Contains(l.Key) || TerminalPortPaymentType.Types.Contains(l.Key)).ToList();
             _context.RemoveRange(key_list);
             await _context.SaveChangesAsync();

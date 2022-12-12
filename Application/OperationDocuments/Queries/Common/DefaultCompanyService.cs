@@ -31,7 +31,7 @@ public class DefaultCompanyService {
                     Name = s.DefaultCompany.Name,
                     TinNumber = s.DefaultCompany.Name,
                     CodeNIF = s.DefaultCompany.CodeNIF,
-                    ContactPersonId = s.DefaultCompany.ContactPersonId,
+                    // ContactPersonId = s.DefaultCompany.ContactPersonId,
                     AddressId = s.DefaultCompany.AddressId
                 },
                 BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformationUpdateDto {

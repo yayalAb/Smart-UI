@@ -43,6 +43,7 @@ public class Operation : BaseAuditableEntity
     public DateTime? PIDate { get; set; }
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
+    public string? Shipper { get; set; }
     //--------------------------------------//
     // has one
     public virtual Port PortOfLoading { get; set; } = null!;

@@ -11,10 +11,9 @@ public class CompanyDto : IMapFrom<Company>
     public string? Name { get; set; }
     public string? TinNumber { get; set; }
     public string? CodeNIF { get; set; }
-    public int ContactPersonId { get; set; }
     public int AddressId { get; set; }
     
-    public virtual ContactPersonDto ContactPerson { get; set; } = null!;
+    public virtual ICollection<ContactPersonDto> ContactPeople { get; set; } = null!;
     public virtual UpdateAddressDto Address { get; set; } = null!;
     public virtual ICollection<UpdateBankInformationDto> BankInformation { get; set; }
     

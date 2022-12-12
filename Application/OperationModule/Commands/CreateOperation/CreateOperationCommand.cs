@@ -16,6 +16,7 @@ namespace Application.OperationModule.Commands.CreateOperation
     public record CreateOperationCommand : IRequest<CustomResponse>
     {
         public string? Consignee { get; set; }
+        public string? NameOnPermit { get; set; }
         public string? NotifyParty { get; set; }
         public string BillNumber { get; set; }
         public string? ShippingLine { get; set; }
@@ -47,6 +48,7 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
+        public string? Shipper { get; set; }
         //--------------------------------------//
     }
     public class CreateOperationCommandHandler : IRequestHandler<CreateOperationCommand, CustomResponse>
@@ -71,7 +73,8 @@ namespace Application.OperationModule.Commands.CreateOperation
             {
                 using (var transaction = _context.database.BeginTransaction())
                 {
-                    try {
+                    try
+                    {
                         //create operation with empty operation number
                         Operation newOperation = _mapper.Map<Operation>(request);
                         newOperation.OperationNumber = "";

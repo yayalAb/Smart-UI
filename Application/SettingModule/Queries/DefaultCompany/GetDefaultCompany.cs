@@ -42,7 +42,7 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                     Name = s.DefaultCompany.Name,
                     TinNumber = s.DefaultCompany.Name,
                     CodeNIF = s.DefaultCompany.Name,
-                    ContactPersonId = s.DefaultCompany.ContactPersonId,
+                 
                     AddressId = s.DefaultCompany.AddressId,
                     Address = new Address {
                         Id = s.DefaultCompany.Address.Id,

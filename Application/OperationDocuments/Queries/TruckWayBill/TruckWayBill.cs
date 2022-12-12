@@ -17,6 +17,7 @@ public record TruckWayBill : IRequest<DocsDto>
     public int operationId { get; init; }
     public int TruckAssignmentId { get; init; }
     public bool isWaybill { get; init; } = false!;
+    public int ContactPersonId { get; init; }
 }
 
 public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
@@ -55,7 +56,7 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                         {
                             throw new GhionException(CustomResponse.BadRequest("PackageList document must be generated before truck way bill"));
                         }
-                        return await _documentationService.GetDocumentation(Documents.TruckWayBill, request.operationId, request.TruckAssignmentId, cancellationToken);
+                        return await _documentationService.GetDocumentation(Documents.TruckWayBill, request.operationId, request.TruckAssignmentId,request.ContactPersonId, cancellationToken);
 
                     }
                     //if waybill
@@ -69,7 +70,7 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
                         OperationId = request.operationId
                     }, Enum.GetName(typeof(Status), Status.Closed)!);
                     var document = await _documentationService
-                                    .GetDocumentation(Documents.Waybill, request.operationId, request.TruckAssignmentId, cancellationToken);
+                                    .GetDocumentation(Documents.Waybill, request.operationId, request.TruckAssignmentId,request.ContactPersonId, cancellationToken);
                     await transaction.CommitAsync();
                     return document;
 

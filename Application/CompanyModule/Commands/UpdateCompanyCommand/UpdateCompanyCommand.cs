@@ -22,7 +22,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string Name { get; init; }
         public string TinNumber { get; init; }
         public string CodeNIF { get; init; }
-        public ContactPersonUpdateCommand contactPerson { get; init; }
+        public ICollection<ContactPersonUpdateCommand> contactPeople { get; init; }
         public UpdateAddressDto address { get; init; }
         public ICollection<UpdateBankInformationDto> BankInformation { get; init; }
     }
@@ -46,7 +46,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
             
             bool isCompanyFound = _context.Companies
                         .Include(c => c.Address)
-                        .Include(c => c.ContactPerson)
+                        .Include(c => c.ContactPeople)
                         .Include( c => c.BankInformation)
                         .Where(c => c.Id == request.Id).AsNoTracking()
                         .Any();

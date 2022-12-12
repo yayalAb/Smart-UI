@@ -23,7 +23,7 @@ public class DocumentationService
         _mapper = mapper;
         _logger = logger;
     }
-    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId, CancellationToken cancellationToken)
+    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId,int contactPersonId ,  CancellationToken cancellationToken)
     {
         if (!await _context.TruckAssignments.Where(ta => ta.Id == truckAssignmentId).AnyAsync())
         {
@@ -32,7 +32,7 @@ public class DocumentationService
         
         var data = await _context.Operations
                         .Include(o => o.Company)
-                            .ThenInclude(c => c.ContactPerson)
+                            .ThenInclude(c => c.ContactPeople)
                         .Include(o => o.TruckAssignments!.Where(ta => ta.Id == truckAssignmentId))
                             .ThenInclude(ta => ta.Goods)!
                                 .ThenInclude(g => g.Container)
@@ -44,10 +44,10 @@ public class DocumentationService
                             OperationNumber = o.OperationNumber,
                             PINumber = o.PINumber,
                             PIDate = o.PIDate,
-                            CustomerName = o.Company.ContactPerson.Name,
-                            CustomerAddress = string.Concat(o.Company.ContactPerson.City, " , ", o.Company.ContactPerson.Country),
-                            CustomerPhone = o.Company.ContactPerson.Phone,
-                            CustomerTinNumber = o.Company.ContactPerson.TinNumber,
+                            // CustomerName = o.Company.ContactPerson.Name,
+                            // CustomerAddress = string.Concat(o.Company.ContactPerson.City, " , ", o.Company.ContactPerson.Country),
+                            // CustomerPhone = o.Company.ContactPerson.Phone,
+                            // CustomerTinNumber = o.Company.ContactPerson.TinNumber,
                             CountryOfOrigin = o.CountryOfOrigin,
                             PortOfLoading = o.PortOfLoading.Country,
                             FinalDestination = o.FinalDestination,
@@ -81,6 +81,8 @@ public class DocumentationService
         if (data == null) {
             throw new GhionException(CustomResponse.NotFound($"Operation with id = {operationId} is Not found!"));
         }
+        // fetch name on permit/ contact person for the documentation
+
         
 
         if (docType != Documents.Waybill) {

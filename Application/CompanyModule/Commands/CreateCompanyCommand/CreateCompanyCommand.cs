@@ -16,7 +16,7 @@ public record CreateCompanyCommand : IRequest<CustomResponse>
     public string Name { get; init; } = null!;
     public string TinNumber { get; init; } = null!;
     public string CodeNIF { get; init; } = null!;
-    public ContactPersonCreateCommand? contactPerson { get; init; }
+    public ICollection<ContactPersonCreateCommand>? contactPerson { get; init; }
     public AddressDto address { get; init; } = null!;
     public ICollection<BankInformationDto> BankInformation { get; init; } = null!;
 

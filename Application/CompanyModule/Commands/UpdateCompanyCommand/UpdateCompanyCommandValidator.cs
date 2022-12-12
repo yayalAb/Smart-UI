@@ -32,24 +32,19 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand
                 .NotEmpty()
                 .EmailAddress()
                 .WithMessage("invalid email address");
-            When(u => u.contactPerson != null, () =>
-            {
-                RuleFor( u => u.contactPerson!.Name)
-                    .NotNull()
-                    .NotEmpty(); 
-                RuleFor( u => u.contactPerson!.Email)
-                    .NotNull()
-                    .NotEmpty()
-                    .EmailAddress()
-                    .WithMessage("invalid contact person email address");                
-                RuleFor( u => u.contactPerson!.Phone)
-                    .NotNull()
-                    .NotEmpty(); 
-                RuleFor(u => u.contactPerson!.TinNumber)
-                    .NotNull()
-                    .NotEmpty();
-                
-            });
+          
+            RuleFor( u => u.contactPeople!.Select(cp => cp.Name))
+                .NotNull()
+                .NotEmpty(); 
+            RuleFor( u => u.contactPeople!.Select(cp => cp.Email))
+                .ForEach(em => em.EmailAddress().WithMessage("invalid contact person email address"));
+             
+            RuleFor( u => u.contactPeople!.Select(cp => cp.Phone))
+                .NotNull()
+                .NotEmpty(); 
+            RuleFor(u => u.contactPeople!.Select(cp => cp.TinNumber))
+                .NotNull()
+                .NotEmpty();
             RuleFor( u => u.BankInformation)
                 .NotNull();
             RuleFor( u => u.BankInformation.Select(bi => bi.AccountHolderName))

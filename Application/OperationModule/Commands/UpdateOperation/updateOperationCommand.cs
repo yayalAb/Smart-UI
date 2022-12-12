@@ -44,6 +44,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
+        public string? Shipper { get; set; }
         public string? PINumber { get; set; } = null;
         public DateTime? PIDate { get; set; } = null;
 
@@ -69,6 +70,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
             }
 
             // found_operation = _mapper.Map<Operation>(request);
+            found_operation.NameOnPermit = request.NameOnPermit;
             found_operation.Consignee = request.Consignee;
             found_operation.NotifyParty = request.NotifyParty;
             found_operation.BillNumber = request.BillNumber;

@@ -18,6 +18,7 @@ public record Number9 : IRequest<Number9Dto>
 {
     public int OperationId { get; init; }
     public string Type { get; init; }
+    public int  ContactPersonId { get; init; }
 }
 
 public class Number9Handler : IRequestHandler<Number9, Number9Dto>
@@ -50,7 +51,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                 .Include(o => o.Company)
                                 .Include(o => o.Goods)
                                 .Include(o => o.PortOfLoading)
-                                .Include(o => o.Company.ContactPerson)
+                                .Include(o => o.Company.ContactPeople)
                                 .Select(o => new N9OperationDto {
                                     Id = o.Id,
                                     ShippingLine = o.ShippingLine,
@@ -81,8 +82,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         Name = o.Company.Name,
                                         TinNumber = o.Company.TinNumber,
                                         CodeNIF = o.Company.CodeNIF,
-                                        ContactPersonId = o.Company.ContactPersonId,
-                                        ContactPerson = _mapper.Map<N9NameOnPermitDto>(o.Company.ContactPerson),
+                                        // ContactPersonId = o.Company.ContactPersonId,
+                                        // ContactPerson = _mapper.Map<N9NameOnPermitDto>(o.Company.Con),
                                     },
                                     Goods = (o.Goods != null) ? o.Goods.Select(g => new N9GoodDto {
                                         Description = g.Description,
@@ -101,7 +102,12 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     }
 
                     var goods = operation.Goods;
+
                     var company = operation.Company;
+                    //loading the selected name on permit //
+                    var nameOnPermit = _mapper.Map<N9NameOnPermitDto>(await _context.ContactPeople.FindAsync(request.ContactPersonId));
+                    company.ContactPerson = nameOnPermit;
+                    
                     IEnumerable<float> size = new List<float>();
                     operation.Company = null;
                     operation.Goods = null;
