@@ -179,7 +179,7 @@ namespace Infrastructure.Identity
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.UtcNow.AddSeconds(30),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(
                     key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),

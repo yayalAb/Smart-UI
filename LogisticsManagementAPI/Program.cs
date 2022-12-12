@@ -7,6 +7,7 @@ using WebApi.Extensions;
 using WebApi.Services;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+using BackgroundService = WebApi.Services.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddSingleton<ICurrentUserService, CurrentUserService>();
+builder.Services.AddHostedService<BackgroundService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

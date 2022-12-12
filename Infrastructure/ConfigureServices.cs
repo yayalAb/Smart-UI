@@ -52,6 +52,7 @@ namespace Infrastructure
             services.AddScoped<AppDbContextInitializer>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IFileUploadService, FileUploadService>();
+            services.AddScoped<INumberService , NumberService>();
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

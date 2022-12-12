@@ -6,7 +6,9 @@ using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace Application.User.Commands.Logout
@@ -27,14 +29,21 @@ namespace Application.User.Commands.Logout
         }
         public async Task<CustomResponse> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(request.TokenString);
+            var expireDate = token.ValidTo.AddMinutes(1);
+            if(await _context.Blacklists.Where(b => b.tokenString == request.TokenString).AnyAsync()){
+                return CustomResponse.Succeeded("already logged out");
+            }
             await _context.Blacklists.AddAsync(
-                new Blacklist{
-                    tokenString = request.TokenString
+                new Blacklist
+                {
+                    tokenString = request.TokenString,
+                    ExpireDate = expireDate
                 }
             );
-            _logger.LogCritical($"blacklistinggggggggggggggggggggggggggggggg..................");
+
             await _context.SaveChangesAsync(cancellationToken);
-            _logger.LogCritical($"blacklistinggggggggggggggggggggggggggggggg..................");
 
 
             return CustomResponse.Succeeded("Logout Successful");
