@@ -10,7 +10,6 @@ public class DriverDto : IMapFrom<Driver> {
     public string Fullname { get; set; } = null!;
     public string LicenceNumber { get; set; } = null!;
     public int AddressId { get; set; }
-    public string? Image { get; set; }
     public bool IsAssigned { get; set; }
     public UpdateAddressDto Address {get; set;}
 

@@ -16,13 +16,12 @@ public class SettingController : ApiControllerBase
     public async Task<ActionResult> update(UpdateSetting command)
     {
 
-        try
-        {
+        try {
             return Ok(await Mediator.Send(command));
-        }
-        catch (GhionException ex) {
+        } catch (GhionException ex) {
             return AppdiveResponse.Response(this, ex.Response);
         }
+        
     }
 
     [HttpGet]
