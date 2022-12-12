@@ -19,10 +19,7 @@ public class GetAllDriversHandler : IRequestHandler<GetAllDrivers, PaginatedList
     private readonly IMapper _mapper;
     private readonly IAppDbContext _context;
 
-    public GetAllDriversHandler(
-        IMapper mapper,
-        IAppDbContext context
-    ){
+    public GetAllDriversHandler(IMapper mapper, IAppDbContext context){
         _mapper = mapper;
         _context = context;
     }

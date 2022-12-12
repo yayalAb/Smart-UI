@@ -6,6 +6,7 @@ using Application.GoodModule.Queries.GetGoodsByLocation;
 using Application.GoodModule.Queries.GetAllGoodQuery;
 using Application.GoodModule.Queries.GetGoodQuery;
 using Application.GoodModule.Commands.UpdateGoodCommand;
+using Application.GoodModule.Queries.GoodByContainer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -60,6 +61,19 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(query));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("/byContainer/{containerId}")]
+        public async Task<ActionResult> byContainer(int containerId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetByContainer{ContainerId = containerId}));
             }
             catch (GhionException ex)
             {

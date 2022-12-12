@@ -1,4 +1,5 @@
 
+using System.Net.Http.Headers;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -22,7 +23,7 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
         _context = context;
     }
 
-    public async Task<string> Handle(GetImageById request, CancellationToken cancellationToken)
+    public async Task</*HttpResponseMessage*/ string> Handle(GetImageById request, CancellationToken cancellationToken)
     {
         
         string data = "";
@@ -52,7 +53,17 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
         //     data = temp.;
         // }
 
+        // HttpResponseMessage response = new HttpResponseMessage();
+        // byte[] bytes = System.Convert.FromBase64String(data);
+
+        // response.Content = new ByteArrayContent(bytes);
+        // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
+        // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+        // return response;
+
         return data;
+
+        // return File(new Byte[2], "image/jpeg");
 
     }
 }
