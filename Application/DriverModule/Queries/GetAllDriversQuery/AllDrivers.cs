@@ -22,7 +22,11 @@ public class AllDriversHandler : IRequestHandler<AllDrivers, PaginatedList<Drive
     }
 
     public async Task<PaginatedList<Driver>> Handle(AllDrivers request, CancellationToken cancellationToken) {
-        return await PaginatedList<Driver>.CreateAsync(_context.Drivers, request.PageCount ?? 1, request.PageSize ?? 10);
+        return await PaginatedList<Driver>.CreateAsync(_context.Drivers.Select(d => new Driver {
+            Id = d.Id,
+            Fullname = d.Fullname,
+            Created = d.Created
+        }), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 
 }
