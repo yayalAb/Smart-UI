@@ -22,7 +22,7 @@ public class GetAllLookupsHandler: IRequestHandler<GetAllLookups, PaginatedList<
     }
 
     public async Task<PaginatedList<LookupDto>> Handle(GetAllLookups request, CancellationToken cancellationToken) {
-        var lookups = await PaginatedList<LookupDto>.CreateAsync(_context.Lookups.ProjectTo<LookupDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
+        var lookups = await PaginatedList<LookupDto>.CreateAsync(_context.Lookups.Where(l => l.Key != "key").ProjectTo<LookupDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
         return lookups;
     }
 

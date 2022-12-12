@@ -6,6 +6,7 @@ using Application.Common.Models;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.SettingModule.Queries.DefaultCompany;
+using Application.Image.GetImage;
 
 namespace WebApi.Controllers;
 
@@ -29,6 +30,16 @@ public class SettingController : ApiControllerBase
     {
         try {
             return Ok(await Mediator.Send(new GetDefaultCompany()));
+        } catch (GhionException ex) {
+            return AppdiveResponse.Response(this, ex.Response);
+        }
+    }
+
+    [HttpGet("image/{type}/{id}")]
+    public async Task<ActionResult> getImage(string type, int id)
+    {
+        try {
+            return Ok(await Mediator.Send(new GetImageById{Id = id, Type = type}));
         } catch (GhionException ex) {
             return AppdiveResponse.Response(this, ex.Response);
         }

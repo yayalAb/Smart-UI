@@ -230,7 +230,7 @@ namespace Infrastructure.Identity
      
             return password.ToString();
         }
-           public IQueryable<IApplicationUser> AllUsers(){
+        public IQueryable<IApplicationUser> AllUsers(){
             return _userManager.Users;
         }
 

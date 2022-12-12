@@ -11,6 +11,5 @@ public class Number9Dto {
     public N9OperationDto operation {get; set;}
     public N9PaymentDto doPayment {get; set;}
     public ICollection<N9GoodDto> goods {get; set;}
-    // public IEnumerable<float> containerSize {get; set;}
     
 }

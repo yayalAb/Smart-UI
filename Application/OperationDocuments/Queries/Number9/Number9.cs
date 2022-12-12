@@ -103,22 +103,11 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     var goods = operation.Goods;
                     var company = operation.Company;
                     IEnumerable<float> size = new List<float>();
-                    // size = from container in operation.Containers select container.Size;
                     operation.Company = null;
                     operation.Goods = null;
-                    // operation.Containers = new List<Container>();
 
                     var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).Select(p => new N9PaymentDto {
-                        // Name = p.Name,
-                        // Type = p.Type,
                         PaymentDate = p.PaymentDate,
-                        // PaymentMethod = p.PaymentMethod,
-                        // BankCode = p.BankCode,
-                        // Amount = p.Amount,
-                        // Currency = p.Currency,
-                        // Description = p.Description,
-                        // OperationId = p.OperationId,
-                        // ShippingAgentId = p.ShippingAgentId,
                         DONumber = p.DONumber
                     }).FirstOrDefault();
 
@@ -144,9 +133,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                         company = company,
                         operation = operation,
                         goods = goods,
-                        doPayment = payment,
-                        // containerSize = size
-            
+                        doPayment = payment,            
                     };
 
                 }
