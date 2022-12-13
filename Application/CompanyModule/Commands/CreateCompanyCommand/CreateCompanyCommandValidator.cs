@@ -30,16 +30,16 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand {
                 .EmailAddress()
                 .WithMessage("invalid email address");
 
-            RuleFor( u => u.contactPerson!.Select(cp => cp.Name))
+            RuleFor( u => u.ContactPeople!.Select(cp => cp.Name))
                 .NotNull()
                 .NotEmpty(); 
-            RuleFor( u => u.contactPerson!.Select(cp => cp.Email))
+            RuleFor( u => u.ContactPeople!.Select(cp => cp.Email))
                .ForEach(em => em.EmailAddress().WithMessage("invalid contact person email address"));             
                   
-            RuleFor( u => u.contactPerson!.Select(cp => cp.Phone))
+            RuleFor( u => u.ContactPeople!.Select(cp => cp.Phone))
                 .NotNull()
                 .NotEmpty(); 
-            RuleFor(u => u.contactPerson!.Select(cp => cp.TinNumber))
+            RuleFor(u => u.ContactPeople!.Select(cp => cp.TinNumber))
                 .NotNull()
                 .NotEmpty();
 
