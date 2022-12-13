@@ -22,7 +22,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string Name { get; init; }
         public string TinNumber { get; init; }
         public string CodeNIF { get; init; }
-        public ICollection<ContactPersonUpdateCommand> contactPeople { get; init; }
+        public ICollection<ContactPersonUpdateCommand> ContactPeople { get; init; }
         public UpdateAddressDto address { get; init; }
         public ICollection<UpdateBankInformationDto> BankInformation { get; init; }
     }
