@@ -54,6 +54,7 @@ public class Operation : BaseAuditableEntity
     public virtual ICollection<Documentation>? Documentaions { get; set; }
     public virtual ICollection<OperationStatus>? OperationStatuses { get; set; }
     public virtual ICollection<TruckAssignment>? TruckAssignments { get; set; }
+    public virtual ICollection<GeneratedDocument> GeneratedDocuments { get; set; }
 
 
 
