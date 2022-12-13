@@ -19,7 +19,6 @@ namespace Infrastructure.Persistence.Configurations
                 .HasForeignKey(os => os.OperationId)
                 .OnDelete(DeleteBehavior. Cascade);
 
-
         }
     }
 }

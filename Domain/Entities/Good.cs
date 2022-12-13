@@ -28,5 +28,6 @@ public class Good : BaseAuditableEntity
     public virtual Operation Operation { get; set; } = null!;
     public virtual Port? LocationPort { get; set; }
     public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } =  null!;
+    public virtual ICollection<GeneratedDocumentGood>? DocumentGoods {get; set;}
 
 }
