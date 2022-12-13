@@ -10,9 +10,16 @@ public class Container : BaseAuditableEntity
         TruckAssignments = new HashSet<TruckAssignment>();
     }
     public string ContianerNumber { get; set; } = null!;
+    public string? GoodsDescription { get; set; }
     public string SealNumber {get; set;} =null!;
     public string Location {get; set;} =null!;
-    public float Size { get; set; } 
+    public int Article { get; set; } = 1;
+    public string Size { get; set; } 
+    public float GrossWeight { get; set; }
+    public string WeightMeasurement { get; set; }
+    public int Quantity { get; set; }
+    public float TotalPrice { get; set; }
+    public string Currency { get; set; }
     public int?  LocationPortId { get; set; }
     public bool IsAssigned { get; set; } = false;
     public int OperationId { get; set; } 

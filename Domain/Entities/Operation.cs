@@ -19,7 +19,6 @@ public class Operation : BaseAuditableEntity
     public DateTime? ActualDateOfDeparture { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }
-    public string? TypeOfMerchandise { get; set; }
     public string OperationNumber { get; set; } = null!;
     public DateTime OpenedDate { get; set; }
     public string Status { get; set; } = null!;
@@ -33,7 +32,6 @@ public class Operation : BaseAuditableEntity
     public string? RecepientName { get; set; }
     public string? VesselName { get; set; } // operation
     public DateTime? ArrivalDate { get; set; } // operation
-    public string? ConnaissementNumber { get; set; } // operation
     public string? CountryOfOrigin { get; set; } // operation
     public float? REGTax { get; set; }//
     public string? BillOfLoadingNumber { get; set; }

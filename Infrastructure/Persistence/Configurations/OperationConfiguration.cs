@@ -54,8 +54,6 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.Property(e => e.ArrivalDate)
             .IsRequired(false)   
             .HasColumnType("datetime");
-        entity.Property(e => e.ConnaissementNumber)
-            .IsRequired(false);
         entity.Property(e => e.CountryOfOrigin)
             .IsRequired(false);
         entity.Property(e => e.REGTax)

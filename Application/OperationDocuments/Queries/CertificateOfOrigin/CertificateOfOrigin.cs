@@ -60,7 +60,6 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                 ActualDateOfDeparture = o.ActualDateOfDeparture,
                 EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                 VoyageNumber = o.VoyageNumber,
-                TypeOfMerchandise = o.TypeOfMerchandise,
                 OperationNumber = o.OperationNumber,
                 OpenedDate = o.OpenedDate,
                 Status = o.Status,
@@ -74,7 +73,6 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                 RecepientName = o.RecepientName,
                 VesselName = o.VesselName, // operation
                 ArrivalDate = o.ArrivalDate, // operation
-                ConnaissementNumber = o.ConnaissementNumber, // operation
                 CountryOfOrigin = o.CountryOfOrigin, // operation
                 REGTax = o.REGTax,//
                 BillOfLoadingNumber = o.BillOfLoadingNumber,

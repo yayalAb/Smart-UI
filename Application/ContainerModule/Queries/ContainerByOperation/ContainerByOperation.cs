@@ -33,7 +33,6 @@ public class GetByOperationHandler: IRequestHandler<GetByOperation, List<Contain
             Id = c.Id,
             ContianerNumber = c.ContianerNumber,
             SealNumber = c.SealNumber,
-            Size = c.Size,
             Location = c.Location,
             LocationPortId = c.LocationPortId,
             OperationId = c.OperationId,

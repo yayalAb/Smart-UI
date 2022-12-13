@@ -27,7 +27,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? ActualDateOfDeparture { get; set; }
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
-        public string? TypeOfMerchandise { get; set; }
         public DateTime OpenedDate { get; set; }
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
@@ -86,7 +85,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
             found_operation.ActualDateOfDeparture = request.ActualDateOfDeparture;
             found_operation.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
             found_operation.VoyageNumber = request.VoyageNumber;
-            found_operation.TypeOfMerchandise = request.TypeOfMerchandise;
             found_operation.OpenedDate = request.OpenedDate;
             found_operation.ECDDocument = request.ECDDocument;
             found_operation.ShippingAgentId = request.ShippingAgentId;

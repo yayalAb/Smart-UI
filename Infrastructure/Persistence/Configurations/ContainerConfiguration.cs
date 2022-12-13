@@ -13,6 +13,12 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.Property(e => e.ContianerNumber)
             .IsRequired()
             .HasMaxLength(45);
+        entity.Property(e => e.Size)
+            .IsRequired(true);
+        entity.Property(e => e.Currency)
+            .IsRequired(true);
+        entity.Property(e => e.WeightMeasurement)
+            .IsRequired(true);
         entity.Property(e => e.SealNumber)
             .IsRequired()
             .HasMaxLength(45);

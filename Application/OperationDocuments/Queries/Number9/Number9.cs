@@ -62,7 +62,6 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     SourceDocument = o.SourceDocument,
                                     EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                                     VoyageNumber = o.VoyageNumber,
-                                    TypeOfMerchandise = o.TypeOfMerchandise,
                                     OperationNumber = o.OperationNumber,
                                     PortOfLoading = new N9PortOfLoadingDto {
                                         PortNumber = o.PortOfLoading.PortNumber,
