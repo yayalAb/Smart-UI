@@ -14,5 +14,6 @@ public class GeneratedDocument : BaseAuditableEntity
     public virtual Port ExitPort { get; set; }
     public virtual Port DestinationPort { get; set; }
     public virtual ContactPerson ContactPerson { get; set; }
+    public virtual ICollection<Container> Containers { get; set; }
     public virtual ICollection<GeneratedDocumentGood> DocumentGoods { get; set; }
 }

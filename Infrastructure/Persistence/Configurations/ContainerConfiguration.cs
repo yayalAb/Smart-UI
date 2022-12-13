@@ -19,6 +19,8 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
             .IsRequired(true);
         entity.Property(e => e.WeightMeasurement)
             .IsRequired(true);
+        entity.Property(e => e.Article)
+            .IsRequired(true);
         entity.Property(e => e.SealNumber)
             .IsRequired()
             .HasMaxLength(45);
@@ -33,6 +35,11 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
             .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasMany<TruckAssignment>(c => c.TruckAssignments)
             .WithMany(ta => ta.Containers);
+        entity.HasOne(c => c.GeneratedDocument)
+            .WithMany( d => d.Containers)
+            .HasForeignKey(c => c.GeneratedDocumentId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

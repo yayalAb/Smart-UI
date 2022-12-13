@@ -17,10 +17,10 @@ public class GeneratedDocumentConfiguration : IEntityTypeConfiguration<Generated
             .WithMany(o => o.GeneratedDocuments)
             .HasForeignKey(e => e.OperationId);
         entity.HasOne(e => e.ExitPort)
-            .WithMany(p => p.GeneratedDocuments)
+            .WithMany(p => p.ExitPortGeneratedDocuments)
             .HasForeignKey(e => e.ExitPortId);
         entity.HasOne(e => e.DestinationPort)
-            .WithMany(p => p.GeneratedDocuments)
+            .WithMany(p => p.DestinationPortGeneratedDocuments)
             .HasForeignKey(e => e.DestinationPortId);
         entity.HasOne(e => e.ContactPerson)
             .WithMany(c => c.GeneratedDocuments)

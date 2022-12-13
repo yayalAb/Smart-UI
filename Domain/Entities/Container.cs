@@ -23,12 +23,14 @@ public class Container : BaseAuditableEntity
     public int?  LocationPortId { get; set; }
     public bool IsAssigned { get; set; } = false;
     public int OperationId { get; set; } 
+    public int GeneratedDocumentId { get; set; }
 
     
 
     public virtual ICollection<Good> Goods { get; set; }
     public virtual Port? LocationPort { get; set; }
     public virtual Operation Operation { get; set; } = null!;
+    public virtual GeneratedDocument GeneratedDocument { get; set; }
     public virtual ICollection< TruckAssignment> TruckAssignments { get; set; } = null!;
 
 }

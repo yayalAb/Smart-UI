@@ -13,6 +13,6 @@ public class Port : BaseAuditableEntity {
     public virtual ICollection<TruckAssignment> DestinationPortTruckAssignments { get; set; }
     public virtual ICollection<TruckAssignment> SourcePortTruckAssignments { get; set; }
     public virtual ICollection<Operation > Operations { get; set; } 
-    public virtual ICollection<GeneratedDocument> GeneratedDocuments { get; set; }
-    
+    public virtual ICollection<GeneratedDocument> ExitPortGeneratedDocuments { get; set; }
+    public virtual ICollection<GeneratedDocument> DestinationPortGeneratedDocuments { get; set; }
 }

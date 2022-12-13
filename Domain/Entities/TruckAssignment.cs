@@ -16,7 +16,7 @@ namespace Domain.Entities
         public float AgreedTariff { get; set; }
         public string SENumber { get; set; }
         public DateTime Date { get; set; }
-        public string? GatePassType { get; set; }
+        public string GatePassType { get; set; }
         public virtual Driver Driver { get; set; }
         public virtual Truck Truck { get; set; }
         public virtual Operation Operation { get; set; }
