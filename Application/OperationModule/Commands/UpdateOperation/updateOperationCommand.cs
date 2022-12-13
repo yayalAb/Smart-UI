@@ -27,11 +27,11 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? ActualDateOfDeparture { get; set; }
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
-        //------------------////
+        //--********************----------------////
         public string OperationNumber { get; set; }
         public DateTime OpenedDate { get;set ; }
         public string Status { get; set; }
-        //----------------------///
+        //--********************--------------------///
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
@@ -108,6 +108,8 @@ namespace Application.OperationModule.Commands.UpdateOperation
             found_operation.BillOfLoadingNumber = request.BillOfLoadingNumber;
             found_operation.FinalDestination = request.FinalDestination;
             found_operation.Localization = request.Localization;
+            found_operation.Shipper = request.Shipper ; 
+            found_operation.PINumber = request.PINumber;
             // change operation number accordingly  if destinationType is changed
             if (found_operation.DestinationType != request.DestinationType)
             {

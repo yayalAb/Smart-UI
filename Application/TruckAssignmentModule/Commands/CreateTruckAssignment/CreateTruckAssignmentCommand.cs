@@ -23,6 +23,10 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
         public string? TransportationMethod { get; set; }
+        public string? SENumber { get; set; }
+        // public DateTime Date { get; set; }
+        public string GatePassType { get; set; }
+        public float AgreedTariff { get; set; }
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 
@@ -99,10 +103,26 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                             DestinationLocation = request.DestinationLocation,
                             SourcePortId = request.SourcePortId,
                             DestinationPortId = request.DestinationPortId,
+                            AgreedTariff = request.AgreedTariff,
+                            GatePassType = request.GatePassType,
                             Containers = containers,
                             Goods = goods
 
                         };
+                        if (request.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType), GatepassType.ENTRANCE))
+                        {
+                            
+                            var operation = await _context.Operations.FindAsync(request.OperationId);
+                            if(operation!.SNumber == null){
+                                throw new GhionException(CustomResponse.BadRequest("SNumber of the selected operation cannot be null if the gatepass is of type entrance!!"));
+                            }
+                            newTruckAssignment.SENumber = operation.SNumber;
+                            newTruckAssignment.Date = operation.SDate;
+                        }
+                        else{
+                            newTruckAssignment.SENumber = request.SENumber!;
+                            newTruckAssignment.Date = DateTime.Now;
+                        }
                         await _context.TruckAssignments.AddAsync(newTruckAssignment);
                         await _context.SaveChangesAsync(cancellationToken);
                         await ChangeIsAssignedFlag(request.TruckId, request.DriverId, cancellationToken);
