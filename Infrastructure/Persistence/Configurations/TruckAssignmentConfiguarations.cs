@@ -15,6 +15,10 @@ namespace Infrastructure.Persistence.Configurations
 
             entity.Property(e => e.DestinationLocation)
                 .IsRequired(true);
+            entity.Property(e => e.SENumber)
+                .IsRequired(true);
+            entity.Property(e => e.GatePassType)
+                .IsRequired(true);
 
             entity.HasOne(d => d.Driver)
                 .WithMany(p => p.TruckAssignments)
