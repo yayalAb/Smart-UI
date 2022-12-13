@@ -79,5 +79,9 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasForeignKey(d => d.ShippingAgentId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
+        entity.HasOne(d => d.ContactPerson)
+            .WithOne(p => p.Operation)
+            .HasForeignKey<Operation>(p => p.ContactPersonId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

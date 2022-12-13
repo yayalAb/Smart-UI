@@ -21,10 +21,12 @@ public class GetOperationLookupQueryHandler : IRequestHandler<GetOperationLookup
     }
 
     public async Task<List<DropDownLookupDto>> Handle(GetOperationLookupQuery request, CancellationToken candellationToken) {
-        return await _context.Operations.Select(u => new DropDownLookupDto() {
-            Text = $"{u.OperationNumber} {u.NameOnPermit}" ,
-            Value = u.Id
-        }).ToListAsync();
+        return await _context.Operations
+                .Include(o => o.ContactPerson)
+                .Select(u => new DropDownLookupDto() {
+                    Text = $"{u.OperationNumber} {u.ContactPerson.Name}" ,
+                    Value = u.Id
+                }).ToListAsync();
     }
 
 }

@@ -11,7 +11,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
     public record UpdateOperationCommand : IRequest<CustomResponse>
     {
         public int Id {get; set;}
-        public string? NameOnPermit { get; set; }
+        public int ContactPersonId { get; set; }
         public string? Consignee { get; set; }
         public string? NotifyParty { get; set; }
         public string BillNumber { get; set; }
@@ -70,7 +70,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
             }
 
             // found_operation = _mapper.Map<Operation>(request);
-            found_operation.NameOnPermit = request.NameOnPermit;
+            found_operation.ContactPersonId = request.ContactPersonId;
             found_operation.Consignee = request.Consignee;
             found_operation.NotifyParty = request.NotifyParty;
             found_operation.BillNumber = request.BillNumber;

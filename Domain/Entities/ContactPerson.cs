@@ -14,4 +14,5 @@ public class ContactPerson : BaseAuditableEntity
     
     //has one
     public virtual Company Company { get; set; } = null!;
+    public virtual Operation Operation { get; set; } = null!;
 }

@@ -24,6 +24,10 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
             .WithMany(c => c.ContactPeople)
             .HasForeignKey(e => e.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
+        entity.HasOne(e => e.Operation)
+            .WithOne(o => o.ContactPerson)
+            .HasForeignKey<Operation>(o => o.ContactPersonId)
+            .OnDelete(DeleteBehavior.ClientSetNull);      
 
     }
 }

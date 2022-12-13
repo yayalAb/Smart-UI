@@ -4,8 +4,6 @@ namespace Domain.Entities;
 
 public class Operation : BaseAuditableEntity
 {
-
-    public string? NameOnPermit { get; set; }
     public string? Consignee { get; set; }
     public string? NotifyParty { get; set; }
     public string BillNumber { get; set; }
@@ -44,8 +42,10 @@ public class Operation : BaseAuditableEntity
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
     public string? Shipper { get; set; }
+    public int ContactPersonId { get; set; }
     //--------------------------------------//
     // has one
+    public virtual ContactPerson ContactPerson { get; set;} = null!;
     public virtual Port PortOfLoading { get; set; } = null!;
     public virtual ShippingAgent? ShippingAgent { get; set; } = null!;
     public virtual Company Company { get; set; } = null!;

@@ -624,6 +624,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Consignee")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("ContactPersonId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CountryOfOrigin")
                         .HasColumnType("longtext");
 
@@ -668,9 +671,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Localization")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NameOnPermit")
                         .HasColumnType("longtext");
 
                     b.Property<string>("NotifyParty")
@@ -738,6 +738,9 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("ContactPersonId")
+                        .IsUnique();
 
                     b.HasIndex("OperationNumber")
                         .IsUnique();
@@ -1472,6 +1475,11 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.ContactPerson", "ContactPerson")
+                        .WithOne("Operation")
+                        .HasForeignKey("Domain.Entities.Operation", "ContactPersonId")
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Port", "PortOfLoading")
                         .WithMany("Operations")
                         .HasForeignKey("PortOfLoadingId");
@@ -1481,6 +1489,8 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("ShippingAgentId");
 
                     b.Navigation("Company");
+
+                    b.Navigation("ContactPerson");
 
                     b.Navigation("PortOfLoading");
 
@@ -1670,6 +1680,12 @@ namespace Infrastructure.Migrations
                     b.Navigation("DefaultSetting");
 
                     b.Navigation("Operations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ContactPerson", b =>
+                {
+                    b.Navigation("Operation")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Container", b =>

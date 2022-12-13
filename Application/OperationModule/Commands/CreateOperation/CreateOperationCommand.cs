@@ -16,7 +16,7 @@ namespace Application.OperationModule.Commands.CreateOperation
     public record CreateOperationCommand : IRequest<CustomResponse>
     {
         public string? Consignee { get; set; }
-        public string? NameOnPermit { get; set; }
+        public int ContactPersonId { get; set; }
         public string? NotifyParty { get; set; }
         public string BillNumber { get; set; }
         public string? ShippingLine { get; set; }

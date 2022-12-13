@@ -8,6 +8,7 @@ using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.DriverModule.Queries.GetCompanyLookup;
+using Application.ContactPersonModule.Queries;
 
 namespace WebApi.Controllers
 {
@@ -18,9 +19,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult> create([FromBody] CreateCompanyCommand command)
 
         {
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -33,7 +37,9 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -45,19 +51,23 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(new GetCompanyQuery(id)));
-            }catch(GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
         }
         [HttpGet]
         [Route("lookup")]
-        public async Task<ActionResult> lookup( )
+        public async Task<ActionResult> lookup()
         {
             try
             {
-                return Ok(await Mediator.Send(new GetCompanyLookupQuery ()));
-            }catch(GhionException ex) {
+                return Ok(await Mediator.Send(new GetCompanyLookupQuery()));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -67,16 +77,34 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
-
+        [HttpGet]
+        [Route("nameOnPermit/{companyId}")]
+        public async Task<ActionResult> nameOnPermits(int companyId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetContactPeopleByCompanyIdQuery {CompanyId = companyId}));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> delete(int id ) {
-            try{
-                return Ok(await Mediator.Send(new DeleteCompany{Id = id}));
-            }catch(GhionException ex) {
+        public async Task<ActionResult> delete(int id)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteCompany { Id = id }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 

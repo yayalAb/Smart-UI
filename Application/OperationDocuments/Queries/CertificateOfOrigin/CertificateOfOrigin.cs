@@ -44,7 +44,7 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
             .Select(o => new Operation
             {
                 Id = o.Id,
-                NameOnPermit = o.NameOnPermit,
+                ContactPersonId = o.ContactPersonId,
                 Consignee = o.Consignee,
                 NotifyParty = o.NotifyParty,
                 BillNumber = o.BillNumber,
