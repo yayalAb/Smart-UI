@@ -6,7 +6,7 @@ namespace Application.OperationModule.Queries;
 public class OperationDto : IMapFrom<Operation>
 {
     public int Id { get; set; }
-    public string? NameOnPermit { get; set; }
+    public int ContactPersonId { get; set; }
     public string? Consignee { get; set; }
     public string? NotifyParty { get; set; }
     public string? BillNumber { get; set; }
@@ -22,7 +22,6 @@ public class OperationDto : IMapFrom<Operation>
     public DateTime? ActualDateOfDeparture { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }
-    public string? TypeOfMerchandise { get; set; }
     public string OperationNumber { get; set; } = null!;
     public DateTime OpenedDate { get; set; }
     public string Status { get; set; } = null!;
@@ -36,7 +35,6 @@ public class OperationDto : IMapFrom<Operation>
     public string? RecepientName { get; set; }
     public string? VesselName { get; set; } // operation
     public DateTime? ArrivalDate { get; set; } // operation
-    public string? ConnaissementNumber { get; set; } // operation
     public string? CountryOfOrigin { get; set; } // operation
     public float? REGTax { get; set; }//
     public string? BillOfLoadingNumber { get; set; }
@@ -44,6 +42,7 @@ public class OperationDto : IMapFrom<Operation>
     public DateTime? PIDate { get; set; }
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
+    public string? Shipper { get; set; }
     //--------------------------------------//
     public virtual ICollection<FetchGoodDto> Goods { get; set; }
 }

@@ -13,8 +13,6 @@ namespace Application.OperationModule.Commands.UpdateOperation
         {
             _context = context;
         
-            RuleFor(o => o.OpenedDate)
-                .NotNull();
             RuleFor(o => o.Quantity)
                 .NotNull();
             RuleFor(o => o.ShippingAgentId)
