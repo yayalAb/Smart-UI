@@ -22,14 +22,6 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .IsRequired(true)
             .HasMaxLength(45);
 
-        entity.Property(e => e.Quantity)
-            .IsRequired(false)
-            .HasMaxLength(45);
-
-        entity.Property(e => e.GrossWeight)
-            .IsRequired(true)
-            .HasMaxLength(45);
-
         entity.Property(e => e.DestinationType)
             .IsRequired(true)
             .HasMaxLength(45);
@@ -56,8 +48,6 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasColumnType("datetime");
         entity.Property(e => e.CountryOfOrigin)
             .IsRequired(false);
-        entity.Property(e => e.REGTax)
-            .IsRequired(false);
 
 //--------------------------------------------------------------------------------------
         entity.HasOne(d => d.Company)
@@ -80,6 +70,7 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.HasOne(d => d.ContactPerson)
             .WithOne(p => p.Operation)
             .HasForeignKey<Operation>(p => p.ContactPersonId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

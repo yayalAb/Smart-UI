@@ -10,15 +10,15 @@ namespace Application.OperationModule.Commands.UpdateOperation
 {
     public record UpdateOperationCommand : IRequest<CustomResponse>
     {
-        public int Id {get; set;}
+        public int Id { get; set; }
         public int ContactPersonId { get; set; }
         public string? Consignee { get; set; }
         public string? NotifyParty { get; set; }
         public string BillNumber { get; set; }
         public string? ShippingLine { get; set; }
         public string? GoodsDescription { get; set; }
-        public float? Quantity { get; set; }
-        public float? GrossWeight { get; set; }
+        public float Quantity { get; set; } = 0;
+        public float GrossWeight { get; set; } = 0;
         public string? ATA { get; set; }
         public string? FZIN { get; set; }
         public string? FZOUT { get; set; }
@@ -27,7 +27,11 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? ActualDateOfDeparture { get; set; }
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
-        public DateTime OpenedDate { get; set; }
+        //--********************----------------////
+        public string OperationNumber { get; set; }
+        public DateTime OpenedDate { get;set ; }
+        public string Status { get; set; }
+        //--********************--------------------///
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }
         public int? PortOfLoadingId { get; set; }
@@ -39,7 +43,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public string? VesselName { get; set; }
         public DateTime? ArrivalDate { get; set; }
         public string? CountryOfOrigin { get; set; }
-        public float? REGTax { get; set; }
+        public float REGTax { get; set; } = 0;
         public string? BillOfLoadingNumber { get; set; }
         public string? FinalDestination { get; set; }
         public string? Localization { get; set; }
@@ -54,17 +58,22 @@ namespace Application.OperationModule.Commands.UpdateOperation
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IFileUploadService _fileUploadService;
+        private readonly OperationService _operationService;
 
-        public UpdateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService) {
+        public UpdateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService, OperationService operationService)
+        {
             _context = context;
             _mapper = mapper;
             _fileUploadService = fileUploadService;
+            _operationService = operationService;
         }
-        public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken) {
+        public async Task<CustomResponse> Handle(UpdateOperationCommand request, CancellationToken cancellationToken)
+        {
 
             var found_operation = await _context.Operations.FindAsync(request.Id);
 
-            if (found_operation == null) {
+            if (found_operation == null)
+            {
                 throw new GhionException(CustomResponse.NotFound($"operation with Id = {request.Id} is not found"));
             }
 
@@ -80,12 +89,10 @@ namespace Application.OperationModule.Commands.UpdateOperation
             found_operation.ATA = request.ATA;
             found_operation.FZIN = request.FZIN;
             found_operation.FZOUT = request.FZOUT;
-            found_operation.DestinationType = request.DestinationType;
-            found_operation.SourceDocument =  request.SourceDocument;
+            found_operation.SourceDocument = request.SourceDocument;
             found_operation.ActualDateOfDeparture = request.ActualDateOfDeparture;
             found_operation.EstimatedTimeOfArrival = request.EstimatedTimeOfArrival;
             found_operation.VoyageNumber = request.VoyageNumber;
-            found_operation.OpenedDate = request.OpenedDate;
             found_operation.ECDDocument = request.ECDDocument;
             found_operation.ShippingAgentId = request.ShippingAgentId;
             found_operation.PortOfLoadingId = request.PortOfLoadingId;
@@ -101,9 +108,15 @@ namespace Application.OperationModule.Commands.UpdateOperation
             found_operation.BillOfLoadingNumber = request.BillOfLoadingNumber;
             found_operation.FinalDestination = request.FinalDestination;
             found_operation.Localization = request.Localization;
-
-            // Operation updatedOperation = _mapper.Map<Operation>(request);
-            // _context.Operations.Update(found_operation);
+            found_operation.Shipper = request.Shipper ; 
+            found_operation.PINumber = request.PINumber;
+            // change operation number accordingly  if destinationType is changed
+            if (found_operation.DestinationType != request.DestinationType)
+            {
+                string updatedOperationNumber = _operationService.GenerateOperationNumber(found_operation.Id, request.DestinationType);
+                found_operation.DestinationType = request.DestinationType;
+                found_operation.OperationNumber = updatedOperationNumber;
+            }
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("operation updated successfully!");
 

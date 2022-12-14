@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Domain.Enums;
 using FluentValidation;
 
 namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
@@ -11,7 +12,18 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         public CreateTruckAssignmentCommandValidator(IAppDbContext context)
         {
             _context = context;
-
+            RuleFor(u => u.GatePassType)
+                .NotNull()
+                .Must(BeValidGatepassType)
+                .WithMessage("gatepass type is incorrect");
+            RuleFor(u => u.AgreedTariff)
+                .NotNull();
+            When(u => u.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType) , GatepassType.EXIT), () => {
+                RuleFor(u => u.SENumber)
+                    .NotNull()
+                    .WithMessage("SENumber cannot be null if gatepass is EXIT type !!");
+     
+            });
             RuleFor(u => u.OperationId)
                 .NotNull()
                 .NotEmpty()
@@ -47,6 +59,12 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         });
 
         }
+
+        private bool BeValidGatepassType(string gatepassType)
+        {
+            return Enum.IsDefined(typeof(Page) , gatepassType.ToUpper());
+        }
+
         private bool BeFoundInOperationsTable(int operationId)
         {
             return _context.Operations.Find(operationId) != null;
@@ -63,6 +81,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         {
             return portId == null || _context.Ports.Find(portId) != null;
         }
+         
     }
 
 }

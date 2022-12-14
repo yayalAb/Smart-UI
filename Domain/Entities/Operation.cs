@@ -9,8 +9,8 @@ public class Operation : BaseAuditableEntity
     public string BillNumber { get; set; }
     public string? ShippingLine { get; set; }
     public string? GoodsDescription { get; set; }
-    public float? Quantity { get; set; }
-    public float? GrossWeight { get; set; }
+    public float Quantity { get; set; }= 0;
+    public float GrossWeight { get; set; }= 0;
     public string? ATA { get; set; }
     public string? FZIN { get; set; }
     public string? FZOUT { get; set; }
@@ -33,7 +33,7 @@ public class Operation : BaseAuditableEntity
     public string? VesselName { get; set; } // operation
     public DateTime? ArrivalDate { get; set; } // operation
     public string? CountryOfOrigin { get; set; } // operation
-    public float? REGTax { get; set; }//
+    public float REGTax { get; set; } = 0;
     public string? BillOfLoadingNumber { get; set; }
     public string? PINumber { get; set; }
     public DateTime? PIDate { get; set; }

@@ -64,7 +64,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            
+
         }
 
         // POST api/<OperationController>
@@ -81,7 +81,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            
+
         }
 
         // POST api/<OperationController>
@@ -102,13 +102,19 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("SNumberUpdate")]
-        public async Task<IActionResult> snumberUpdate([FromQuery] SetSNumber command) {
+        public async Task<IActionResult> snumberUpdate([FromQuery] SetSNumber command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -129,7 +135,7 @@ namespace WebApi.Controllers
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
-        
+
         [HttpGet]
         [Route("lookup")]
         public async Task<IActionResult> LookUp()
@@ -152,10 +158,14 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new GetStatusByOperation{OperationId = OperationId}));
-            }catch (GhionException ex) {
+                return Ok(await Mediator.Send(new GetStatusByOperation { OperationId = OperationId }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -163,13 +173,19 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("SingleStatus/{id}")]
-        public async Task<IActionResult> SingleStatus (int id) {
+        public async Task<IActionResult> SingleStatus(int id)
+        {
 
-            try {
-                return Ok(await Mediator.Send(new SingleStatus{Id = id}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new SingleStatus { Id = id }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -177,13 +193,19 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("status/{operationId}")]
-        public async Task<IActionResult> updateStatus(int operationId) {
+        public async Task<IActionResult> updateStatus(int operationId)
+        {
 
-            try {
-                return Ok(await Mediator.Send(new UpdateStatus {Id = operationId}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new UpdateStatus { Id = operationId }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -191,26 +213,38 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Dashboard/operationCount")]
-        public async Task<IActionResult> operationCount() {
+        public async Task<IActionResult> operationCount()
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(new OperationDashboardInfo()));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
 
         [HttpGet("Dashboard/graph/{year}")]
-        public async Task<IActionResult> operationGrph(int year) {
+        public async Task<IActionResult> operationGrph(int year)
+        {
 
-            try {
-                return Ok(await Mediator.Send(new OperationCountGraph{year = year}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new OperationCountGraph { year = year }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 

@@ -23,26 +23,28 @@ namespace Application.OperationModule.Commands.CreateOperation
                 .NotEmpty()
                 .Must(BeOfDestinationType)
                 .WithMessage("destination type is not in the correct format!");
+            RuleFor(o => o.ContactPersonId)
+                .NotNull()
+                .NotEmpty()
+                .Must(BeFoundInContactPersonTable)
+                .WithMessage("contact person with the provided id is not found");
             RuleFor(o =>o.CompanyId)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInCompanyTable)
                 .WithMessage("company with the provided id is not found");
-            RuleFor(o => o.ShippingAgentId)
-                .Must(BeFoundInShippingAgentsTable)
-                .WithMessage("shippingAgent with the provided id is not found");
             RuleFor(o => o.PortOfLoadingId)
                .Must(BeFoundInPortsTable).WithMessage("port with the provided id is not found");
 
         }
   
-        private bool BeFoundInShippingAgentsTable(int? shippingAgentId)
+        private bool BeFoundInContactPersonTable(int contactPersonId)
         {
-            return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
+            return  _context.ContactPeople.Find(contactPersonId) != null;
         }
-        private bool BeFoundInPortsTable(int? portOfloadingId)
+        private bool BeFoundInPortsTable(int portOfloadingId)
         {
-            return portOfloadingId == null || _context.Ports.Find(portOfloadingId) != null;
+            return _context.Ports.Find(portOfloadingId) != null;
         }
         private bool BeFoundInCompanyTable(int companyId)
         {
