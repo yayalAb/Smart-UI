@@ -35,7 +35,8 @@ namespace Application.OperationModule.Commands.CreateOperation
                 .WithMessage("company with the provided id is not found");
             RuleFor(o => o.PortOfLoadingId)
                .Must(BeFoundInPortsTable).WithMessage("port with the provided id is not found");
-
+            RuleFor(o => o.ShippingAgentId)
+               .Must(BeFoundInShippingAgentTable).WithMessage("port with the provided id is not found");
         }
   
         private bool BeFoundInContactPersonTable(int contactPersonId)
@@ -49,6 +50,10 @@ namespace Application.OperationModule.Commands.CreateOperation
         private bool BeFoundInCompanyTable(int companyId)
         {
             return  _context.Companies.Find(companyId) != null;
+        }
+        private bool BeFoundInShippingAgentTable(int? shippingAgentId)
+        {
+            return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
         private bool BeOfDestinationType(string DesType) {
             return DestinationType.Types.Contains(DesType);
