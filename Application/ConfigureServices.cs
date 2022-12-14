@@ -1,5 +1,6 @@
 ﻿using Application.Common;
 using Application.Common.Behaviours;
+using Application.Common.Service;
 using Application.OperationDocuments.Queries.Common;
 using Application.OperationFollowupModule;
 using Application.OperationModule;
@@ -20,7 +21,8 @@ namespace Application
             services.AddScoped<OperationEventHandler>();
             services.AddScoped<DocumentationService>();
             services.AddScoped<DefaultCompanyService>();
-            services.AddScoped<OperationService>();
+            // services.AddScoped<OperationService>();
+            services.AddSingleton<AppdivConvertor>();
            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
