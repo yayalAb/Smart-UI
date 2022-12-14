@@ -7,6 +7,7 @@ using AutoMapper;
 using Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
+using Domain.Enums;
 
 namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
 {
@@ -22,6 +23,9 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
         public string? TransportationMethod { get; set; }
+        public string? SENumber { get; set; }
+        public DateTime Date { get; set; }
+        public string GatePassType { get; set; }
         public float AgreedTariff { get; set; }
         public string Currency { get; set; }
         public List<int>? ContainerIds { get; set; }
@@ -104,10 +108,26 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
                         existingTruckAssignment.TruckId = request.TruckId;
                         existingTruckAssignment.SourcePortId = request.SourcePortId;
                         existingTruckAssignment.DestinationPortId = request.DestinationPortId;
+                        existingTruckAssignment.SourceLocation = request.SourceLocation;
+                        existingTruckAssignment.DestinationLocation = request.DestinationLocation;
                         existingTruckAssignment.TransportationMethod = request.TransportationMethod;
                         existingTruckAssignment.Containers = containers;
                         existingTruckAssignment.Goods = goods;
+                        existingTruckAssignment.SENumber = request.SENumber;
+                        existingTruckAssignment.GatePassType = request.GatePassType;
+                        existingTruckAssignment.AgreedTariff = request.AgreedTariff;
+                        existingTruckAssignment.Currency = request.Currency;
+                        if (request.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType), GatepassType.ENTRANCE))
+                        {
 
+                            var operation = await _context.Operations.FindAsync(request.OperationId);
+                            if (operation!.SNumber == null)
+                            {
+                                throw new GhionException(CustomResponse.BadRequest("SNumber of the selected operation cannot be null if the gatepass is of type entrance!!"));
+                            }
+                            existingTruckAssignment.SENumber = operation.SNumber;
+                            existingTruckAssignment.Date = operation.SDate;
+                        }
 
                         _context.TruckAssignments.Update(existingTruckAssignment);
                         await _context.SaveChangesAsync(cancellationToken);

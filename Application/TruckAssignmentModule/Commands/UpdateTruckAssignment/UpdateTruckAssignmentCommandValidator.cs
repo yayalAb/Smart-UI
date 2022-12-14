@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Domain.Enums;
 using FluentValidation;
 
 namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
@@ -11,10 +12,20 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         public UpdateTruckAssignmentCommandValidator(IAppDbContext context)
         {
             _context = context;
+               RuleFor(u => u.GatePassType)
+                .NotNull()
+                .Must(BeValidGatepassType)
+                .WithMessage("gatepass type is incorrect");
             RuleFor(u => u.AgreedTariff)
                 .NotNull();
             RuleFor(u => u.Currency)
                 .NotNull();
+            When(u => u.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType) , GatepassType.EXIT), () => {
+                RuleFor(u => u.SENumber)
+                    .NotNull()
+                    .WithMessage("SENumber cannot be null if gatepass is EXIT type !!");
+     
+            });
             RuleFor(u => u.OperationId)
                 .NotNull()
                 .NotEmpty()
@@ -27,7 +38,7 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
             RuleFor(u => u.TruckId)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeFoundInDriversTable).WithMessage("truck with the provided id is not found");
+                .Must(BeFoundInTrucksTable).WithMessage("truck with the provided id is not found");
                  
             RuleFor(u => u.SourceLocation)
                 .NotNull()
@@ -65,6 +76,10 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         private bool BeFoundInPortsTable(int? portId)
         {
             return portId == null || _context.Ports.Find(portId) != null;
+        }
+                private bool BeValidGatepassType(string gatepassType)
+        {
+            return Enum.IsDefined(typeof(GatepassType) , gatepassType.ToUpper());
         }
     }
 

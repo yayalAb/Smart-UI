@@ -38,7 +38,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             RuleFor(u => u.TruckId)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeFoundInDriversTable).WithMessage("truck with the provided id is not found");
+                .Must(BeFoundInTrucksTable).WithMessage("truck with the provided id is not found");
                  
             RuleFor(u => u.SourceLocation)
                 .NotNull()
@@ -64,7 +64,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 
         private bool BeValidGatepassType(string gatepassType)
         {
-            return Enum.IsDefined(typeof(Page) , gatepassType.ToUpper());
+            return Enum.IsDefined(typeof(GatepassType) , gatepassType.ToUpper());
         }
 
         private bool BeFoundInOperationsTable(int operationId)
