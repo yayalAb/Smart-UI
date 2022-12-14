@@ -54,7 +54,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                 Manufacturer = g.Manufacturer,
                 Weight = g.Weight,
                 Quantity = g.Quantity,
-                NumberOfPackages = g.NumberOfPackages,
+                RemainingQuantity = g.RemainingQuantity,
                 Type = g.Type,
                 Location = g.Location,
                 ChasisNumber = g.ChasisNumber,

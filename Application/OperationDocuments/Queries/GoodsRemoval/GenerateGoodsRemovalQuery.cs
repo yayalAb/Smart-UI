@@ -147,7 +147,7 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
         }
         if (goods != null && goods.Count > 0)
         {
-            return goods.Select(g => g.NumberOfPackages).Sum().ToString();
+            return goods.Select(g => g.RemainingQuantity).Sum().ToString();
         }
         return null;
     }

@@ -73,7 +73,7 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                                                 : o.Payments.First().PaymentDate,
                             TotalNumberOfPackages = o.Goods == null || o.Goods.Count == 0
                                                 ? null
-                                                : o.Goods.Select(g => g.NumberOfPackages).Sum(),
+                                                : o.Goods.Select(g => g.Quantity).Sum(),
                             RecepientName = o.RecepientName,
                             VesselName = o.VesselName,
                             ArrivalDate = o.ArrivalDate,

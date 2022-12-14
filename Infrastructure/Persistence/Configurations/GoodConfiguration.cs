@@ -11,11 +11,10 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
             
-        // entity.Property(e => e.CBM)
-        //     .HasMaxLength(45);
+        entity.Property(e => e.RemainingQuantity)
+            .IsRequired(true);
 
         entity.Property(e => e.Description)
-            
             .HasMaxLength(100);
 
         entity.Property(e => e.HSCode)

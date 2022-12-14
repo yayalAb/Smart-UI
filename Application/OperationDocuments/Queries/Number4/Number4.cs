@@ -105,7 +105,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         HSCode = g.HSCode,
                         Weight = g.Weight,
                         Quantity = g.Quantity,
-                        NumberOfPackages = g.NumberOfPackages,
+                        RemainingQuantity = g.RemainingQuantity,
                         Type = g.Type,
                         OperationId = g.OperationId,
                         LocationPortId = g.LocationPortId,

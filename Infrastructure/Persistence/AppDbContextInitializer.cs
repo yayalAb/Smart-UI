@@ -48,9 +48,9 @@ namespace Infrastructure.Persistence
         {
             try
             {
-                await TrySeedAsync();
-                await TrySeedLookup();
-                await TrySeedSettings();
+                // await TrySeedAsync();
+                // await TrySeedLookup();
+                // await TrySeedSettings();
                 // await removeLookups();
             }
             catch (Exception ex)
@@ -64,8 +64,7 @@ namespace Infrastructure.Persistence
         {
             // Adding Default userGroup
             int groupId = 0;
-            UserGroup defaultGroup = new UserGroup
-            {
+            UserGroup defaultGroup = new UserGroup {
                 Name = "AdminGroup",
                 Responsiblity = "adminstration",
 

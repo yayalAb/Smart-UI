@@ -89,7 +89,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         HSCode = g.HSCode,
                                         Weight = g.Weight,
                                         Quantity = g.Quantity,
-                                        NumberOfPackages = g.NumberOfPackages,
+                                        RemainingQuantity = g.RemainingQuantity,
                                         Unit = g.Unit,
                                         UnitPrice = g.UnitPrice,
                                         CBM = g.CBM

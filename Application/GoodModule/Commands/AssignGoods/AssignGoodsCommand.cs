@@ -12,13 +12,11 @@ using Domain.Enums;
 namespace Application.GoodModule.Commands.AssignGoodsCommand
 {
 
-    public record AssignGoodsCommand : IRequest<CustomResponse>
-    {
+    public record AssignGoodsCommand : IRequest<CustomResponse> {
+
         public int OperationId { get; set; }
         public List<ASgContainerDto>? Containers { get; set; }
         public List<GoodDto>? Goods { get; set; }
-
-
 
     }
 
@@ -54,19 +52,34 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                     try
                     {
                         List<Good> goods = _mapper.Map<List<Good>>(request.Goods);
-                        goods.ForEach(good => good.OperationId = request.OperationId);
+                        goods.ForEach(good => {
+                                good.OperationId = request.OperationId;
+                                good.RemainingQuantity = good.Quantity;
+                            });
+
+                        if (goods.Any(good => good.Location == null)) {
+                            throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
+                        }
 
                         if (request.Containers != null)
                         {
+                            List<string> sh_codes = new List<string>();
                             List<Container> containers = _mapper.Map<List<Container>>(request.Containers);
                             containers.ForEach(container =>{
-
+                                
                                 container.OperationId = request.OperationId;
-                                container.Goods.ToList().ForEach(good =>{
+                                container.Article = 1;
+                                container.Quantity = container.Goods.Count;
+                                container.Goods.ToList().ForEach(good => {
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
                                     good.Location = container.Location;
+                                    if(!sh_codes.Any(code => code == good.HSCode)){
+                                        sh_codes.Add(good.HSCode);
+                                        container.Article += 1;
+                                    }
                                 });
+
                             });
                             await _context.Containers.AddRangeAsync(containers);
                             await _context.SaveChangesAsync(cancellationToken);
@@ -81,11 +94,6 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                             // });
 
-                        }
-
-                        if (goods.Any(good => good.Location == null))
-                        {
-                            throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
                         }
 
                         await _context.AddRangeAsync(goods);

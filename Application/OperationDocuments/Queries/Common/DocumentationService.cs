@@ -62,7 +62,7 @@ public class DocumentationService
                             {
                                 Description = g.Description,
                                 HSCode = g.HSCode,
-                                Quantity = g.NumberOfPackages,
+                                Quantity = g.Quantity,
                                 Unit = g.Unit,
                                 UnitPrice = g.UnitPrice,
                                 CBM = g.CBM,

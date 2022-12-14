@@ -30,9 +30,9 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
                 .NotNull();
             RuleFor(ag => ag.Goods!.Select(g => g.Unit))
                 .NotNull();
-            RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
-                .NotNull()
-                .NotEmpty();
+            // RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
+            //     .NotNull()
+            //     .NotEmpty();
         });
 
         When(ag => ag.Containers != null, () =>
@@ -52,26 +52,26 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Containers!.Select(c => c.LocationPortId))
                 .Must(BeFoundInPortTable).WithMessage($"one or more location port of a container with the provided id is not found ");
 
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.LocationPortId)))
-                    .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.LocationPortId)))
+                .Must(BeFoundInPortTable).WithMessage("one or more location port of a good with the provided id is not found ");
 
 
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Description)))
-                    .NotNull()
-                    .NotEmpty();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Weight)))
-                    .NotNull()
-                    .NotEmpty();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
-                    .NotNull()
-                    .NotEmpty();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
-                    .NotNull()
-                    .NotEmpty();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))
-                    .NotNull();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
-                    .NotNull();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Description)))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Weight)))
+                .NotNull()
+                .NotEmpty();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
+                .NotNull()
+                .NotEmpty();
+            // RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
+            //     .NotNull()
+            //     .NotEmpty();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))
+                .NotNull();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
+                .NotNull();
         });
 
     }

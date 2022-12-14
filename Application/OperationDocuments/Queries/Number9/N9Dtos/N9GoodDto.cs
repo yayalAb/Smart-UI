@@ -9,7 +9,7 @@ public class N9GoodDto : IMapFrom<Good> {
     public string? Manufacturer { get; set; }
     public float Weight { get; set; }
     public float? Quantity { get; set; }
-    public int NumberOfPackages {get; set;}
+    public int RemainingQuantity {get; set;}
     public string? ChasisNumber {get; set; }
     public string? EngineNumber {get; set;}
     public string? ModelCode { get; set; }
