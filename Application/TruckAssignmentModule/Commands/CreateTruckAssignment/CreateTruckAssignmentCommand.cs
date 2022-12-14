@@ -27,6 +27,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         // public DateTime Date { get; set; }
         public string GatePassType { get; set; }
         public float AgreedTariff { get; set; }
+        public string Currency { get; set; }
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 
@@ -104,6 +105,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                             SourcePortId = request.SourcePortId,
                             DestinationPortId = request.DestinationPortId,
                             AgreedTariff = request.AgreedTariff,
+                            Currency = request.Currency ,
                             GatePassType = request.GatePassType,
                             Containers = containers,
                             Goods = goods

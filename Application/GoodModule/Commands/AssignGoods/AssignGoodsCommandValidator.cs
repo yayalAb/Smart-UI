@@ -30,7 +30,9 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Goods!.Select(g => g.UnitPrice))
                 .NotNull();
             RuleFor(ag => ag.Goods!.Select(g => g.Unit))
-                .NotNull();
+                .NotNull()
+                .Must(BeOfCurrencyType)
+                .WithMessage("one or more good unit is not valid");
             // RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
             //     .NotNull()
             //     .NotEmpty();
@@ -73,7 +75,8 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
                 .NotNull();
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
                 .NotNull()
-                .Must(BeOfCurrencyType);
+                .Must(BeOfCurrencyType)
+                .WithMessage("one or more container good unit is not valid");
         });
 
     }

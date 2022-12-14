@@ -18,6 +18,8 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                 .WithMessage("gatepass type is incorrect");
             RuleFor(u => u.AgreedTariff)
                 .NotNull();
+            RuleFor(u => u.Currency)
+                .NotNull();
             When(u => u.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType) , GatepassType.EXIT), () => {
                 RuleFor(u => u.SENumber)
                     .NotNull()

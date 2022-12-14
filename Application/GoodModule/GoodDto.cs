@@ -10,7 +10,8 @@ public class GoodDto
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
     public float Weight { get; set; }
-    public float Quantity { get; set; }
+    public string WeightUnit { get; set; }
+    public int Quantity { get; set; }
     public string Type { get; set; } = null!;
     public string? Location { get; set; }
     public string? ChasisNumber { get; set; }

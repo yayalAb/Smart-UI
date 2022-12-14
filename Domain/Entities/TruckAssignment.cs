@@ -14,6 +14,7 @@ namespace Domain.Entities
         public int? DestinationPortId { get; set; }
         public string? TransportationMethod { get; set; }
         public float AgreedTariff { get; set; }
+        public string Currency { get; set; }
         public string SENumber { get; set; }
         public DateTime? Date { get; set; }
         public string GatePassType { get; set; }

@@ -22,6 +22,8 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         public int? SourcePortId { get; set; }
         public int? DestinationPortId { get; set; }
         public string? TransportationMethod { get; set; }
+        public float AgreedTariff { get; set; }
+        public string Currency { get; set; }
         public List<int>? ContainerIds { get; set; }
         public List<int>? GoodIds { get; set; }
 

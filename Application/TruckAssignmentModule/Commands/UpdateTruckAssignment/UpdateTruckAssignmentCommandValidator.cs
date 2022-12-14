@@ -11,7 +11,10 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
         public UpdateTruckAssignmentCommandValidator(IAppDbContext context)
         {
             _context = context;
-
+            RuleFor(u => u.AgreedTariff)
+                .NotNull();
+            RuleFor(u => u.Currency)
+                .NotNull();
             RuleFor(u => u.OperationId)
                 .NotNull()
                 .NotEmpty()
