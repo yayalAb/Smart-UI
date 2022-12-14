@@ -27,7 +27,7 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
             .IsRequired(false);
 
         entity.Property(e => e.UnitPrice)
-            .IsRequired(false);
+            .IsRequired(true);
             
         entity.Property(e => e.CBM)
             .IsRequired(false);
