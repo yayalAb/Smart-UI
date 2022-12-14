@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Domain.Common.Units;
 using FluentValidation;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand;
@@ -71,7 +72,8 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))
                 .NotNull();
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
-                .NotNull();
+                .NotNull()
+                .Must(BeOfCurrencyType);
         });
 
     }
@@ -99,6 +101,29 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             }
 
         }
+        return true;
+    }
+
+    private bool BeOfCurrencyType(IEnumerable<string> units){
+
+        foreach (var unit in units) {
+            if(!Currency.Currencies.ToList().Contains(unit)){
+                return false;
+            }
+        }
+
+        return true;
+        
+    }
+
+    private bool BeOfWeightUnitType(IEnumerable<string> units){
+        
+        foreach (var unit in units) {
+            if(!WeightUnits.Units.ToList().Contains(unit)){
+                return false;
+            }
+        }
+
         return true;
     }
 }

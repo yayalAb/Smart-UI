@@ -8,6 +8,8 @@ using Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
 using Domain.Enums;
+using Application.Common.Service;
+using Domain.Common.Units;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand
 {
@@ -61,8 +63,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
                         }
 
-                        if (request.Containers != null)
-                        {
+                        if (request.Containers != null) {
+
                             List<string> sh_codes = new List<string>();
                             List<Container> containers = _mapper.Map<List<Container>>(request.Containers);
                             containers.ForEach(container =>{
@@ -70,6 +72,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 container.OperationId = request.OperationId;
                                 container.Article = 1;
                                 container.Quantity = container.Goods.Count;
+                                container.WeightMeasurement = WeightUnits.Default.name;
+                                container.Currency = Currency.Default.name;
                                 container.Goods.ToList().ForEach(good => {
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
@@ -77,6 +81,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     if(!sh_codes.Any(code => code == good.HSCode)){
                                         sh_codes.Add(good.HSCode);
                                         container.Article += 1;
+                                        container.TotalPrice += ((float) AppdivConvertor.CurrencyConversion(good.Unit, good.UnitPrice) * good.Quantity);
+                                        container.GrossWeight += (float) AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
                                     }
                                 });
 
@@ -102,8 +108,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                         return CustomResponse.Succeeded("goods  assigned successfully", 201);
 
                     }
-                    catch (System.Exception)
-                    {
+                    catch (System.Exception) {
                         await transaction.RollbackAsync();
                         throw;
                     }
