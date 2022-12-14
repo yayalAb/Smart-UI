@@ -5,6 +5,7 @@ using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
 using Application.ContainerModule;
 using Application.ContainerModule.Commands.CreateContainer;
+using Application.ContainerModule.Commands.CreateSingleContainer;
 // using Application.ContainerModule.Commands.CreateSingleContainer;
 using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.DocumentationModule.Commands.UpdateDocumentation;
@@ -66,7 +67,7 @@ namespace Application.Common.Mappings
             CreateMap<CreateOperationCommand, Operation>();
             CreateMap<UpdateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
-            // CreateMap<CreateSingleContainer, Container>();
+            CreateMap<CreateSingleContainer, Container>();
             CreateMap<GoodDto , Good>();
             CreateMap<ASgContainerDto, Container>();
             CreateMap<ContainerDto, Container>();
