@@ -65,4 +65,7 @@ public class BackgroundService : IHostedService
         }
 
     }
+    public async void FetchCurrency(object state){
+        
+    }
 }
