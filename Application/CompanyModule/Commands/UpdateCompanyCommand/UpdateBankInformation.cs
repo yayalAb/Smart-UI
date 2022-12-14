@@ -10,4 +10,5 @@ public class UpdateBankInformationDto : IMapFrom<BankInformation>
     public string AccountNumber { get; set; }
     public string SwiftCode { get; set; } 
     public string BankAddress { get; set; }
+    public string CurrencyType { get; set; }
 }

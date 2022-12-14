@@ -55,6 +55,8 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand {
                 .NotNull();
             RuleFor( u => u.BankInformation.Select(bi => bi.SwiftCode))
                 .NotNull();
+            RuleFor( u => u.BankInformation.Select(bi => bi.CurrencyType))
+                .NotNull();
             
 
             

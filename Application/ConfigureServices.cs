@@ -21,7 +21,7 @@ namespace Application
             services.AddScoped<OperationEventHandler>();
             services.AddScoped<DocumentationService>();
             services.AddScoped<DefaultCompanyService>();
-            // services.AddScoped<OperationService>();
+            services.AddScoped<OperationService>();
             services.AddSingleton<AppdivConvertor>();
            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
