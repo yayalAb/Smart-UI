@@ -38,7 +38,7 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
             RuleFor(u => u.TruckId)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeFoundInTrucksTable).WithMessage("truck with the provided id is not found");
+                .Must(BeFoundInTrucksTable    ).WithMessage("truck with the provided id is not found");
                  
             RuleFor(u => u.SourceLocation)
                 .NotNull()

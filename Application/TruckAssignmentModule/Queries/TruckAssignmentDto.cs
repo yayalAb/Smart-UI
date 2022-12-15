@@ -11,6 +11,11 @@ public class TruckAssignmentDto : IMapFrom<TruckAssignment>
     public string SourceLocation { get; set; }
     public string DestinationLocation { get; set; }
     public string TransportationMethod { get; set; }
+    public float AgreedTariff { get; set; }
+    public string Currency { get; set; }
+    public string SENumber { get; set; }
+    public DateTime? Date { get; set; }
+    public string GatePassType { get; set; }
     public TaPortDto SourcePort { get; set; }
     public TaPortDto DestinationPort { get; set; }
 

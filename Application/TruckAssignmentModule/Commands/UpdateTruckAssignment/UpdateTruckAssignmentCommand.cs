@@ -68,7 +68,11 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
                         List<Good> goods = new List<Good>();
 
                         //fetch existing truck assignment 
-                        var existingTruckAssignment = await _context.TruckAssignments.FindAsync(request.Id);
+                        var existingTruckAssignment = await _context.TruckAssignments
+                                        .Include(ta => ta.Containers)
+                                        .Include(ta => ta.Goods)
+                                        .Where(ta => ta.Id == request.Id)
+                                        .FirstOrDefaultAsync();
                         if (existingTruckAssignment == null)
                         {
                             throw new GhionException(CustomResponse.BadRequest($"TruckAssignment with id = {request.Id} is not found"));
@@ -111,12 +115,14 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
                         existingTruckAssignment.SourceLocation = request.SourceLocation;
                         existingTruckAssignment.DestinationLocation = request.DestinationLocation;
                         existingTruckAssignment.TransportationMethod = request.TransportationMethod;
-                        existingTruckAssignment.Containers = containers;
-                        existingTruckAssignment.Goods = goods;
                         existingTruckAssignment.SENumber = request.SENumber;
                         existingTruckAssignment.GatePassType = request.GatePassType;
                         existingTruckAssignment.AgreedTariff = request.AgreedTariff;
                         existingTruckAssignment.Currency = request.Currency;
+                        
+                        existingTruckAssignment.Containers = containers;
+                        existingTruckAssignment.Goods = goods;
+                        
                         if (request.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType), GatepassType.ENTRANCE))
                         {
 
