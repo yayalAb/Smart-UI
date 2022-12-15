@@ -13,7 +13,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public string ContainerNumber { get; set; } = null!;
         public string SealNumber { get; set; } = null!;
         public string Location { get; set; } = null!;
-        public float Size { get; set; }
+        public string Size { get; set; }
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
         public ICollection<GoodDto> Goods { get; set; }= null!;

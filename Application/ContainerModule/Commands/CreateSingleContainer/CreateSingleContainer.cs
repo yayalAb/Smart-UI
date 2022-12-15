@@ -14,7 +14,7 @@ public record CreateSingleContainer : IRequest<CustomResponse>
     public string? GoodsDescription { get; set; }
     public string SealNumber { get; set; } = null!;
     public string Location { get; set; } = null!;
-    public float Size { get; set; }
+    public string Size { get; set; }
     public string WeightMeasurement { get; set; }
     public string Currency { get; set; }
     public int LocationPortId { get; set; }
