@@ -46,7 +46,7 @@ namespace Application.OperationModule.Commands.UpdateOperation
         }
         private bool BeFoundInCompanyTable(int companyId)
         {
-            return  _context.Companies.Find(companyId) != null;
+            return _context.Companies.Find(companyId) != null;
         }
     }
 }

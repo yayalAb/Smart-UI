@@ -28,9 +28,9 @@ namespace Application.OperationModule.Commands.UpdateOperation
         public DateTime? EstimatedTimeOfArrival { get; set; }
         public string? VoyageNumber { get; set; }
         //--********************----------------////
-        public string OperationNumber { get; set; }
+        // public string? OperationNumber { get; set; }
         public DateTime OpenedDate { get;set ; }
-        public string Status { get; set; }
+        // public string Status { get; set; }
         //--********************--------------------///
         public string? ECDDocument { get; set; }
         public int? ShippingAgentId { get; set; }

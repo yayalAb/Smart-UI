@@ -38,11 +38,11 @@ public class OperationDto : IMapFrom<Operation>
     public string? CountryOfOrigin { get; set; } // operation
     public float? REGTax { get; set; }//
     public string? BillOfLoadingNumber { get; set; }
-    public string? PINumber { get; set; }
-    public DateTime? PIDate { get; set; }
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
     public string? Shipper { get; set; }
+    public string? PINumber { get; set; }
+    public DateTime? PIDate { get; set; }
     //--------------------------------------//
     public virtual ICollection<FetchGoodDto> Goods { get; set; }
 }
