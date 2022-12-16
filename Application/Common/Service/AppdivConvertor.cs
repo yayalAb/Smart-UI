@@ -12,16 +12,38 @@ namespace Application.Common.Service;
 public class AppdivConvertor
 {
     /**
-    this method will convert any weight units to the default weight unit
+    this method will convert any weight units to the default weight unit if convertTo unit has not been set
     */
-    public static Double WeightConversion(string unitName, float value) {
-        Unit toBeConverted = WeightUnits.getUnit(unitName);
-        return value/toBeConverted.rate;
+    public static float WeightConversion(string unitName, float value, string? convertTo) {
+        Unit convertFrom = WeightUnits.getUnit(unitName);
+        var to_default = value/convertFrom.rate;
+        Unit toBeConverted = WeightUnits.getUnit(convertTo);
+        if(toBeConverted.Equals(WeightUnits.Default)){
+            return to_default;
+        }else{
+            return to_default * toBeConverted.rate; 
+        }
     }
 
-    public static float CurrencyConversion(string unitName, float value) {
-        Unit toBeConverted = Currency.getUnit(unitName);
-        return (float) value/toBeConverted.rate;
+    /**
+    this method will convert any currency to the default currency if convertTo currency has not been set
+    */
+    public static float CurrencyConversion(string unitName, float value, string? convertTo) {
+
+        Unit convertFrom = Currency.getUnit(unitName);
+        var toBeConverted = convertTo == null ? null : Currency.getUnit(convertTo);
+        var to_default = value/convertFrom.rate;
+
+        if(toBeConverted == null) {
+            return to_default;
+        }else{
+            if(toBeConverted.Equals(Currency.Default)) {
+                return to_default;
+            } else {
+                return to_default * toBeConverted.rate; 
+            }
+        }
+
     }
 
 }
