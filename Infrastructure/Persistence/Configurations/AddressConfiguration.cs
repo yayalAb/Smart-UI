@@ -37,7 +37,17 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address> {
             .HasForeignKey<ApplicationUser>(u=>u.AddressId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
-    
+        entity.HasOne<Company>()
+        .WithOne(c => c.Address)
+        .OnDelete(DeleteBehavior.Cascade);
+
+        entity.HasOne<Driver>()
+        .WithOne(c => c.Address)
+        .OnDelete(DeleteBehavior.Cascade);
+        
+        entity.HasOne<ShippingAgent>()
+        .WithOne(c => c.Address)
+        .OnDelete(DeleteBehavior.Cascade);
     }
 
 }
