@@ -23,6 +23,7 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
         entity.HasOne(e => e.Company)
             .WithMany(c => c.ContactPeople)
             .HasForeignKey(e => e.CompanyId)
+            .IsRequired(true)
             .OnDelete(DeleteBehavior.Cascade);
         entity.HasOne(e => e.Operation)
             .WithOne(o => o.ContactPerson)

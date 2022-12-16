@@ -4,6 +4,7 @@ using Application.Common.Exceptions;
 using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyModule.Commands.DeleteCompanyCommand;
 
@@ -22,15 +23,20 @@ public class DeleteCompanyHandler : IRequestHandler<DeleteCompany, CustomRespons
 
     public async Task<CustomResponse> Handle(DeleteCompany request, CancellationToken cancellationToken){
         
-        var found_Company = await _context.Companies.FindAsync(request.Id);
+        var found_Company = await _context.Companies
+                .Include(c => c.Address)
+                .Where(c => c.Id == request.Id)
+                .FirstOrDefaultAsync();
         if(found_Company == null){
             throw new GhionException(CustomResponse.NotFound($"Company with id = {request.Id} is not found"));
         }
-        _context.Addresses.Remove(found_Company.Address);
+        var address = found_Company.Address;
+      //TODO: address relationship on delete
         _context.BankInformation.RemoveRange(found_Company.BankInformation);
         _context.Companies.Remove(found_Company);
-            await _context.SaveChangesAsync(cancellationToken);
-
+        await _context.SaveChangesAsync(cancellationToken);
+        _context.Addresses.Remove(address);
+        await _context.SaveChangesAsync(cancellationToken);
          return CustomResponse.Succeeded("Company deleted successfully!");
     }
 

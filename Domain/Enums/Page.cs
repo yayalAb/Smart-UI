@@ -20,7 +20,8 @@ namespace Domain.Enums
         users,
         lookup,
         group,
-        settings
+        settings,
+        print
 
     }
 }

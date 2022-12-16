@@ -37,7 +37,7 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address> {
             .HasForeignKey<ApplicationUser>(u=>u.AddressId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
-    
+
     }
 
 }
