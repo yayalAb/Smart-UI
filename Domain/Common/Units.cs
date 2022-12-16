@@ -63,7 +63,7 @@ public class Currency
     public static string Name = "Currency";
     public static Unit Default = new Unit { name = "USD", rate = 1 };
     public static Dictionary<string, Unit> dict = new Dictionary<string, Unit>() {
-        {"Birr", new Unit { name = "Birr", rate = 50 }},
+        {"BIR", new Unit { name = "BIR", rate = 50 }},
         {"DJF", new Unit { name = "DJF", rate = 51 }},
         {"USD", new Unit { name = "USD", rate = 1 }}
     };
