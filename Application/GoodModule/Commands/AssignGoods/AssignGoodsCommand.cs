@@ -81,8 +81,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     if(!sh_codes.Any(code => code == good.HSCode)){
                                         sh_codes.Add(good.HSCode);
                                         container.Article += 1;
-                                        container.TotalPrice += ((float) AppdivConvertor.CurrencyConversion(good.Unit, good.UnitPrice) * good.Quantity);
-                                        container.GrossWeight += (float) AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+                                        container.TotalPrice += (AppdivConvertor.CurrencyConversion(good.Unit, good.UnitPrice) * good.Quantity);
+                                        container.GrossWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
                                     }
                                 });
 
