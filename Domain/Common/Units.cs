@@ -45,7 +45,7 @@ public class WeightUnits
             }
         }
 
-        throw new Exception("unit not found");
+        throw new Exception("weight unit not found");
 
     }
 
@@ -77,7 +77,7 @@ public class Currency
             }
         }
 
-        throw new Exception("unit not found");
+        throw new Exception("currency not found");
 
     }
 
