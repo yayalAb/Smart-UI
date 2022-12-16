@@ -27,12 +27,27 @@ public class WeightUnits
         "lb"
     };
 
+    public static Dictionary<string, Unit> dict = new Dictionary<string, Unit>(){
+        { "KG", new Unit { name = "KG", rate = 1 } },
+        {"Ton", new Unit { name = "Ton", rate = 0.001F }},
+        {"g", new Unit { name = "g", rate = 1000 }},
+        {"lb", new Unit { name = "lb", rate = 2.20462F }}
+    };
+
     public static string Name = "WeightUnits";
     public static Unit Default = new Unit { name = "KG", rate = 1 };
-    public static Unit KG = new Unit { name = "KG", rate = 1 };
-    public static Unit Ton = new Unit { name = "Ton", rate = 0.001F };
-    public static Unit g = new Unit { name = "g", rate = 1000 };
-    public static Unit lb = new Unit { name = "lb", rate = 2.20462F };
+
+    public static Unit getUnit(string name){
+
+        foreach(KeyValuePair<string, Unit> instance in dict){
+            if(instance.Key == name){
+                return instance.Value;
+            }
+        }
+
+        throw new Exception("unit not found");
+
+    }
 
 }
 
@@ -47,9 +62,23 @@ public class Currency
 
     public static string Name = "Currency";
     public static Unit Default = new Unit { name = "USD", rate = 1 };
+    public static Dictionary<string, Unit> dict = new Dictionary<string, Unit>() {
+        {"Birr", new Unit { name = "Birr", rate = 50 }},
+        {"DJF", new Unit { name = "DJF", rate = 51 }},
+        {"USD", new Unit { name = "USD", rate = 1 }}
+    };
 
-    public static Unit Birr = new Unit { name = "Birr", rate = 50 };
-    public static Unit DJF = new Unit { name = "DJF", rate = 51 };
-    public static Unit USD = new Unit { name = "USD", rate = 1 };
+
+    public static Unit getUnit(string name){
+
+        foreach(KeyValuePair<string, Unit> instance in dict){
+            if(instance.Key == name){
+                return instance.Value;
+            }
+        }
+
+        throw new Exception("unit not found");
+
+    }
 
 }

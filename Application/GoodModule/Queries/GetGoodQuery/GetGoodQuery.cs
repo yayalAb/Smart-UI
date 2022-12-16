@@ -17,12 +17,12 @@ using System.Reflection;
 namespace Application.GoodModule.Queries.GetGoodQuery
 {
 
-    public class GetAssignedGoodQuery : IRequest<List<PropertyInfo>>
+    public class GetAssignedGoodQuery : IRequest<UpdateGoodCommand>
     {
         public int OperationId { get; init; }
     }
 
-    public class GetAssignedGoodQueryHandler : IRequestHandler<GetAssignedGoodQuery, List<PropertyInfo>>
+    public class GetAssignedGoodQueryHandler : IRequestHandler<GetAssignedGoodQuery, UpdateGoodCommand>
     {
 
         private readonly IMapper _mapper;
@@ -35,28 +35,25 @@ namespace Application.GoodModule.Queries.GetGoodQuery
             _logger = logger;
         }
 
-        public async Task<List<PropertyInfo>> Handle(GetAssignedGoodQuery request, CancellationToken cancellationToken) {
+        public async Task<UpdateGoodCommand> Handle(GetAssignedGoodQuery request, CancellationToken cancellationToken) {
             
-            return new WeightUnits().GetType().GetProperties(BindingFlags.Static).ToList();
-            // _logger.LogCritical($"{typeof(WeightUnits).GetProperty("KG")}");//.GetValue(null, null);
+            var operation = await _context.Operations
+                .Include(o => o.Containers)!
+                    .ThenInclude(c => c.Goods)
+                .Include(o => o.Goods)
+                .Where(o => o.Id == request.OperationId)
+                .Select(o => new UpdateGoodCommand
+                {
+                    OperationId = o.Id,
+                    Containers = _mapper.Map<List<UpdateGoodContainerDto>>(o.Containers),
+                    Goods = _mapper.Map<List<UpdateGoodDto>>(o.Goods!.Where(g => g.ContainerId == null))
+                }).FirstOrDefaultAsync();
 
-            // var operation = await _context.Operations
-            //     .Include(o => o.Containers)!
-            //         .ThenInclude(c => c.Goods)
-            //     .Include(o => o.Goods)
-            //     .Where(o => o.Id == request.OperationId)
-            //     .Select(o => new UpdateGoodCommand
-            //     {
-            //         OperationId = o.Id,
-            //         Containers = _mapper.Map<List<UpdateGoodContainerDto>>(o.Containers),
-            //         Goods = _mapper.Map<List<UpdateGoodDto>>(o.Goods!.Where(g => g.ContainerId == null))
-            //     }).FirstOrDefaultAsync();
+            if (operation == null) {
+                throw new GhionException(CustomResponse.NotFound($"operation with id = {request.OperationId} is not found"));
+            }
 
-            // if (operation == null) {
-            //     throw new GhionException(CustomResponse.NotFound($"operation with id = {request.OperationId} is not found"));
-            // }
-
-            // return operation;
+            return operation;
 
         }
 

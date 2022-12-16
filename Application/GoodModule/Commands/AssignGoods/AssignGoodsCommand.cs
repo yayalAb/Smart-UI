@@ -113,9 +113,6 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                         throw;
                     }
 
-
-
-
                 }
             });
 
