@@ -55,7 +55,7 @@ public class Currency
 {
 
     public static string[] Currencies = {
-        "Birr",
+        "BIR",
         "USD",
         "DJF"
     };
