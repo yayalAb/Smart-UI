@@ -21,14 +21,14 @@ public class Unit
 public class WeightUnits
 {
     public static string[] Units = {
-        "KG",
+        "kg",
         "g",
         "Ton",
         "lb"
     };
 
     public static Dictionary<string, Unit> dict = new Dictionary<string, Unit>(){
-        { "KG", new Unit { name = "KG", rate = 1 } },
+        { "kg", new Unit { name = "kg", rate = 1 } },
         {"Ton", new Unit { name = "Ton", rate = 0.001F }},
         {"g", new Unit { name = "g", rate = 1000 }},
         {"lb", new Unit { name = "lb", rate = 2.20462F }}
