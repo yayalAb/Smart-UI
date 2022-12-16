@@ -27,6 +27,9 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
             RuleFor(ag => ag.Goods!.Select(g => g.Weight))
                 .NotNull()
                 .NotEmpty();
+            RuleFor(ag => ag.Goods!.Select(g => g.WeightUnit))
+                .NotNull()
+                .NotEmpty();
             RuleFor(ag => ag.Goods!.Select(g => g.UnitPrice))
                 .NotNull();
             RuleFor(ag => ag.Goods!.Select(g => g.Unit))
@@ -61,16 +64,19 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
 
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Description)))
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Description is requried");
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Weight)))
                 .NotNull()
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Weight is requried");
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
                 .NotNull()
                 .NotEmpty();
-            // RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
-            //     .NotNull()
-            //     .NotEmpty();
+            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.WeightUnit)))
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Weight unit is requried");
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))
                 .NotNull();
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Unit)))
