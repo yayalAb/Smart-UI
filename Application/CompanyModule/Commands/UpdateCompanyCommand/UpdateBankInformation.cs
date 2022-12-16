@@ -2,9 +2,9 @@ using Application.Common.Mappings;
 using Domain.Entities;
 
 namespace Application.CompanyModule.Commands.UpdateCompanyCommand;
-public class UpdateBankInformationDto : IMapFrom<BankInformation>
+public class UpdateBankInformationDto :IMapFrom<BankInformation> 
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string AccountHolderName { get; set; }
     public string BankName { get; set; }
     public string AccountNumber { get; set; }

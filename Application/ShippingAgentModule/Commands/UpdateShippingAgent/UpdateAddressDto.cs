@@ -5,7 +5,7 @@ namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 {
     public  class UpdateAddressDto : IMapFrom<Address>
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Email { get; set; }
         public string? Phone { get; set; }
         public string? Region { get; set; }

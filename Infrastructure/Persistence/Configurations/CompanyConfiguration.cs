@@ -19,12 +19,6 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company> {
         entity.Property(e => e.TinNumber)
             .HasMaxLength(45);
         
-        // entity.HasMany(d => d.ContactPeople)
-        //     .WithOne(p => p.Company)
-        //     .HasForeignKey(d => d.ContactPersonId)
-        //         .IsRequired(false)
-        //     .OnDelete(DeleteBehavior. Cascade);
-        
         entity.HasOne(d => d.Address)
             .WithOne(p => p.Company)
             .HasForeignKey<Company>(d => d.AddressId)

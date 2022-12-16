@@ -23,7 +23,7 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
         public string TinNumber { get; init; }
         public string CodeNIF { get; init; }
         public ICollection<ContactPersonUpdateCommand> ContactPeople { get; init; }
-        public UpdateAddressDto address { get; init; }
+        public UpdateAddressDto Address { get; init; }
         public ICollection<UpdateBankInformationDto> BankInformation { get; init; }
     }
 
@@ -44,18 +44,53 @@ namespace Application.CompanyModule.Commands.UpdateCompanyCommand {
 
         public async Task<CustomResponse> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken){
             
-            bool isCompanyFound = _context.Companies
+            // bool isCompanyFound = _context.Companies
+            //             .Include(c => c.Address)
+            //             .Include(c => c.ContactPeople)
+            //             .Include( c => c.BankInformation)
+            //             .Where(c => c.Id == request.Id).AsNoTracking()
+            //             .Any();
+            // var comp = _context.Companies.Find(request.Id);
+  
+            // if(!isCompanyFound){
+            //     throw new GhionException(CustomResponse.NotFound("Company not found!"));
+            // }
+             var  existingCompany  = _context.Companies
                         .Include(c => c.Address)
                         .Include(c => c.ContactPeople)
                         .Include( c => c.BankInformation)
-                        .Where(c => c.Id == request.Id).AsNoTracking()
-                        .Any();
-            // var comp = _context.Companies.Find(request.Id);
+                        .Where(c => c.Id == request.Id)
+                        .AsNoTracking()
+                        .FirstOrDefault();
 
-            if(!isCompanyFound){
-                throw new GhionException(CustomResponse.NotFound("Company not found!"));
-            }
-            _context.Companies.Update(_mapper.Map<Company>(request));
+         var trash =   existingCompany.ContactPeople.ToList()
+                .Where(cp => !request.ContactPeople.Where(c => c.Id == cp.Id).Any());
+        _context.ContactPeople.RemoveRange(trash);
+         await _context.SaveChangesAsync(cancellationToken);
+
+
+         var trash2 =   existingCompany.BankInformation.ToList()
+                .Where(cp => !request.BankInformation.Where(c => c.Id == cp.Id).Any());
+        _context.BankInformation.RemoveRange(trash2);
+         await _context.SaveChangesAsync(cancellationToken);
+
+
+            // existingCompany.Address.City = request.address.City;
+            // existingCompany.Address.Country = request.address.Country;
+            // existingCompany.Address.Email = request.address.Email;
+            // existingCompany.Address.Phone = request.address.Phone;
+            // existingCompany.Address.Region = request.address.Phone;
+            // exi
+
+
+            existingCompany.Name = request.Name;
+            existingCompany.TinNumber = request.TinNumber;
+            existingCompany.CodeNIF = request.CodeNIF;
+            existingCompany.Address = _mapper.Map<Address>(request.Address);
+            existingCompany.ContactPeople = _mapper.Map<ICollection<ContactPerson>>(request.ContactPeople);
+            existingCompany.BankInformation = _mapper.Map<ICollection<BankInformation>>(request.BankInformation);
+            _context.Companies.Update(existingCompany);
+            // _context.Companies.Update(_mapper.Map<Company>(request));
             await _context.SaveChangesAsync(cancellationToken);
 
             return CustomResponse.Succeeded("Company Updated");

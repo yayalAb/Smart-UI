@@ -23,6 +23,7 @@ public class BankInformationConfiguration : IEntityTypeConfiguration<BankInforma
         entity.HasOne(bi => bi.Company)
             .WithMany(c => c.BankInformation)
             .HasForeignKey(bi=>bi.CompanyId)
+            .IsRequired(true)
             .OnDelete(DeleteBehavior.Cascade);
     
     }
