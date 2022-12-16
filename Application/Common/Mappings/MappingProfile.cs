@@ -83,8 +83,6 @@ namespace Application.Common.Mappings
             CreateMap<AllDocDto , PackingListDto>();
             CreateMap<AllDocDto , TruckWayBillDto2>();
             CreateMap<AllDocDto , WaybillDto>();
-
-
             
 
             var mapFromType = typeof(IMapFrom<>);

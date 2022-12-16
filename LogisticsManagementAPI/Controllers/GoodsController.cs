@@ -7,6 +7,7 @@ using Application.GoodModule.Queries.GetAllGoodQuery;
 using Application.GoodModule.Queries.GetGoodQuery;
 using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries.GoodByContainer;
+using Application.GoodModule.Queries.UnstafedGoodByOperation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,6 +51,24 @@ namespace WebApi.Controllers
         {
             try {
                 return Ok(await Mediator.Send(query));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("unstafed/{opeartionId}")]
+        public async Task<ActionResult> Unstafed(int operationId) {
+            try {
+                return Ok(await Mediator.Send(new OperationUnstafedGood{OperationId = operationId, Type = true}));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("contained/{operationId}")]
+        public async Task<ActionResult> Contained(int operationId) {
+            try {
+                return Ok(await Mediator.Send(new OperationUnstafedGood{OperationId = operationId, Type = false}));
             } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
