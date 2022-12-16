@@ -1,5 +1,3 @@
-using Application.CompanyModule.Queries;
-using Domain.Entities;
 using MediatR;
 using Application.Common.Interfaces;
 using Application.Common.Exceptions;
@@ -28,6 +26,8 @@ public class DeleteCompanyHandler : IRequestHandler<DeleteCompany, CustomRespons
         if(found_Company == null){
             throw new GhionException(CustomResponse.NotFound($"Company with id = {request.Id} is not found"));
         }
+        _context.Addresses.Remove(found_Company.Address);
+        _context.BankInformation.RemoveRange(found_Company.BankInformation);
         _context.Companies.Remove(found_Company);
             await _context.SaveChangesAsync(cancellationToken);
 
