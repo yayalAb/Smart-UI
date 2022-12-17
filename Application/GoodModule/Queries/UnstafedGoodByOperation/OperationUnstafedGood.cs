@@ -35,10 +35,10 @@ public class OperationUnstafedGoodHandler : IRequestHandler<OperationUnstafedGoo
 
     public async Task<ICollection<FetchGoodDto>> Handle(OperationUnstafedGood request, CancellationToken cancellationToken) {
         return request.Type ? await _context.Goods
-                        .Where(c => c.OperationId == request.OperationId)
+                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
                         .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync() :
                     await _context.Goods
-                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
+                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId != null || c.ContainerId == 0))
                         .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
