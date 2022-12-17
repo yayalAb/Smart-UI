@@ -1,14 +1,12 @@
-﻿using Application.ContainerModule.Commands.UpdateContainer;
+﻿using Application.Common.Exceptions;
 using Application.PortModule.Commands.CreatePort;
+using Application.PortModule.Commands.DeletePort;
 using Application.PortModule.Commands.UpdatePort;
-using Microsoft.AspNetCore.Mvc;
 using Application.PortModule.Queries.GetAllPortsQuery;
 using Application.PortModule.Queries.GetPort;
-using Application.PortModule.Commands.DeletePort;
-using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.Common.Models;
 using Application.UserGroupModule.Queries.GetPortLookupQuery;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -1,10 +1,13 @@
 using FluentValidation;
 
-namespace Application.DriverModule.Commands.ChangeDriverImageCommand {
-    public class ChangeDriverImageValidator : AbstractValidator<ChangeDriverImage> {
+namespace Application.DriverModule.Commands.ChangeDriverImageCommand
+{
+    public class ChangeDriverImageValidator : AbstractValidator<ChangeDriverImage>
+    {
 
-        public ChangeDriverImageValidator(){
-            
+        public ChangeDriverImageValidator()
+        {
+
             RuleFor(u => u.Id)
                 .NotNull()
                 .NotEmpty()

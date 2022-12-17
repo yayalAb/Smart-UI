@@ -1,13 +1,12 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
+using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using Application.Addresses.Commands.CreateAddress;
 using Microsoft.EntityFrameworkCore;
-using Application.Common.Models;
-using Application.ShippingAgentModule.Commands.CreateShippingAgent;
+using Microsoft.Extensions.Logging;
 
 namespace Application.User.Commands.CreateUser
 {

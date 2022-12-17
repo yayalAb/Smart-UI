@@ -17,7 +17,7 @@ namespace Infrastructure.Persistence.Configurations
             entity.HasOne(os => os.Operation)
                 .WithMany(o => o.OperationStatuses)
                 .HasForeignKey(os => os.OperationId)
-                .OnDelete(DeleteBehavior. Cascade);
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

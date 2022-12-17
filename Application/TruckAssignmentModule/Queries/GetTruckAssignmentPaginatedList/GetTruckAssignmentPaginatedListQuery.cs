@@ -29,10 +29,10 @@ public class GetTruckAssignmentPaginatedListQueryHandler : IRequestHandler<GetTr
         .Include(ta => ta.Truck)
         .Include(ta => ta.Operation)
         .Include(ta => ta.SourcePort)
-        .Include( ta => ta.DestinationPort)
+        .Include(ta => ta.DestinationPort)
         .Include(ta => ta.Goods)
         .Include(ta => ta.Containers)!
-            .ThenInclude(c =>c.Goods)
+            .ThenInclude(c => c.Goods)
         .ProjectTo<TruckAssignmentDto>(_mapper.ConfigurationProvider), request.PageCount, request.PageSize);
     }
 

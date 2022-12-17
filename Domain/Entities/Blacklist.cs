@@ -1,6 +1,7 @@
 namespace Domain.Entities;
-public class Blacklist{
-    public int Id {get; set;}
-    public string tokenString {get; set;}
+public class Blacklist
+{
+    public int Id { get; set; }
+    public string tokenString { get; set; }
     public DateTime ExpireDate { get; set; }
 }

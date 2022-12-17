@@ -1,29 +1,31 @@
-﻿using Application.LookUp.Commands.CreateLookup;
+﻿using Application.Common.Exceptions;
+using Application.LookUp.Commands.CreateLookup;
+using Application.LookUp.Commands.CreateLookUpKey;
 using Application.LookUp.Commands.DeleteLookup;
 using Application.LookUp.Commands.UpdateLookup;
-using Application.LookUp.Query.GetByKey;
-using Microsoft.AspNetCore.Mvc;
-using Application.LookUp.Commands.CreateLookUpKey;
 using Application.LookUp.Query.GetAllLookups;
 using Application.LookUp.Query.GetByIdQuery;
-using Application.Common.Exceptions;
+using Application.LookUp.Query.GetByKey;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
-using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
-   
+
     public class LookupController : ApiControllerBase
     {
-   
+
         // POST api/<LookupController>
         [HttpPost]
         public async Task<IActionResult> createLookup([FromBody] CreateLookupCommand command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex){
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -34,9 +36,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> createLookupKey(CreateLookUpKey command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex){
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -47,13 +52,16 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Put([FromBody] UpdateLookupCommand command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            }catch(GhionException ex){
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
-            
+
         }
 
         // DELETE api/<LookupController>/5
@@ -71,31 +79,42 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("one/{id}")]
-        public async Task<ActionResult> getById(int id){
-            try{
-                return Ok(await Mediator.Send(new GetById(){Id = id}));
-            }catch(GhionException ex){
+        public async Task<ActionResult> getById(int id)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetById() { Id = id }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
         }
 
         [HttpGet("{type}")]
-        public async Task<ActionResult> getLookup(string type){
-            try{
+        public async Task<ActionResult> getLookup(string type)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(new GetLookUpByKey(type)));
-            }catch(GhionException ex){
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
         }
 
         [HttpGet]
-        public async Task<ActionResult> getAll([FromQuery] GetAllLookups command) {
-            try{
+        public async Task<ActionResult> getAll([FromQuery] GetAllLookups command)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
-             catch(GhionException ex){
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }

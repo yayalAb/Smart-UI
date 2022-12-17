@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
     {
         DatabaseFacade database { get; }
         DbSet<AppUserRole> AppUserRoles { get; }
-        DbSet<UserGroup> UserGroups { get; } 
+        DbSet<UserGroup> UserGroups { get; }
         DbSet<Address> Addresses { get; set; }
         DbSet<Company> Companies { get; set; }
         DbSet<ContactPerson> ContactPeople { get; set; }
@@ -25,12 +25,12 @@ namespace Application.Common.Interfaces
         DbSet<ShippingAgent> ShippingAgents { get; set; }
         DbSet<Truck> Trucks { get; set; }
         DbSet<TruckAssignment> TruckAssignments { get; set; }
-        DbSet<Setting> Settings {get; set;}
-        DbSet<Blacklist> Blacklists {get; set;}
-        DbSet<BankInformation> BankInformation {get; set;}
+        DbSet<Setting> Settings { get; set; }
+        DbSet<Blacklist> Blacklists { get; set; }
+        DbSet<BankInformation> BankInformation { get; set; }
 
-        
-        Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
+
+        Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
     }

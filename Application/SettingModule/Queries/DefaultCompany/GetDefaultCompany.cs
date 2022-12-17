@@ -10,25 +10,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.SettingModule.Queries.DefaultCompany;
 
-public record GetDefaultCompany : IRequest<SettingDto> {}
+public record GetDefaultCompany : IRequest<SettingDto> { }
 
-public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, SettingDto> {
+public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, SettingDto>
+{
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
-    
-    public GetDefaultCompanyHandler(IAppDbContext context, IMapper mapper) {
+
+    public GetDefaultCompanyHandler(IAppDbContext context, IMapper mapper)
+    {
         _context = context;
         _mapper = mapper;
     }
 
-    public async Task<SettingDto> Handle(GetDefaultCompany request, CancellationToken cancellationToken) {
+    public async Task<SettingDto> Handle(GetDefaultCompany request, CancellationToken cancellationToken)
+    {
 
         var setting = await _context.Settings
             .Include(s => s.DefaultCompany)
             .Include(s => s.DefaultCompany.Address)
             .Include(s => s.DefaultCompany.BankInformation)
-            .Select(s => new Setting {
+            .Select(s => new Setting
+            {
                 Id = s.Id,
                 Email = s.Email,
                 Password = s.Password,
@@ -37,14 +41,16 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                 Protocol = s.Protocol,
                 Username = s.Username,
                 CompanyId = s.CompanyId,
-                DefaultCompany = new Company {
+                DefaultCompany = new Company
+                {
                     Id = s.DefaultCompany.Id,
                     Name = s.DefaultCompany.Name,
                     TinNumber = s.DefaultCompany.Name,
                     CodeNIF = s.DefaultCompany.Name,
-                 
+
                     AddressId = s.DefaultCompany.AddressId,
-                    Address = new Address {
+                    Address = new Address
+                    {
                         Id = s.DefaultCompany.Address.Id,
                         Email = s.DefaultCompany.Address.Email,
                         Phone = s.DefaultCompany.Address.Phone,
@@ -54,7 +60,8 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                         Country = s.DefaultCompany.Address.Country,
                         POBOX = s.DefaultCompany.Address.POBOX
                     },
-                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation {
+                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation
+                    {
                         Id = b.Id,
                         AccountHolderName = b.AccountHolderName,
                         BankName = b.BankName,
@@ -66,7 +73,8 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                 },
             }).FirstOrDefaultAsync();
 
-        if(setting == null){
+        if (setting == null)
+        {
             throw new GhionException(CustomResponse.NotFound("Operation not found!"));
         }
 
@@ -75,6 +83,6 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
         ReturnSetting.BankInformation = _mapper.Map<BankInformationUpdateDto>(setting.DefaultCompany.BankInformation.First());
 
         return ReturnSetting;
-        
+
     }
 }

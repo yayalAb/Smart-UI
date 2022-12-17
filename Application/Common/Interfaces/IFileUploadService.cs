@@ -7,6 +7,6 @@ namespace Application.Common.Interfaces
 {
     public interface IFileUploadService
     {
-        Task<(Result result, byte[]? byteData)> GetFileByte(IFormFile file, FileType fileType );
+        Task<(Result result, byte[]? byteData)> GetFileByte(IFormFile file, FileType fileType);
     }
 }

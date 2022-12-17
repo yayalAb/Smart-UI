@@ -1,16 +1,16 @@
 ﻿
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Domain.Common;
 using Application.Common.Interfaces;
+using Domain.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Persistence.Interceptors
 {
     public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     {
         private readonly ICurrentUserService _currentUserService;
-      
+
 
         public AuditableEntitySaveChangesInterceptor(
             ICurrentUserService currentUserService

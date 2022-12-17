@@ -5,11 +5,13 @@ using MediatR;
 
 namespace Application.TruckModule.Commands.DeleteTruckCommand;
 
-public record DeleteTruck: IRequest<CustomResponse> {
-    public int Id {get; set;}
+public record DeleteTruck : IRequest<CustomResponse>
+{
+    public int Id { get; set; }
 }
 
-public class DeleteTruckHandler: IRequestHandler<DeleteTruck, CustomResponse> {
+public class DeleteTruckHandler : IRequestHandler<DeleteTruck, CustomResponse>
+{
 
     private readonly IAppDbContext _context;
 
@@ -18,16 +20,18 @@ public class DeleteTruckHandler: IRequestHandler<DeleteTruck, CustomResponse> {
         _context = context;
     }
 
-    public async Task<CustomResponse> Handle(DeleteTruck request, CancellationToken cancellationToken){
-        
+    public async Task<CustomResponse> Handle(DeleteTruck request, CancellationToken cancellationToken)
+    {
+
         var found_truck = await _context.Trucks.FindAsync(request.Id);
-        if(found_truck == null){
+        if (found_truck == null)
+        {
             throw new GhionException(CustomResponse.NotFound($"Truck with id = {request.Id} is not found"));
         }
         _context.Trucks.Remove(found_truck);
-            await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
-         return CustomResponse.Succeeded("Truck deleted successfully!");
+        return CustomResponse.Succeeded("Truck deleted successfully!");
 
     }
 }

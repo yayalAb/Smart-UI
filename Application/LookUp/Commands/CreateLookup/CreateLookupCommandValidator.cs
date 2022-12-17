@@ -3,14 +3,15 @@ using FluentValidation;
 
 namespace Application.LookUp.Commands.CreateLookup
 {
-    public class CreateLookupCommandValidator : AbstractValidator<CreateLookupCommand> {
-        
+    public class CreateLookupCommandValidator : AbstractValidator<CreateLookupCommand>
+    {
+
         private readonly IAppDbContext _context;
 
         public CreateLookupCommandValidator(IAppDbContext context)
         {
-            
-            _context = context; 
+
+            _context = context;
 
             RuleFor(l => l.Key)
                 .NotEmpty()
@@ -23,12 +24,12 @@ namespace Application.LookUp.Commands.CreateLookup
                 // .Must(BeUnique)
                 .MaximumLength(45)
                 .WithMessage("lookup name not in the correct format");
-          
+
         }
-        
-        private bool BeUnique(CreateLookupCommand lookup ,string name)
+
+        private bool BeUnique(CreateLookupCommand lookup, string name)
         {
-            return !_context.Lookups.Where(l=>l.Value == name && lookup.Key == l.Key ).Any();  
+            return !_context.Lookups.Where(l => l.Value == name && lookup.Key == l.Key).Any();
         }
 
     }

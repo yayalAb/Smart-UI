@@ -4,14 +4,14 @@ using FluentValidation;
 
 namespace Application.ContainerModule.Commands.UpdateContainer
 {
-    public class UpdateContainerCommandValidator : AbstractValidator<UpdateContainerCommand>    
+    public class UpdateContainerCommandValidator : AbstractValidator<UpdateContainerCommand>
     {
         private readonly IAppDbContext _context;
         public UpdateContainerCommandValidator(IAppDbContext context)
         {
             _context = context;
 
-                
+
             RuleFor(c => c.ContainerNumber)
                 .NotNull()
                 .NotEmpty()
@@ -29,7 +29,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             RuleFor(c => c.LocationPortId)
                 .NotNull()
                 .Must(BeFoundInPort).WithMessage("port not found with the provided id");
-            
+
         }
 
         private bool BeFoundInDb(int operationId)

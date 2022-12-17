@@ -36,5 +36,5 @@ namespace Application.Common.Behaviours
             return await next();
         }
     }
-  
+
 }

@@ -1,6 +1,5 @@
 
 using Application.Common.Interfaces;
-using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -16,7 +15,7 @@ namespace Application.UserGroupModule.Queries.GetUserGroupList
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetAllUserGroupsCommandHandler(IAppDbContext context , IMapper mapper)
+        public GetAllUserGroupsCommandHandler(IAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

@@ -15,7 +15,7 @@ public class GetContactPeopleByCompanyIdQueryHandler : IRequestHandler<GetContac
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetContactPeopleByCompanyIdQueryHandler(IAppDbContext context , IMapper mapper ) 
+    public GetContactPeopleByCompanyIdQueryHandler(IAppDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

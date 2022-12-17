@@ -1,10 +1,13 @@
 using FluentValidation;
 
-namespace Application.TruckModule.Commands.CreateTruckCommand {
+namespace Application.TruckModule.Commands.CreateTruckCommand
+{
 
-    public class CreateTruckCommandValidator : AbstractValidator<CreateTruckCommand> {
-        
-        public CreateTruckCommandValidator(){
+    public class CreateTruckCommandValidator : AbstractValidator<CreateTruckCommand>
+    {
+
+        public CreateTruckCommandValidator()
+        {
             RuleFor(u => u.TruckNumber)
                 .NotNull()
                 .NotEmpty()

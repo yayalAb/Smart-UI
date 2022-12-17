@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
 using Domain.Entities;
+using MediatR;
 
 namespace Application.ContactPersonModule.Commands.ContactPersonUpdateCommand
 {
 
-    public class ContactPersonUpdateCommand : IRequest<ContactPerson> 
+    public class ContactPersonUpdateCommand : IRequest<ContactPerson>
     {
         public int? Id { get; init; }
         public string Name { get; init; }

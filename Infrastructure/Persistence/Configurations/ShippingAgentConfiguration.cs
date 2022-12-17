@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class ShippingAgentConfiguration : IEntityTypeConfiguration<ShippingAgent> {
-    public void Configure(EntityTypeBuilder<ShippingAgent> entity) {
+public class ShippingAgentConfiguration : IEntityTypeConfiguration<ShippingAgent>
+{
+    public void Configure(EntityTypeBuilder<ShippingAgent> entity)
+    {
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();

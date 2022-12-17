@@ -1,16 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
-using Application.TruckModule.Commands.CreateTruckCommand;
-using Application.TruckModule.Commands.ChangeTruckImageCommand;
-using Application.TruckModule.Commands.UpdateTruckCommand;
-using Application.TruckModule.Queries.GetTruckQuery;
-using Application.TruckModule.Queries.GetAllTruckQuery;
-using Application.TruckModule.Commands.DeleteTruckCommand;
 using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.Common.Models;
-using Application.UserGroupModule.Queries.GetTruckLookupQuery;
-using Application.TruckModule.Queries.GetUnassignedTrucks;
+using Application.TruckModule.Commands.CreateTruckCommand;
+using Application.TruckModule.Commands.DeleteTruckCommand;
 using Application.TruckModule.Commands.ReleaseTruck;
+using Application.TruckModule.Commands.UpdateTruckCommand;
+using Application.TruckModule.Queries.GetAllTruckQuery;
+using Application.TruckModule.Queries.GetTruckQuery;
+using Application.TruckModule.Queries.GetUnassignedTrucks;
+using Application.UserGroupModule.Queries.GetTruckLookupQuery;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -41,7 +39,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new ReleaseTruckCommand{Id = id}));
+                return Ok(await Mediator.Send(new ReleaseTruckCommand { Id = id }));
             }
             catch (GhionException ex)
             {

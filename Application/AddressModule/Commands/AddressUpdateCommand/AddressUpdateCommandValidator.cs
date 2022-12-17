@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Application.AddressModule.Commands.AddressUpdateCommand {
+namespace Application.AddressModule.Commands.AddressUpdateCommand
+{
 
-    public class AddressUpdateCommandValidator : AbstractValidator<AddressUpdateCommand> {
+    public class AddressUpdateCommandValidator : AbstractValidator<AddressUpdateCommand>
+    {
 
-        public AddressUpdateCommandValidator(){
+        public AddressUpdateCommandValidator()
+        {
 
             RuleFor(u => u.City)
                 .NotNull()
@@ -43,7 +42,7 @@ namespace Application.AddressModule.Commands.AddressUpdateCommand {
                 .WithMessage("phone is not in the correct format!");
 
         }
-        
+
     }
 
 }

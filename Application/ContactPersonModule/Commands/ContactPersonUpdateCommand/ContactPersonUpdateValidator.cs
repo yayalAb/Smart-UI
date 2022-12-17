@@ -1,9 +1,12 @@
 using FluentValidation;
 
-namespace Application.ContactPersonModule.Commands.ContactPersonUpdateCommand {
+namespace Application.ContactPersonModule.Commands.ContactPersonUpdateCommand
+{
 
-    public class ContactPersonUpdateValidator : AbstractValidator<ContactPersonUpdateCommand> {
-        public ContactPersonUpdateValidator(){
+    public class ContactPersonUpdateValidator : AbstractValidator<ContactPersonUpdateCommand>
+    {
+        public ContactPersonUpdateValidator()
+        {
             RuleFor(u => u.Id)
                 .NotNull()
                 .NotEmpty();

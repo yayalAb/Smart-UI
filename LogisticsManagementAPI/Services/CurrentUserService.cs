@@ -14,16 +14,17 @@ namespace WebApi.Services
         }
 
         public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-        public string? tokenString() {
+        public string? tokenString()
+        {
             var authValue = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"];
-             if (AuthenticationHeaderValue.TryParse(authValue, out var headerValue))
-             {
+            if (AuthenticationHeaderValue.TryParse(authValue, out var headerValue))
+            {
                 var scheme = headerValue.Scheme;
                 var parameter = headerValue.Parameter;
                 return parameter?.ToString();
-             }
-             return null;
-            
+            }
+            return null;
+
         }
     }
 }

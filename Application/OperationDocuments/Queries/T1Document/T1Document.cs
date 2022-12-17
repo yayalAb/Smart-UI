@@ -10,7 +10,6 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Application.OperationDocuments.Queries.T1Document;
 
@@ -27,7 +26,8 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
     private readonly OperationEventHandler _operationEvent;
     private readonly DefaultCompanyService _defaultCompanyService;
 
-    public T1DocumentHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent, DefaultCompanyService defaultCompanyService) {
+    public T1DocumentHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent, DefaultCompanyService defaultCompanyService)
+    {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
@@ -61,11 +61,14 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                             .Include(t => t.Goods)
                                             .Include(t => t.Containers)
                                             .Include(t => t.SourcePort)
-                                            .Select(t => new T1TruckAssignmentDto {
-                                                AssignedTruck = new T1TruckDto {
+                                            .Select(t => new T1TruckAssignmentDto
+                                            {
+                                                AssignedTruck = new T1TruckDto
+                                                {
                                                     TruckNumber = t.Truck.TruckNumber
                                                 },
-                                                AssignedGood = (t.Goods != null) ? t.Goods.Select(g => new T1GoodDto {
+                                                AssignedGood = (t.Goods != null) ? t.Goods.Select(g => new T1GoodDto
+                                                {
                                                     HSCode = g.HSCode,
                                                     Weight = g.Weight,
                                                     Quantity = g.Quantity,
@@ -75,7 +78,8 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                                                 }).ToList() : null
                                             }).ToListAsync();
 
-                    if (truckAssignment.Count == 0) {
+                    if (truckAssignment.Count == 0)
+                    {
                         throw new GhionException(CustomResponse.NotFound("There is no Truck Assignment!"));
                     }
 
@@ -87,7 +91,8 @@ public class T1DocumentHandler : IRequestHandler<T1Document, T1DocumentDto>
                         OperationId = request.OperationId
                     }, Enum.GetName(typeof(Status), Status.T1Generated)!);
                     await transaction.CommitAsync();
-                    return new T1DocumentDto {
+                    return new T1DocumentDto
+                    {
                         TruckAssignments = (from assignments in truckAssignment where assignments.AssignedGood != null && assignments.AssignedGood.Count > 0 select assignments).ToList(),
                         Operation = operation,
                         DefaultCompanyInformation = await _defaultCompanyService.GetDefaultCompanyAsync()

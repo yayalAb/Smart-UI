@@ -15,5 +15,5 @@ public class Address : BaseAuditableEntity
     public virtual Company Company { get; set; } = null!;
     public virtual Driver Driver { get; set; } = null!;
     public virtual ShippingAgent ShippingAgent { set; get; } = null!;
-    
+
 }

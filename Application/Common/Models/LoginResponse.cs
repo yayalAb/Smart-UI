@@ -8,7 +8,7 @@ namespace Application.Common.Models
         public string tokenString { get; set; }
         public string fullName { get; set; }
         public string id { get; set; }
-        public IEnumerable<UserRoleDto> roles { get; set; }  
+        public IEnumerable<UserRoleDto> roles { get; set; }
         public int userGroupId { get; set; }
         public string userName { get; set; }
     }

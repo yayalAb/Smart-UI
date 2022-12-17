@@ -24,7 +24,8 @@ public class ReleaseTruckCommandHandler : IRequestHandler<ReleaseTruckCommand, C
             throw new GhionException(CustomResponse.NotFound($"Truck with id = {request.Id} is not found"));
 
         }
-        if(!Truck.IsAssigned){
+        if (!Truck.IsAssigned)
+        {
             return CustomResponse.Succeeded("Truck is already unassigned");
         }
         Truck.IsAssigned = false;

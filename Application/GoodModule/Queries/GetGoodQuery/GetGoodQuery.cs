@@ -1,18 +1,11 @@
-using Domain.Entities;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
+using Application.Common.Models;
+using Application.GoodModule.Commands.UpdateGoodCommand;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.Common.Exceptions;
-using Application.Common.Models;
-using Application.GoodModule.Queries.GetAllGoodQuery;
-using AutoMapper;
-using Application.ContainerModule;
-using Application.GoodModule.Commands.AssignGoodsCommand;
-using Application.GoodModule.Commands.UpdateGoodCommand;
-using Application.Common.Service;
-using Domain.Common.Units;
-using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace Application.GoodModule.Queries.GetGoodQuery
 {
@@ -29,14 +22,16 @@ namespace Application.GoodModule.Queries.GetGoodQuery
         private readonly IAppDbContext _context;
         private readonly ILogger<GetAssignedGoodQueryHandler> _logger;
 
-        public GetAssignedGoodQueryHandler( IMapper mapper, IAppDbContext context, ILogger<GetAssignedGoodQueryHandler> logger) {
+        public GetAssignedGoodQueryHandler(IMapper mapper, IAppDbContext context, ILogger<GetAssignedGoodQueryHandler> logger)
+        {
             _mapper = mapper;
             _context = context;
             _logger = logger;
         }
 
-        public async Task<UpdateGoodCommand> Handle(GetAssignedGoodQuery request, CancellationToken cancellationToken) {
-            
+        public async Task<UpdateGoodCommand> Handle(GetAssignedGoodQuery request, CancellationToken cancellationToken)
+        {
+
             var operation = await _context.Operations
                 .Include(o => o.Containers)!
                     .ThenInclude(c => c.Goods)
@@ -49,7 +44,8 @@ namespace Application.GoodModule.Queries.GetGoodQuery
                     Goods = _mapper.Map<List<UpdateGoodDto>>(o.Goods!.Where(g => g.ContainerId == null))
                 }).FirstOrDefaultAsync();
 
-            if (operation == null) {
+            if (operation == null)
+            {
                 throw new GhionException(CustomResponse.NotFound($"operation with id = {request.OperationId} is not found"));
             }
 

@@ -1,11 +1,14 @@
 using FluentValidation;
 
-namespace Application.DriverModule.Commands.CreateDriverCommand {
+namespace Application.DriverModule.Commands.CreateDriverCommand
+{
 
-    public class CreateDriverCommandValidator : AbstractValidator<CreateDriverCommand> {
-        
-        public CreateDriverCommandValidator(){
-            
+    public class CreateDriverCommandValidator : AbstractValidator<CreateDriverCommand>
+    {
+
+        public CreateDriverCommandValidator()
+        {
+
             RuleFor(u => u.Fullname)
                 .NotNull()
                 .NotEmpty()

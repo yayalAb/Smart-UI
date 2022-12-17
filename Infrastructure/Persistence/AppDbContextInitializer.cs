@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Domain.Common.DestinationTypes;
+﻿using Domain.Common.DestinationTypes;
 using Domain.Common.DocumentType;
 using Domain.Common.PaymentTypes;
 using Domain.Entities;
@@ -64,7 +63,8 @@ namespace Infrastructure.Persistence
         {
             // Adding Default userGroup
             int groupId = 0;
-            UserGroup defaultGroup = new UserGroup {
+            UserGroup defaultGroup = new UserGroup
+            {
                 Name = "AdminGroup",
                 Responsiblity = "adminstration",
 

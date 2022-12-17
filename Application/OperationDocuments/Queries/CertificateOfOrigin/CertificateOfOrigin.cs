@@ -87,7 +87,8 @@ public class CertificateOfOriginHandler : IRequestHandler<CertificateOfOrigin, C
                         City = o.Company.Address.City,
                         Country = o.Company.Address.Country
                     },
-                    ContactPeople = o.Company.ContactPeople.Select(cp => new ContactPerson{
+                    ContactPeople = o.Company.ContactPeople.Select(cp => new ContactPerson
+                    {
                         TinNumber = cp.TinNumber,
                         Name = cp.Name
                     }).ToList()

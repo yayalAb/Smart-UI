@@ -1,12 +1,8 @@
-using Domain.Entities;
 using Application.Common.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
-using Application.Common.Models;
-
-using Application.Common.Exceptions;
 
 namespace Application.GoodModule.Queries.UnstafedGoodByOperation;
 
@@ -33,7 +29,8 @@ public class OperationUnstafedGoodHandler : IRequestHandler<OperationUnstafedGoo
         _mapper = mapper;
     }
 
-    public async Task<ICollection<FetchGoodDto>> Handle(OperationUnstafedGood request, CancellationToken cancellationToken) {
+    public async Task<ICollection<FetchGoodDto>> Handle(OperationUnstafedGood request, CancellationToken cancellationToken)
+    {
         return request.Type ? await _context.Goods
                         .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
                         .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync() :

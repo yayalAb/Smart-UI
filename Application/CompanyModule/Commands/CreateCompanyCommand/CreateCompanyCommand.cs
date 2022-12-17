@@ -1,12 +1,12 @@
 using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.Common.Models;
+using Application.ContactPersonModule.Commands.ContactPersonCreateCommand;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
 using AutoMapper;
+using Domain.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 
@@ -53,7 +53,7 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand,
                     await _context.SaveChangesAsync(cancellationToken);
                     await transaction.CommitAsync();
 
-                    return CustomResponse.Succeeded("Company Created Successfully" , 201);
+                    return CustomResponse.Succeeded("Company Created Successfully", 201);
 
                 }
                 catch (Exception)

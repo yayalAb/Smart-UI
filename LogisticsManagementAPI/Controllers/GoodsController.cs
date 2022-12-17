@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
 using Application.Common.Exceptions;
-using WebApi.Models;
 using Application.GoodModule.Commands.AssignGoodsCommand;
-using Application.GoodModule.Queries.GetGoodsByLocation;
+using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries.GetAllGoodQuery;
 using Application.GoodModule.Queries.GetGoodQuery;
-using Application.GoodModule.Commands.UpdateGoodCommand;
+using Application.GoodModule.Queries.GetGoodsByLocation;
 using Application.GoodModule.Queries.GoodByContainer;
 using Application.GoodModule.Queries.UnstafedGoodByOperation;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,11 +35,15 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("reassign")]
-        public async Task<IActionResult> ReassignGoods([FromBody] ReassignGoodsCommand command) {
+        public async Task<IActionResult> ReassignGoods([FromBody] ReassignGoodsCommand command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
@@ -49,27 +53,38 @@ namespace WebApi.Controllers
         [Route("Bylocation")]
         public async Task<ActionResult> GoodListByLocation([FromQuery] GetGoodsByLocationQuery query)
         {
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(query));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
 
         [HttpGet("unstafed/{operationId}")]
-        public async Task<ActionResult> Unstafed(int operationId) {
-            try {
-                return Ok(await Mediator.Send(new OperationUnstafedGood{OperationId = operationId, Type = true}));
-            } catch (GhionException ex) {
+        public async Task<ActionResult> Unstafed(int operationId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = true }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
 
         [HttpGet("contained/{operationId}")]
-        public async Task<ActionResult> Contained(int operationId) {
-            try {
-                return Ok(await Mediator.Send(new OperationUnstafedGood{OperationId = operationId, Type = false}));
-            } catch (GhionException ex) {
+        public async Task<ActionResult> Contained(int operationId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = false }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -92,7 +107,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new GetByContainer{ContainerId = containerId}));
+                return Ok(await Mediator.Send(new GetByContainer { ContainerId = containerId }));
             }
             catch (GhionException ex)
             {
@@ -105,7 +120,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new GetAssignedGoodQuery{OperationId = operationId}));
+                return Ok(await Mediator.Send(new GetAssignedGoodQuery { OperationId = operationId }));
             }
             catch (GhionException ex)
             {

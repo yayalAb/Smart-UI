@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-
 using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.Common.Models;
 using Application.TruckAssignmentModule.Commands.CreateTruckAssignment;
 using Application.TruckAssignmentModule.Commands.UpdateTruckAssignment;
 using Application.TruckAssignmentModule.Queries;
 using Application.TruckAssignmentModule.Queries.GetTruckAssignmentPaginatedList;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -78,7 +76,7 @@ namespace WebApi.Controllers
 
             try
             {
-                return Ok(await Mediator.Send(new GetTruckAssignmentByIdQuery{Id = id}));
+                return Ok(await Mediator.Send(new GetTruckAssignmentByIdQuery { Id = id }));
             }
             catch (GhionException ex)
             {

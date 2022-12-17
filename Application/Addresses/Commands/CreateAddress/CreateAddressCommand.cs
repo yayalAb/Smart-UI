@@ -6,15 +6,15 @@ using MediatR;
 
 namespace Application.Addresses.Commands.CreateAddress
 {
-    public record  CreateAddressCommand : IRequest<int>
+    public record CreateAddressCommand : IRequest<int>
     {
         public string? Email { get; init; }
         public string? Phone { get; init; }
         public string? Region { get; init; }
         public string? City { get; init; }
         public string? Subcity { get; init; }
-        public string? Country { get; init; }   
-        public string? POBOX { get; init; } 
+        public string? Country { get; init; }
+        public string? POBOX { get; init; }
     }
     public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, int>
     {
@@ -30,11 +30,11 @@ namespace Application.Addresses.Commands.CreateAddress
             {
                 Email = request.Email,
                 Phone = request.Phone,
-                Region = request.Region,    
-                City = request.City,    
+                Region = request.Region,
+                City = request.City,
                 Subcity = request.Subcity,
                 Country = request.Country,
-                POBOX = request.POBOX,  
+                POBOX = request.POBOX,
             };
 
             await _context.Addresses.AddAsync(newAddress);

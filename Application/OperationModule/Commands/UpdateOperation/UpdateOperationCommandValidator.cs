@@ -1,18 +1,18 @@
 
-using Domain.Common.DestinationTypes;
 using Application.Common.Interfaces;
+using Domain.Common.DestinationTypes;
 using FluentValidation;
 
 namespace Application.OperationModule.Commands.UpdateOperation
 {
-    public class UpdateOperationCommandValidator : AbstractValidator<UpdateOperationCommand>    
+    public class UpdateOperationCommandValidator : AbstractValidator<UpdateOperationCommand>
     {
         private readonly IAppDbContext _context;
 
         public UpdateOperationCommandValidator(IAppDbContext context)
         {
             _context = context;
-        
+
             RuleFor(o => o.Quantity)
                 .NotNull();
             RuleFor(o => o.ShippingAgentId)
@@ -20,24 +20,25 @@ namespace Application.OperationModule.Commands.UpdateOperation
             RuleFor(o => o.PortOfLoadingId)
                .Must(BeFoundInPortsTable)
                .WithMessage("port with the provided id is not found");
-            RuleFor(o =>o.CompanyId)
+            RuleFor(o => o.CompanyId)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInCompanyTable)
                 .WithMessage("company with the provided id is not found");
-            RuleFor(o =>o.DestinationType)
+            RuleFor(o => o.DestinationType)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeOfDestinationType)
                 .WithMessage("destination type is not in the correct format!");
 
         }
-  
+
         private bool BeFoundInShippingAgentsTable(int? shippingAgentId)
         {
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
-        private bool BeOfDestinationType(string DesType) {
+        private bool BeOfDestinationType(string DesType)
+        {
             return DestinationType.Types.Contains(DesType);
         }
         private bool BeFoundInPortsTable(int? portOfloadingId)

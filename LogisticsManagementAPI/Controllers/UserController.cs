@@ -1,18 +1,17 @@
-﻿using Application.User.Commands.AuthenticateUser;
+﻿using Application.Common.Exceptions;
+using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.ChangePassword;
 using Application.User.Commands.CreateUser;
+using Application.User.Commands.DeleteUser;
 using Application.User.Commands.ForgotPassword;
+using Application.User.Commands.Logout;
 using Application.User.Commands.ResetPassword;
 using Application.User.Commands.UpdateUserCommand;
 using Application.User.Queries.GetAllUsersQuery;
 using Application.User.Queries.GetUserQuery;
-using Application.User.Commands.DeleteUser;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Application.User.Commands.Logout;
-using Application.Common.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
-using Application.Common.Models;
 
 namespace WebApi.Controllers
 {
@@ -159,6 +158,6 @@ namespace WebApi.Controllers
             }
 
         }
-        
+
     }
 }

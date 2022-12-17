@@ -1,15 +1,10 @@
-
-
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 namespace Application.User.Commands.Logout
 {
@@ -32,7 +27,8 @@ namespace Application.User.Commands.Logout
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(request.TokenString);
             var expireDate = token.ValidTo.AddMinutes(1);
-            if(await _context.Blacklists.Where(b => b.tokenString == request.TokenString).AnyAsync()){
+            if (await _context.Blacklists.Where(b => b.tokenString == request.TokenString).AnyAsync())
+            {
                 return CustomResponse.Succeeded("already logged out");
             }
             await _context.Blacklists.AddAsync(

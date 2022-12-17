@@ -1,7 +1,3 @@
-using Application.Common.Mappings;
-using Domain.Entities;
-using Application.DriverModule;
-
 namespace Application.GoodModule;
 
 public class GoodDto

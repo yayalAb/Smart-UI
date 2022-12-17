@@ -6,19 +6,19 @@ using FluentValidation;
 
 namespace Application.OperationModule.Commands.CreateOperation
 {
-    public class CreateOperationCommandValidator : AbstractValidator<CreateOperationCommand>    
+    public class CreateOperationCommandValidator : AbstractValidator<CreateOperationCommand>
     {
         private readonly IAppDbContext _context;
 
         public CreateOperationCommandValidator(IAppDbContext context)
         {
-            
+
             _context = context;
 
             RuleFor(o => o.BillNumber)
                 .NotNull()
                 .NotEmpty();
-            RuleFor(o =>o.DestinationType)
+            RuleFor(o => o.DestinationType)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeOfDestinationType)
@@ -28,7 +28,7 @@ namespace Application.OperationModule.Commands.CreateOperation
                 .NotEmpty()
                 .Must(BeFoundInContactPersonTable)
                 .WithMessage("contact person with the provided id is not found");
-            RuleFor(o =>o.CompanyId)
+            RuleFor(o => o.CompanyId)
                 .NotNull()
                 .NotEmpty()
                 .Must(BeFoundInCompanyTable)
@@ -38,10 +38,10 @@ namespace Application.OperationModule.Commands.CreateOperation
             RuleFor(o => o.ShippingAgentId)
                .Must(BeFoundInShippingAgentTable).WithMessage("port with the provided id is not found");
         }
-  
+
         private bool BeFoundInContactPersonTable(int contactPersonId)
         {
-            return  _context.ContactPeople.Find(contactPersonId) != null;
+            return _context.ContactPeople.Find(contactPersonId) != null;
         }
         private bool BeFoundInPortsTable(int portOfloadingId)
         {
@@ -49,13 +49,14 @@ namespace Application.OperationModule.Commands.CreateOperation
         }
         private bool BeFoundInCompanyTable(int companyId)
         {
-            return  _context.Companies.Find(companyId) != null;
+            return _context.Companies.Find(companyId) != null;
         }
         private bool BeFoundInShippingAgentTable(int? shippingAgentId)
         {
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
-        private bool BeOfDestinationType(string DesType) {
+        private bool BeOfDestinationType(string DesType)
+        {
             return DestinationType.Types.Contains(DesType);
         }
     }

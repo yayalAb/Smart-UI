@@ -10,7 +10,7 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
     {
         private readonly IAppDbContext _context;
 
-        public CreateUserGroupCommandValidator( IAppDbContext context)
+        public CreateUserGroupCommandValidator(IAppDbContext context)
         {
             RuleFor(g => g.Name)
                 .NotNull()
@@ -18,13 +18,13 @@ namespace Application.UserGroupModule.Commands.CreateUserGroup
                 .Must(BeUnique).WithMessage("group name should be unique");
             RuleFor(g => g.UserRoles)
                 .Must(AllHaveValidPage).WithMessage(" one or more userRole  have invalid page name ");
-          _context = context;
+            _context = context;
         }
 
 
-        private bool BeUnique(CreateUserGroupCommand userGroup ,string name)
+        private bool BeUnique(CreateUserGroupCommand userGroup, string name)
         {
-            return !_context.UserGroups.Where(ug => ug.Name == name ).Any();  
+            return !_context.UserGroups.Where(ug => ug.Name == name).Any();
         }
         private bool AllHaveValidPage(List<UserRoleDto> userRoles)
         {

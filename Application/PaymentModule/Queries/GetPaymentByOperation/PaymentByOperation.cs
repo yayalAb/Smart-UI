@@ -7,15 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.PaymentModule.Queries.GetPaymentByOperation;
 
-public record PaymentByOperation : IRequest<ICollection<OperationPaymentDto>> {
-    public int OperationId {get; init;}
+public record PaymentByOperation : IRequest<ICollection<OperationPaymentDto>>
+{
+    public int OperationId { get; init; }
 }
 
-public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, ICollection<OperationPaymentDto>> {
+public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, ICollection<OperationPaymentDto>>
+{
 
     private readonly IAppDbContext _context;
 
-    public PaymentByOperationHandler(IAppDbContext context) {
+    public PaymentByOperationHandler(IAppDbContext context)
+    {
         _context = context;
     }
 
@@ -25,17 +28,19 @@ public class PaymentByOperationHandler : IRequestHandler<PaymentByOperation, ICo
 
         ICollection<OperationPaymentDto> reports = new List<OperationPaymentDto>();
 
-        reports.Add(new OperationPaymentDto {
+        reports.Add(new OperationPaymentDto
+        {
             Name = "Shipping Agent Fee",
             Data = from payment in payments where ShippingAgentPaymentType.Types.Contains(payment.Name) select payment,
         });
 
-        reports.Add(new OperationPaymentDto {
+        reports.Add(new OperationPaymentDto
+        {
             Name = "Terminal Port Fee",
             Data = from payment in payments where TerminalPortPaymentType.Types.Contains(payment.Name) select payment,
         });
 
         return reports;
-        
+
     }
 }

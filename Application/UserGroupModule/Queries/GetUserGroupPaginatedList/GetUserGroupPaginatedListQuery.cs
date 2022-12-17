@@ -11,25 +11,25 @@ namespace Application.UserGroupModule.Queries.GetUserGroupPaginatedList
     public record GetUserGroupPaginatedListQuery : IRequest<PaginatedList<UserGroupDto>>
     {
 
-    public int PageCount { get; init; } = 1;
-    public int PageSize { get; init; } = 10;
+        public int PageCount { get; init; } = 1;
+        public int PageSize { get; init; } = 10;
     }
     public class GetUserGroupPaginatedListQueryHandler : IRequestHandler<GetUserGroupPaginatedListQuery, PaginatedList<UserGroupDto>>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetUserGroupPaginatedListQueryHandler(IAppDbContext context , IMapper mapper)
+        public GetUserGroupPaginatedListQueryHandler(IAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
         public async Task<PaginatedList<UserGroupDto>> Handle(GetUserGroupPaginatedListQuery request, CancellationToken cancellationToken)
         {
-            return await PaginatedList<UserGroupDto>.CreateAsync( _context.UserGroups
+            return await PaginatedList<UserGroupDto>.CreateAsync(_context.UserGroups
                 .Include(ug => ug.UserRoles)
                 .ProjectTo<UserGroupDto>(_mapper.ConfigurationProvider)
-                , request.PageCount , request.PageSize);
+                , request.PageCount, request.PageSize);
         }
     }
 }

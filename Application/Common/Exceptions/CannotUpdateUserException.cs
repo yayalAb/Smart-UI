@@ -1,12 +1,15 @@
 
 namespace Application.Common.Exceptions;
 
-public class CannotUpdateUserException : Exception {
+public class CannotUpdateUserException : Exception
+{
 
-    public CannotUpdateUserException() : base("could not create user") {
+    public CannotUpdateUserException() : base("could not create user")
+    {
         Errors = new List<string>();
     }
-    public CannotUpdateUserException(List<string> errors):this() {
+    public CannotUpdateUserException(List<string> errors) : this()
+    {
         Errors = errors;
 
     }

@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     public class Payment : BaseAuditableEntity
     {
-        public string Name { get; set; }    
+        public string Name { get; set; }
         public string Type { get; set; } = null!;
         public DateTime PaymentDate { get; set; }
         public string PaymentMethod { get; set; } = null!;
@@ -15,7 +15,7 @@ namespace Domain.Entities
         public int OperationId { get; set; }
         public int? ShippingAgentId { get; set; }
         public string? DONumber { get; set; }
-    
+
         public Operation Operation { get; set; }
         public ShippingAgent ShippingAgent { get; set; }
     }

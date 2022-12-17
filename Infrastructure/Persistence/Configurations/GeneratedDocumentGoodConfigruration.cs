@@ -9,10 +9,10 @@ public class GeneratedDocumentGoodConfiguration : IEntityTypeConfiguration<Gener
     {
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-        
+
         entity.Property(e => e.Quantity)
             .IsRequired(true);
-        
+
         entity.HasOne(e => e.Good)
             .WithMany(o => o.DocumentGoods)
             .HasForeignKey(e => e.GoodId);

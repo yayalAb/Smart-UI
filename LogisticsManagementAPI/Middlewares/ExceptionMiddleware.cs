@@ -1,8 +1,7 @@
 ﻿using Application.Common.Exceptions;
-using WebApi.Models;
 using System.Net;
 using System.Security.Authentication;
-using Newtonsoft.Json.Linq;
+using WebApi.Models;
 
 namespace WebApi.Middlewares
 {
@@ -24,8 +23,8 @@ namespace WebApi.Middlewares
             catch (Exception ex)
             {
 
-                 _logger.LogError($"Something went wrong: {ex}");
-                
+                _logger.LogError($"Something went wrong: {ex}");
+
 
                 await HandleExceptionAsync(httpContext, ex);
             }
@@ -38,16 +37,16 @@ namespace WebApi.Middlewares
             {
                 ValidationException => (int)HttpStatusCode.BadRequest,
                 NotFoundException => (int)HttpStatusCode.NotFound,
-                InvalidLoginException => (int)HttpStatusCode.BadRequest,    
+                InvalidLoginException => (int)HttpStatusCode.BadRequest,
                 AuthenticationException => (int)HttpStatusCode.Unauthorized,
                 ForbiddenAccessException => (int)HttpStatusCode.Unauthorized,
-                CantCreateUserException => (int)HttpStatusCode.BadRequest, 
+                CantCreateUserException => (int)HttpStatusCode.BadRequest,
                 PasswordResetException => (int)HttpStatusCode.BadRequest,
-                CustomBadRequestException   => (int)HttpStatusCode.BadRequest,
+                CustomBadRequestException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError,
             };
             var message = exception.Message;
-           
+
 
             switch (exception)
             {
@@ -73,11 +72,11 @@ namespace WebApi.Middlewares
                         message = ex2.Message + "\n" + errors;
                     }
                     break;
-                
+
             }
-          
+
             await context.Response.WriteAsync(new ErrorDetail()
-            {   
+            {
                 StatusCode = context.Response.StatusCode,
                 Message = message,
             }.ToString());

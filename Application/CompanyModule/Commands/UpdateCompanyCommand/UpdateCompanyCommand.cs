@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Application.Common.Interfaces;
+using Application.Common.Models;
+using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
+using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using Application.AddressModule.Commands.AddressUpdateCommand;
-using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
-using Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Application.Common.Models;
-using Application.Common.Exceptions;
-using Application.ShippingAgentModule.Commands.CreateShippingAgent;
-using AutoMapper;
-using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
 
 namespace Application.CompanyModule.Commands.UpdateCompanyCommand
 {

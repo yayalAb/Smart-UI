@@ -23,22 +23,22 @@ public class BackgroundService : IHostedService
 
         Action action = () =>
         {
-        	var t1 = Task.Delay(firstInterval);
-        	t1.Wait();
-        	//clean expired tokens form black list at expected time
-        	CleanBlackList(null);
-        	//now schedule it to be called every 24 hours for future
-        	// timer repeats call to CleanBlacklist every 24 hours.
-        	_timer = new Timer(
-        		CleanBlackList,
-        		null,
-        		TimeSpan.Zero,
-        		interval
-        	);
+            var t1 = Task.Delay(firstInterval);
+            t1.Wait();
+            //clean expired tokens form black list at expected time
+            CleanBlackList(null);
+            //now schedule it to be called every 24 hours for future
+            // timer repeats call to CleanBlacklist every 24 hours.
+            _timer = new Timer(
+                CleanBlackList,
+                null,
+                TimeSpan.Zero,
+                interval
+            );
         };
         Task.Run(action);
 
-       // starts the timer from when the application is first started
+        // starts the timer from when the application is first started
         // _timer = new Timer(
         //             CleanBlackList,
         //             null,

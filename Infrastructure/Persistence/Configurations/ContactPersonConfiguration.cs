@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson> {
-    
-    public void Configure(EntityTypeBuilder<ContactPerson> entity) {
+public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson>
+{
+
+    public void Configure(EntityTypeBuilder<ContactPerson> entity)
+    {
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
@@ -28,7 +30,7 @@ public class ContactPersonConfiguration : IEntityTypeConfiguration<ContactPerson
         entity.HasOne(e => e.Operation)
             .WithOne(o => o.ContactPerson)
             .HasForeignKey<Operation>(o => o.ContactPersonId)
-            .OnDelete(DeleteBehavior.ClientSetNull);      
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

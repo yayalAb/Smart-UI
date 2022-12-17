@@ -16,56 +16,74 @@ namespace WebApi.Controllers
 
     public class PaymentController : ApiControllerBase
     {
-    
-  // GET api/<PaymentController>/
+
+        // GET api/<PaymentController>/
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query) {
-            
-            try{
+        public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query)
+        {
+
+            try
+            {
                 return Ok(await Mediator.Send(query));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            
+
         }
 
         // GET api/<PaymentController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            try{
-                return Ok(await Mediator.Send(new GetPaymentByIdQuery{Id = id}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new GetPaymentByIdQuery { Id = id }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
 
         [HttpGet("Dashboard")]
-        public async Task<IActionResult> TotalPayment() {
-            try{
+        public async Task<IActionResult> TotalPayment()
+        {
+            try
+            {
                 return Ok(await Mediator.Send(new TotalPayments()));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
 
         [HttpGet("ByOperation/{operationId}")]
-        public async Task<IActionResult> paymentByOperation(int operationId) {
-            try{
+        public async Task<IActionResult> paymentByOperation(int operationId)
+        {
+            try
+            {
                 return Ok(await Mediator.Send(new PaymentByOperation { OperationId = operationId }));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
         }
 
         // POST api/<PaymentController>
         [HttpPost]
-        public async Task<IActionResult> CreatePayment( [FromBody] CreatePaymentCommand command)
+        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
         {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
@@ -80,14 +98,15 @@ namespace WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdatePayment([FromBody] UpdatePymentCommand command)
         {
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            
+
         }
 
 
@@ -95,9 +114,12 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try{
-                return Ok( await Mediator.Send(new DeletePaymentCommand{Id = id})) ;
-            } catch(GhionException ex){
+            try
+            {
+                return Ok(await Mediator.Send(new DeletePaymentCommand { Id = id }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }

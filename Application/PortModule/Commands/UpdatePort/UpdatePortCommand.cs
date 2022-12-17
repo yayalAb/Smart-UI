@@ -23,21 +23,21 @@ namespace Application.PortModule.Commands.UpdatePort
         {
             _context = context;
         }
-        public async  Task<CustomResponse> Handle(UpdatePortCommand request, CancellationToken cancellationToken)
+        public async Task<CustomResponse> Handle(UpdatePortCommand request, CancellationToken cancellationToken)
         {
             //check if port exists
             var oldPort = await _context.Ports.FindAsync(request.Id);
-            if(oldPort == null)
+            if (oldPort == null)
             {
                 throw new GhionException(CustomResponse.NotFound("Port"));
             }
             // update port
             oldPort.PortNumber = request.PortNumber;
-            oldPort.Country = request.Country;  
+            oldPort.Country = request.Country;
             oldPort.Region = request.Region;
             oldPort.Vollume = request.Vollume;
 
-             _context.Ports.Update(oldPort);
+            _context.Ports.Update(oldPort);
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Port Updated Successfully!");
         }

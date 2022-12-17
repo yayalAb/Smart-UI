@@ -1,6 +1,3 @@
-using Application.Common.Mappings;
-using Domain.Entities;
-
 namespace Application.TruckAssignmentModule.Queries.GetTruckAssignmentById;
 public class TruckAssignmentByIdDto
 {

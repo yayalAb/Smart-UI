@@ -1,12 +1,9 @@
-using Application.SettingModule.Command.UpdateSettingCommand;
-using Application.SettingModule.Command.CreateSettingCommand;
-using Application.SettingModule.Queries.GetSettingQuery;
-using Microsoft.AspNetCore.Mvc;
-using Application.Common.Models;
 using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.SettingModule.Queries.DefaultCompany;
 using Application.Image.GetImage;
+using Application.SettingModule.Command.UpdateSettingCommand;
+using Application.SettingModule.Queries.DefaultCompany;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers;
 
@@ -16,20 +13,26 @@ public class SettingController : ApiControllerBase
     public async Task<ActionResult> update(UpdateSetting command)
     {
 
-        try {
+        try
+        {
             return Ok(await Mediator.Send(command));
-        } catch (GhionException ex) {
+        }
+        catch (GhionException ex)
+        {
             return AppdiveResponse.Response(this, ex.Response);
         }
-        
+
     }
 
     [HttpGet]
     public async Task<ActionResult> read()
     {
-        try {
+        try
+        {
             return Ok(await Mediator.Send(new GetDefaultCompany()));
-        } catch (GhionException ex) {
+        }
+        catch (GhionException ex)
+        {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }
@@ -37,9 +40,12 @@ public class SettingController : ApiControllerBase
     [HttpGet("image/{type}/{id}")]
     public async Task<ActionResult> getImage(string type, int id)
     {
-        try {
-            return Ok(await Mediator.Send(new GetImageById{Id = id, Type = type}));
-        } catch (GhionException ex) {
+        try
+        {
+            return Ok(await Mediator.Send(new GetImageById { Id = id, Type = type }));
+        }
+        catch (GhionException ex)
+        {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }

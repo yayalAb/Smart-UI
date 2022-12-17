@@ -1,12 +1,8 @@
-using Application.GoodModule;
-using Application.GoodModule.Queries;
-using Domain.Entities;
-
 namespace Application.OperationDocuments.Queries.Number1
 {
     public class Number1Dto
     {
-        public DateTime? Date { get; set;} /// now
+        public DateTime? Date { get; set; } /// now
         public string? BillOfLoadingNumber { get; set; }
         public string? PortOfLoadingCountry { get; set; }
         public string? DefaultCompanyName { get; set; }
@@ -23,11 +19,11 @@ namespace Application.OperationDocuments.Queries.Number1
         public string? ConnaissementNumber { get; set; } // operation
         public string? CountryOfOrigin { get; set; } // operation
         public float? REGTax { get; set; } // operation
-        public ICollection<DocGoodDto> Goods { get; set;  }
+        public ICollection<DocGoodDto> Goods { get; set; }
         public ICollection<No1ContainerDto> Containers { get; set; }
         public string? SourceLocation { get; set; }//??????????????
         public string? DestinationLocation { get; set; }//??????????
-        
+
 
     }
 }

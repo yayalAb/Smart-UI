@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class SettingConfiguration : IEntityTypeConfiguration<Setting> {
+public class SettingConfiguration : IEntityTypeConfiguration<Setting>
+{
 
-    public void Configure(EntityTypeBuilder<Setting> entity) {
+    public void Configure(EntityTypeBuilder<Setting> entity)
+    {
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
@@ -34,7 +36,7 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting> {
         entity.Property(e => e.Protocol)
             .HasMaxLength(10)
             .IsRequired(true);
-        
+
         entity.Property(e => e.CompanyId)
             .IsRequired(true);
     }

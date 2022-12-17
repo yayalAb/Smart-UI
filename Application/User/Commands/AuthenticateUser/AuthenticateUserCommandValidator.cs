@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.User.Commands.AuthenticateUser
 {
@@ -11,13 +6,13 @@ namespace Application.User.Commands.AuthenticateUser
     {
         public AuthenticateUserCommandValidator()
         {
-            RuleFor(u=>u.Email)
+            RuleFor(u => u.Email)
                 .NotEmpty()
-                .NotNull()  
+                .NotNull()
                 .EmailAddress();
-            RuleFor(u=>u.Password)
+            RuleFor(u => u.Password)
                 .NotEmpty()
-                .NotNull();    
+                .NotNull();
         }
     }
 }

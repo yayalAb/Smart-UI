@@ -113,22 +113,28 @@ public class AssignGoodsCommandValidator : AbstractValidator<AssignGoodsCommand>
         return true;
     }
 
-    private bool BeOfCurrencyType(IEnumerable<string> units){
+    private bool BeOfCurrencyType(IEnumerable<string> units)
+    {
 
-        foreach (var unit in units) {
-            if(!Currency.Currencies.ToList().Contains(unit)){
+        foreach (var unit in units)
+        {
+            if (!Currency.Currencies.ToList().Contains(unit))
+            {
                 return false;
             }
         }
 
         return true;
-        
+
     }
 
-    private bool BeOfWeightUnitType(IEnumerable<string> units){
-        
-        foreach (var unit in units) {
-            if(!WeightUnits.Units.ToList().Contains(unit)){
+    private bool BeOfWeightUnitType(IEnumerable<string> units)
+    {
+
+        foreach (var unit in units)
+        {
+            if (!WeightUnits.Units.ToList().Contains(unit))
+            {
                 return false;
             }
         }

@@ -1,11 +1,11 @@
+using Application.AddressModule.Commands.AddressUpdateCommand;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using Application.AddressModule.Commands.AddressUpdateCommand;
 using Microsoft.EntityFrameworkCore;
-using Application.Common.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Application.User.Commands.UpdateUserCommand;
 

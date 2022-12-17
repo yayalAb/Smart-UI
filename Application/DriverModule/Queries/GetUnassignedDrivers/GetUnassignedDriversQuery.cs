@@ -5,15 +5,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.DriverModule.Queries.GetUnassignedDrivers;
-public record GetUnassignedDriversQuery : IRequest<List<UnassignedDriverDto>>{
-    
+public record GetUnassignedDriversQuery : IRequest<List<UnassignedDriverDto>>
+{
+
 }
 public class GetUnassignedDriversQueryHandler : IRequestHandler<GetUnassignedDriversQuery, List<UnassignedDriverDto>>
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetUnassignedDriversQueryHandler(IAppDbContext context , IMapper mapper)
+    public GetUnassignedDriversQueryHandler(IAppDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

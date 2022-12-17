@@ -3,7 +3,7 @@
 
 namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 {
-    public class UpdateShippingAgentCommandValidator : AbstractValidator<UpdateShippingAgentCommand>    
+    public class UpdateShippingAgentCommandValidator : AbstractValidator<UpdateShippingAgentCommand>
     {
         public UpdateShippingAgentCommandValidator()
         {

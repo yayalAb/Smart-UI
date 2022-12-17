@@ -4,14 +4,14 @@ using Domain.Entities;
 namespace Application.OperationDocuments.Queries;
 public class DocGoodDto : IMapFrom<Good>
 {
-    public int Id { get; set;}
+    public int Id { get; set; }
     public string Description { get; set; }
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
     public float Weight { get; set; }
     public int NumberOfPackages { get; set; }
     public string Type { get; set; }
-    public string? Location {get; set;}
+    public string? Location { get; set; }
     public string? Unit { get; set; }
     public float? UnitPrice { get; set; }
     public string? ChasisNumber { get; set; }

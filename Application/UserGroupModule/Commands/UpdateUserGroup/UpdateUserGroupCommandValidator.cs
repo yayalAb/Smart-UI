@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.UserGroupModule.Commands.UpdateUserGroup
 {
-    public class UpdateUserGroupCommandValidator : AbstractValidator<UpdateUserGroupCommand>    
+    public class UpdateUserGroupCommandValidator : AbstractValidator<UpdateUserGroupCommand>
     {
         public UpdateUserGroupCommandValidator()
         {

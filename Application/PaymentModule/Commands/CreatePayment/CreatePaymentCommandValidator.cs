@@ -10,7 +10,8 @@ namespace Application.PaymentModule.Commands.CreatePayment
     {
         private readonly IAppDbContext _context;
 
-        public CreatePaymentCommandValidator(IAppDbContext context) {
+        public CreatePaymentCommandValidator(IAppDbContext context)
+        {
 
             _context = context;
 
@@ -48,17 +49,19 @@ namespace Application.PaymentModule.Commands.CreatePayment
         {
             return _context.Operations.Find(operationId) != null;
         }
-        
+
         private bool BeRegisteredShippingAgentId(int? shippingAgentId)
         {
             return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
-        private bool OfType(string Name) {
+        private bool OfType(string Name)
+        {
             return ShippingAgentPaymentType.Types.Contains(Name) || TerminalPortPaymentType.Types.Contains(Name);
         }
 
-        private bool BeOfType(string Type) {
+        private bool BeOfType(string Type)
+        {
             return Type == ShippingAgentPaymentType.Name || Type == TerminalPortPaymentType.Name;
         }
 

@@ -1,15 +1,13 @@
 ﻿
 using Application.Common.Mappings;
-using Application.OperationModule.Queries;
-using Application.ShippingAgentModule.Queries;
 using Domain.Entities;
 
 namespace Application.PaymentModule.Queries
 {
     public class PaymentDto : IMapFrom<Payment>
     {
-        public int Id { get; set; } 
-        public string Name { get; set; }    
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string Type { get; set; }
         public DateTime PaymentDate { get; set; }
         public string PaymentMethod { get; set; }
@@ -20,7 +18,7 @@ namespace Application.PaymentModule.Queries
         public int OperationId { get; set; }
         public int ShippingAgentId { get; set; }
         public string? DONumber { get; set; }
-        public GetPaymentOperationDto Operation{get; set;}
-        public GetPaymentShippingAgentDto ShippingAgent {get; set;}
+        public GetPaymentOperationDto Operation { get; set; }
+        public GetPaymentShippingAgentDto ShippingAgent { get; set; }
     }
 }

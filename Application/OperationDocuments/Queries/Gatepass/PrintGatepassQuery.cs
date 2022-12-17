@@ -1,12 +1,12 @@
 
-using MediatR;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.OperationDocuments.Queries.Gatepass.GPDtos;
+using Application.OperationFollowupModule;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Application.OperationFollowupModule;
-using Application.Common.Exceptions;
-using Application.OperationDocuments.Queries.Gatepass.GPDtos;
 
 namespace Application.OperationDocuments.Queries.Gatepass;
 
@@ -27,7 +27,8 @@ public class PrintGatepassQueryHandler : IRequestHandler<PrintGatepassQuery, GPT
         _operationEventHandler = operationEventHandler;
     }
 
-    public async Task<GPTruckAssignmentDto> Handle(PrintGatepassQuery request, CancellationToken cancellationToken) {
+    public async Task<GPTruckAssignmentDto> Handle(PrintGatepassQuery request, CancellationToken cancellationToken)
+    {
 
         //fetch gatepass form data 
         var data = await _context.TruckAssignments
@@ -38,23 +39,27 @@ public class PrintGatepassQueryHandler : IRequestHandler<PrintGatepassQuery, GPT
            .Include(ta => ta.Goods)
            .Include(ta => ta.Containers)
            .Include(ta => ta.Operation)
-           .Select(ta => new GPTruckAssignmentDto {
-               Operation = new GPOperationDto {
-                    Localization = ta.Operation.Localization,
-                    SNumber = ta.Operation.SNumber
+           .Select(ta => new GPTruckAssignmentDto
+           {
+               Operation = new GPOperationDto
+               {
+                   Localization = ta.Operation.Localization,
+                   SNumber = ta.Operation.SNumber
                },
-               Good = ta.Goods == null ? null : ta.Goods.Select(g => new GPGoodDto {
-                    Weight = g.Weight,
-                    Quantity = g.Quantity,
-                    ContainerNumber = g.Container == null ? null : g.Container.ContianerNumber,
+               Good = ta.Goods == null ? null : ta.Goods.Select(g => new GPGoodDto
+               {
+                   Weight = g.Weight,
+                   Quantity = g.Quantity,
+                   ContainerNumber = g.Container == null ? null : g.Container.ContianerNumber,
                }).ToList(),
                TruckNumber = ta.Truck.TruckNumber
            }).FirstAsync();
 
-        if(data == null){
+        if (data == null)
+        {
             throw new GhionException(CustomResponse.NotFound("There is no TruckAssignment with the given Id!"));
         }
-        
+
         return data;
 
     }

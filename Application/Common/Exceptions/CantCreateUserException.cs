@@ -7,9 +7,9 @@ namespace Application.Common.Exceptions
         {
             Errors = new List<string>();
         }
-        public CantCreateUserException(List<string> errors):this()
+        public CantCreateUserException(List<string> errors) : this()
         {
-            Errors = errors;    
+            Errors = errors;
 
         }
         public IEnumerable<string> Errors { get; }

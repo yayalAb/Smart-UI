@@ -6,10 +6,11 @@ namespace Infrastructure.Persistence.Configurations;
 
 public class OperationConfiguration : IEntityTypeConfiguration<Operation>
 {
-    public void Configure(EntityTypeBuilder<Operation> entity) {
+    public void Configure(EntityTypeBuilder<Operation> entity)
+    {
 
         entity.Property(e => e.OpenedDate)
-            .IsRequired(true)   
+            .IsRequired(true)
             .HasColumnType("datetime");
 
         entity.Property(e => e.OperationNumber)
@@ -27,29 +28,29 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasMaxLength(45);
 
         entity.Property(e => e.Status)
-            .IsRequired(true) 
+            .IsRequired(true)
             .HasMaxLength(45);
-//---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         entity.Property(e => e.SNumber)
-            .IsRequired(false);   
+            .IsRequired(false);
 
         entity.Property(e => e.SDate)
-            .IsRequired(false)   
+            .IsRequired(false)
             .HasColumnType("datetime");
 
         entity.Property(e => e.RecepientName)
-            .IsRequired(false); 
+            .IsRequired(false);
 
         entity.Property(e => e.VesselName)
-            .IsRequired(false); 
+            .IsRequired(false);
 
         entity.Property(e => e.ArrivalDate)
-            .IsRequired(false)   
+            .IsRequired(false)
             .HasColumnType("datetime");
         entity.Property(e => e.CountryOfOrigin)
             .IsRequired(false);
 
-//--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         entity.HasOne(d => d.Company)
             .WithMany(p => p.Operations)
             .HasForeignKey(d => d.CompanyId);

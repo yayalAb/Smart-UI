@@ -1,18 +1,20 @@
-using MediatR;
+using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Application.TruckModule.Commands.ChangeTruckImageCommand
 {
-    public record ChangeTruckImageCommand : IRequest<Truck> {
+    public record ChangeTruckImageCommand : IRequest<Truck>
+    {
         public int Id { get; set; }
         public IFormFile? ImageFile { get; set; }
     }
 
-    public class ChangeTruckImageCommandHandler : IRequestHandler<ChangeTruckImageCommand, Truck> {
+    public class ChangeTruckImageCommandHandler : IRequestHandler<ChangeTruckImageCommand, Truck>
+    {
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
@@ -20,22 +22,25 @@ namespace Application.TruckModule.Commands.ChangeTruckImageCommand
         private readonly IFileUploadService _fileUploadService;
 
         public ChangeTruckImageCommandHandler(
-            IIdentityService identityService, 
-            IAppDbContext context, 
-            ILogger<ChangeTruckImageCommandHandler> logger, 
+            IIdentityService identityService,
+            IAppDbContext context,
+            ILogger<ChangeTruckImageCommandHandler> logger,
             IFileUploadService fileUploadService
-        ) {
+        )
+        {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _fileUploadService = fileUploadService;
         }
 
-        public async Task<Truck> Handle(ChangeTruckImageCommand request, CancellationToken cancellationToken) {
+        public async Task<Truck> Handle(ChangeTruckImageCommand request, CancellationToken cancellationToken)
+        {
 
             Truck found_truck = await _context.Trucks.FindAsync(request.Id);
 
-            if(found_truck == null){
+            if (found_truck == null)
+            {
                 throw new Exception("Truck not found");
             }
 

@@ -1,26 +1,30 @@
+using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
-using Application.Common.Interfaces;
-using Application.Common.Exceptions;
-using Application.Common.Models;
 
 namespace Application.SettingModule.Queries.GetSettingQuery;
 
-public record GetSettings : IRequest<Setting> {}
+public record GetSettings : IRequest<Setting> { }
 
-public class GetSettingsHandler : IRequestHandler<GetSettings, Setting> {
-    
+public class GetSettingsHandler : IRequestHandler<GetSettings, Setting>
+{
+
     private readonly IAppDbContext _context;
 
-    public GetSettingsHandler(IAppDbContext context) {
+    public GetSettingsHandler(IAppDbContext context)
+    {
         _context = context;
     }
 
-    public async Task<Setting> Handle(GetSettings request, CancellationToken cancellationToken){
-        
+    public async Task<Setting> Handle(GetSettings request, CancellationToken cancellationToken)
+    {
+
         var setting = _context.Settings.FirstOrDefault();
 
-        if(setting == null){
+        if (setting == null)
+        {
             throw new GhionException(CustomResponse.Failed("Setting not found!"));
         }
 

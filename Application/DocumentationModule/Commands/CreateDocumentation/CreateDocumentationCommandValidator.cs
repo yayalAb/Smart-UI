@@ -1,20 +1,19 @@
 ﻿
 using Application.Common.Interfaces;
-using Domain.Common.DocumentType;
 using Domain.Enums;
 using FluentValidation;
 using static Domain.Common.DocumentType.DocumentType;
 
 namespace Application.DocumentationModule.Commands.CreateDocumentation
 {
-    public class CreateDocumentationCommandValidator :AbstractValidator<CreateDocumentationCommand> 
+    public class CreateDocumentationCommandValidator : AbstractValidator<CreateDocumentationCommand>
     {
         private readonly IAppDbContext _context;
 
         public CreateDocumentationCommandValidator(IAppDbContext context)
         {
             _context = context;
-            
+
             RuleFor(d => d.OperationId)
                 .NotNull()
                 .Must(BeFoundInDb).WithMessage("operation with the provided id is not found");
@@ -47,8 +46,9 @@ namespace Application.DocumentationModule.Commands.CreateDocumentation
             return _context.Operations.Find(operationId) != null;
         }
 
-        private bool BeOfType(string Type){
-            return DocumentationType.Types.Contains(Type) && Type != Enum.GetName(typeof(Documents) , Documents.Waybill);
+        private bool BeOfType(string Type)
+        {
+            return DocumentationType.Types.Contains(Type) && Type != Enum.GetName(typeof(Documents), Documents.Waybill);
         }
     }
 }

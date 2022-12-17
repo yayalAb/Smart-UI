@@ -12,7 +12,6 @@ using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
 using Application.GoodModule.Commands.UpdateGoodCommand;
-using Application.GoodModule.Queries;
 using Application.OperationDocuments.Queries;
 using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Common;
@@ -44,46 +43,46 @@ namespace Application.Common.Mappings
 
         private void ApplyMappingsFromAssembly(Assembly assembly)
         {
-          
+
             CreateMap<UserRoleDto, AppUserRole>();
             CreateMap<FetchUserRoleDto, AppUserRole>();
 
             CreateMap<AddressDto, Address>().ReverseMap();
-            CreateMap<UpdateAddressDto , Address>().ReverseMap();
-            CreateMap<ContactPersonCreateCommand , ContactPerson>();
-            CreateMap<ContactPersonUpdateCommand , ContactPerson>();
-            CreateMap<CreateCompanyCommand , Company>();
-            CreateMap<UpdateCompanyCommand , Company>();
-            CreateMap<BankInformationDto , BankInformation>();
-            CreateMap<UpdateBankInformationDto , BankInformation>();
+            CreateMap<UpdateAddressDto, Address>().ReverseMap();
+            CreateMap<ContactPersonCreateCommand, ContactPerson>();
+            CreateMap<ContactPersonUpdateCommand, ContactPerson>();
+            CreateMap<CreateCompanyCommand, Company>();
+            CreateMap<UpdateCompanyCommand, Company>();
+            CreateMap<BankInformationDto, BankInformation>();
+            CreateMap<UpdateBankInformationDto, BankInformation>();
 
-            CreateMap<CreateDocumentationCommand , Documentation>();
-            CreateMap<UpdateDocumentationCommand , Documentation>();
+            CreateMap<CreateDocumentationCommand, Documentation>();
+            CreateMap<UpdateDocumentationCommand, Documentation>();
 
             CreateMap<CreateShippingAgentCommand, ShippingAgent>();
 
             CreateMap<UpdatePymentCommand, Payment>();
-            CreateMap<CreatePaymentCommand , Payment>();
+            CreateMap<CreatePaymentCommand, Payment>();
             CreateMap<CreateOperationCommand, Operation>();
             CreateMap<UpdateOperationCommand, Operation>();
             CreateMap<CreateContainerCommand, Container>();
             CreateMap<CreateSingleContainer, Container>();
-            CreateMap<GoodDto , Good>();
+            CreateMap<GoodDto, Good>();
             CreateMap<ASgContainerDto, Container>();
             CreateMap<ContainerDto, Container>();
-            CreateMap<UpdateGoodDto , Good>().ReverseMap();
-            CreateMap<CreateTruckCommand , Truck>();
+            CreateMap<UpdateGoodDto, Good>().ReverseMap();
+            CreateMap<CreateTruckCommand, Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
-            CreateMap<UpdateGoodContainerDto , Container>().ReverseMap();
+            CreateMap<UpdateGoodContainerDto, Container>().ReverseMap();
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
             CreateMap<SettingDto, Setting>().ReverseMap();
             CreateMap<AddressUpdateCommand, Address>().ReverseMap();
             CreateMap<BankInformationUpdateDto, BankInformation>().ReverseMap();
-            CreateMap<AllDocDto , CommercialInvoiceDto2>();
-            CreateMap<AllDocDto , PackingListDto>();
-            CreateMap<AllDocDto , TruckWayBillDto2>();
-            CreateMap<AllDocDto , WaybillDto>();
-            
+            CreateMap<AllDocDto, CommercialInvoiceDto2>();
+            CreateMap<AllDocDto, PackingListDto>();
+            CreateMap<AllDocDto, TruckWayBillDto2>();
+            CreateMap<AllDocDto, WaybillDto>();
+
 
             var mapFromType = typeof(IMapFrom<>);
 
@@ -95,7 +94,8 @@ namespace Application.Common.Mappings
 
             var argumentTypes = new Type[] { typeof(Profile) };
 
-            foreach (var type in types) {
+            foreach (var type in types)
+            {
 
                 var instance = Activator.CreateInstance(type);
 

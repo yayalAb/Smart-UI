@@ -4,8 +4,9 @@ using Domain.Entities;
 
 namespace Application.SettingModule.Command.UpdateSettingCommand;
 
-public class CompanyUpdateDto: IMapFrom<Company> {
-    public int Id {get; set;}
+public class CompanyUpdateDto : IMapFrom<Company>
+{
+    public int Id { get; set; }
     public string? Name { get; set; }
     public string? TinNumber { get; set; }
     public string? CodeNIF { get; set; }

@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using Domain.Common;
 namespace Domain.Entities;
 
@@ -9,8 +8,8 @@ public class Operation : BaseAuditableEntity
     public string BillNumber { get; set; }
     public string? ShippingLine { get; set; }
     public string? GoodsDescription { get; set; }
-    public float Quantity { get; set; }= 0;
-    public float GrossWeight { get; set; }= 0;
+    public float Quantity { get; set; } = 0;
+    public float GrossWeight { get; set; } = 0;
     public string? ATA { get; set; }
     public string? FZIN { get; set; }
     public string? FZOUT { get; set; }
@@ -43,7 +42,7 @@ public class Operation : BaseAuditableEntity
     public int ContactPersonId { get; set; }
     //--------------------------------------//
     // has one
-    public virtual ContactPerson ContactPerson { get; set;} = null!;
+    public virtual ContactPerson ContactPerson { get; set; } = null!;
     public virtual Port PortOfLoading { get; set; } = null!;
     public virtual ShippingAgent? ShippingAgent { get; set; } = null!;
     public virtual Company Company { get; set; } = null!;

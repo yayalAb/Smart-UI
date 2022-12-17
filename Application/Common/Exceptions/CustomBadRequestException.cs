@@ -3,7 +3,7 @@ namespace Application.Common.Exceptions
 {
     public class CustomBadRequestException : Exception
     {
-        public CustomBadRequestException():base("bad request")
+        public CustomBadRequestException() : base("bad request")
         {
 
         }

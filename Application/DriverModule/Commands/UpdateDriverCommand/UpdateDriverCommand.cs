@@ -1,48 +1,46 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using MediatR;
-using Domain.Entities;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using Application.AddressModule.Commands.AddressCreateCommand;
-using Application.Common.Models;
 using Application.Common.Exceptions;
-using System.Reflection.Metadata;
+using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.ShippingAgentModule.Commands.UpdateShippingAgent;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.DriverModule.Commands.UpdateDriverCommand
 {
-    public record UpdateDriverCommand : IRequest<CustomResponse> {
-        public int Id {get; init;}
+    public record UpdateDriverCommand : IRequest<CustomResponse>
+    {
+        public int Id { get; init; }
         public string Fullname { get; init; }
         public string LicenceNumber { get; init; }
         public UpdateAddressDto address { get; init; }
-        public string? Image {get; init; }
+        public string? Image { get; init; }
     }
 
-    public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, CustomResponse> {
-        
+    public class UpdateDriverCommandHandler : IRequestHandler<UpdateDriverCommand, CustomResponse>
+    {
+
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
         private readonly ILogger<UpdateDriverCommandHandler> _logger;
 
-        public UpdateDriverCommandHandler(IIdentityService identityService , IAppDbContext context , ILogger<UpdateDriverCommandHandler> logger) {
+        public UpdateDriverCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<UpdateDriverCommandHandler> logger)
+        {
             _identityService = identityService;
             _context = context;
             _logger = logger;
         }
 
-        public async Task<CustomResponse> Handle(UpdateDriverCommand request, CancellationToken cancellationToken){
+        public async Task<CustomResponse> Handle(UpdateDriverCommand request, CancellationToken cancellationToken)
+        {
 
             var found_driver = _context.Drivers
                         .Include(d => d.Address)
                         .Where(d => d.Id == request.Id)
                         .FirstOrDefault();
 
-            if(found_driver == null){
+            if (found_driver == null)
+            {
                 throw new GhionException(CustomResponse.NotFound("driver not found"));
             }
 

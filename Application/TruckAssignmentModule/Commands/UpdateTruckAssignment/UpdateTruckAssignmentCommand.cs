@@ -1,13 +1,13 @@
 
-using MediatR;
-using Domain.Entities;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Application.Common.Models;
+using AutoMapper;
+using Domain.Entities;
 using Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
 {
@@ -119,10 +119,10 @@ namespace Application.TruckAssignmentModule.Commands.UpdateTruckAssignment
                         existingTruckAssignment.GatePassType = request.GatePassType;
                         existingTruckAssignment.AgreedTariff = request.AgreedTariff;
                         existingTruckAssignment.Currency = request.Currency;
-                        
+
                         existingTruckAssignment.Containers = containers;
                         existingTruckAssignment.Goods = goods;
-                        
+
                         if (request.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType), GatepassType.ENTRANCE))
                         {
 

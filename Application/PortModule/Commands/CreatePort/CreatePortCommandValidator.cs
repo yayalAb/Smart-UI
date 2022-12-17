@@ -1,10 +1,8 @@
-﻿using System.Data;
-
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.PortModule.Commands.CreatePort
 {
-    public class CreatePortCommandValidator : AbstractValidator<CreatePortCommand>  
+    public class CreatePortCommandValidator : AbstractValidator<CreatePortCommand>
     {
         public CreatePortCommandValidator()
         {

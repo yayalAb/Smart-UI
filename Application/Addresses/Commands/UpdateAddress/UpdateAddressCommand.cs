@@ -7,7 +7,7 @@ namespace Application.Addresses.Commands.UpdateAddress
 {
     public class UpdateAddressCommand : IRequest<int>
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string? Email { get; init; }
         public string? Phone { get; init; }
         public string? Region { get; init; }
@@ -32,14 +32,14 @@ namespace Application.Addresses.Commands.UpdateAddress
                 throw new NotFoundException("Adress", new { Id = request.Id });
 
             };
-           
-            existingAddress.Email = request.Email;  
+
+            existingAddress.Email = request.Email;
             existingAddress.Phone = request.Phone;
-            existingAddress.Region = request.Region;    
-            existingAddress.City = request.City;    
-            existingAddress.Subcity = request.Subcity;  
-            existingAddress.Country = request.Country;  
-            existingAddress.POBOX = request.POBOX;  
+            existingAddress.Region = request.Region;
+            existingAddress.City = request.City;
+            existingAddress.Subcity = request.Subcity;
+            existingAddress.Country = request.Country;
+            existingAddress.POBOX = request.POBOX;
 
             _context.Addresses.Update(existingAddress);
             await _context.SaveChangesAsync(cancellationToken);

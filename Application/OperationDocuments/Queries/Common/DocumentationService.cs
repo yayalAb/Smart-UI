@@ -17,19 +17,19 @@ public class DocumentationService
     private readonly IMapper _mapper;
     private readonly ILogger<DocumentationService> _logger;
 
-    public DocumentationService(IAppDbContext context, IMapper mapper , ILogger<DocumentationService> logger)
+    public DocumentationService(IAppDbContext context, IMapper mapper, ILogger<DocumentationService> logger)
     {
         _context = context;
         _mapper = mapper;
         _logger = logger;
     }
-    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId,int contactPersonId ,  CancellationToken cancellationToken)
+    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId, int contactPersonId, CancellationToken cancellationToken)
     {
         if (!await _context.TruckAssignments.Where(ta => ta.Id == truckAssignmentId).AnyAsync())
         {
             throw new GhionException(CustomResponse.NotFound($"truck assignment with id = {truckAssignmentId} is not found "));
         }
-        
+
         var data = await _context.Operations
                         .Include(o => o.Company)
                             .ThenInclude(c => c.ContactPeople)
@@ -78,16 +78,19 @@ public class DocumentationService
                         })
                         .FirstOrDefaultAsync();
 
-        if (data == null) {
+        if (data == null)
+        {
             throw new GhionException(CustomResponse.NotFound($"Operation with id = {operationId} is Not found!"));
         }
         // fetch name on permit/ contact person for the documentation
 
-        
 
-        if (docType != Documents.Waybill) {
 
-            if (data.PINumber == null) {
+        if (docType != Documents.Waybill)
+        {
+
+            if (data.PINumber == null)
+            {
                 throw new GhionException(CustomResponse.BadRequest("pi number cannot be null!"));
             }
 
@@ -117,30 +120,35 @@ public class DocumentationService
             // if waybill
             var truckData = await _context.TruckAssignments
                 .Include(ta => ta.Driver)
-                .Include( ta => ta.Truck)
+                .Include(ta => ta.Truck)
                 .Where(ta => ta.Id == truckAssignmentId)
-                .Select(ta => new {
-                    DriverName =ta.Driver == null?null: ta.Driver.Fullname,
-                    DriverPhone = ta.Driver == null? null: ta.Driver.Address.Phone,
-                    DriverLicense = ta.Driver == null? null: ta.Driver.LicenceNumber,
+                .Select(ta => new
+                {
+                    DriverName = ta.Driver == null ? null : ta.Driver.Fullname,
+                    DriverPhone = ta.Driver == null ? null : ta.Driver.Address.Phone,
+                    DriverLicense = ta.Driver == null ? null : ta.Driver.LicenceNumber,
                     TruckNumber = ta.Truck == null ? null : ta.Truck.TruckNumber,
-                    PlateNumber = ta.Truck == null ? null : ta.Truck.PlateNumber 
+                    PlateNumber = ta.Truck == null ? null : ta.Truck.PlateNumber
                 }).FirstOrDefaultAsync();
-                data!.DriverName = truckData!.DriverName;
-                data.DriverPhone = truckData.DriverPhone;
-                data.DriverLicenceNumber = truckData.DriverLicense;
-                data.TruckNumber = truckData.TruckNumber;
-                data.PlateNumber = truckData.PlateNumber;
+            data!.DriverName = truckData!.DriverName;
+            data.DriverPhone = truckData.DriverPhone;
+            data.DriverLicenceNumber = truckData.DriverLicense;
+            data.TruckNumber = truckData.TruckNumber;
+            data.PlateNumber = truckData.PlateNumber;
             ////////
         }
 
-        if(docType == Documents.CommercialInvoice){
+        if (docType == Documents.CommercialInvoice)
+        {
             var defaultInfo = await _context.Settings
             .Include(s => s.DefaultCompany)
             .Include(s => s.DefaultCompany.BankInformation)
-            .Select(s => new Setting {
-                DefaultCompany = new Company {
-                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation {
+            .Select(s => new Setting
+            {
+                DefaultCompany = new Company
+                {
+                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation
+                    {
                         AccountHolderName = b.AccountHolderName,
                         BankName = b.BankName,
                         AccountNumber = b.AccountNumber,
@@ -150,7 +158,8 @@ public class DocumentationService
                 },
             }).FirstOrDefaultAsync();
 
-            if(defaultInfo == null){
+            if (defaultInfo == null)
+            {
                 throw new GhionException(CustomResponse.NotFound("ghion bank info not found"));
             }
 

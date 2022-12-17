@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Common.Models
 {
-    public  class EmailConfiguration
+    public class EmailConfiguration
     {
         public string From { get; set; }
         public string SmtpServer { get; set; }

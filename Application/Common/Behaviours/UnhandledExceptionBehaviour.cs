@@ -15,7 +15,7 @@ namespace Application.Common.Behaviours
             _logger = logger;
         }
 
-     
+
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             try
@@ -31,12 +31,12 @@ namespace Application.Common.Behaviours
                     request = default;
 
                 }
-              
+
                 _logger.LogError(ex, "GhionApi Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
 
                 throw;
             }
         }
     }
-    
+
 }
