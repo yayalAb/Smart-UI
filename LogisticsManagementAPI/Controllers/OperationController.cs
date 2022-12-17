@@ -8,13 +8,13 @@ using Application.OperationModule.Commands.UpdateOperation;
 using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.Common.Models;
-using Application.UserGroupModule.Queries.GetOperationLookupQuery;
 using Application.OperationFollowupModule.Queries.GetStatusByOperation;
 using Application.OperationFollowupModule.Commands.UpdateStatus;
 using Application.OperationFollowupModule.Queries.GetSingleStatus;
 using Application.OperationModule.Queries.OperationDashboard;
 using Application.OperationModule.Commands.DispatchECD;
 using Application.OperationDocuments.SNumberUpdate;
+using Application.OperationModule.Queries.GetOperationLookup;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

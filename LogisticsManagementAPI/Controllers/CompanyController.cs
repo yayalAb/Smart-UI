@@ -9,6 +9,7 @@ using Application.Common.Exceptions;
 using WebApi.Models;
 using Application.DriverModule.Queries.GetCompanyLookup;
 using Application.ContactPersonModule.Queries;
+using Application.CompanyModule.Queries.GetCompanyBankInformation;
 
 namespace WebApi.Controllers
 {
@@ -89,7 +90,20 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new GetContactPeopleByCompanyIdQuery {CompanyId = companyId}));
+                return Ok(await Mediator.Send(new GetContactPeopleByCompanyIdQuery { CompanyId = companyId }));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+        [HttpGet]
+        [Route("bankInformation/{companyId}")]
+        public async Task<ActionResult> bankInformation(int companyId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetCompanyBankInformationQuery { CompanyId = companyId }));
             }
             catch (GhionException ex)
             {

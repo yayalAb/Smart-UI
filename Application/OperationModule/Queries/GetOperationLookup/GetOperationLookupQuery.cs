@@ -1,16 +1,12 @@
 using Application.Common.Interfaces;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
-using Application.UserGroupModule.Queries.UserGroupLookup;
+namespace Application.OperationModule.Queries.GetOperationLookup;
 
-namespace Application.UserGroupModule.Queries.GetOperationLookupQuery;
+public record GetOperationLookupQuery : IRequest<List<OperationLookupDto>> {}
 
-public record GetOperationLookupQuery : IRequest<List<DropDownLookupDto>> {}
-
-public class GetOperationLookupQueryHandler : IRequestHandler<GetOperationLookupQuery, List<DropDownLookupDto>> {
+public class GetOperationLookupQueryHandler : IRequestHandler<GetOperationLookupQuery, List<OperationLookupDto>> {
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
@@ -20,12 +16,13 @@ public class GetOperationLookupQueryHandler : IRequestHandler<GetOperationLookup
         _mapper = mapper;
     }
 
-    public async Task<List<DropDownLookupDto>> Handle(GetOperationLookupQuery request, CancellationToken candellationToken) {
+    public async Task<List<OperationLookupDto>> Handle(GetOperationLookupQuery request, CancellationToken candellationToken) {
         return await _context.Operations
                 .Include(o => o.ContactPerson)
-                .Select(u => new DropDownLookupDto() {
+                .Select(u => new OperationLookupDto() {
                     Text = $"{u.OperationNumber} {u.ContactPerson.Name}" ,
-                    Value = u.Id
+                    Value = u.Id,
+                    CompanyId = u.CompanyId
                 }).ToListAsync();
     }
 
