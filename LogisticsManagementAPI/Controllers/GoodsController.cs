@@ -56,8 +56,8 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("unstafed")]
-        public async Task<ActionResult> Unstafed([FromQuery] int operationId) {
+        [HttpGet("unstafed/{operationId}")]
+        public async Task<ActionResult> Unstafed(int operationId) {
             try {
                 return Ok(await Mediator.Send(new OperationUnstafedGood{OperationId = operationId, Type = true}));
             } catch (GhionException ex) {
