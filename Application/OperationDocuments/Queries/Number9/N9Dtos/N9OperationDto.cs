@@ -14,7 +14,6 @@ public class N9OperationDto : IMapFrom<Operation>
     public string? SourceDocument { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }
-    public string? TypeOfMerchandise { get; set; }
     public string OperationNumber { get; set; } = null!;
     public int CompanyId { get; set; }
     /////------------Additionals------

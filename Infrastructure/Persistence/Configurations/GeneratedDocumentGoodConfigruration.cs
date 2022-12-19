@@ -14,11 +14,11 @@ public class GeneratedDocumentGoodConfiguration : IEntityTypeConfiguration<Gener
             .IsRequired(true);
 
         entity.HasOne(e => e.Good)
-            .WithMany(o => o.DocumentGoods)
+            .WithMany(o => o.GeneratedDocumentsGoods)
             .HasForeignKey(e => e.GoodId);
 
         entity.HasOne(e => e.GeneratedDocument)
-            .WithMany(p => p.DocumentGoods)
+            .WithMany(p => p.GeneratedDocumentsGoods)
             .HasForeignKey(e => e.GeneratedDocumentId);
 
     }

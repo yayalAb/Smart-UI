@@ -5,6 +5,7 @@ using Application.DocumentationModule.Commands.DeleteDocumentation;
 using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
+using Application.OperationDocuments.Number9Transfer;
 using Application.OperationDocuments.Queries.CertificateOfOrigin;
 using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Gatepass;
@@ -211,6 +212,18 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+        [HttpPost("TransferNumber9")]
+        public async Task<IActionResult> GenerateTransferNumber9([FromBody] GenerateTransferNumber9Query command) {
+
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch(GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch(Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
