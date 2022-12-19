@@ -1,5 +1,6 @@
 ﻿
 using Application.Common.Interfaces;
+using Domain.Common.DocumentType;
 using Domain.Enums;
 using FluentValidation;
 using static Domain.Common.DocumentType.DocumentType;

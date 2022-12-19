@@ -10,6 +10,7 @@ using Application.OperationModule.Commands.DeleteOperation;
 using Application.OperationModule.Commands.DispatchECD;
 using Application.OperationModule.Commands.UpdateOperation;
 using Application.OperationModule.Queries.GetOperationById;
+using Application.OperationModule.Queries.GetOperationList;
 using Application.OperationModule.Queries.GetOperationLookup;
 using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.OperationModule.Queries.OperationDashboard;
@@ -226,6 +227,20 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpGet]
+        [Route("Dashboard/opeartionList")]
+        public async Task<IActionResult> opeartionList([FromQuery] DashboardOperationList command) {
+
+            try {
+                return Ok(await Mediator.Send(command));
+            } catch (GhionException ex) {
+                return AppdiveResponse.Response(this, ex.Response);
+            } catch (Exception ex) {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 

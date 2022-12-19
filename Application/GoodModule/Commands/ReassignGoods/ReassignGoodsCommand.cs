@@ -96,8 +96,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             var selectedGood = goods.Find(g => g.Id == gd.Id);
                             // var gd = request.Goods.ToList().Find(g => g.Id == selectedGood.Id);
 
-                            if (selectedGood == null)
-                            {
+                            if (selectedGood == null) {
                                 continue;
                             }
 
