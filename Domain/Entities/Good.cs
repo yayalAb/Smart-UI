@@ -1,7 +1,7 @@
 using Domain.Common;
 namespace Domain.Entities;
 
-public class Good : BaseAuditableEntity
+public class  Good : BaseAuditableEntity
 {
     public string Description { get; set; }
     public string? HSCode { get; set; }
@@ -28,7 +28,7 @@ public class Good : BaseAuditableEntity
     public virtual Container? Container { get; set; } = null!;
     public virtual Operation Operation { get; set; } = null!;
     public virtual Port? LocationPort { get; set; }
-    public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } = null!;
-    public virtual ICollection<GeneratedDocumentGood>? DocumentGoods { get; set; }
+    public virtual ICollection<TruckAssignment> TruckAssignments { get; set; } =  null!;
+    public virtual ICollection<GeneratedDocumentGood>? GeneratedDocumentsGoods {get; set;}
 
 }

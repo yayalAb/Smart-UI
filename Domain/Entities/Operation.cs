@@ -36,7 +36,7 @@ public class Operation : BaseAuditableEntity
     public string? BillOfLoadingNumber { get; set; }
     public string? PINumber { get; set; }
     public DateTime? PIDate { get; set; }
-    public string? FinalDestination { get; set; }
+    public string? FinalDestination { get; set; }//////////////////////////??////////////
     public string? Localization { get; set; }
     public string? Shipper { get; set; }
     public int ContactPersonId { get; set; }

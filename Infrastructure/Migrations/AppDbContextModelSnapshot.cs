@@ -522,9 +522,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ExitPortId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -544,11 +541,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("DestinationPortId");
 
-                    b.HasIndex("ExitPortId");
-
                     b.HasIndex("OperationId");
 
-                    b.ToTable("GeneratedDocument");
+                    b.ToTable("GeneratedDocuments");
                 });
 
             modelBuilder.Entity("Domain.Entities.GeneratedDocumentGood", b =>
@@ -584,7 +579,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("GoodId");
 
-                    b.ToTable("GeneratedDocumentGood");
+                    b.ToTable("GeneratedDocumentsGoods");
                 });
 
             modelBuilder.Entity("Domain.Entities.Good", b =>
@@ -1599,12 +1594,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Port", "ExitPort")
-                        .WithMany("ExitPortGeneratedDocuments")
-                        .HasForeignKey("ExitPortId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Operation", "Operation")
                         .WithMany("GeneratedDocuments")
                         .HasForeignKey("OperationId")
@@ -1615,21 +1604,19 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("DestinationPort");
 
-                    b.Navigation("ExitPort");
-
                     b.Navigation("Operation");
                 });
 
             modelBuilder.Entity("Domain.Entities.GeneratedDocumentGood", b =>
                 {
                     b.HasOne("Domain.Entities.GeneratedDocument", "GeneratedDocument")
-                        .WithMany("DocumentGoods")
+                        .WithMany("GeneratedDocumentsGoods")
                         .HasForeignKey("GeneratedDocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Good", "Good")
-                        .WithMany("DocumentGoods")
+                        .WithMany("GeneratedDocumentsGoods")
                         .HasForeignKey("GoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1898,12 +1885,12 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Containers");
 
-                    b.Navigation("DocumentGoods");
+                    b.Navigation("GeneratedDocumentsGoods");
                 });
 
             modelBuilder.Entity("Domain.Entities.Good", b =>
                 {
-                    b.Navigation("DocumentGoods");
+                    b.Navigation("GeneratedDocumentsGoods");
                 });
 
             modelBuilder.Entity("Domain.Entities.Operation", b =>
@@ -1930,8 +1917,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("DestinationPortGeneratedDocuments");
 
                     b.Navigation("DestinationPortTruckAssignments");
-
-                    b.Navigation("ExitPortGeneratedDocuments");
 
                     b.Navigation("Goods");
 

@@ -94,10 +94,10 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
-                    else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
-                    {
-                        throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
-                    }
+                    // else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
+                    // {
+                    //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
+                    // }
 
                     var goods = await _context.Goods.Where(g => g.OperationId == request.OperationId).Include(g => g.Container).Select(g => new Good
                     {

@@ -29,7 +29,7 @@ namespace Application.Common.Interfaces
         DbSet<Blacklist> Blacklists {get; set;}
         DbSet<BankInformation> BankInformation {get; set;}
         DbSet<GeneratedDocument> GeneratedDocuments {get; set;}
-        DbSet<GeneratedDocumentGood> GeneratedDocumentGoods {get; set;}
+        DbSet<GeneratedDocumentGood> GeneratedDocumentsGoods { get; set; }
 
 
         Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);

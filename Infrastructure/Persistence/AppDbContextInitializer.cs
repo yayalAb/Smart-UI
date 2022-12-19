@@ -350,7 +350,8 @@ namespace Infrastructure.Persistence
                             AccountNumber = "1003499041",
                             SwiftCode = "CACDDJJD",
                             BankAddress = "DJIBOUTI, REPUBLIC DE DJIBOUTI",
-                            CompanyId = defaultCompany.Id
+                            CompanyId = defaultCompany.Id,
+                            CurrencyType = "USD"
                         };
 
                         _context.BankInformation.Add(bankInfo);
