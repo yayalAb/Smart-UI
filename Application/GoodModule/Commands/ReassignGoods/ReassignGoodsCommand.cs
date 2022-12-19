@@ -45,8 +45,9 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
         {
 
             var container = await _context.Containers.FindAsync(request.ContainerId);
+            var good_id_list = from gs in request.Goods select gs.Id;
 
-            var goods = await _context.Goods.Where(g => request.Goods.Any(gs => gs.Id == g.Id))
+            var goods = await _context.Goods.Where(g => good_id_list.Contains(g.Id))
                 .Include(g => g.Container)
                 .Select(g => new Good
                 {
