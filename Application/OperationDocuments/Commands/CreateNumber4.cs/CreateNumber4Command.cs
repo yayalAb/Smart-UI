@@ -59,7 +59,7 @@ public class CreateNumber4CommandHandler : IRequestHandler<CreateNumber4Command,
                         LoadType = request.LoadType, 
                         DocumentType = Enum.GetName(typeof(Documents), Documents.Number4),
                         OperationId = request.OperationId,
-                        ExitPortId = request.ExitPortId,
+                        // ExitPortId = request.ExitPortId,
                         DestinationPortId = request.DestinationPortId,
                         ContactPersonId = request.NameOnPermit
                     });
