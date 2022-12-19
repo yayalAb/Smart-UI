@@ -64,10 +64,10 @@ public class TruckWayBillHandler : IRequestHandler<TruckWayBill, DocsDto>
 
                     }
                     //if waybill
-                    if (!await _operationEvent.IsDocumentGenerated(request.operationId, Enum.GetName(typeof(Documents), Documents.ECDDocument)!))
-                    {
-                        throw new GhionException(CustomResponse.NotFound("ECD Document should be dispatched before generating waybill!"));
-                    }
+                    // if (!await _operationEvent.IsDocumentGenerated(request.operationId, Enum.GetName(typeof(Documents), Documents.ECDDocument)!))
+                    // {
+                    //     throw new GhionException(CustomResponse.NotFound("ECD Document should be dispatched before generating waybill!"));
+                    // }
                     await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
                     {
                         GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Waybill)!,
