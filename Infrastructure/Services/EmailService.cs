@@ -2,10 +2,8 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
-using Infrastructure.Common.Models;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace Infrastructure.Services
@@ -26,16 +24,17 @@ namespace Infrastructure.Services
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
             var emailConfig = await _context.Settings.FirstOrDefaultAsync();
-            if(emailConfig == null ){
+            if (emailConfig == null)
+            {
                 throw new Exception("email configuration not found");
             }
-            var emailMessage =  CreateEmailMessage(mailRequest, emailConfig);
+            var emailMessage = CreateEmailMessage(mailRequest, emailConfig);
             await Send(emailMessage, emailConfig);
 
         }
 
 
-        private  MimeMessage CreateEmailMessage(MailRequest mailRequest, Setting emailConfig)
+        private MimeMessage CreateEmailMessage(MailRequest mailRequest, Setting emailConfig)
         {
 
             var emailMessage = new MimeMessage();

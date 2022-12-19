@@ -4,7 +4,7 @@ using Domain.Entities;
 namespace Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 public class DocumentationDto : IMapFrom<Documentation>
 {
-    public int Id {get; set;}
+    public int Id { get; set; }
     public int OperationId { get; set; }
     public string Type { get; set; } = null!;
     public DateTime Date { get; set; }
@@ -18,6 +18,6 @@ public class DocumentationDto : IMapFrom<Documentation>
     public string? PaymentTerm { get; set; }
     public bool? IsPartialShipmentAllowed { get; set; }
     public string? Fright { get; set; }
-    
- 
+
+
 }

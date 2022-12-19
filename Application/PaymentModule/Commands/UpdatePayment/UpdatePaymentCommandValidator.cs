@@ -3,14 +3,17 @@ using Application.Common.Interfaces;
 using Domain.Common.PaymentTypes;
 using FluentValidation;
 
-namespace Application.PaymentModule.Commands.UpdatePayment {
-    public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePymentCommand> {
+namespace Application.PaymentModule.Commands.UpdatePayment
+{
+    public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePymentCommand>
+    {
         private readonly IAppDbContext _context;
 
-        public UpdatePaymentCommandValidator(IAppDbContext context) {
+        public UpdatePaymentCommandValidator(IAppDbContext context)
+        {
 
             _context = context;
-            
+
             RuleFor(s => s.Id)
                 .NotNull();
             RuleFor(s => s.Type)
@@ -42,20 +45,24 @@ namespace Application.PaymentModule.Commands.UpdatePayment {
                  .NotEmpty()
                  .Must(BeRegisteredShippingAgentId).WithMessage("shipping agent with the provided id is not found");
         }
-        
-        private bool BeRegisteredOperationId(int operationId) {
+
+        private bool BeRegisteredOperationId(int operationId)
+        {
             return _context.Operations.Find(operationId) != null;
         }
-        
-        private bool BeRegisteredShippingAgentId(int shippingAgentId) {
+
+        private bool BeRegisteredShippingAgentId(int shippingAgentId)
+        {
             return _context.ShippingAgents.Find(shippingAgentId) != null;
         }
 
-        private bool OfType(string Type) {
+        private bool OfType(string Type)
+        {
             return ShippingAgentPaymentType.Types.Contains(Type) || TerminalPortPaymentType.Types.Contains(Type);
         }
 
-        private bool BeOfType(string Type) {
+        private bool BeOfType(string Type)
+        {
             return Type == ShippingAgentPaymentType.Name || Type == TerminalPortPaymentType.Name;
         }
 

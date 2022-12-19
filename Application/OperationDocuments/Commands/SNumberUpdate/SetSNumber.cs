@@ -6,24 +6,27 @@ using MediatR;
 
 namespace Application.OperationDocuments.SNumberUpdate;
 
-public record SetSNumber : IRequest<CustomResponse> {
-    public string SNumber {get; init;}
-    public int OperationId {get; init;}
+public record SetSNumber : IRequest<CustomResponse>
+{
+    public string SNumber { get; init; }
+    public int OperationId { get; init; }
 }
 
 public class SetSNumberHandler : IRequestHandler<SetSNumber, CustomResponse>
 {
 
     private readonly IAppDbContext _context;
-    
-    public SetSNumberHandler(IAppDbContext context) {
+
+    public SetSNumberHandler(IAppDbContext context)
+    {
         _context = context;
     }
 
     public async Task<CustomResponse> Handle(SetSNumber request, CancellationToken cancellationToken)
     {
         var operation = await _context.Operations.FindAsync(request.OperationId);
-        if(operation == null){
+        if (operation == null)
+        {
             throw new GhionException(CustomResponse.NotFound("Operation not found!"));
         }
 

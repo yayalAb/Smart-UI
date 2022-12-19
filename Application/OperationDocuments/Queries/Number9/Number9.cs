@@ -1,16 +1,15 @@
-using System.Linq;
+using Application.Common;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.OperationDocuments.Number9.N9Dtos;
 using Application.OperationFollowupModule;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using Domain.Common.PaymentTypes;
 using Domain.Entities;
 using Domain.Enums;
-using Application.OperationDocuments.Number9.N9Dtos;
-using AutoMapper;
-using Application.Common;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.Number9;
 
@@ -18,7 +17,7 @@ public record Number9 : IRequest<Number9Dto>
 {
     public int OperationId { get; init; }
     public string Type { get; init; }
-    public int  ContactPersonId { get; init; }
+    public int ContactPersonId { get; init; }
 }
 
 public class Number9Handler : IRequestHandler<Number9, Number9Dto>
@@ -29,7 +28,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
     private readonly DefaultCompanyService _defaultCompanyService;
 
 
-    public Number9Handler(IAppDbContext context, OperationEventHandler operationEvent , DefaultCompanyService defaultCompanyService , IMapper mapper)
+    public Number9Handler(IAppDbContext context, OperationEventHandler operationEvent, DefaultCompanyService defaultCompanyService, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
@@ -52,7 +51,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                 .Include(o => o.Goods)
                                 .Include(o => o.PortOfLoading)
                                 .Include(o => o.Company.ContactPeople)
-                                .Select(o => new N9OperationDto {
+                                .Select(o => new N9OperationDto
+                                {
                                     Id = o.Id,
                                     ShippingLine = o.ShippingLine,
                                     GoodsDescription = o.GoodsDescription,
@@ -63,7 +63,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                                     VoyageNumber = o.VoyageNumber,
                                     OperationNumber = o.OperationNumber,
-                                    PortOfLoading = new N9PortOfLoadingDto {
+                                    PortOfLoading = new N9PortOfLoadingDto
+                                    {
                                         PortNumber = o.PortOfLoading.PortNumber,
                                         Country = o.PortOfLoading.Country,
                                         Region = o.PortOfLoading.Region,
@@ -77,14 +78,16 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     ArrivalDate = o.ArrivalDate, // operation
                                     CountryOfOrigin = o.CountryOfOrigin, // operation
                                     REGTax = o.REGTax,//
-                                    Company = new N9CompanyDto {
+                                    Company = new N9CompanyDto
+                                    {
                                         Name = o.Company.Name,
                                         TinNumber = o.Company.TinNumber,
                                         CodeNIF = o.Company.CodeNIF,
                                         // ContactPersonId = o.Company.ContactPersonId,
                                         // ContactPerson = _mapper.Map<N9NameOnPermitDto>(o.Company.Con),
                                     },
-                                    Goods = (o.Goods != null) ? o.Goods.Select(g => new N9GoodDto {
+                                    Goods = (o.Goods != null) ? o.Goods.Select(g => new N9GoodDto
+                                    {
                                         Description = g.Description,
                                         HSCode = g.HSCode,
                                         Weight = g.Weight,
@@ -96,7 +99,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                     }).ToList() : null
                                 }).First();
 
-                    if (operation == null) {
+                    if (operation == null)
+                    {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
 
@@ -106,12 +110,13 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     //loading the selected name on permit //
                     var nameOnPermit = _mapper.Map<N9NameOnPermitDto>(await _context.ContactPeople.FindAsync(request.ContactPersonId));
                     company.ContactPerson = nameOnPermit;
-                    
+
                     IEnumerable<float> size = new List<float>();
                     operation.Company = null;
                     operation.Goods = null;
 
-                    var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).Select(p => new N9PaymentDto {
+                    var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).Select(p => new N9PaymentDto
+                    {
                         PaymentDate = p.PaymentDate,
                         DONumber = p.DONumber
                     }).FirstOrDefault();
@@ -119,7 +124,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                     var companySetting = await _defaultCompanyService.GetDefaultCompanyAsync();
 
 
-                    if (payment == null) {
+                    if (payment == null)
+                    {
                         throw new GhionException(CustomResponse.NotFound(" Delivery Order Payment for the operation not found!"));
                     }
 
@@ -138,7 +144,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                         company = company,
                         operation = operation,
                         goods = goods,
-                        doPayment = payment,            
+                        doPayment = payment,
                     };
 
                 }

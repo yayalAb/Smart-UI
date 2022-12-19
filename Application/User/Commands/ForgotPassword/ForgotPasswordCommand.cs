@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using System.Web;
 
 namespace Application.User.Commands.ForgotPassword
 {
@@ -20,9 +19,9 @@ namespace Application.User.Commands.ForgotPassword
         private readonly IEmailService _emailService;
         private readonly ILogger<ForgotPasswordCommandHandler> _logger;
 
-        public ForgotPasswordCommandHandler(IIdentityService identityService , IEmailService emailService , ILogger<ForgotPasswordCommandHandler> logger)
+        public ForgotPasswordCommandHandler(IIdentityService identityService, IEmailService emailService, ILogger<ForgotPasswordCommandHandler> logger)
         {
-           _identityService = identityService;
+            _identityService = identityService;
             _emailService = emailService;
             _logger = logger;
         }
@@ -33,7 +32,7 @@ namespace Application.User.Commands.ForgotPassword
             {
                 return CustomResponse.Failed(response.result.Errors);
             }
-            var token  = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(response.resetToken)); ;
+            var token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(response.resetToken)); ;
             var param = new Dictionary<string, string?>
             {
                 { "token" , token },
@@ -42,7 +41,7 @@ namespace Application.User.Commands.ForgotPassword
 
             var callback = QueryHelpers.AddQueryString(request.ClientURI, param);
             var emailContent = "Please use the link below to reset your password" + callback;
-            
+
 
             // sending  password reset email 
             var mailrequest = new MailRequest()

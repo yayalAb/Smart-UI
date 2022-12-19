@@ -1,20 +1,20 @@
 
-using MediatR;
-using Domain.Entities;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
-using Domain.Enums;
+using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.Common.Service;
+using AutoMapper;
 using Domain.Common.Units;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand
 {
 
-    public record AssignGoodsCommand : IRequest<CustomResponse> {
+    public record AssignGoodsCommand : IRequest<CustomResponse>
+    {
 
         public int OperationId { get; set; }
         public List<ASgContainerDto>? Containers { get; set; }
@@ -54,31 +54,37 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                     try
                     {
                         List<Good> goods = _mapper.Map<List<Good>>(request.Goods);
-                        goods.ForEach(good => {
-                                good.OperationId = request.OperationId;
-                                good.RemainingQuantity = good.Quantity;
-                            });
+                        goods.ForEach(good =>
+                        {
+                            good.OperationId = request.OperationId;
+                            good.RemainingQuantity = good.Quantity;
+                        });
 
-                        if (goods.Any(good => good.Location == null)) {
+                        if (goods.Any(good => good.Location == null))
+                        {
                             throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
                         }
 
-                        if (request.Containers != null) {
+                        if (request.Containers != null)
+                        {
 
                             List<string> sh_codes = new List<string>();
                             List<Container> containers = _mapper.Map<List<Container>>(request.Containers);
-                            containers.ForEach(container =>{
-                                
+                            containers.ForEach(container =>
+                            {
+
                                 container.OperationId = request.OperationId;
                                 container.Article = 1;
                                 container.Quantity = container.Goods.Count;
                                 container.WeightMeasurement = WeightUnits.Default.name;
                                 container.Currency = Currency.Default.name;
-                                container.Goods.ToList().ForEach(good => {
+                                container.Goods.ToList().ForEach(good =>
+                                {
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
                                     good.Location = container.Location;
-                                    if(!sh_codes.Any(code => code == good.HSCode)){
+                                    if (!sh_codes.Any(code => code == good.HSCode))
+                                    {
                                         sh_codes.Add(good.HSCode);
                                         container.Article += 1;
                                         container.TotalPrice += (AppdivConvertor.CurrencyConversion(good.Unit, good.UnitPrice) * good.Quantity);
@@ -108,7 +114,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                         return CustomResponse.Succeeded("goods  assigned successfully", 201);
 
                     }
-                    catch (System.Exception) {
+                    catch (System.Exception)
+                    {
                         await transaction.RollbackAsync();
                         throw;
                     }

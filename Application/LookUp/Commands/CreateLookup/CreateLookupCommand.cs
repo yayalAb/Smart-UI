@@ -11,7 +11,7 @@ namespace Application.LookUp.Commands.CreateLookup
     {
         public string Key { get; init; }
         public string Value { get; init; }
-        public byte? IsParent {get; init;} = 0!;
+        public byte? IsParent { get; init; } = 0!;
     }
     public class CreateLookupCommandHandler : IRequestHandler<CreateLookupCommand, CustomResponse>
     {
@@ -19,7 +19,7 @@ namespace Application.LookUp.Commands.CreateLookup
 
         public CreateLookupCommandHandler(IAppDbContext context)
         {
-           _context = context;
+            _context = context;
         }
         public async Task<CustomResponse> Handle(CreateLookupCommand request, CancellationToken cancellationToken)
         {
@@ -32,8 +32,10 @@ namespace Application.LookUp.Commands.CreateLookup
 
             _context.Lookups.Add(newLookup);
 
-            if(request.IsParent == 1){
-                _context.Lookups.Add(new Lookup() {
+            if (request.IsParent == 1)
+            {
+                _context.Lookups.Add(new Lookup()
+                {
                     Key = "key",
                     Value = request.Value,
                     IsParent = 1
@@ -42,7 +44,7 @@ namespace Application.LookUp.Commands.CreateLookup
 
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Lookup created!");
-           
+
         }
     }
 }

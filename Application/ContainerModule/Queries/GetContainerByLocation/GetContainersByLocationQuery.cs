@@ -1,11 +1,10 @@
-using Domain.Entities;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
-using Application.Common.Models;
-using Application.Common.Exceptions;
 
 namespace Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
 
@@ -48,13 +47,14 @@ public class GetContainersByLocationQueryHandler : IRequestHandler<GetContainers
                         .Include(c => c.Goods)
                         .ProjectTo<ContainerDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
-        if(request.OperationId !=null && request.Location == null){
+        if (request.OperationId != null && request.Location == null)
+        {
             return await _context.Containers
                         .Where(c => c.OperationId == request.OperationId)
                         .Include(c => c.Goods)
                         .ProjectTo<ContainerDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
-       throw new GhionException(CustomResponse.BadRequest("atleast one query param must be provided for filtering"));
+        throw new GhionException(CustomResponse.BadRequest("atleast one query param must be provided for filtering"));
 
     }
 

@@ -3,11 +3,8 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.OperationDocuments.Queries.Common;
-using Application.OperationFollowupModule;
-using Domain.Entities;
 using Domain.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.CommercialInvoice;
 
@@ -51,7 +48,7 @@ public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, Comme
             await _context.SaveChangesAsync(cancellationToken);
         }
         return (CommercialInvoiceDto2)await _documentationService
-                    .GetDocumentation(request.IsProformaInvoice?Documents.ProformaInvoice: Documents.CommercialInvoice , request.operationId, request.TruckAssignmentId ,request.ContactPersonId, cancellationToken);
-       
+                    .GetDocumentation(request.IsProformaInvoice ? Documents.ProformaInvoice : Documents.CommercialInvoice, request.operationId, request.TruckAssignmentId, request.ContactPersonId, cancellationToken);
+
     }
 }

@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class GoodConfiguration : IEntityTypeConfiguration<Good> {
-    
-    public void Configure(EntityTypeBuilder<Good> entity) {
-        
+public class GoodConfiguration : IEntityTypeConfiguration<Good>
+{
+
+    public void Configure(EntityTypeBuilder<Good> entity)
+    {
+
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-            
+
         entity.Property(e => e.RemainingQuantity)
             .IsRequired(true);
 
@@ -28,7 +30,7 @@ public class GoodConfiguration : IEntityTypeConfiguration<Good> {
 
         entity.Property(e => e.UnitPrice)
             .IsRequired(true);
-            
+
         entity.Property(e => e.CBM)
             .IsRequired(false);
 

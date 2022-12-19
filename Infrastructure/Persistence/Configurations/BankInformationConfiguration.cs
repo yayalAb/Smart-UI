@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class BankInformationConfiguration : IEntityTypeConfiguration<BankInformation> {
+public class BankInformationConfiguration : IEntityTypeConfiguration<BankInformation>
+{
 
-    public void Configure(EntityTypeBuilder<BankInformation> entity) {
+    public void Configure(EntityTypeBuilder<BankInformation> entity)
+    {
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
         entity.Property(e => e.AccountHolderName)
@@ -19,13 +21,13 @@ public class BankInformationConfiguration : IEntityTypeConfiguration<BankInforma
             .IsRequired(true);
         entity.Property(e => e.CurrencyType)
             .IsRequired(true);
-        
+
         entity.HasOne(bi => bi.Company)
             .WithMany(c => c.BankInformation)
-            .HasForeignKey(bi=>bi.CompanyId)
+            .HasForeignKey(bi => bi.CompanyId)
             .IsRequired(true)
             .OnDelete(DeleteBehavior.Cascade);
-    
+
     }
 
 }

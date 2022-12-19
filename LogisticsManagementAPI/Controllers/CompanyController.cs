@@ -1,15 +1,15 @@
 
-using Microsoft.AspNetCore.Mvc;
+using Application.Common.Exceptions;
 using Application.CompanyModule.Commands.CreateCompanyCommand;
-using Application.CompanyModule.Queries.GetCompanyQuery;
+using Application.CompanyModule.Commands.DeleteCompanyCommand;
 using Application.CompanyModule.Commands.UpdateCompanyCommand;
 using Application.CompanyModule.Queries.GetAllCompanyQuery;
-using Application.CompanyModule.Commands.DeleteCompanyCommand;
-using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.DriverModule.Queries.GetCompanyLookup;
-using Application.ContactPersonModule.Queries;
 using Application.CompanyModule.Queries.GetCompanyBankInformation;
+using Application.CompanyModule.Queries.GetCompanyQuery;
+using Application.ContactPersonModule.Queries;
+using Application.DriverModule.Queries.GetCompanyLookup;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {

@@ -29,13 +29,13 @@ namespace Application.Common.Behaviours
                 userName = await _identityService.GetUserNameAsync(userId);
             }
             //Hide sensetive informataion 
-            if(request.GetType().Equals(typeof(AuthenticateUserCommand)) || request.GetType().Equals(typeof(CreateUserCommand)))
+            if (request.GetType().Equals(typeof(AuthenticateUserCommand)) || request.GetType().Equals(typeof(CreateUserCommand)))
             {
                 request = default;
 
             }
             _logger.LogInformation("GhionApi Request: {Name} {@UserId} {@UserName} {@Request} {@Time}",
-                                 requestName, userId, userName, request , DateTime.Now);
+                                 requestName, userId, userName, request, DateTime.Now);
 
 
 

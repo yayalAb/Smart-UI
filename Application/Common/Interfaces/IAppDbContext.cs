@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
     {
         DatabaseFacade database { get; }
         DbSet<AppUserRole> AppUserRoles { get; }
-        DbSet<UserGroup> UserGroups { get; } 
+        DbSet<UserGroup> UserGroups { get; }
         DbSet<Address> Addresses { get; set; }
         DbSet<Company> Companies { get; set; }
         DbSet<ContactPerson> ContactPeople { get; set; }
@@ -31,8 +31,8 @@ namespace Application.Common.Interfaces
         DbSet<GeneratedDocument> GeneratedDocuments {get; set;}
         DbSet<GeneratedDocumentGood> GeneratedDocumentGoods {get; set;}
 
-        
-        Task AddRangeAsync(IEnumerable<object> entities,CancellationToken cancellationToken = default);
+
+        Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
     }

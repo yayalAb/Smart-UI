@@ -1,16 +1,14 @@
 
 
-using MediatR;
-using Domain.Entities;
 using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
 using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
-using Application.Common.Exceptions;
-using Domain.Enums;
-using Application.GoodModule.Commands.ReassignGoods;
 using Application.Common.Service;
+using Application.GoodModule.Commands.ReassignGoods;
+using AutoMapper;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.GoodModule.Commands.AssignGoodsCommand
 {
@@ -35,20 +33,23 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
             IAppDbContext context,
             ILogger<AssignGoodsCommandHandler> logger,
             IMapper mapper
-        ) {
+        )
+        {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<CustomResponse> Handle(ReassignGoodsCommand request, CancellationToken cancellationToken) {
+        public async Task<CustomResponse> Handle(ReassignGoodsCommand request, CancellationToken cancellationToken)
+        {
 
             var container = await _context.Containers.FindAsync(request.ContainerId);
 
             var goods = await _context.Goods.Where(g => request.Goods.Any(gs => gs.Id == g.Id))
                 .Include(g => g.Container)
-                .Select(g => new Good {
+                .Select(g => new Good
+                {
                     Description = g.Description,
                     HSCode = g.HSCode,
                     Manufacturer = g.Manufacturer,
@@ -67,7 +68,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                     ContainerId = request.ContainerId,
                     OperationId = g.OperationId,
                     LocationPortId = g.LocationPortId,
-                    Container = (g.Container == null) ? null : new Container {
+                    Container = (g.Container == null) ? null : new Container
+                    {
                         Id = g.Container.Id,
                         ContianerNumber = g.Container.ContianerNumber,
                         GoodsDescription = g.Container.GoodsDescription,
@@ -82,20 +84,24 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                     }
                 }).ToListAsync();
 
-            foreach(ReassignedGoodDto gd in request.Goods) {
-                
+            foreach (ReassignedGoodDto gd in request.Goods)
+            {
+
                 var selectedGood = goods.Find(g => g.Id == gd.Id);
 
-                if(selectedGood == null){
+                if (selectedGood == null)
+                {
                     continue;
                 }
 
                 var remained = selectedGood.Quantity - gd.Quantity;
-                var calculated_weight = ((selectedGood.Weight/selectedGood.Quantity) * gd.Quantity);
+                var calculated_weight = ((selectedGood.Weight / selectedGood.Quantity) * gd.Quantity);
 
-                if(container == null) {
+                if (container == null)
+                {
 
-                    if(selectedGood.Container != null){
+                    if (selectedGood.Container != null)
+                    {
                         var container_to_be_updated = selectedGood.Container;
                         selectedGood.Container = null;
                         selectedGood.ContainerId = null;
@@ -109,11 +115,13 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                 }
 
-                if(remained > 0){
+                if (remained > 0)
+                {
 
                     selectedGood.RemainingQuantity = remained;
 
-                    _context.Goods.Add(new Good {
+                    _context.Goods.Add(new Good
+                    {
                         Description = selectedGood.Description,
                         HSCode = selectedGood.HSCode,
                         Manufacturer = selectedGood.Manufacturer,
@@ -134,18 +142,22 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                         LocationPortId = selectedGood.LocationPortId
                     });
 
-                }else{
+                }
+                else
+                {
                     selectedGood.ContainerId = request.ContainerId;
                     selectedGood.Container = null;
                 }
-                
+
                 //check if the good is contained or unstafed
-                if(selectedGood.Container != null) {
+                if (selectedGood.Container != null)
+                {
                     selectedGood.Container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, selectedGood.Container.Currency);
                     selectedGood.Container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), selectedGood.Container.Currency);
                 }
 
-                if(container != null) {
+                if (container != null)
+                {
                     container.Quantity += gd.Quantity;
                     container.GrossWeight += calculated_weight;
                     container.TotalPrice += AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency);

@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace Domain.Common.Units;
 
 public class Unit
@@ -12,7 +10,8 @@ public class Unit
         return (value.name == this.name && this.rate == value.rate);
     }
 
-    public bool NameEquals(Unit value) {
+    public bool NameEquals(Unit value)
+    {
         return (value.name == this.name);
     }
 
@@ -37,10 +36,13 @@ public class WeightUnits
     public static string Name = "WeightUnits";
     public static Unit Default = new Unit { name = "KG", rate = 1 };
 
-    public static Unit getUnit(string name){
+    public static Unit getUnit(string name)
+    {
 
-        foreach(KeyValuePair<string, Unit> instance in dict){
-            if(instance.Key == name){
+        foreach (KeyValuePair<string, Unit> instance in dict)
+        {
+            if (instance.Key == name)
+            {
                 return instance.Value;
             }
         }
@@ -69,10 +71,13 @@ public class Currency
     };
 
 
-    public static Unit getUnit(string name){
+    public static Unit getUnit(string name)
+    {
 
-        foreach(KeyValuePair<string, Unit> instance in dict){
-            if(instance.Key == name){
+        foreach (KeyValuePair<string, Unit> instance in dict)
+        {
+            if (instance.Key == name)
+            {
                 return instance.Value;
             }
         }

@@ -1,10 +1,10 @@
 ﻿
 using Application.Common.Interfaces;
-using Domain.Entities;
-using MediatR;
-using AutoMapper;
 using Application.Common.Models;
 using Application.GoodModule;
+using AutoMapper;
+using Domain.Entities;
+using MediatR;
 
 namespace Application.ContainerModule.Commands.CreateContainer
 {
@@ -16,7 +16,7 @@ namespace Application.ContainerModule.Commands.CreateContainer
         public string Size { get; set; }
         public int LocationPortId { get; set; }
         public int OperationId { get; set; }
-        public ICollection<GoodDto> Goods { get; set; }= null!;
+        public ICollection<GoodDto> Goods { get; set; } = null!;
     }
 
     public class CreateContainerCommandHandler : IRequestHandler<CreateContainerCommand, CustomResponse>

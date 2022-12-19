@@ -1,6 +1,4 @@
 using Application.Common.Mappings;
-using Application.ContainerModule;
-using Application.OperationModule.Queries;
 using Domain.Entities;
 
 namespace Application.GoodModule.Queries;

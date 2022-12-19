@@ -1,16 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 using Application.DriverModule.Commands.CreateDriverCommand;
+using Application.DriverModule.Commands.DeleteDriverCommand;
+using Application.DriverModule.Commands.ReleaseDriver;
 using Application.DriverModule.Commands.UpdateDriverCommand;
-using Application.DriverModule.Commands.ChangeDriverImageCommand;
+using Application.DriverModule.Queries.DriverLookUpQuery;
 using Application.DriverModule.Queries.GetAllDriversQuery;
 using Application.DriverModule.Queries.GetDriverQuery;
-using Application.DriverModule.Commands.DeleteDriverCommand;
-using Application.Common.Models;
-using WebApi.Models;
-using Application.Common.Exceptions;
 using Application.DriverModule.Queries.GetUnassignedDrivers;
-using Application.DriverModule.Queries.DriverLookUpQuery;
-using Application.DriverModule.Commands.ReleaseDriver;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -55,7 +54,7 @@ namespace WebApi.Controllers
 
             try
             {
-                return Ok(await Mediator.Send(new ReleaseDriverCommand{Id = id}));
+                return Ok(await Mediator.Send(new ReleaseDriverCommand { Id = id }));
             }
             catch (GhionException ex)
             {

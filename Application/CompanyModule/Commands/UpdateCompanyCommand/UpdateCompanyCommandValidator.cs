@@ -1,6 +1,5 @@
 
 using Application.Common.Interfaces;
-using Application.ContactPersonModule.Commands.ContactPersonUpdateCommand;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 

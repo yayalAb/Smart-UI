@@ -24,7 +24,8 @@ public class ReleaseDriverCommandHandler : IRequestHandler<ReleaseDriverCommand,
             throw new GhionException(CustomResponse.NotFound($"driver with id = {request.Id} is not found"));
 
         }
-        if(!driver.IsAssigned){
+        if (!driver.IsAssigned)
+        {
             return CustomResponse.Succeeded("driver is already unassigned");
         }
         driver.IsAssigned = false;

@@ -1,14 +1,10 @@
-using MediatR;
-using Domain.Entities;
-using Domain.Enums;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
 using Application.AddressModule.Commands.AddressCreateCommand;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Common.Exceptions;
-using System.Reflection.Metadata;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.DriverModule.Commands.CreateDriverCommand
 {

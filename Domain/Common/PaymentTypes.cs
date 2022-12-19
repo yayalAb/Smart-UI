@@ -1,9 +1,10 @@
 
 namespace Domain.Common.PaymentTypes;
 
-public class ShippingAgentPaymentType {
+public class ShippingAgentPaymentType
+{
     public static string[] Types = {
-        "Delivery Order", 
+        "Delivery Order",
         "Advanced Demurrage",
         "Container Deposit",
         "Final Demurrage",
@@ -19,8 +20,9 @@ public class ShippingAgentPaymentType {
 
 }
 
-public class TerminalPortPaymentType {
-    
+public class TerminalPortPaymentType
+{
+
     public static string[] Types = {
         "Facture",
         "Storage",

@@ -1,14 +1,14 @@
 
-using MediatR;
-using Domain.Entities;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
-using Domain.Enums;
+using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.OperationFollowupModule;
+using AutoMapper;
+using Domain.Entities;
+using Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 {
@@ -105,7 +105,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                             SourcePortId = request.SourcePortId,
                             DestinationPortId = request.DestinationPortId,
                             AgreedTariff = request.AgreedTariff,
-                            Currency = request.Currency ,
+                            Currency = request.Currency,
                             GatePassType = request.GatePassType,
                             Containers = containers,
                             Goods = goods
@@ -113,15 +113,17 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                         };
                         if (request.GatePassType.ToUpper() == Enum.GetName(typeof(GatepassType), GatepassType.ENTRANCE))
                         {
-                            
+
                             var operation = await _context.Operations.FindAsync(request.OperationId);
-                            if(operation!.SNumber == null){
+                            if (operation!.SNumber == null)
+                            {
                                 throw new GhionException(CustomResponse.BadRequest("SNumber of the selected operation cannot be null if the gatepass is of type entrance!!"));
                             }
                             newTruckAssignment.SENumber = operation.SNumber;
                             newTruckAssignment.Date = operation.SDate;
                         }
-                        else{
+                        else
+                        {
                             newTruckAssignment.SENumber = request.SENumber!;
                             newTruckAssignment.Date = DateTime.Now;
                         }

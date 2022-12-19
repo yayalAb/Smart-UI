@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.ShippingAgentModule.Commands.UpdateShippingAgent
 {
-    public  class UpdateAddressDto : IMapFrom<Address>
+    public class UpdateAddressDto : IMapFrom<Address>
     {
         public int? Id { get; set; }
         public string Email { get; set; }

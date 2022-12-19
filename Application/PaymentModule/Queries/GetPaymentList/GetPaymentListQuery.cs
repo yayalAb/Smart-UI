@@ -1,7 +1,6 @@
 using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
-using Application.PaymentModule.Queries;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;

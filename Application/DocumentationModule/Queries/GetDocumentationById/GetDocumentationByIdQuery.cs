@@ -12,24 +12,24 @@ namespace Application.DocumentationModule.Queries.GetDocumentationById
 {
     public record GetDocumentationByIdQuery : IRequest<DocumentationDto>
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
     }
     public class GetDocumentationByIdQueryHandler : IRequestHandler<GetDocumentationByIdQuery, DocumentationDto>
     {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetDocumentationByIdQueryHandler(IAppDbContext context , IMapper mapper)
+        public GetDocumentationByIdQueryHandler(IAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
         public async Task<DocumentationDto> Handle(GetDocumentationByIdQuery request, CancellationToken cancellationToken)
         {
-            var doc =  _context.Documentations
+            var doc = _context.Documentations
             .ProjectTo<DocumentationDto>(_mapper.ConfigurationProvider)
             .FirstOrDefault(d => d.Id == request.Id);
-            if(doc == null)
+            if (doc == null)
             {
                 throw new GhionException(CustomResponse.NotFound($"Documentation with Id {request.Id} is not found"));
             }

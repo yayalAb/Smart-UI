@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using Infrastructure.Common.Models;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
@@ -16,14 +15,14 @@ namespace Infrastructure
 {
     public static class ConfigureServices
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services , IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             //Db config
             services.AddDbContext<AppDbContext>(options =>
             {
                 // options.UseSqlServer(configuration.GetConnectionString("appDbConnectionString"),
                 //     builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
-                
+
                 // options.UseMySql(configuration.GetConnectionString("appDbConnectionString"),
                 //   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"),
                 // builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
@@ -31,19 +30,19 @@ namespace Infrastructure
                 options.UseMySql(configuration.GetConnectionString("appDbConnectionString"),
                   Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"),
                   mySqlOptions => mySqlOptions.EnableRetryOnFailure());
-                
+
 
 
             });
             services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
 
-        //     --- mail service config
-        //     var emailConfig = configuration
-        //             .GetSection("EmailConfiguration")
-        //             .Get<EmailConfiguration>();
-        //    services.AddSingleton(emailConfig);
-           
+            //     --- mail service config
+            //     var emailConfig = configuration
+            //             .GetSection("EmailConfiguration")
+            //             .Get<EmailConfiguration>();
+            //    services.AddSingleton(emailConfig);
+
 
 
             //local config
@@ -52,7 +51,7 @@ namespace Infrastructure
             services.AddScoped<AppDbContextInitializer>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IFileUploadService, FileUploadService>();
-            services.AddScoped<INumberService , NumberService>();
+            services.AddScoped<INumberService, NumberService>();
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

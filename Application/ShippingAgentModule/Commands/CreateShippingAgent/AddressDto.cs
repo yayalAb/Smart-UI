@@ -5,7 +5,7 @@ using Domain.Entities;
 
 namespace Application.ShippingAgentModule.Commands.CreateShippingAgent
 {
-    public  class AddressDto : IMapFrom<Address>
+    public class AddressDto : IMapFrom<Address>
     {
         public string Email { get; set; }
         public string? Phone { get; set; }

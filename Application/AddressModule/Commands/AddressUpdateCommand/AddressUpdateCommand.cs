@@ -1,9 +1,11 @@
 using Domain.Entities;
 using MediatR;
 
-namespace Application.AddressModule.Commands.AddressUpdateCommand {
+namespace Application.AddressModule.Commands.AddressUpdateCommand
+{
 
-    public record AddressUpdateCommand : IRequest<Address> {
+    public record AddressUpdateCommand : IRequest<Address>
+    {
         public int Id { get; init; }
         public string Email { get; init; }
         public string Phone { get; init; }

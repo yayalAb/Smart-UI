@@ -2,7 +2,7 @@
 
 namespace Application.User.Commands.ForgotPassword
 {
-    internal class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>    
+    internal class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>
     {
         public ForgotPasswordCommandValidator()
         {

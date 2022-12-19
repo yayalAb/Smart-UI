@@ -22,10 +22,11 @@ namespace Application.DocumentationModule.Commands.DeleteDocumentation
         public async Task<CustomResponse> Handle(DeleteDocumentationCommand request, CancellationToken cancellationToken)
         {
             var found_Documentation = await _context.Documentations.FindAsync(request.Id);
-        if(found_Documentation == null){
-            throw new GhionException(CustomResponse.NotFound($"Documentation with id = {request.Id} is not found"));
-        }
-        _context.Documentations.Remove(found_Documentation);
+            if (found_Documentation == null)
+            {
+                throw new GhionException(CustomResponse.NotFound($"Documentation with id = {request.Id} is not found"));
+            }
+            _context.Documentations.Remove(found_Documentation);
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Documentation Deleted Successfully!");
         }

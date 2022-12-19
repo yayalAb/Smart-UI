@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Application.LookUp.Commands.UpdateLookup
 {
-    public class UpdateLookupCommandValidator : AbstractValidator<UpdateLookupCommand>  
+    public class UpdateLookupCommandValidator : AbstractValidator<UpdateLookupCommand>
     {
         private readonly IAppDbContext _context;
         public UpdateLookupCommandValidator(IAppDbContext context)

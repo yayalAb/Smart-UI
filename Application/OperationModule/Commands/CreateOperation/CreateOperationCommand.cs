@@ -1,13 +1,8 @@
-﻿
-using System.Reflection.Metadata;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Common.Models;
+﻿using Application.Common.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -33,7 +28,7 @@ namespace Application.OperationModule.Commands.CreateOperation
         public string? VoyageNumber { get; set; }
         //--********************----------------////
         // public string OperationNumber { get; set; }
-        public DateTime OpenedDate { get;set ; }
+        public DateTime OpenedDate { get; set; }
         // public string Status { get; set; }
         //--********************--------------------///
         public string? ECDDocument { get; set; }
@@ -64,7 +59,7 @@ namespace Application.OperationModule.Commands.CreateOperation
         private readonly OperationService _operationService;
         private readonly ILogger<CreateOperationCommandHandler> _logger;
 
-        public CreateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService,OperationService operationService, ILogger<CreateOperationCommandHandler> logger)
+        public CreateOperationCommandHandler(IAppDbContext context, IMapper mapper, IFileUploadService fileUploadService, OperationService operationService, ILogger<CreateOperationCommandHandler> logger)
         {
             _context = context;
             _mapper = mapper;
@@ -96,7 +91,7 @@ namespace Application.OperationModule.Commands.CreateOperation
                         await _context.SaveChangesAsync(cancellationToken);
                         await transaction.CommitAsync();
 
-                        return new {Id = newOperation.Id , operationNumber = newOperation.OperationNumber};
+                        return new { Id = newOperation.Id, operationNumber = newOperation.OperationNumber };
                     }
                     catch (System.Exception)
                     {
@@ -108,6 +103,6 @@ namespace Application.OperationModule.Commands.CreateOperation
             });
 
         }
-      
-}
+
+    }
 }

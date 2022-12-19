@@ -1,10 +1,13 @@
 using FluentValidation;
 
-namespace Application.TruckModule.Commands.ChangeTruckImageCommand {
+namespace Application.TruckModule.Commands.ChangeTruckImageCommand
+{
 
-    public class ChangeTruckImageValidator : AbstractValidator<ChangeTruckImageCommand> {
-        
-        public ChangeTruckImageValidator(){
+    public class ChangeTruckImageValidator : AbstractValidator<ChangeTruckImageCommand>
+    {
+
+        public ChangeTruckImageValidator()
+        {
 
             RuleFor(u => u.Id)
                 .NotNull()

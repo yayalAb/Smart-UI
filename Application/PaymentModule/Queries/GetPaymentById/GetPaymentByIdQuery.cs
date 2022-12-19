@@ -12,18 +12,21 @@ namespace Application.PaymentModule.Queries.GetPaymentById
 {
     public record GetPaymentByIdQuery : IRequest<PaymentDto>
     {
-        public int Id { get; init; } 
+        public int Id { get; init; }
     }
-    public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto> {
+    public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto>
+    {
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetPaymentByIdQueryHandler(IAppDbContext context , IMapper mapper) {
+        public GetPaymentByIdQueryHandler(IAppDbContext context, IMapper mapper)
+        {
             _context = context;
             _mapper = mapper;
         }
-        
-        public async Task<PaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken) {
+
+        public async Task<PaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
+        {
 
             var payment = _context.Payments
                 .Include(p => p.Operation)
@@ -31,7 +34,8 @@ namespace Application.PaymentModule.Queries.GetPaymentById
                 .ProjectTo<PaymentDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefault(s => s.Id == request.Id);
 
-            if(payment == null) {
+            if (payment == null)
+            {
                 throw new GhionException(CustomResponse.NotFound("Payment created!"));
             }
 

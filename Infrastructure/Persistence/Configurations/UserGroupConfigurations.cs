@@ -11,11 +11,11 @@ namespace Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<UserGroup> builder)
         {
             builder.HasMany<ApplicationUser>()
-                .WithOne(u=>u.UserGroup)
-                .HasForeignKey(u=>u.UserGroupId)
+                .WithOne(u => u.UserGroup)
+                .HasForeignKey(u => u.UserGroupId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
-            builder.HasIndex(u=>u.Name).IsUnique();
+            builder.HasIndex(u => u.Name).IsUnique();
 
         }
     }

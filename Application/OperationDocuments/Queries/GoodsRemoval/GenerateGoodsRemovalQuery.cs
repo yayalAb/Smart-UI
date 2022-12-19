@@ -89,7 +89,7 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
                         truckAssignments.Add(ta);
                     }
 
-                // update operation status and generate doc
+                    // update operation status and generate doc
                     var date = DateTime.Now;
                     var statusName = Enum.GetName(typeof(Status), Status.GoodsRemovalGenerated);
 

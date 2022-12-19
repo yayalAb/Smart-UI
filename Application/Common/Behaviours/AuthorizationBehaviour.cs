@@ -13,7 +13,7 @@ namespace Application.Common.Behaviours
         private readonly IAppDbContext _context;
         private readonly ICurrentUserService _currentUserService;
 
-        public AuthorizationBehaviour(ILogger<AuthorizationBehaviour<TRequest, TResponse> > logger , IAppDbContext context , ICurrentUserService currentUserService)
+        public AuthorizationBehaviour(ILogger<AuthorizationBehaviour<TRequest, TResponse>> logger, IAppDbContext context, ICurrentUserService currentUserService)
         {
             _logger = logger;
             _context = context;
@@ -23,9 +23,10 @@ namespace Application.Common.Behaviours
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-           
-            var tokenString = _currentUserService.tokenString(); 
-            if( _context.Blacklists.Any(b => b.tokenString == tokenString)){
+
+            var tokenString = _currentUserService.tokenString();
+            if (_context.Blacklists.Any(b => b.tokenString == tokenString))
+            {
                 throw new ForbiddenAccessException();
             }
 
@@ -33,5 +34,5 @@ namespace Application.Common.Behaviours
             return await next();
         }
     }
-  
+
 }

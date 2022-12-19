@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Application.AddressModule.Commands.AddressCreateCommand {
+namespace Application.AddressModule.Commands.AddressCreateCommand
+{
 
-    public class AddressCreateCommandValidator : AbstractValidator<AddressCreateCommand> {
+    public class AddressCreateCommandValidator : AbstractValidator<AddressCreateCommand>
+    {
 
-        public AddressCreateCommandValidator(){
+        public AddressCreateCommandValidator()
+        {
 
             RuleFor(u => u.City)
                 .NotNull()
@@ -37,7 +36,7 @@ namespace Application.AddressModule.Commands.AddressCreateCommand {
                 .NotEmpty();
 
         }
-        
+
     }
 
 }

@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.User.Commands.DeleteUser
 {
-   public record DeleteUserCommand : IRequest<CustomResponse>
+    public record DeleteUserCommand : IRequest<CustomResponse>
     {
-        public string Id { get; set; } 
+        public string Id { get; set; }
     }
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, CustomResponse>
     {
@@ -21,7 +21,8 @@ namespace Application.User.Commands.DeleteUser
         public async Task<CustomResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var response = await _identityService.DeleteUser(request.Id);
-            if(!response.Succeeded){
+            if (!response.Succeeded)
+            {
                 throw new GhionException(CustomResponse.BadRequest(String.Join(" , ", response.Errors)));
             }
             return CustomResponse.Succeeded("User deleted successfully!");

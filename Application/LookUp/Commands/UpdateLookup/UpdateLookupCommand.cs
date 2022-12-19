@@ -22,14 +22,14 @@ namespace Application.LookUp.Commands.UpdateLookup
         }
         public async Task<CustomResponse> Handle(UpdateLookupCommand request, CancellationToken cancellationToken)
         {
-            
+
             var existingLookup = await _context.Lookups.FindAsync(request.Id);
-            if(existingLookup == null)
+            if (existingLookup == null)
             {
                 throw new GhionException(CustomResponse.NotFound("Lookup not found!"));
             };
-            existingLookup.Key = request.Key; 
-            existingLookup.Value = request.Value; 
+            existingLookup.Key = request.Key;
+            existingLookup.Value = request.Value;
             _context.Lookups.Update(existingLookup);
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Lookup Updated Successfully!");

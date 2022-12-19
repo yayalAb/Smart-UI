@@ -24,6 +24,6 @@ public class Documentation : BaseAuditableEntity
     public bool? IsPartialShipmentAllowed { get; set; }
     public string? Fright { get; set; }
     ///////
-    
+
     public virtual Operation Operation { get; set; } = null!;
 }

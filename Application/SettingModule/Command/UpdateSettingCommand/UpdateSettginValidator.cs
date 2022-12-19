@@ -1,11 +1,10 @@
 using Application.Common.Interfaces;
-using Application.User.Commands.AuthenticateUser;
-using Domain.Enums;
 using FluentValidation;
 
 namespace Application.SettingModule.Command.UpdateSettingCommand;
 
-public class UpdateSettingValidator : AbstractValidator<UpdateSetting> {
+public class UpdateSettingValidator : AbstractValidator<UpdateSetting>
+{
     private readonly IAppDbContext _context;
 
     public UpdateSettingValidator(IAppDbContext context)

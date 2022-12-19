@@ -3,11 +3,8 @@ using Application.Common;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.GoodModule;
-using Application.GoodModule.Queries;
 using Application.OperationFollowupModule;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -28,7 +25,7 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
     private readonly OperationEventHandler _operationEvent;
     private readonly DefaultCompanyService _defaultCompanyService;
 
-    public GenerateNumber1QueryHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent , DefaultCompanyService defaultCompanyService )
+    public GenerateNumber1QueryHandler(IAppDbContext context, IMapper mapper, OperationEventHandler operationEvent, DefaultCompanyService defaultCompanyService)
     {
         _context = context;
         _mapper = mapper;
@@ -49,14 +46,14 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                     {
                         throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
                     }
-                     var date = DateTime.Now;
+                    var date = DateTime.Now;
                     // fetch number1 form data
                     Number1Dto data = _context.Operations
                         .Include(o => o.Company)
                         .Include(o => o.Payments.Where(p => p.Name == "DO"))
                         .Include(o => o.Goods)
                         .Include(o => o.Containers)
-                        .Include (o => o.PortOfLoading)
+                        .Include(o => o.PortOfLoading)
                         .Where(o => o.Id == request.OperationId)
                         .Select(o => new Number1Dto
                         {
@@ -81,9 +78,10 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             CountryOfOrigin = o.CountryOfOrigin,
                             REGTax = o.REGTax,
                             Goods = _mapper.Map<ICollection<DocGoodDto>>(o.Goods),
-                            Containers = o.Containers == null 
-                                            ? null 
-                                            : o.Containers.Select(c => new No1ContainerDto {
+                            Containers = o.Containers == null
+                                            ? null
+                                            : o.Containers.Select(c => new No1ContainerDto
+                                            {
                                                 ContianerNumber = c.ContianerNumber,
                                                 SealNumber = c.SealNumber
                                             }).ToList(),
@@ -91,10 +89,10 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                             SourceLocation = null,
                             DestinationLocation = null
                         }).First();
-                        var settingData = await _defaultCompanyService.GetDefaultCompanyAsync();
-                        data.DefaultCompanyName = settingData!.DefaultCompany.Name;
-                        data.DefaultCompanyCodeNIF = settingData.DefaultCompany.CodeNIF;
-    
+                    var settingData = await _defaultCompanyService.GetDefaultCompanyAsync();
+                    data.DefaultCompanyName = settingData!.DefaultCompany.Name;
+                    data.DefaultCompanyCodeNIF = settingData.DefaultCompany.CodeNIF;
+
                     // update operation status and generate doc
                     var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
                     await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus

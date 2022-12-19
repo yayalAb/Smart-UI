@@ -4,7 +4,6 @@ using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +18,12 @@ namespace Application.UserGroupModule.Queries.GetUserGroupById
         private readonly IAppDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetUserGroupByIdQueryHandler(IAppDbContext context , IMapper mapper)
+        public GetUserGroupByIdQueryHandler(IAppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
-        public async  Task<UserGroupDto> Handle(GetUserGroupByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserGroupDto> Handle(GetUserGroupByIdQuery request, CancellationToken cancellationToken)
         {
             var oldGroup = await _context.UserGroups
                 .Include(ug => ug.UserRoles)
@@ -34,7 +33,7 @@ namespace Application.UserGroupModule.Queries.GetUserGroupById
             {
                 throw new GhionException(CustomResponse.NotFound("UserGroup"));
             }
-            return oldGroup;    
+            return oldGroup;
         }
     }
 }

@@ -6,5 +6,5 @@ public class Lookup : BaseAuditableEntity
 {
     public string Key { get; set; }
     public string Value { get; set; }
-    public byte IsParent {get; set;} = 0!;
+    public byte IsParent { get; set; } = 0!;
 }

@@ -2,9 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Domain.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.ContainerModule.Commands.UpdateContainer
 {
@@ -12,7 +10,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
     {
         public int Id { get; init; }
         public string ContainerNumber { get; init; } = null!;
-        public string Location {get; init;} = null!;
+        public string Location { get; init; } = null!;
         public string SealNumber { get; init; } = null!;
         public string Size { get; set; }
         public int? LocationPortId { get; init; }
@@ -23,7 +21,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         private readonly IAppDbContext _context;
         private readonly IFileUploadService _fileUploadService;
 
-        public UpdateContainerCommandHandler(IAppDbContext context , IFileUploadService fileUploadService)
+        public UpdateContainerCommandHandler(IAppDbContext context, IFileUploadService fileUploadService)
         {
             _context = context;
             _fileUploadService = fileUploadService;
@@ -32,7 +30,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
         {
             // check if container exists 
             var oldContainer = await _context.Containers.FindAsync(request.Id);
-            if(oldContainer == null)
+            if (oldContainer == null)
             {
                 throw new GhionException(CustomResponse.NotFound("Container not found"));
             }
@@ -41,7 +39,7 @@ namespace Application.ContainerModule.Commands.UpdateContainer
             oldContainer.SealNumber = request.SealNumber;
             oldContainer.OperationId = request.OperationId;
             _context.Containers.Update(oldContainer);
-            await  _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Container Updated");
 
         }

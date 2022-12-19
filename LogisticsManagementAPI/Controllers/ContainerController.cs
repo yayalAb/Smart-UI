@@ -1,17 +1,16 @@
 ﻿
+using Application.Common.Exceptions;
+using Application.Common.Models;
+using Application.ContainerModule.Commands.ContainerDelete;
 using Application.ContainerModule.Commands.CreateContainer;
+using Application.ContainerModule.Commands.CreateSingleContainer;
 using Application.ContainerModule.Commands.UpdateContainer;
+using Application.ContainerModule.Queries.ContainerByOperation;
 using Application.ContainerModule.Queries.GetAllContainersQuery;
 using Application.ContainerModule.Queries.GetContainerQuery;
-using Application.ContainerModule.Commands.ContainerDelete;
-
-using Microsoft.AspNetCore.Mvc;
-using Application.Common.Exceptions;
-using WebApi.Models;
-using Application.Common.Models;
 using Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
-using Application.ContainerModule.Commands.CreateSingleContainer;
-using Application.ContainerModule.Queries.ContainerByOperation;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,13 +21,19 @@ namespace WebApi.Controllers
 
         // POST api/<ContainerController>
         [HttpPost]
-        public async Task<IActionResult> CreateContainer([FromBody] CreateContainerCommand command) {
+        public async Task<IActionResult> CreateContainer([FromBody] CreateContainerCommand command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -36,13 +41,19 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("single")]
-        public async Task<IActionResult> CreateSingle([FromBody] CreateSingleContainer command) {
+        public async Task<IActionResult> CreateSingle([FromBody] CreateSingleContainer command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -50,13 +61,19 @@ namespace WebApi.Controllers
 
         // PUT api/<ContainerController>/
         [HttpPut]
-        public async Task<IActionResult> UpdateContainer([FromForm] UpdateContainerCommand command) {
+        public async Task<IActionResult> UpdateContainer([FromForm] UpdateContainerCommand command)
+        {
 
-            try{
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch (Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -68,7 +85,9 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -76,9 +95,12 @@ namespace WebApi.Controllers
         [HttpGet("ByOperation/{OperationId}")]
         public async Task<ActionResult> ContainerListByOperation(int OperationId)
         {
-            try {
-                return Ok(await Mediator.Send(new GetByOperation{ OperationId = OperationId}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new GetByOperation { OperationId = OperationId }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -90,9 +112,11 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(query));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } 
+            }
         }
 
 
@@ -102,7 +126,9 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(new GetContainer(id)));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }
@@ -113,7 +139,9 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(new ContainerDelete() { Id = id }));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
         }

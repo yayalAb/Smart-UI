@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Application.Addresses.Commands.CreateAddress
 {
-    public class CreateAddressCommandValidator : AbstractValidator<CreateAddressCommand>    
+    public class CreateAddressCommandValidator : AbstractValidator<CreateAddressCommand>
     {
         public CreateAddressCommandValidator()
         {

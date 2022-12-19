@@ -11,7 +11,7 @@ namespace Application.OperationDocuments.Queries.Common
         public float? Weight { get; set; }
         public string? ContainerNumber { get; set; }
         public string? SealNumber { get; set; }
-        
+
 
     }
 }

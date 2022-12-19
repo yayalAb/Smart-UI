@@ -6,8 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    public class TruckAssignmentConfiguarations : IEntityTypeConfiguration<TruckAssignment> {
-        
+    public class TruckAssignmentConfiguarations : IEntityTypeConfiguration<TruckAssignment>
+    {
+
         public void Configure(EntityTypeBuilder<TruckAssignment> entity)
         {
             entity.Property(e => e.SourceLocation)
@@ -23,7 +24,7 @@ namespace Infrastructure.Persistence.Configurations
             entity.Property(e => e.SENumber)
                 .IsRequired(true)
                 .HasMaxLength(45);
-            
+
             entity.Property(e => e.AgreedTariff)
                 .IsRequired(true);
 
@@ -35,13 +36,13 @@ namespace Infrastructure.Persistence.Configurations
                 .HasForeignKey(d => d.DriverId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
-            
+
             entity.HasOne(d => d.Truck)
                 .WithMany(p => p.TruckAssignments)
                 .HasForeignKey(d => d.TruckId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
-            
+
             entity.HasOne(d => d.Operation)
                 .WithMany(p => p.TruckAssignments)
                 .HasForeignKey(d => d.OperationId)
@@ -57,7 +58,7 @@ namespace Infrastructure.Persistence.Configurations
                 .HasForeignKey(d => d.SourcePortId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired(false);
-            
+
             entity.HasOne(d => d.DestinationPort)
                 .WithMany(p => p.DestinationPortTruckAssignments)
                 .HasForeignKey(d => d.DestinationPortId)

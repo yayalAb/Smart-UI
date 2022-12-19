@@ -5,20 +5,20 @@ namespace Domain.Entities
 {
     public class AppUserRole : BaseAuditableEntity
     {
-        public string Page { get; set; }    
+        public string Page { get; set; }
         public string Title { get; set; }
         public bool CanAdd { get; set; } = true;
         public bool CanDelete { get; set; } = true;
         public bool CanViewDetail { get; set; } = true;
         public bool CanView { get; set; } = true;
-        public bool CanUpdate { get; set; } = true; 
-        public int  UserGroupId { get; set; }
+        public bool CanUpdate { get; set; } = true;
+        public int UserGroupId { get; set; }
 
-      
+
 
         public static List<AppUserRole> createDefaultRoles(int groupId)
         {
-            
+
             List<AppUserRole> defaultRoles = new List<AppUserRole>();
             foreach (string page in Enum.GetNames(typeof(Page)))
             {
@@ -50,9 +50,9 @@ namespace Domain.Entities
 
                 }
             }
-  
+
             return userRoles;
         }
-       
+
     }
 }

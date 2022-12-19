@@ -1,14 +1,11 @@
 ﻿
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -48,7 +45,7 @@ namespace Infrastructure.Identity
         public async Task<string> GetUserNameAsync(string userId)
         {
             var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
-            
+
 
             return user.UserName;
         }
@@ -65,7 +62,8 @@ namespace Infrastructure.Identity
             {
                 return (Result.Failure(new string[] { "username is already taken" }), string.Empty);
             }
-            var newUser = new ApplicationUser() {
+            var newUser = new ApplicationUser()
+            {
                 FullName = fullName,
                 UserName = userName,
                 Email = email,
@@ -104,7 +102,7 @@ namespace Infrastructure.Identity
             if (!resetPassResult.Succeeded)
             {
                 var errors = resetPassResult.Errors.Select(e => e.Description);
-               throw new Exception( $"password reset failed! \n {resetPassResult.Errors}" );
+                throw new Exception($"password reset failed! \n {resetPassResult.Errors}");
             }
             return Result.Success();
         }
@@ -119,16 +117,18 @@ namespace Infrastructure.Identity
             var response = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (!response.Succeeded)
             {
-                throw new Exception( $"Change password failed! \n {response.Errors}" );
+                throw new Exception($"Change password failed! \n {response.Errors}");
             }
             return Result.Success();
         }
 
-        public async Task<Result> UpdateUser(string id, string fullName, string userName, string email, byte state, int groupId) {
+        public async Task<Result> UpdateUser(string id, string fullName, string userName, string email, byte state, int groupId)
+        {
 
             var user = await _userManager.FindByIdAsync(id.ToString());
 
-            if (user == null) {
+            if (user == null)
+            {
                 return Result.Failure(new string[] { "could not find user with the given id" });
             }
 
@@ -140,22 +140,26 @@ namespace Infrastructure.Identity
 
             var response = await _userManager.UpdateAsync(user);
 
-            if(!response.Succeeded) {
-                throw new Exception( $"User Updating failed! \n {response.Errors}" );
+            if (!response.Succeeded)
+            {
+                throw new Exception($"User Updating failed! \n {response.Errors}");
             }
 
             return Result.Success();
 
         }
-        public async Task<Result> DeleteUser(string userId){
+        public async Task<Result> DeleteUser(string userId)
+        {
             var user = await _userManager.FindByIdAsync(userId);
-            if(user == null){
+            if (user == null)
+            {
                 return Result.Failure(new string[] { "could not find user with the given id" });
             }
             var response = await _userManager.DeleteAsync(user);
-            
-            if(!response.Succeeded) {
-                throw new Exception( $"User Deleting failed! \n {response.Errors}" );
+
+            if (!response.Succeeded)
+            {
+                throw new Exception($"User Deleting failed! \n {response.Errors}");
             }
 
             return Result.Success();
@@ -227,10 +231,11 @@ namespace Infrastructure.Identity
             if (uppercase)
                 password.Append((char)random.Next(65, 91));
 
-     
+
             return password.ToString();
         }
-        public IQueryable<IApplicationUser> AllUsers(){
+        public IQueryable<IApplicationUser> AllUsers()
+        {
             return _userManager.Users;
         }
 

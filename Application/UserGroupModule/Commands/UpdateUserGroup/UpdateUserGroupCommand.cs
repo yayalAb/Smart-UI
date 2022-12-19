@@ -2,11 +2,10 @@
 
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
-using Application.Common.Models;
-using FluentValidation.Internal;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +40,7 @@ namespace Application.UserGroupModule.Commands.UpdateUserGroup
 
                        try
                        {
-                         // checking if user group exists
+                           // checking if user group exists
                            var oldGroup = await _context.UserGroups.FindAsync(request.Id);
                            if (oldGroup == null)
                            {
@@ -57,7 +56,7 @@ namespace Application.UserGroupModule.Commands.UpdateUserGroup
                            {
                                userRoles = AppUserRole.fillUndefinedRoles(userRoles);
                            }
-                          //updating user roles 
+                           //updating user roles 
                            _context.AppUserRoles.UpdateRange(userRoles);
                            await _context.SaveChangesAsync(cancellationToken);
                            await transaction.CommitAsync();

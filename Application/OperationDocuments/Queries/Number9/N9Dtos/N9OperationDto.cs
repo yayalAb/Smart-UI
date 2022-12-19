@@ -3,7 +3,8 @@ using Domain.Entities;
 
 namespace Application.OperationDocuments.Number9.N9Dtos;
 
-public class N9OperationDto : IMapFrom<Operation> {
+public class N9OperationDto : IMapFrom<Operation>
+{
     public int Id { get; set; }
     public string? ShippingLine { get; set; }
     public string? GoodsDescription { get; set; }
@@ -26,6 +27,6 @@ public class N9OperationDto : IMapFrom<Operation> {
     public string? FinalDestination { get; set; }
     public string? Localization { get; set; }
     public virtual N9PortOfLoadingDto PortOfLoading { get; set; }
-    public N9CompanyDto Company {get; set;}
-    public ICollection<N9GoodDto>? Goods {get; set;}
+    public N9CompanyDto Company { get; set; }
+    public ICollection<N9GoodDto>? Goods { get; set; }
 }

@@ -14,7 +14,7 @@ public class ASgContainerDto : IMapFrom<Container>
     public string? GoodsDescription { get; set; }
     public float GrossWeight { get; set; }
     public int Quantity { get; set; }
-    
+
     public List<GoodDto> Goods { get; set; }
 
 }

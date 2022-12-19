@@ -11,6 +11,6 @@ namespace Infrastructure.Identity
             return result.Succeeded ? Result.Success() : Result.Failure(result.Errors.Select(e => e.Description));
 
         }
-     
+
     }
 }

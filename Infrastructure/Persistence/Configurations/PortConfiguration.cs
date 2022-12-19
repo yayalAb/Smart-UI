@@ -4,15 +4,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class PortConfiguration : IEntityTypeConfiguration<Port> {
+public class PortConfiguration : IEntityTypeConfiguration<Port>
+{
 
-    public void Configure(EntityTypeBuilder<Port> entity) {
+    public void Configure(EntityTypeBuilder<Port> entity)
+    {
 
         entity.Property(e => e.Country)
             .HasMaxLength(45);
 
         entity.Property(e => e.PortNumber)
-            .IsRequired()   
+            .IsRequired()
             .HasMaxLength(45);
 
         entity.Property(e => e.Region)
@@ -20,7 +22,7 @@ public class PortConfiguration : IEntityTypeConfiguration<Port> {
 
         entity.Property(e => e.Vollume)
             .HasMaxLength(45);
-        
+
     }
 
 }

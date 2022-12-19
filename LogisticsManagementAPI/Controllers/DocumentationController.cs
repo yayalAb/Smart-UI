@@ -4,7 +4,6 @@ using Application.DocumentationModule.Commands.CreateDocumentation;
 using Application.DocumentationModule.Commands.DeleteDocumentation;
 using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.DocumentationModule.Queries.GetDocumentationById;
-using Application.DocumentationModule.Queries.GetDocumentationList;
 using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using Application.OperationDocuments.Queries.CertificateOfOrigin;
 using Application.OperationDocuments.Queries.CommercialInvoice;
@@ -92,16 +91,20 @@ namespace WebApi.Controllers
         public async Task<IActionResult> DeleteDocumentation(int id)
         {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(new DeleteDocumentationCommand { Id = id }));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
         }
 
         [HttpGet("packageLists")]
-        public async Task<IActionResult> GeneratePackageList([FromQuery] PackageList command) {
+        public async Task<IActionResult> GeneratePackageList([FromQuery] PackageList command)
+        {
 
             try
             {
@@ -110,20 +113,28 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
 
         [HttpGet("certificateOfOrigin/{operationId}")]
-        public async Task<IActionResult> GenerateCertificateOfOrigin(int operationId) {
+        public async Task<IActionResult> GenerateCertificateOfOrigin(int operationId)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(new CertificateOfOrigin() { operationId = operationId }));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -140,7 +151,9 @@ namespace WebApi.Controllers
             catch (GhionException ex)
             {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -150,12 +163,16 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GenerateT1(int operationId)
         {
 
-            try {
-                return Ok(await Mediator.Send(new T1Document {OperationId = operationId}));
+            try
+            {
+                return Ok(await Mediator.Send(new T1Document { OperationId = operationId }));
             }
-            catch (GhionException ex) {
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -165,37 +182,54 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GenerateCommercialInvoice([FromQuery] CommercialInvoice command)
         {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch (GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
 
         [HttpGet("Number9")]
-        public async Task<IActionResult> GenerateNumber9([FromQuery] Number9 command) {
+        public async Task<IActionResult> GenerateNumber9([FromQuery] Number9 command)
+        {
 
-            try {
+            try
+            {
                 return Ok(await Mediator.Send(command));
-            } catch(GhionException ex) {
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
         }
 
         [HttpGet("Number4/{operationId}")]
-        public async Task<IActionResult> GenerateNumber4(int operationId) {
+        public async Task<IActionResult> GenerateNumber4(int operationId)
+        {
 
-            try {
-                return Ok(await Mediator.Send(new Number4 { OperationId = operationId}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new Number4 { OperationId = operationId }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 
@@ -203,13 +237,19 @@ namespace WebApi.Controllers
 
 
         [HttpGet("Gatepass/{truckAssignmentId}")]
-        public async Task<IActionResult> PrintGatepass(int truckAssignmentId) {
+        public async Task<IActionResult> PrintGatepass(int truckAssignmentId)
+        {
 
-            try {
-                return Ok(await Mediator.Send(new PrintGatepassQuery { TruckAssignmentId = truckAssignmentId}));
-            } catch (GhionException ex) {
+            try
+            {
+                return Ok(await Mediator.Send(new PrintGatepassQuery { TruckAssignmentId = truckAssignmentId }));
+            }
+            catch (GhionException ex)
+            {
                 return AppdiveResponse.Response(this, ex.Response);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
             }
 

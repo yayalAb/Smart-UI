@@ -9,7 +9,7 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
 
     public CreateLookUpKeyValidator(IAppDbContext context)
     {
-        _context = context; 
+        _context = context;
 
         RuleFor(l => l.Key)
             .NotEmpty()
@@ -17,12 +17,12 @@ public class CreateLookUpKeyValidator : AbstractValidator<CreateLookUpKey>
             // .Must(BeUnique);
             .MaximumLength(45)
             .WithMessage("lookup key is not in the correct format");
-        
+
     }
 
-    private bool BeUnique(CreateLookUpKey lookup ,string name)
+    private bool BeUnique(CreateLookUpKey lookup, string name)
     {
-        return !_context.Lookups.Where(l => l.Value == name && l.Key == "key" ).Any();
+        return !_context.Lookups.Where(l => l.Value == name && l.Key == "key").Any();
     }
 
 }

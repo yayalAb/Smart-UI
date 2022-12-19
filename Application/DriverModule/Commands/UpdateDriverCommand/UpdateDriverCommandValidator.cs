@@ -2,10 +2,12 @@ using FluentValidation;
 
 namespace Application.DriverModule.Commands.UpdateDriverCommand;
 
-public class UpdateDriverCommandValidator : AbstractValidator<UpdateDriverCommand> {
-        
-    public UpdateDriverCommandValidator(){
-        
+public class UpdateDriverCommandValidator : AbstractValidator<UpdateDriverCommand>
+{
+
+    public UpdateDriverCommandValidator()
+    {
+
         RuleFor(u => u.Fullname)
             .NotNull()
             .NotEmpty()

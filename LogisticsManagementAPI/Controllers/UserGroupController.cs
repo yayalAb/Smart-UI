@@ -1,11 +1,9 @@
 ﻿
 using Application.Common.Exceptions;
-using Application.Common.Models;
 using Application.UserGroupModule.Commands.CreateUserGroup;
 using Application.UserGroupModule.Commands.DeleteUserGroup;
 using Application.UserGroupModule.Commands.UpdateUserGroup;
 using Application.UserGroupModule.Queries.GetUserGroupById;
-using Application.UserGroupModule.Queries.GetUserGroupList;
 using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +12,8 @@ using WebApi.Models;
 namespace WebApi.Controllers
 {
 
-    public class UserGroupController : ApiControllerBase {
+    public class UserGroupController : ApiControllerBase
+    {
 
         // GET api/<UserGroupController>/
         [HttpGet]

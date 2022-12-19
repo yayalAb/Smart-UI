@@ -11,15 +11,15 @@ using System.Reflection;
 
 namespace Infrastructure.Persistence
 {
-    public  class AppDbContext : IdentityDbContext<ApplicationUser> , IAppDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         private readonly IMediator _mediator;
         private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options , IMediator mediator , AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor ) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IMediator mediator, AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) : base(options)
         {
             _mediator = mediator;
-           _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
+            _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         }
 
         public DatabaseFacade database => Database;
@@ -38,7 +38,7 @@ namespace Infrastructure.Persistence
         public virtual DbSet<OperationStatus> OperationStatuses { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
         public virtual DbSet<Port> Ports { get; set; } = null!;
-        public virtual DbSet<ShippingAgent> ShippingAgents { get; set; } = null!;        
+        public virtual DbSet<ShippingAgent> ShippingAgents { get; set; } = null!;
         public virtual DbSet<Truck> Trucks { get; set; } = null!;
         public virtual DbSet<TruckAssignment> TruckAssignments { get; set; } = null!;
         public virtual DbSet<Setting> Settings {get; set;} = null!;
@@ -53,7 +53,7 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-          
+
 
             base.OnModelCreating(builder);
         }
@@ -66,7 +66,7 @@ namespace Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _mediator.DispatchDomainEvents(this);
-            
+
 
             return await base.SaveChangesAsync(cancellationToken);
         }

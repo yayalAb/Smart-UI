@@ -4,15 +4,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation> {
-    
-    public void Configure(EntityTypeBuilder<Documentation> entity) {
+public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation>
+{
+
+    public void Configure(EntityTypeBuilder<Documentation> entity)
+    {
         entity.Property(e => e.Type)
             .IsRequired();
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-            
+
         entity.Property(e => e.BankPermit)
             .HasMaxLength(45);
 
@@ -37,8 +39,8 @@ public class DocumentationConfiguration : IEntityTypeConfiguration<Documentation
         entity.HasOne(d => d.Operation)
             .WithMany(p => p.Documentaions)
             .HasForeignKey(d => d.OperationId)
-            .OnDelete(DeleteBehavior. Cascade);
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
-    
+
 }

@@ -8,7 +8,7 @@ namespace Infrastructure.Persistence.Configurations
 {
     public class PaymentConfiguaration : IEntityTypeConfiguration<Payment>
     {
-        public void Configure(EntityTypeBuilder<Payment>  entity)
+        public void Configure(EntityTypeBuilder<Payment> entity)
         {
             entity.Property(e => e.BankCode)
            .HasMaxLength(45);

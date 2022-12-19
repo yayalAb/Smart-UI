@@ -4,12 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
-    public void Configure(EntityTypeBuilder<Container> entity) {
+public class ContainerConfiguration : IEntityTypeConfiguration<Container>
+{
+    public void Configure(EntityTypeBuilder<Container> entity)
+    {
 
         entity.Property(e => e.Id)
             .ValueGeneratedOnAdd();
-            
+
         entity.Property(e => e.ContianerNumber)
             .IsRequired()
             .HasMaxLength(45);
@@ -36,7 +38,7 @@ public class ContainerConfiguration : IEntityTypeConfiguration<Container> {
         entity.HasMany<TruckAssignment>(c => c.TruckAssignments)
             .WithMany(ta => ta.Containers);
         entity.HasOne(c => c.GeneratedDocument)
-            .WithMany( d => d.Containers)
+            .WithMany(d => d.Containers)
             .HasForeignKey(c => c.GeneratedDocumentId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);

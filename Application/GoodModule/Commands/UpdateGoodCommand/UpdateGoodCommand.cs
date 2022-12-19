@@ -1,13 +1,12 @@
 
-using MediatR;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
 using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Application.Common.Models;
+using AutoMapper;
 using Domain.Entities;
-using Application.GoodModule.Commands.AssignGoodsCommand;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.GoodModule.Commands.UpdateGoodCommand
 {
@@ -59,14 +58,16 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
             if (request.Containers != null)
             {
                 operation.Containers = _mapper.Map<ICollection<Container>>(request.Containers);
-                operation.Containers.ToList().ForEach(container =>{
+                operation.Containers.ToList().ForEach(container =>
+                {
                     container.OperationId = request.OperationId;
-                     container.Goods.ToList().ForEach(good =>{
-                                    good.OperationId = request.OperationId;
-                                    good.Location = container.Location;
-                                    good.ContainerId = container.Id;
-                                    });
-            });
+                    container.Goods.ToList().ForEach(good =>
+                    {
+                        good.OperationId = request.OperationId;
+                        good.Location = container.Location;
+                        good.ContainerId = container.Id;
+                    });
+                });
             }
             if (request.Goods != null)
             {

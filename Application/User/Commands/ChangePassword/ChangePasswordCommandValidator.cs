@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace Application.User.Commands.ChangePassword
 {
-    public  class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCommand> 
+    public class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCommand>
     {
         public ChangePasswordCommandValidator()
         {
-        
+
             RuleFor(u => u.Email)
                 .NotEmpty()
                 .NotNull()
