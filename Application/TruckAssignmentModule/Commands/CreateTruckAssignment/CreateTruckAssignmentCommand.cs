@@ -132,7 +132,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                         await ChangeIsAssignedFlag(request.TruckId, request.DriverId, cancellationToken);
 
                         //generate gatepass operation status 
-                        await GenerateGatepass(request.OperationId, cancellationToken);
+                        await GenerateGatepass(request.GatePassType.ToUpper(), request.OperationId, cancellationToken);
                         await transaction.CommitAsync();
 
                         return CustomResponse.Succeeded("Gatepass Generation  Successful!");
@@ -164,7 +164,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 
 
         }
-        private async Task GenerateGatepass(int operationId, CancellationToken cancellationToken)
+        private async Task GenerateGatepass(string type, int operationId, CancellationToken cancellationToken)
         {
 
             //checking preconditions before generating gatepass
@@ -174,9 +174,8 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             }
 
             var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
-            var statusName = Enum.GetName(typeof(Status), Status.GatePassGenerated);
-            var newOperationStatus = new OperationStatus
-            {
+            var statusName = (type == Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated)) ? Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated) : Enum.GetName(typeof(Status), Status.ExitGatePassGenerated);
+            var newOperationStatus = new OperationStatus {
                 GeneratedDocumentName = DocumentName!,
                 GeneratedDate = DateTime.Now,
                 OperationId = operationId
