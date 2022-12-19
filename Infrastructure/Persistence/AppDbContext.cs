@@ -44,6 +44,8 @@ namespace Infrastructure.Persistence
         public virtual DbSet<Setting> Settings {get; set;} = null!;
         public virtual DbSet<Blacklist> Blacklists {get; set;} = null!;
         public virtual DbSet<BankInformation> BankInformation {get; set;} = null!;
+        public virtual DbSet<GeneratedDocument> GeneratedDocuments {get; set;} = null!;
+        public virtual DbSet<GeneratedDocumentGood> GeneratedDocumentGoods {get; set;} = null!;
 
 
 

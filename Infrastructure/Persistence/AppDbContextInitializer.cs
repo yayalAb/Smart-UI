@@ -2,6 +2,7 @@
 using Domain.Common.DestinationTypes;
 using Domain.Common.DocumentType;
 using Domain.Common.PaymentTypes;
+using Domain.Common.Units;
 using Domain.Entities;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -49,7 +50,7 @@ namespace Infrastructure.Persistence
             try
             {
                 await TrySeedAsync();
-                // await TrySeedLookup();
+                await TrySeedLookup();
                 // await TrySeedSettings();
                 // await removeLookups();
             }
@@ -157,67 +158,130 @@ namespace Infrastructure.Persistence
         public async Task TrySeedLookup()
         {
 
-            Lookup[] paymentTypes = {
-                new Lookup {
+            var allLookups = await _context.Lookups.ToListAsync();
+
+            List<Lookup> lookupKeyList = new List<Lookup>();
+            
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Payment"))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "key",
                     Value = "Payment"
-                },
-                new Lookup {
+                });
+            }
+
+            if(!allLookups.Any(l => (l.Key == "Payment" && l.Value == ShippingAgentPaymentType.Name))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "Payment",
                     Value = ShippingAgentPaymentType.Name
-                },
-                new Lookup {
+                });
+            }
+
+            if(!allLookups.Any(l => (l.Key == "Payment" && l.Value == TerminalPortPaymentType.Name))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "Payment",
                     Value = TerminalPortPaymentType.Name
-                },
-                //document lookup
-                new Lookup {
+                });
+            }
+
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Document"))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "key",
                     Value = "Document"
-                },
-                new Lookup {
+                });
+            }
+
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Documentation"))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "key",
                     Value = "Documentation"
-                },
-                new Lookup {
+                });
+            }
+
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "DestinationType"))) {
+                lookupKeyList.Add(new Lookup {
                     Key = "key",
                     Value = "DestinationType"
-                }
-            };
+                });
+            }
 
-            _context.Lookups.AddRange(paymentTypes);
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Currency"))) {
+                lookupKeyList.Add(new Lookup {
+                    Key = "key",
+                    Value = "Currency"
+                });
+            }
+            
+            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "WeightUnit"))) {
+                lookupKeyList.Add(new Lookup {
+                    Key = "key",
+                    Value = "WeightUnit"
+                });
+            }
 
-            var document_type_list = from type in DocumentType.Types
-                                     select new Lookup
-                                     {
+            foreach(var type in DocumentType.Types){
+                if(!allLookups.Any(l => (l.Key == "Document" && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
                                          Key = "Document",
                                          Value = type
-                                     };
+                                     });
+                }
+            }
 
-            var documentation_type_list = from type in DocumentationType.Types
-                                          select new Lookup
-                                          {
-                                              Key = "Documentation",
-                                              Value = type
-                                          };
+            foreach(var type in DocumentationType.Types){
+                if(!allLookups.Any(l => (l.Key == "Documentation" && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
+                                        Key = "Documentation",
+                                        Value = type
+                                    });
+                }
+            }
 
-            var destination_type_list = from type in DestinationType.Types
-                                        select new Lookup
-                                        {
-                                            Key = "DestinationType",
+            foreach(var type in DestinationType.Types){
+                if(!allLookups.Any(l => (l.Key == "DestinationType" && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
+                                        Key = "DestinationType",
+                                        Value = type
+                                    });
+                }
+            }
+
+            foreach(var type in WeightUnits.Units) {
+                if(!allLookups.Any(l => (l.Key == "WeightUnit" && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
+                                        Key = "WeightUnit",
+                                        Value = type
+                                    });
+                }
+            }
+
+            foreach(var type in Currency.Currencies) {
+                if(!allLookups.Any(l => (l.Key == "Currency" && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
+                                            Key = "Currency",
                                             Value = type
-                                        };
+                                        });
+                }
+            }
 
-            _context.Lookups.AddRange(document_type_list);
-            _context.Lookups.AddRange(documentation_type_list);
-            _context.Lookups.AddRange(destination_type_list);
+            foreach(var type in ShippingAgentPaymentType.Types) {
+                if(!allLookups.Any(l => (l.Key == ShippingAgentPaymentType.Name && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup { 
+                            Key = ShippingAgentPaymentType.Name, 
+                            Value = type 
+                        });
+                }
+            }
 
-            var shippingAgentPaymentNames = from type in ShippingAgentPaymentType.Types select new Lookup { Key = ShippingAgentPaymentType.Name, Value = type };
-            _context.Lookups.AddRange(shippingAgentPaymentNames);
+            foreach(var type in TerminalPortPaymentType.Types) {
+                if(!allLookups.Any(l => (l.Key == TerminalPortPaymentType.Name && l.Value == type))) {
+                    lookupKeyList.Add(new Lookup {
+                            Key = TerminalPortPaymentType.Name,
+                            Value = type
+                        });
+                }
+            }
 
-            var terminalPortPaymentNames = from type in TerminalPortPaymentType.Types select new Lookup { Key = TerminalPortPaymentType.Name, Value = type };
-            _context.Lookups.AddRange(terminalPortPaymentNames);
-
+            _context.Lookups.AddRange(lookupKeyList);
             await _context.SaveChangesAsync();
 
         }
