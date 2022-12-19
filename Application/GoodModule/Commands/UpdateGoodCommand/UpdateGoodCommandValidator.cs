@@ -30,9 +30,6 @@ public class UpdateGoodCommandValidator : AbstractValidator<UpdateGoodCommand>
                 .NotNull();
             RuleFor(ag => ag.Goods!.Select(g => g.Unit))
                 .NotNull();
-            RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
-                .NotNull()
-                .NotEmpty();
         });
 
         When(ag => ag.Containers != null, () =>
@@ -63,9 +60,6 @@ public class UpdateGoodCommandValidator : AbstractValidator<UpdateGoodCommand>
                 .NotNull()
                 .NotEmpty();
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
-                .NotNull()
-                .NotEmpty();
-            RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
                 .NotNull()
                 .NotEmpty();
             RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.UnitPrice)))

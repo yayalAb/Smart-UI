@@ -13,7 +13,6 @@ public class FetchGoodDto : IMapFrom<Good>
     public string WeightUnit { get; set; }
     public int Quantity { get; set; }
     public int RemainingQuantity { get; set; }
-    // public int NumberOfPackages { get; set; }
     public string Type { get; set; }
     public string? Location { get; set; }
     public string? ChasisNumber { get; set; }

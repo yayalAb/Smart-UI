@@ -106,8 +106,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             if (container == null)
                             {
 
-                                if (selectedGood.Container != null)
-                                {
+                                if (selectedGood.Container != null) {
                                     var container_to_be_updated = selectedGood.Container;
                                     selectedGood.Container = null;
                                     selectedGood.ContainerId = null;

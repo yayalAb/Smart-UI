@@ -30,9 +30,6 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
                 RuleFor(ag => ag.Goods!.Select(g => g.Weight))
                     .NotNull()
                     .NotEmpty();
-                RuleFor(ag => ag.Goods!.Select(g => g.NumberOfPackages))
-                    .NotNull()
-                    .NotEmpty();
             });
 
             When(ag => ag.Containers != null, () =>
@@ -68,9 +65,6 @@ namespace Application.GoodModule.Commands.UpdateGoodCommand
                      .NotNull()
                      .NotEmpty();
                 RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.Type)))
-                     .NotNull()
-                     .NotEmpty();
-                RuleFor(ag => ag.Containers!.SelectMany(c => c.Goods!.Select(g => g.NumberOfPackages)))
                      .NotNull()
                      .NotEmpty();
 
