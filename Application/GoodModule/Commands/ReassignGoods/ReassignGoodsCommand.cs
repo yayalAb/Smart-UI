@@ -73,8 +73,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             ContainerId = request.ContainerId,
                             OperationId = g.OperationId,
                             LocationPortId = g.LocationPortId,
-                            Container = (g.Container == null) ? null : new Container
-                            {
+                            Container = (g.Container == null) ? null : new Container {
                                 Id = g.Container.Id,
                                 ContianerNumber = g.Container.ContianerNumber,
                                 GoodsDescription = g.Container.GoodsDescription,

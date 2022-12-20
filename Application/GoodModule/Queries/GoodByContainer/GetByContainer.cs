@@ -10,27 +10,25 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.GoodModule.Queries.GoodByContainer;
 
-public record GetByContainer : IRequest<ICollection<UpdateGoodDto>>
+public record GetByContainer : IRequest<ICollection<GoodByContainerDto>>
 {
     public int ContainerId { get; set; }
 }
 
-public class GetByContainerHandler : IRequestHandler<GetByContainer, ICollection<UpdateGoodDto>>
-{
+public class GetByContainerHandler : IRequestHandler<GetByContainer, ICollection<GoodByContainerDto>> {
 
     private readonly IMapper _mapper;
     private readonly IAppDbContext _context;
     private readonly ILogger<GetAssignedGoodQueryHandler> _logger;
 
-    public GetByContainerHandler(IMapper mapper, IAppDbContext context, ILogger<GetAssignedGoodQueryHandler> logger)
-    {
+    public GetByContainerHandler(IMapper mapper, IAppDbContext context, ILogger<GetAssignedGoodQueryHandler> logger) {
         _mapper = mapper;
         _context = context;
         _logger = logger;
     }
 
-    public async Task<ICollection<UpdateGoodDto>> Handle(GetByContainer request, CancellationToken cancellationToken)
+    public async Task<ICollection<GoodByContainerDto>> Handle(GetByContainer request, CancellationToken cancellationToken)
     {
-        return await _context.Goods.Where(g => g.ContainerId == request.ContainerId).ProjectTo<UpdateGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
+        return await _context.Goods.Where(g => g.ContainerId == request.ContainerId).ProjectTo<GoodByContainerDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 }
