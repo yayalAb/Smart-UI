@@ -1,5 +1,6 @@
 using Application.Common.Exceptions;
 using Application.GoodModule.Commands.AssignGoodsCommand;
+using Application.GoodModule.Commands.DeleteGood;
 using Application.GoodModule.Commands.UpdateGoodCommand;
 using Application.GoodModule.Queries.GetAllGoodQuery;
 using Application.GoodModule.Queries.GetGoodQuery;
@@ -134,6 +135,18 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> delete(int id)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new DeleteGoodCommand { Id = id }));
             }
             catch (GhionException ex)
             {
