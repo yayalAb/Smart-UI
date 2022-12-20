@@ -90,43 +90,41 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                         }).ToListAsync();
 
                         foreach (ReassignedGoodDto gd in request.Goods)
-                        // foreach (Good selectedGood in goods)
                         {
 
                             var selectedGood = goods.Find(g => g.Id == gd.Id);
-                            // var gd = request.Goods.ToList().Find(g => g.Id == selectedGood.Id);
 
                             if (selectedGood == null) {
                                 continue;
                             }
 
-                            var remained = selectedGood.Quantity - gd.Quantity;
+                            var remained = selectedGood.RemainingQuantity - gd.Quantity;
                             var calculated_weight = ((selectedGood.Weight / selectedGood.Quantity) * gd.Quantity);
+                            var container_to_be_updated = selectedGood.Container;
 
-                            if (container == null)
-                            {
+                            if (container == null) {
 
-                                if (selectedGood.Container != null) {
-                                    var container_to_be_updated = selectedGood.Container;
+                                if (container_to_be_updated != null) {
+                                    
                                     selectedGood.Container = null;
                                     selectedGood.ContainerId = null;
                                     container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
                                     container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
                                     container_to_be_updated.Quantity -= 1;
                                     _context.Containers.Update(container_to_be_updated);
+                                    _context.Goods.Update(selectedGood);
+                                    await _context.SaveChangesAsync(cancellationToken);
                                 }
 
                                 continue;
 
                             }
 
-                            if (remained > 0)
-                            {
+                            if (remained > 0) {
 
                                 selectedGood.RemainingQuantity = remained;
 
-                                _context.Goods.Add(new Good
-                                {
+                                _context.Goods.Add(new Good {
                                     Description = selectedGood.Description,
                                     HSCode = selectedGood.HSCode,
                                     Manufacturer = selectedGood.Manufacturer,
@@ -156,10 +154,12 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             }
 
                             //check if the good is contained or unstafed
-                            if (selectedGood.Container != null)
+                            if (container_to_be_updated != null)
                             {
-                                selectedGood.Container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, selectedGood.Container.Currency);
-                                selectedGood.Container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), selectedGood.Container.Currency);
+                                container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.Currency);
+                                container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
+                                _context.Containers.Update(container_to_be_updated);
+                                await _context.SaveChangesAsync(cancellationToken);
                             }
 
                             if (container != null)
@@ -167,6 +167,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 container.Quantity += gd.Quantity;
                                 container.GrossWeight += calculated_weight;
                                 container.TotalPrice += AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency);
+                                _context.Containers.Update(container);
+                                await _context.SaveChangesAsync(cancellationToken);
                             }
 
                         }
