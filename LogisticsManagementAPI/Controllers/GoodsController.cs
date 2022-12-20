@@ -102,7 +102,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("/byContainer/{containerId}")]
+        [HttpGet("byContainer/{containerId}")]
         public async Task<ActionResult> byContainer(int containerId)
         {
             try
