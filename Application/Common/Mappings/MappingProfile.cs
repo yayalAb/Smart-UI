@@ -74,6 +74,7 @@ namespace Application.Common.Mappings
             CreateMap<CreateTruckCommand, Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
             CreateMap<UpdateGoodContainerDto, Container>().ReverseMap();
+            CreateMap<UpdateGoodDto, Good>().ReverseMap();
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
             CreateMap<SettingDto, Setting>().ReverseMap();
             CreateMap<AddressUpdateCommand, Address>().ReverseMap();

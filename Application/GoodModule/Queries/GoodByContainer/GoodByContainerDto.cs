@@ -4,6 +4,7 @@ using Domain.Entities;
 namespace Application.GoodModule.Queries.GoodByContainer;
 
 public class GoodByContainerDto : IMapFrom<Good> {
+    public int Id { get; set; }
     public string Description { get; set; } = null!;
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
@@ -20,4 +21,5 @@ public class GoodByContainerDto : IMapFrom<Good> {
     public float UnitPrice { get; set; }
     public float? CBM { get; set; }
     public int? LocationPortId { get; set; }
+    public int OperationId { get; set; }
 }
