@@ -83,6 +83,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
                                     good.Location = container.Location;
+                                    good.RemainingQuantity = good.Quantity;
                                     if (!sh_codes.Any(code => code == good.HSCode))
                                     {
                                         sh_codes.Add(good.HSCode);

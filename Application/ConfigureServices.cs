@@ -24,6 +24,7 @@ namespace Application
             services.AddScoped<DefaultCompanyService>();
             services.AddScoped<OperationService>();
             services.AddSingleton<AppdivConvertor>();
+            services.AddScoped<GeneratedDocumentService>();
             // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));

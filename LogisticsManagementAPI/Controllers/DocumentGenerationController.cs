@@ -1,5 +1,6 @@
 
 using Application.Common.Exceptions;
+using Application.GeneratedDocumentModule.Queries;
 using Application.OperationDocuments.Queries.GoodsRemoval;
 using Application.OperationDocuments.Queries.Number1;
 using Microsoft.AspNetCore.Mvc;
@@ -36,5 +37,21 @@ public class DocumentGenerationController : ApiControllerBase
         }
 
     }
+
+     [HttpGet]
+    [Route("GeneratedDocumentsList")]
+    public async Task<ActionResult> generatedDocs([FromQuery] GetAllGeneratedDocumentsQuery query)
+    {
+        try
+        {
+            return Ok(await Mediator.Send(query));
+        }
+        catch (GhionException ex)
+        {
+            return AppdiveResponse.Response(this, ex.Response);
+        }
+
+    }
+
 
 }
