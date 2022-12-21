@@ -95,9 +95,21 @@ namespace WebApi.Controllers
         [HttpGet("ByOperation/{OperationId}")]
         public async Task<ActionResult> ContainerListByOperation(int OperationId)
         {
+            try {
+                return Ok(await Mediator.Send(new GetByOperation { OperationId = OperationId }));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("ForDocument/{OperationId}")]
+        public async Task<ActionResult> ContainerListForDocument(int OperationId)
+        {
             try
             {
-                return Ok(await Mediator.Send(new GetByOperation { OperationId = OperationId }));
+                return Ok(await Mediator.Send(new GetByOperation { OperationId = OperationId, Type = true }));
             }
             catch (GhionException ex)
             {

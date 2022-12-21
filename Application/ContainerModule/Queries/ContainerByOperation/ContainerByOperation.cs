@@ -9,6 +9,7 @@ namespace Application.ContainerModule.Queries.ContainerByOperation;
 public class GetByOperation : IRequest<List<ContainerGoodCountDto>>
 {
     public int OperationId { get; init; }
+    public bool Type { get; init; } = false;
 }
 public class GetByOperationHandler : IRequestHandler<GetByOperation, List<ContainerGoodCountDto>>
 {
@@ -31,16 +32,22 @@ public class GetByOperationHandler : IRequestHandler<GetByOperation, List<Contai
     public async Task<List<ContainerGoodCountDto>> Handle(GetByOperation request, CancellationToken cancellationToken)
     {
 
-        return await _context.Containers.Include(c => c.Goods).Where(c => c.OperationId == request.OperationId).Select(c => new ContainerGoodCountDto
-        {
-            Id = c.Id,
-            ContianerNumber = c.ContianerNumber,
-            SealNumber = c.SealNumber,
-            Location = c.Location,
-            LocationPortId = c.LocationPortId,
-            OperationId = c.OperationId,
-            GoodCount = c.Goods.Count
-        }).ToListAsync();
+        return await _context.Containers
+            .Where(c => c.OperationId == request.OperationId && (request.Type ? (c.GeneratedDocumentId != null) : true))
+            .Select(c => new ContainerGoodCountDto {
+                Id = c.Id,
+                ContianerNumber = c.ContianerNumber,
+                SealNumber = c.SealNumber,
+                Location = c.Location,
+                LocationPortId = c.LocationPortId,
+                OperationId = c.OperationId,
+                Article = c.Article,
+                TotalPrice = c.TotalPrice,
+                Currency = c.Currency,
+                WeightMeasurement = c.WeightMeasurement,
+                GrossWeight = c.GrossWeight,
+                GoodCount = c.Quantity
+            }).ToListAsync();
 
     }
 

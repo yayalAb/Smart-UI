@@ -1,9 +1,9 @@
 
 using Application.Common;
+using Application.Common.Service;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Common.Service;
 using Application.OperationDocuments.Number9Transfer;
 using Application.OperationFollowupModule;
 using Application.PortModule;
