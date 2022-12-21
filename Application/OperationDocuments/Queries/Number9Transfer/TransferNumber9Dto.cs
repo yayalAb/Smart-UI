@@ -1,7 +1,8 @@
 using Application.ContainerModule;
 using Application.OperationDocuments.Number9.N9Dtos;
+using Application.OperationDocuments.Queries;
 
-namespace Application.OperationDocuments.Number9Transfer;
+namespace Application.OperationDocuments.Queries.Number9Transfer;
 public class TransferNumber9Dto
 {
     public string? defaultCompanyName { get; set; }
@@ -10,6 +11,6 @@ public class TransferNumber9Dto
     public N9CompanyDto company {get; set;}
     public N9OperationDto operation {get; set;}
     public N9PaymentDto? doPayment {get; set;}
-    public List<N9GoodDto> goods {get; set;}
+    public List<DocGoodDto> goods {get; set;}
     public List<ContainerDto> containers { get; set; } 
 }

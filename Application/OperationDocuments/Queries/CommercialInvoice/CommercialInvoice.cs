@@ -17,6 +17,7 @@ public record CommercialInvoice : IRequest<CommercialInvoiceDto2>
     public int TruckAssignmentId { get; init; }
     public int ContactPersonId { get; init; }
     public bool IsProformaInvoice { get; init; } = false;
+    public int BankInformationId { get; init;}
 }
 
 public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, CommercialInvoiceDto2>
@@ -48,7 +49,7 @@ public class CommercialInvoiceHandler : IRequestHandler<CommercialInvoice, Comme
             await _context.SaveChangesAsync(cancellationToken);
         }
         return (CommercialInvoiceDto2)await _documentationService
-                    .GetDocumentation(request.IsProformaInvoice ? Documents.ProformaInvoice : Documents.CommercialInvoice, request.operationId, request.TruckAssignmentId, request.ContactPersonId, cancellationToken);
+                    .GetDocumentation(request.IsProformaInvoice ? Documents.ProformaInvoice : Documents.CommercialInvoice, request.operationId, request.TruckAssignmentId, request.ContactPersonId, cancellationToken, request.BankInformationId);
 
     }
 }

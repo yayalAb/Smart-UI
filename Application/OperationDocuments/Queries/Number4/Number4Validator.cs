@@ -1,13 +1,14 @@
 using Application.Common.Interfaces;
 using FluentValidation;
 
-namespace Application.OperationDocuments.Queries.Number1;
-public class GenerateNumber1QueryValidator : AbstractValidator<GenerateNumber1Query>{
+namespace Application.OperationDocuments.Queries.Number4;
+public class Number4Validator : AbstractValidator<Number4>
+{
     private readonly IAppDbContext _context;
 
-    public GenerateNumber1QueryValidator(IAppDbContext context)
+    public Number4Validator(IAppDbContext context)
     {
-         _context = context;
+        _context = context;
         RuleFor(n => n.OperationId)
             .NotNull()
             .NotEmpty()
@@ -27,7 +28,7 @@ public class GenerateNumber1QueryValidator : AbstractValidator<GenerateNumber1Qu
             .NotEmpty()
             .Must(BeFoundInGeneratedDocTable).WithMessage("generated document with the provided id is not found");
         });
-    
+
     }
 
     private bool BeFoundInGeneratedDocTable(int? generatedDocumentId)

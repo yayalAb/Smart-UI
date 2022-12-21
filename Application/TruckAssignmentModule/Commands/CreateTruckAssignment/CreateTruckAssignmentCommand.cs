@@ -105,6 +105,7 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
                             SourcePortId = request.SourcePortId,
                             DestinationPortId = request.DestinationPortId,
                             AgreedTariff = request.AgreedTariff,
+                            TransportationMethod = request.TransportationMethod,
                             Currency = request.Currency,
                             GatePassType = request.GatePassType,
                             Containers = containers,
@@ -168,10 +169,10 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
         {
 
             //checking preconditions before generating gatepass
-            if (!await _operationEventHandler.IsDocumentApproved(operationId, Enum.GetName(typeof(Documents), Documents.ImportNumber9)!))
-            {
-                throw new GhionException(CustomResponse.BadRequest($"Import number9 must be approved before generating gatepass document"));
-            }
+            // if (!await _operationEventHandler.IsDocumentApproved(operationId, Enum.GetName(typeof(Documents), Documents.ImportNumber9)!))
+            // {
+            //     throw new GhionException(CustomResponse.BadRequest($"Import number9 must be approved before generating gatepass document"));
+            // }
 
             var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
             var statusName = (type == Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated)) ? Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated) : Enum.GetName(typeof(Status), Status.ExitGatePassGenerated);

@@ -5,11 +5,10 @@ using Application.Common.Models;
 using Application.Common.Service;
 using Application.CompanyModule.Queries;
 using Application.ContainerModule;
-using Application.OperationDocuments.Number9Transfer;
+using Application.OperationDocuments.Queries.Number9Transfer;
 using Application.OperationFollowupModule;
 using Application.PortModule;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.Common.PaymentTypes;
 using Domain.Entities;
 using Domain.Enums;
@@ -25,6 +24,8 @@ public record Number4 : IRequest<Number4Dto>
     public int DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
     public IEnumerable<GoodWithQuantityDto>? GoodIds { get; set; }
+    public bool isPrintOnly { get; set; }
+    public int? GeneratedDocumentId { get; set; }
 
 }
 
@@ -36,7 +37,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
     private readonly GeneratedDocumentService _generatedDocumentService;
     private readonly IMapper _mapper;
 
-    public Number4Handler(IAppDbContext context, OperationEventHandler operationEvent , GeneratedDocumentService generatedDocumentService , IMapper mapper )
+    public Number4Handler(IAppDbContext context, OperationEventHandler operationEvent, GeneratedDocumentService generatedDocumentService, IMapper mapper)
     {
         _context = context;
         _operationEvent = operationEvent;
@@ -53,107 +54,93 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
             {
                 try
                 {
-                
-                    // save No.4 doc
-                    var createDocRequest = new CreateGeneratedDocDto
+                    // save No.4 doc for create
+                    if (!request.isPrintOnly)
                     {
-                        OperationId = request.OperationId,
-                        NameOnPermitId = request.NameOnPermitId,
-                        DestinationPortId = request.DestinationPortId,
-                        documentType = Documents.TransferNumber9,
-                        ContainerIds = request.ContainerIds,
-                        GoodIds = request.GoodIds
+                        var createDocRequest = new CreateGeneratedDocDto
+                        {
+                            OperationId = request.OperationId,
+                            NameOnPermitId = request.NameOnPermitId,
+                            DestinationPortId = request.DestinationPortId,
+                            documentType = Documents.TransferNumber9,
+                            ContainerIds = request.ContainerIds,
+                            GoodIds = request.GoodIds
+                        };
+                        request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
+
+                    }
+                    // fetch no.4 document 
+                    var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
+
+                    var operation = new Operation
+                    {
+                        Id = doc.Operation.Id,
+                        Consignee = doc.Operation.Consignee,
+                        BillNumber = doc.Operation.BillNumber,
+                        ShippingLine = doc.Operation.ShippingLine,
+                        Quantity = doc.Operation.Quantity,
+
+                        GrossWeight = doc.Operation.GrossWeight,
+                        DestinationType = doc.Operation.DestinationType,
+                        ActualDateOfDeparture = doc.Operation.ActualDateOfDeparture,
+                        EstimatedTimeOfArrival = doc.Operation.EstimatedTimeOfArrival,
+                        VoyageNumber = doc.Operation.VoyageNumber,
+                        OperationNumber = doc.Operation.OperationNumber,
+                        Localization = doc.Operation.Localization,
+                        SNumber = doc.Operation.SNumber,
+                        SDate = doc.Operation.SDate,
+                        VesselName = doc.Operation.VesselName,
+                        ArrivalDate = doc.Operation.ArrivalDate,
+                        CountryOfOrigin = doc.Operation.CountryOfOrigin,
+                        REGTax = doc.Operation.REGTax,
+                        BillOfLoadingNumber = doc.Operation.BillOfLoadingNumber,
+
+                        PortOfLoading = new Port
+                        {
+                            PortNumber = doc.Operation.PortOfLoading.PortNumber,
+                            Country = doc.Operation.PortOfLoading.Country,
+                            Region = doc.Operation.PortOfLoading.Region,
+                            Vollume = doc.Operation.PortOfLoading.Vollume
+                        },
+
                     };
-                var createDocResult = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
 
-                var operation = _context.Operations
-                .Where(d => d.Id == request.OperationId)
-                .Include(o => o.Company)
-                .Include(o => o.Company.ContactPeople)
-                .Include(o => o.Containers)
-                .Include(o => o.PortOfLoading)
-                .Select(o => new Operation
-                {
-                    Id = o.Id,
-                    Consignee = o.Consignee,
-                    BillNumber = o.BillNumber,
-                    ShippingLine = o.ShippingLine,
-                    Quantity = o.Quantity,
-                    
-                    GrossWeight = o.GrossWeight,
-                    DestinationType = o.DestinationType,
-                    ActualDateOfDeparture = o.ActualDateOfDeparture,
-                    EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
-                    VoyageNumber = o.VoyageNumber,
-                    OperationNumber = o.OperationNumber,
-                    Localization = o.Localization,
-                    /////------------Additionals------
-                    SNumber = o.SNumber, // operation
-                    SDate = o.SDate, //operation
-                    VesselName = o.VesselName, // operation
-                    ArrivalDate = o.ArrivalDate, // operation
-                    CountryOfOrigin = o.CountryOfOrigin, // operation
-                    REGTax = o.REGTax,//
-                    BillOfLoadingNumber = o.BillOfLoadingNumber,
-                    
-                    PortOfLoading = new Port
+                    if (operation == null)
                     {
-                        PortNumber = o.PortOfLoading.PortNumber,
-                        Country = o.PortOfLoading.Country,
-                        Region = o.PortOfLoading.Region,
-                        Vollume = o.PortOfLoading.Vollume
-                    },
-                    Company = new Company
+                        throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
+                    }
+                    // else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
+                    // {
+                    //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
+                    // }
+                    var payment = _context.Payments.Where(c => c.OperationId == operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
+                    //save no4 operation status document
+                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
                     {
-                        Name = o.Company.Name,
-                        TinNumber = o.Company.TinNumber,
-                        CodeNIF = o.Company.CodeNIF,
-                    },
-                }).FirstOrDefault();
-
-                if (operation == null)
-                {
-                    throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
+                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number4)!,
+                        GeneratedDate = DateTime.Now,
+                        IsApproved = false,
+                        OperationId = request.OperationId
+                    }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
+                    var data = new Number4Dto
+                    {
+                        destinationPort = _mapper.Map<PortDto>(doc.DestinationPort),
+                        company = null,//TODO: 
+                        nameOnPermit = _mapper.Map<ContactPersonDto>(doc.ContactPerson),
+                        operation = operation,
+                        containers = _mapper.Map<ICollection<ContainerDto>>(doc.Containers),
+                        goods = doc.Goods,
+                        doPayment = payment
+                    };
+                    await transaction.CommitAsync();
+                    return data;
                 }
-                // else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
-                // {
-                //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
-                // }
-                var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
-                var contactPerson = await _context.ContactPeople
-                        .Where(cp => cp.Id == request.NameOnPermitId)
-                        .ProjectTo<ContactPersonDto>(_mapper.ConfigurationProvider)
-                        .FirstOrDefaultAsync();
-                if (contactPerson == null)
-                {
-                    throw new GhionException(CustomResponse.NotFound($"contact person with id = {request.NameOnPermitId}"));
-                }
-
-                await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-                {
-                    GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number4)!,
-                    GeneratedDate = DateTime.Now,
-                    IsApproved = false,
-                    OperationId = request.OperationId
-                }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
-                await transaction.CommitAsync();
-                return new Number4Dto
-                {
-                    destinationPort = _mapper.Map<PortDto>(createDocResult.destinationPort),
-                    company = operation.Company,
-                    nameOnPermit = contactPerson,
-                    operation = operation,
-                    containers =_mapper.Map<ICollection<ContainerDto>>( createDocResult.containers),
-                    goods = _mapper.Map<ICollection<DocGoodDto>>(createDocResult.goods),
-                    doPayment = payment
-                };
-            }
                 catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
-        }
         });
 
 

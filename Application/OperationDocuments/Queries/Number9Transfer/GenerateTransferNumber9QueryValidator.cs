@@ -1,13 +1,14 @@
 using Application.Common.Interfaces;
 using FluentValidation;
 
-namespace Application.OperationDocuments.Queries.Number1;
-public class GenerateNumber1QueryValidator : AbstractValidator<GenerateNumber1Query>{
+namespace Application.OperationDocuments.Queries.Number9Transfer;
+public class GenerateTransferNumber9QueryValidator: AbstractValidator<GenerateTransferNumber9Query>
+{
     private readonly IAppDbContext _context;
 
-    public GenerateNumber1QueryValidator(IAppDbContext context)
+    public GenerateTransferNumber9QueryValidator(IAppDbContext context)
     {
-         _context = context;
+        _context = context;
         RuleFor(n => n.OperationId)
             .NotNull()
             .NotEmpty()

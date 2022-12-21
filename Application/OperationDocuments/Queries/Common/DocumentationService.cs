@@ -23,7 +23,7 @@ public class DocumentationService
         _mapper = mapper;
         _logger = logger;
     }
-    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId, int contactPersonId, CancellationToken cancellationToken)
+    public async Task<DocsDto> GetDocumentation(Documents docType, int operationId, int truckAssignmentId, int contactPersonId, CancellationToken cancellationToken , int BankInformationId=0) 
     {
         if (!await _context.TruckAssignments.Where(ta => ta.Id == truckAssignmentId).AnyAsync())
         {
@@ -31,12 +31,11 @@ public class DocumentationService
         }
 
         var data = await _context.Operations
-                        .Include(o => o.Company)
-                            .ThenInclude(c => c.ContactPeople)
-                        .Include(o => o.TruckAssignments!.Where(ta => ta.Id == truckAssignmentId))
-                            .ThenInclude(ta => ta.Goods)!
-                                .ThenInclude(g => g.Container)
-
+                        // .Include(o => o.Company)
+                        //     .ThenInclude(c => c.ContactPeople)
+                        // .Include(o => o.TruckAssignments!.Where(ta => ta.Id == truckAssignmentId))
+                        //     .ThenInclude(ta => ta.Goods)!
+                        //         .ThenInclude(g => g.Container)
                         .Include(o => o.PortOfLoading)
                         .Where(d => d.Id == operationId)
                         .Select(o => new AllDocDto
@@ -44,36 +43,32 @@ public class DocumentationService
                             OperationNumber = o.OperationNumber,
                             PINumber = o.PINumber,
                             PIDate = o.PIDate,
-                            // CustomerName = o.Company.ContactPerson.Name,
-                            // CustomerAddress = string.Concat(o.Company.ContactPerson.City, " , ", o.Company.ContactPerson.Country),
-                            // CustomerPhone = o.Company.ContactPerson.Phone,
-                            // CustomerTinNumber = o.Company.ContactPerson.TinNumber,
                             CountryOfOrigin = o.CountryOfOrigin,
                             PortOfLoading = o.PortOfLoading.Country,
                             FinalDestination = o.FinalDestination,
                             Consignee = o.Consignee,
-                            PlaceOfDelivery = o.TruckAssignments == null
-                                                ? null
-                                                : o.TruckAssignments.FirstOrDefault()!.DestinationLocation,
-                            TransportationMethod = o.TruckAssignments == null
-                                                ? null
-                                                : o.TruckAssignments.FirstOrDefault()!.TransportationMethod,
-                            Goods = o.Goods!.Select(g => new CIGoodsDto
-                            {
-                                Description = g.Description,
-                                HSCode = g.HSCode,
-                                Quantity = g.Quantity,
-                                Unit = g.Unit,
-                                UnitPrice = g.UnitPrice,
-                                CBM = g.CBM,
-                                Weight = g.Weight,
-                                ContainerNumber = g.Container == null
-                                            ? null
-                                            : g.Container.ContianerNumber,
-                                SealNumber = g.Container == null
-                                            ? null
-                                            : g.Container.SealNumber
-                            })
+                            // PlaceOfDelivery = o.TruckAssignments == null
+                            //                     ? null
+                            //                     : o.TruckAssignments.FirstOrDefault()!.DestinationLocation,
+                            // TransportationMethod = o.TruckAssignments == null
+                            //                     ? null
+                            //                     : o.TruckAssignments.FirstOrDefault()!.TransportationMethod,
+                            // Goods = o.TruckAssignments.First().Goods!.Select(g => new CIGoodsDto
+                            // {
+                            //     Description = g.Description,
+                            //     HSCode = g.HSCode,
+                            //     Quantity = g.Quantity,
+                            //     Unit = g.Unit,
+                            //     UnitPrice = g.UnitPrice,
+                            //     CBM = g.CBM,
+                            //     Weight = g.Weight,
+                            //     ContainerNumber = g.Container == null
+                            //                 ? null
+                            //                 : g.Container.ContianerNumber,
+                            //     SealNumber = g.Container == null
+                            //                 ? null
+                            //                 : g.Container.SealNumber
+                            // })
 
                         })
                         .FirstOrDefaultAsync();
@@ -83,7 +78,48 @@ public class DocumentationService
             throw new GhionException(CustomResponse.NotFound($"Operation with id = {operationId} is Not found!"));
         }
         // fetch name on permit/ contact person for the documentation
-
+        var contactPerson = await _context.ContactPeople.FindAsync(contactPersonId);
+        data.CustomerName = contactPerson!.Name;
+        data.CustomerAddress =  string.Concat(contactPerson.City, " , ", contactPerson.Country);
+        data.CustomerPhone = contactPerson.Phone;
+        data.CustomerTinNumber = contactPerson.TinNumber;
+        // fetch truck assignment 
+        var truckAssignment = await _context.TruckAssignments
+                    .Include(ta => ta.Goods)
+                    .Include(ta => ta.Containers)!
+                        .ThenInclude(ta => ta.Goods)
+                    .Where(ta => ta.Id == truckAssignmentId)
+                    .FirstOrDefaultAsync();
+        data.TransportationMethod = truckAssignment!.TransportationMethod;
+        data.PlaceOfDelivery = truckAssignment.DestinationLocation;
+        data.Goods = truckAssignment.Goods == null || truckAssignment.Goods.Count == 0
+                        ?truckAssignment.Containers!.SelectMany(c => c.Goods)
+                            .Select(g => new CIGoodsDto
+                                {
+                                    Description = g.Description,
+                                    HSCode = g.HSCode,
+                                    Quantity = g.Quantity,
+                                    Unit = g.Unit,
+                                    UnitPrice = g.UnitPrice,
+                                    CBM = g.CBM,
+                                    Weight = g.Weight,
+                                    ContainerNumber =  g.Container!.ContianerNumber,
+                                    SealNumber = g.Container.SealNumber
+                                })
+                        :truckAssignment.Goods!.Select(g => new CIGoodsDto
+                            {
+                                Description = g.Description,
+                                HSCode = g.HSCode,
+                                Quantity = g.Quantity,
+                                Unit = g.Unit,
+                                UnitPrice = g.UnitPrice,
+                                CBM = g.CBM,
+                                Weight = g.Weight,
+                                ContainerNumber = null,
+                                SealNumber = null
+                            });
+        
+        
 
 
         if (docType != Documents.Waybill)
@@ -137,37 +173,21 @@ public class DocumentationService
             data.PlateNumber = truckData.PlateNumber;
             ////////
         }
-
+        //if commercial invoice
         if (docType == Documents.CommercialInvoice)
         {
-            var defaultInfo = await _context.Settings
-            .Include(s => s.DefaultCompany)
-            .Include(s => s.DefaultCompany.BankInformation)
-            .Select(s => new Setting
-            {
-                DefaultCompany = new Company
-                {
-                    BankInformation = s.DefaultCompany.BankInformation.Select(b => new BankInformation
-                    {
-                        AccountHolderName = b.AccountHolderName,
-                        BankName = b.BankName,
-                        AccountNumber = b.AccountNumber,
-                        SwiftCode = b.SwiftCode,
-                        BankAddress = b.BankAddress
-                    }).ToList()
-                },
-            }).FirstOrDefaultAsync();
+            var bankInfo = await  _context.BankInformation.FindAsync(BankInformationId);
 
-            if (defaultInfo == null)
+            if (bankInfo == null)
             {
                 throw new GhionException(CustomResponse.NotFound("ghion bank info not found"));
             }
 
-            data.AccountHolderName = defaultInfo.DefaultCompany.BankInformation.First().AccountHolderName;
-            data.BankName = defaultInfo.DefaultCompany.BankInformation.First().BankName;
-            data.BankAddress = defaultInfo.DefaultCompany.BankInformation.First().BankAddress;
-            data.AccountNumber = defaultInfo.DefaultCompany.BankInformation.First().AccountNumber;
-            data.SwiftCode = defaultInfo.DefaultCompany.BankInformation.First().SwiftCode;
+            data.AccountHolderName = bankInfo.AccountHolderName;
+            data.BankName = bankInfo.BankName;
+            data.BankAddress = bankInfo.BankAddress;
+            data.AccountNumber = bankInfo.AccountNumber;
+            data.SwiftCode = bankInfo.SwiftCode;
 
         }
 

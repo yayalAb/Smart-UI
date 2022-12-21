@@ -12,6 +12,7 @@ using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Gatepass;
 using Application.OperationDocuments.Queries.Number4;
 using Application.OperationDocuments.Queries.Number9;
+using Application.OperationDocuments.Queries.Number9Transfer;
 using Application.OperationDocuments.Queries.PackageList;
 using Application.OperationDocuments.Queries.T1Document;
 using Application.OperationDocuments.Queries.TruckWayBill;
@@ -217,25 +218,49 @@ namespace WebApi.Controllers
             }
 
         }
-        // [HttpPost("TransferNumber9")]
-        // public async Task<IActionResult> GenerateTransferNumber9([FromBody] GenerateTransferNumber9Query command) {
-
-        //     try {
-        //         return Ok(await Mediator.Send(command));
-        //     } catch(GhionException ex) {
-        //         return AppdiveResponse.Response(this, ex.Response);
-        //     } catch(Exception ex) {
-        //         return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-        //     }
-
-        // }
-
-        [HttpPost("Number4")]
-        public async Task<IActionResult> GenerateNumber4([FromBody]Number4 command)
+        [HttpPost("TransferNumber9")]
+        public async Task<IActionResult> GenerateTransferNumber9([FromBody] GenerateDocRequest request)
         {
 
             try
             {
+                var command = new GenerateTransferNumber9Query
+                {
+                    OperationId = request.OperationId,
+                    NameOnPermitId = request.NameOnPermitId,
+                    DestinationPortId = request.DestinationPortId,
+                    ContainerIds = request.ContainerIds,
+                    GoodIds = request.GoodIds,
+                    isPrintOnly = false
+                };
+                return Ok(await Mediator.Send(command));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
+        [HttpPost("Number4")]
+        public async Task<IActionResult> GenerateNumber4([FromBody] GenerateDocRequest request)
+        {
+
+            try
+            {
+                var command = new Number4
+                {
+                    OperationId = request.OperationId,
+                    NameOnPermitId = request.NameOnPermitId,
+                    DestinationPortId = request.DestinationPortId,
+                    ContainerIds = request.ContainerIds,
+                    GoodIds = request.GoodIds,
+                    isPrintOnly = false
+                };
                 return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
