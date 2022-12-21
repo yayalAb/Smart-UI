@@ -7,8 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Application.PaymentModule.Queries.GetPaymentList
-{
+namespace Application.PaymentModule.Queries.GetPaymentList {
     public record GetPaymentListQuery : IRequest<PaginatedList<PaymentDto>>
     {
         public int PageCount { get; init; } = 1;
