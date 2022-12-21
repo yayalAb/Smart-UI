@@ -13,7 +13,7 @@ public class Container : BaseAuditableEntity
     public string? GoodsDescription { get; set; }
     public string SealNumber { get; set; } = null!;
     public string Location { get; set; } = null!;
-    public int Article { get; set; } = 1;
+    public int Article { get; set; } = 0;
     public string Size { get; set; }
     public float GrossWeight { get; set; } = 0;
     public string WeightMeasurement { get; set; }

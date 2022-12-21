@@ -34,7 +34,7 @@ public class WeightUnits
     };
 
     public static string Name = "WeightUnits";
-    public static Unit Default = new Unit { name = "KG", rate = 1 };
+    public static Unit Default = new Unit { name = "kg", rate = 1 };
 
     public static Unit getUnit(string name)
     {
@@ -47,7 +47,7 @@ public class WeightUnits
             }
         }
 
-        throw new Exception("weight unit not found");
+        throw new Exception("weight unit " + name + " not found");
 
     }
 

@@ -45,15 +45,26 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
         {
 
             var executionStrategy = _context.database.CreateExecutionStrategy();
-            return await executionStrategy.ExecuteAsync(async () => {
-                using (var transaction = _context.database.BeginTransaction()) {
-                    try {
-                        var container = await _context.Containers.FindAsync(request.ContainerId);
+            return await executionStrategy.ExecuteAsync(async () =>
+            {
+                using (var transaction = _context.database.BeginTransaction())
+                {
+                    try
+                    {
+                        var container = request.ContainerId != null ? await _context.Containers.FindAsync(request.ContainerId) : null;
                         var good_id_list = from gs in request.Goods select gs.Id;
+                        var containers_tobe_updated = new List<Container>();
 
-                        var goods = await _context.Goods.Where(g => good_id_list.Contains(g.Id))
+                        if (container != null)
+                        {
+                            containers_tobe_updated.Add(container);
+                        }
+
+                        var goods = await _context.Goods.AsNoTracking().Where(g => good_id_list.Contains(g.Id))
                         .Include(g => g.Container)
-                        .Select(g => new Good {
+                        .Select(g => new Good
+                        {
+                            Id = g.Id,
                             Description = g.Description,
                             HSCode = g.HSCode,
                             Manufacturer = g.Manufacturer,
@@ -70,10 +81,11 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             Unit = g.Unit,
                             UnitPrice = g.UnitPrice,
                             CBM = g.CBM,
-                            ContainerId = request.ContainerId,
+                            ContainerId = g.ContainerId,
                             OperationId = g.OperationId,
                             LocationPortId = g.LocationPortId,
-                            Container = (g.Container == null) ? null : new Container {
+                            Container = (g.Container == null) ? null : new Container
+                            {
                                 Id = g.Container.Id,
                                 ContianerNumber = g.Container.ContianerNumber,
                                 GoodsDescription = g.Container.GoodsDescription,
@@ -84,7 +96,12 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 WeightMeasurement = g.Container.WeightMeasurement,
                                 Quantity = g.Container.Quantity,
                                 TotalPrice = g.Container.TotalPrice,
-                                Currency = g.Container.Currency
+                                Currency = g.Container.Currency,
+                                Location = g.Container.Location,
+                                LocationPortId = g.Container.LocationPortId,
+                                IsAssigned = g.Container.IsAssigned,
+                                OperationId = g.Container.OperationId,
+                                GeneratedDocumentId = g.Container.GeneratedDocumentId
                             }
                         }).ToListAsync();
 
@@ -93,90 +110,157 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                             var selectedGood = goods.Find(g => g.Id == gd.Id);
 
-                            if (selectedGood == null) {
+                            if (selectedGood == null)
+                            {
                                 continue;
                             }
 
                             var remained = selectedGood.RemainingQuantity - gd.Quantity;
                             var calculated_weight = ((selectedGood.Weight / selectedGood.Quantity) * gd.Quantity);
                             var container_to_be_updated = selectedGood.Container;
+                            selectedGood.Container = null;
 
-                            if (container == null) {
+
+                            //making goods unstaffed
+                            if (container == null)
+                            {
 
                                 if (container_to_be_updated != null) {
-                                    
-                                    selectedGood.Container = null;
-                                    selectedGood.ContainerId = null;
-                                    container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
-                                    container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
-                                    container_to_be_updated.Quantity -= 1;
-                                    _context.Containers.Update(container_to_be_updated);
+
+                                    //update the good
+                                    if (remained > 0) {
+                                        _context.Goods.Add(new Good {
+                                            Description = selectedGood.Description,
+                                            HSCode = selectedGood.HSCode,
+                                            Manufacturer = selectedGood.Manufacturer,
+                                            Weight = calculated_weight,
+                                            WeightUnit = selectedGood.WeightUnit,
+                                            Quantity = gd.Quantity,
+                                            RemainingQuantity = gd.Quantity,
+                                            Type = "Unstaff",
+                                            Location = selectedGood.Location,
+                                            ChasisNumber = selectedGood.ChasisNumber,
+                                            EngineNumber = selectedGood.EngineNumber,
+                                            ModelCode = selectedGood.ModelCode,
+                                            IsAssigned = selectedGood.IsAssigned,
+                                            Unit = selectedGood.Unit,
+                                            UnitPrice = selectedGood.UnitPrice,
+                                            CBM = selectedGood.CBM,
+                                            OperationId = selectedGood.OperationId,
+                                            LocationPortId = selectedGood.LocationPortId
+                                        });
+
+                                        selectedGood.RemainingQuantity = remained;
+                                        selectedGood.Weight -= calculated_weight;
+
+                                    } else {
+
+                                        selectedGood.ContainerId = null;
+                                        selectedGood.Type = "Unstaff";
+
+                                    }
+
                                     _context.Goods.Update(selectedGood);
-                                    await _context.SaveChangesAsync(cancellationToken);
+
+                                    //update container
+                                    var temp_container = containers_tobe_updated.FirstOrDefault(c => c.Id == container_to_be_updated.Id);
+                                    if (temp_container != null)
+                                    {
+                                        temp_container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, temp_container.WeightMeasurement);
+                                        temp_container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency);
+                                        temp_container.Quantity -= 1;
+                                    }
+                                    else
+                                    {
+                                        container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
+                                        container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
+                                        container_to_be_updated.Quantity -= 1;
+                                        containers_tobe_updated.Add(container_to_be_updated);
+                                    }
+
+                                    
+
                                 }
 
                                 continue;
 
                             }
 
-                            if (remained > 0) {
+                            //changing goods container
+                            else {
 
-                                selectedGood.RemainingQuantity = remained;
+                                //update the good
+                                if (remained > 0)
+                                {
 
-                                _context.Goods.Add(new Good {
-                                    Description = selectedGood.Description,
-                                    HSCode = selectedGood.HSCode,
-                                    Manufacturer = selectedGood.Manufacturer,
-                                    Weight = calculated_weight,
-                                    WeightUnit = selectedGood.WeightUnit,
-                                    Quantity = gd.Quantity,
-                                    RemainingQuantity = gd.Quantity,
-                                    Type = selectedGood.Type,
-                                    Location = selectedGood.Location,
-                                    ChasisNumber = selectedGood.ChasisNumber,
-                                    EngineNumber = selectedGood.EngineNumber,
-                                    ModelCode = selectedGood.ModelCode,
-                                    IsAssigned = selectedGood.IsAssigned,
-                                    Unit = selectedGood.Unit,
-                                    UnitPrice = selectedGood.UnitPrice,
-                                    CBM = selectedGood.CBM,
-                                    ContainerId = request.ContainerId,
-                                    OperationId = selectedGood.OperationId,
-                                    LocationPortId = selectedGood.LocationPortId
-                                });
+                                    selectedGood.RemainingQuantity = remained;
+                                    selectedGood.Weight -= calculated_weight;
+                                    _context.Goods.Update(selectedGood);
 
-                            }
-                            else
-                            {
-                                selectedGood.ContainerId = request.ContainerId;
-                                selectedGood.Container = null;
-                            }
+                                    _context.Goods.Add(new Good
+                                    {
+                                        Description = selectedGood.Description,
+                                        HSCode = selectedGood.HSCode,
+                                        Manufacturer = selectedGood.Manufacturer,
+                                        Weight = calculated_weight,
+                                        WeightUnit = selectedGood.WeightUnit,
+                                        Quantity = gd.Quantity,
+                                        RemainingQuantity = gd.Quantity,
+                                        Type = "Container",
+                                        Location = selectedGood.Location,
+                                        ChasisNumber = selectedGood.ChasisNumber,
+                                        EngineNumber = selectedGood.EngineNumber,
+                                        ModelCode = selectedGood.ModelCode,
+                                        IsAssigned = selectedGood.IsAssigned,
+                                        Unit = selectedGood.Unit,
+                                        UnitPrice = selectedGood.UnitPrice,
+                                        CBM = selectedGood.CBM,
+                                        ContainerId = request.ContainerId,
+                                        OperationId = selectedGood.OperationId,
+                                        LocationPortId = selectedGood.LocationPortId
+                                    });
 
-                            //check if the good is contained or unstafed
-                            if (container_to_be_updated != null)
-                            {
-                                container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.Currency);
-                                container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
-                                _context.Containers.Update(container_to_be_updated);
-                                await _context.SaveChangesAsync(cancellationToken);
-                            }
+                                }
+                                else
+                                {
+                                    selectedGood.ContainerId = request.ContainerId;
+                                    _context.Goods.Update(selectedGood);
+                                }
 
-                            if (container != null)
-                            {
+
+                                //check if the good is contained or unstafed
+                                //updating the container
+                                if (container_to_be_updated != null) {
+
+                                    var temp_container = containers_tobe_updated.FirstOrDefault(c => c.Id == container_to_be_updated.Id);
+                                    if (temp_container != null)
+                                    {
+                                        temp_container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, temp_container.WeightMeasurement);
+                                        temp_container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency);
+                                    }
+                                    else
+                                    {
+                                        container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
+                                        container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
+                                        containers_tobe_updated.Add(container_to_be_updated);
+                                    }
+
+                                }
+
                                 container.Quantity += gd.Quantity;
-                                container.GrossWeight += calculated_weight;
+                                container.GrossWeight += AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container.WeightMeasurement);
                                 container.TotalPrice += AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency);
-                                _context.Containers.Update(container);
-                                await _context.SaveChangesAsync(cancellationToken);
+
                             }
 
                         }
 
-                        _context.Goods.UpdateRange(goods);
+                        _context.Containers.UpdateRange(containers_tobe_updated);
                         await _context.SaveChangesAsync(cancellationToken);
                         await transaction.CommitAsync();
 
                         return CustomResponse.Succeeded("Goods are reassigned");
+
                     }
                     catch (Exception)
                     {
