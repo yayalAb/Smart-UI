@@ -1,3 +1,5 @@
+using Application.PortModule;
+
 namespace Application.OperationDocuments.Queries.Number1
 {
     public class Number1Dto
@@ -16,13 +18,13 @@ namespace Application.OperationDocuments.Queries.Number1
         public string? VesselName { get; set; } // operation
         public DateTime? ArrivalDate { get; set; } // operation
         public string? VoyageNumber { get; set; } // operation
-        public string? ConnaissementNumber { get; set; } // operation
+        // public string? ConnaissementNumber { get; set; } // operation
         public string? CountryOfOrigin { get; set; } // operation
         public float? REGTax { get; set; } // operation
         public ICollection<DocGoodDto> Goods { get; set; }
         public ICollection<No1ContainerDto> Containers { get; set; }
         public string? SourceLocation { get; set; }//??????????????
-        public string? DestinationLocation { get; set; }//??????????
+        public PortDto? DestinationLocation { get; set; }//??????????
 
 
     }

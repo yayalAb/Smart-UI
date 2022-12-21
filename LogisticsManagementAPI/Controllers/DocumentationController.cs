@@ -230,13 +230,13 @@ namespace WebApi.Controllers
 
         // }
 
-        [HttpGet("Number4/{operationId}")]
-        public async Task<IActionResult> GenerateNumber4(int operationId)
+        [HttpPost("Number4")]
+        public async Task<IActionResult> GenerateNumber4([FromBody]Number4 command)
         {
 
             try
             {
-                return Ok(await Mediator.Send(new Number4 { OperationId = operationId }));
+                return Ok(await Mediator.Send(command));
             }
             catch (GhionException ex)
             {

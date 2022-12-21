@@ -21,6 +21,7 @@ using Application.OperationModule.Commands.CreateOperation;
 using Application.OperationModule.Commands.UpdateOperation;
 using Application.PaymentModule.Commands.CreatePayment;
 using Application.PaymentModule.Commands.UpdatePayment;
+using Application.PortModule;
 using Application.SettingModule.Command.UpdateSettingCommand;
 using Application.SettingModule.Queries.DefaultCompany;
 using Application.ShippingAgentModule.Commands.CreateShippingAgent;
@@ -83,6 +84,7 @@ namespace Application.Common.Mappings
             CreateMap<AllDocDto, PackingListDto>();
             CreateMap<AllDocDto, TruckWayBillDto2>();
             CreateMap<AllDocDto, WaybillDto>();
+            CreateMap<PortDto , Port>().ReverseMap();
 
 
             var mapFromType = typeof(IMapFrom<>);

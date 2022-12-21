@@ -9,14 +9,21 @@ public class DocGoodDto : IMapFrom<Good>
     public string? HSCode { get; set; }
     public string? Manufacturer { get; set; }
     public float Weight { get; set; }
-    public int NumberOfPackages { get; set; }
+    public string WeightUnit { get; set; }
+    public int Quantity { get; set; }
+    public int RemainingQuantity { get; set; }
     public string Type { get; set; }
-    public string? Location { get; set; }
-    public string? Unit { get; set; }
-    public float? UnitPrice { get; set; }
+    public string Location { get; set; }
     public string? ChasisNumber { get; set; }
     public string? EngineNumber { get; set; }
     public string? ModelCode { get; set; }
+    public bool IsAssigned { get; set; } = false;
+    // additionals 
+    public string Unit { get; set; }
+    public float UnitPrice { get; set; }
+    public float? CBM { get; set; }
+    //////
+    public int? ContainerId { get; set; }
+    public int OperationId { get; set; }
     public int? LocationPortId { get; set; }
-
 }

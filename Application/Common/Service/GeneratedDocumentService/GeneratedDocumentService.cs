@@ -17,11 +17,11 @@ public class GeneratedDocumentService {
         _context = context;
         _mapper = mapper;
     }
-      public async Task<(List<Good> goods, List<Container> containers)> CreateGeneratedDocumentRecord(CreateGeneratedDocDto request, CancellationToken cancellationToken)
+      public async Task<(List<Good> goods, List<Container> containers , Port destinationPort)> CreateGeneratedDocumentRecord(CreateGeneratedDocDto request, CancellationToken cancellationToken)
     {
         List<Good> goods = new List<Good>();
         List<Container> containers = new List<Container>();
-        if (request.ContainerIds == null && request.GoodIds == null)
+        if ((request.ContainerIds == null || request.ContainerIds.Count() == 0 )&& (request.GoodIds == null || request.GoodIds.Count() == 0))
         {
             throw new GhionException(CustomResponse.BadRequest("both goodIds and containerIds can not be null!"));
         }
@@ -98,7 +98,8 @@ public class GeneratedDocumentService {
             await _context.SaveChangesAsync(cancellationToken);
 
         }
-        return (goods: goods, containers: containers);
+        var destinationPort = await _context.Ports.FindAsync(request.DestinationPortId);
+        return (goods: goods, containers: containers , destinationPort: destinationPort!);
     }
     public async Task<GeneratedDocumentDto> fetchGeneratedDocument(int id , CancellationToken cancellationToken){
         return await _context.GeneratedDocuments

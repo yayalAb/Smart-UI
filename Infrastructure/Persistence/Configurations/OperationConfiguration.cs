@@ -12,6 +12,9 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
         entity.Property(e => e.OpenedDate)
             .IsRequired(true)
             .HasColumnType("datetime");
+        entity.HasIndex(u => u.ContactPersonId)
+            .IsUnique(false)
+            ;
 
         entity.Property(e => e.OperationNumber)
             .IsRequired(true)
@@ -74,4 +77,5 @@ public class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
+    
 }

@@ -9,9 +9,9 @@ using WebApi.Models;
 namespace WebApi.Controllers;
 public class DocumentGenerationController : ApiControllerBase
 {
-    [HttpGet]
+    [HttpPost]
     [Route("Number1")]
-    public async Task<ActionResult> generateNumber1([FromQuery] GenerateNumber1Query query)
+    public async Task<ActionResult> generateNumber1([FromBody] GenerateNumber1Query query)
     {
         try
         {
