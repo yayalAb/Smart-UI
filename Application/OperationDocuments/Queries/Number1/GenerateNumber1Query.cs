@@ -20,9 +20,9 @@ namespace Application.OperationDocuments.Queries.Number1;
 
 public record GenerateNumber1Query : IRequest<Number1Dto>
 {
-    public int OperationId { get; init; }
-    public int NameOnPermitId { get; set; }
-    public int DestinationPortId { get; set; }
+    public int? OperationId { get; init; }
+    public int? NameOnPermitId { get; set; }
+    public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
     public IEnumerable<GoodWithQuantityDto>? GoodIds { get; set; }
     public bool isPrintOnly { get; set; }
@@ -56,27 +56,30 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
             {
                 try
                 {
-                    if (!await _context.Operations.AnyAsync(o => o.Id == request.OperationId))
-                    {
-                        throw new GhionException(CustomResponse.NotFound("There is no Operation with the given Id!"));
-                    }
-                    // save No.1 doc for create
+                  // save No.1 doc for create
                     if (!request.isPrintOnly)
                     {
                         var createDocRequest = new CreateGeneratedDocDto
                         {
-                            OperationId = request.OperationId,
-                            NameOnPermitId = request.NameOnPermitId,
-                            DestinationPortId = request.DestinationPortId,
-                            documentType = Documents.TransferNumber9,
+                            OperationId = (int)request.OperationId!,
+                            NameOnPermitId = (int)request.NameOnPermitId!,
+                            DestinationPortId = (int)request.DestinationPortId!,
+                            documentType = Documents.Number1,
                             ContainerIds = request.ContainerIds,
                             GoodIds = request.GoodIds
                         };
-                         request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
-
+                        request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
+                        // update operation status and generate doc
+                        var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
+                        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                        {
+                            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number1)!,
+                            GeneratedDate = DateTime.Now,
+                            IsApproved = false,
+                            OperationId = (int)request.OperationId
+                        }, statusName!);
                     }
 
-                    var date = DateTime.Now;
                     // fetch number1 data
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
 
@@ -119,15 +122,7 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                     data.DefaultCompanyName = settingData!.DefaultCompany.Name;
                     data.DefaultCompanyCodeNIF = settingData.DefaultCompany.CodeNIF;
 
-                    // update operation status and generate doc
-                    var statusName = Enum.GetName(typeof(Status), Status.Number1Generated);
-                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-                    {
-                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number1)!,
-                        GeneratedDate = date,
-                        IsApproved = false,
-                        OperationId = request.OperationId
-                    }, statusName!);
+
                     await transaction.CommitAsync();
                     return data;
                 }

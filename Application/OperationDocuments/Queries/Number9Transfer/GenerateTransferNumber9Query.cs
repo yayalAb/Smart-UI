@@ -18,9 +18,9 @@ using Microsoft.Extensions.Logging;
 namespace Application.OperationDocuments.Queries.Number9Transfer;
 public record GenerateTransferNumber9Query : IRequest<TransferNumber9Dto>
 {
-    public int OperationId { get; set; }
-    public int NameOnPermitId { get; set; }
-    public int DestinationPortId { get; set; }
+    public int? OperationId { get; set; }
+    public int? NameOnPermitId { get; set; }
+    public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
     public IEnumerable<GoodWithQuantityDto>? GoodIds { get; set; }
     public bool isPrintOnly { get; set; }
@@ -58,25 +58,25 @@ public class GenerateTransferNumber9QueryHandler : IRequestHandler<GenerateTrans
                     {
                         var createDocRequest = new CreateGeneratedDocDto
                         {
-                            OperationId = request.OperationId,
-                            NameOnPermitId = request.NameOnPermitId,
-                            DestinationPortId = request.DestinationPortId,
+                            OperationId = (int)request.OperationId!,
+                            NameOnPermitId = (int)request.NameOnPermitId!,
+                            DestinationPortId = (int)request.DestinationPortId!,
                             documentType = Documents.TransferNumber9,
                             ContainerIds = request.ContainerIds,
                             GoodIds = request.GoodIds
                         };
-                         request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
+                        request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
 
+                        // generated document status
+                        await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                        {
+                            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.TransferNumber9)!,
+                            GeneratedDate = DateTime.Now,
+                            IsApproved = false,
+                            OperationId = (int)request.OperationId
+                        }, Enum.GetName(typeof(Status), Status.TransferNumber9Generated)!);
                     }
 
-                    // generated document status
-                    await _operationEventHandler.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-                    {
-                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.TransferNumber9)!,
-                        GeneratedDate = DateTime.Now,
-                        IsApproved = false,
-                        OperationId = request.OperationId
-                    }, Enum.GetName(typeof(Status), Status.TransferNumber9Generated)!);
 
                     //fetch data
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);

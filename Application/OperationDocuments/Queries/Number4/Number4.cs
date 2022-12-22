@@ -19,9 +19,9 @@ namespace Application.OperationDocuments.Queries.Number4;
 
 public record Number4 : IRequest<Number4Dto>
 {
-    public int OperationId { get; set; }
-    public int NameOnPermitId { get; set; }
-    public int DestinationPortId { get; set; }
+    public int? OperationId { get; set; }
+    public int? NameOnPermitId { get; set; }
+    public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
     public IEnumerable<GoodWithQuantityDto>? GoodIds { get; set; }
     public bool isPrintOnly { get; set; }
@@ -59,15 +59,22 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     {
                         var createDocRequest = new CreateGeneratedDocDto
                         {
-                            OperationId = request.OperationId,
-                            NameOnPermitId = request.NameOnPermitId,
-                            DestinationPortId = request.DestinationPortId,
-                            documentType = Documents.TransferNumber9,
+                            OperationId = (int)request.OperationId!,
+                            NameOnPermitId = (int)request.NameOnPermitId!,
+                            DestinationPortId = (int)request.DestinationPortId!,
+                            documentType = Documents.Number4,
                             ContainerIds = request.ContainerIds,
                             GoodIds = request.GoodIds
                         };
                         request.GeneratedDocumentId = await _generatedDocumentService.CreateGeneratedDocumentRecord(createDocRequest, cancellationToken);
-
+                        //save no4 operation status document
+                        await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                        {
+                            GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number4)!,
+                            GeneratedDate = DateTime.Now,
+                            IsApproved = false,
+                            OperationId = (int)request.OperationId
+                        }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
                     }
                     // fetch no.4 document 
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
@@ -114,14 +121,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     // }
                     var payment = _context.Payments.Where(c => c.OperationId == operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
-                    //save no4 operation status document
-                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
-                    {
-                        GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.Number4)!,
-                        GeneratedDate = DateTime.Now,
-                        IsApproved = false,
-                        OperationId = request.OperationId
-                    }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
+
                     var data = new Number4Dto
                     {
                         destinationPort = _mapper.Map<PortDto>(doc.DestinationPort),

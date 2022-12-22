@@ -21,7 +21,8 @@ namespace Domain.Enums
         lookup,
         group,
         settings,
-        print
+        print,
+        currency_converter
 
     }
 }
