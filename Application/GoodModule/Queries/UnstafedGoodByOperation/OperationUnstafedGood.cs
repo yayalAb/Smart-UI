@@ -9,7 +9,7 @@ namespace Application.GoodModule.Queries.UnstafedGoodByOperation;
 public class OperationUnstafedGood : IRequest<ICollection<FetchGoodDto>>
 {
     public int OperationId { set; get; }
-    public bool Type { get; set; }
+    public string Type { get; set; }
 }
 public class OperationUnstafedGoodHandler : IRequestHandler<OperationUnstafedGood, ICollection<FetchGoodDto>>
 {
@@ -31,12 +31,27 @@ public class OperationUnstafedGoodHandler : IRequestHandler<OperationUnstafedGoo
 
     public async Task<ICollection<FetchGoodDto>> Handle(OperationUnstafedGood request, CancellationToken cancellationToken)
     {
-        return request.Type ? await _context.Goods
-                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
-                        .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync() :
-                    await _context.Goods
-                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId != null || c.ContainerId == 0))
+        switch(request.Type) {
+            case "contained":
+                return await _context.Goods
+                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId != null || c.ContainerId != 0))
                         .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
+            case "document":
+                return await _context.Goods
+                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0) && c.RemainingQuantity > 0)
+                        .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
+            default:
+                return await _context.Goods
+                        .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
+                        .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
+        };
+
+        // return request.Type ? await _context.Goods
+        //                 .Where(c => c.OperationId == request.OperationId && (c.ContainerId == null || c.ContainerId == 0))
+        //                 .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync() :
+        //             await _context.Goods
+        //                 .Where(c => c.OperationId == request.OperationId && (c.ContainerId != null || c.ContainerId == 0))
+        //                 .ProjectTo<FetchGoodDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
 

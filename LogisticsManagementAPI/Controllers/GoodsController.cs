@@ -69,7 +69,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = true }));
+                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = "unstaffed" }));
             }
             catch (GhionException ex)
             {
@@ -82,7 +82,20 @@ namespace WebApi.Controllers
         {
             try
             {
-                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = false }));
+                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = "contained" }));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+        [HttpGet("documentSelection/{operationId}")]
+        public async Task<ActionResult> documentSelection(int operationId)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new OperationUnstafedGood { OperationId = operationId, Type = "document" }));
             }
             catch (GhionException ex)
             {
