@@ -5,6 +5,7 @@ using Domain.Entities;
 namespace Application.Common.Service;
 public class GeneratedDocumentDto : IMapFrom<GeneratedDocument>
 {
+    public int Id { get; set; }
     public string LoadType { get; set; } // container , unstaff
     public string DocumentType { get; set; } /// t1 , no.1....
     public Operation Operation { get; set; }

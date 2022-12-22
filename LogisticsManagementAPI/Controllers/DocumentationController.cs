@@ -119,10 +119,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+            
 
         }
 
@@ -138,10 +135,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+            
 
         }
 
@@ -157,10 +151,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+            
 
         }
 
@@ -176,11 +167,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-
+          
         }
 
         [HttpGet("CommercialInvoice")]
@@ -195,10 +182,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+            
 
         }
 
@@ -214,10 +198,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+           
 
         }
         [HttpPost("TransferNumber9")]
@@ -241,11 +222,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-
+           
         }
 
         [HttpPost("Number4")]
@@ -269,10 +246,7 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+           
 
         }
 
@@ -289,44 +263,11 @@ namespace WebApi.Controllers
             {
                 return AppdiveResponse.Response(this, ex.Response);
             }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
+           
 
         }
 
 
-        [HttpGet("printDocument")]
-        public async Task<IActionResult> PrintDocument([FromQuery] int documentId, string documentType)
-        {
-
-            try
-            {
-                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.TransferNumber9)!.ToUpper())
-                {
-                    return Ok(await Mediator.Send(new GenerateTransferNumber9Query { isPrintOnly = true, GeneratedDocumentId = documentId }));
-                }
-                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.Number1)!.ToUpper())
-                {
-                    return Ok(await Mediator.Send(new GenerateNumber1Query { isPrintOnly = true, GeneratedDocumentId = documentId }));
-                }
-                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.Number4)!.ToUpper())
-                {
-                    return Ok(await Mediator.Send(new Number4 { isPrintOnly = true, GeneratedDocumentId = documentId }));
-                }
-                throw new GhionException(CustomResponse.BadRequest("invalid document type"));
-            }
-            catch (GhionException ex)
-            {
-                return AppdiveResponse.Response(this, ex.Response);
-            }
-            catch (Exception ex)
-            {
-                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
-            }
-
-        }
 
 
     }
