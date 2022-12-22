@@ -12,6 +12,7 @@ public class N9OperationDto : IMapFrom<Operation>
     public float? Quantity { get; set; }
     public float? GrossWeight { get; set; }
     public string DestinationType { get; set; }
+    public string BillNumber { get; set; }
     public string? SourceDocument { get; set; }
     public DateTime? EstimatedTimeOfArrival { get; set; }
     public string? VoyageNumber { get; set; }

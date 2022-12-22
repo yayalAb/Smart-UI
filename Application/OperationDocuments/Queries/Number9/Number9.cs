@@ -57,6 +57,7 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                                     ShippingLine = o.ShippingLine,
                                     GoodsDescription = o.GoodsDescription,
                                     Quantity = o.Quantity,
+                                    BillNumber = o.BillNumber,
                                     GrossWeight = o.GrossWeight,
                                     DestinationType = o.DestinationType,
                                     SourceDocument = o.SourceDocument,
