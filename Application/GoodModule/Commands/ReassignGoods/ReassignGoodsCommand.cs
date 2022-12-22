@@ -25,18 +25,20 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
+        private readonly CurrencyConversionService _currencyService;
         private readonly ILogger<AssignGoodsCommandHandler> _logger;
         private readonly IMapper _mapper;
 
         public ReassignGoodsCommandHandler(
             IIdentityService identityService,
             IAppDbContext context,
+            CurrencyConversionService currencyService,
             ILogger<AssignGoodsCommandHandler> logger,
             IMapper mapper
         )
         {
             _identityService = identityService;
-            _context = context;
+            _currencyService = currencyService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -84,6 +86,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                             ContainerId = g.ContainerId,
                             OperationId = g.OperationId,
                             LocationPortId = g.LocationPortId,
+                            Created = g.Created,
                             Container = (g.Container == null) ? null : new Container
                             {
                                 Id = g.Container.Id,
@@ -101,7 +104,8 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 LocationPortId = g.Container.LocationPortId,
                                 IsAssigned = g.Container.IsAssigned,
                                 OperationId = g.Container.OperationId,
-                                GeneratedDocumentId = g.Container.GeneratedDocumentId
+                                GeneratedDocumentId = g.Container.GeneratedDocumentId,
+                                Created = g.Container.Created
                             }
                         }).ToListAsync();
 
@@ -167,13 +171,13 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     if (temp_container != null)
                                     {
                                         temp_container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, temp_container.WeightMeasurement);
-                                        temp_container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency);
+                                        temp_container.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency, selectedGood.Created);
                                         temp_container.Quantity -= 1;
                                     }
                                     else
                                     {
                                         container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
-                                        container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
+                                        container_to_be_updated.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency, selectedGood.Created);
                                         container_to_be_updated.Quantity -= 1;
                                         containers_tobe_updated.Add(container_to_be_updated);
                                     }
@@ -236,12 +240,12 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     if (temp_container != null)
                                     {
                                         temp_container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, temp_container.WeightMeasurement);
-                                        temp_container.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency);
+                                        temp_container.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency, selectedGood.Created);
                                     }
                                     else
                                     {
                                         container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
-                                        container_to_be_updated.TotalPrice -= AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency);
+                                        container_to_be_updated.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency, selectedGood.Created);
                                         containers_tobe_updated.Add(container_to_be_updated);
                                     }
 
@@ -250,6 +254,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 container.Quantity += gd.Quantity;
                                 container.GrossWeight += AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container.WeightMeasurement);
                                 container.TotalPrice += AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency);
+                                container.TotalPrice += (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency, selectedGood.Created);
 
                             }
 

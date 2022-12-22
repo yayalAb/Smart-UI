@@ -27,18 +27,21 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
         private readonly IIdentityService _identityService;
         private readonly IAppDbContext _context;
+        private readonly CurrencyConversionService _currencyService;
         private readonly ILogger<AssignGoodsCommandHandler> _logger;
         private readonly IMapper _mapper;
 
         public AssignGoodsCommandHandler(
             IIdentityService identityService,
             IAppDbContext context,
+            CurrencyConversionService currencyService,
             ILogger<AssignGoodsCommandHandler> logger,
             IMapper mapper
         )
         {
             _identityService = identityService;
             _context = context;
+            _currencyService = currencyService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -78,7 +81,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                 container.Quantity = container.Goods.Count;
                                 container.WeightMeasurement = WeightUnits.Default.name;
                                 container.Currency = Currency.Default.name;
-                                container.Goods.ToList().ForEach(good =>
+                                container.Goods.ToList().ForEach(async good =>
                                 {
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
@@ -88,7 +91,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     {
                                         sh_codes.Add(good.HSCode);
                                         container.Article += 1;
-                                        container.TotalPrice += (AppdivConvertor.CurrencyConversion(good.Unit, good.UnitPrice) * good.Quantity);
+                                        container.TotalPrice += (float) ( await _currencyService.convert(good.Unit, good.UnitPrice, container.Currency, DateTime.Today) * good.Quantity);
                                         container.GrossWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
                                     }
                                 });

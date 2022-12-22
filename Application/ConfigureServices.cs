@@ -22,6 +22,7 @@ namespace Application
             services.AddScoped<OperationEventHandler>();
             services.AddScoped<DocumentationService>();
             services.AddScoped<DefaultCompanyService>();
+            services.AddScoped<CurrencyConversionService>();
             services.AddScoped<OperationService>();
             services.AddSingleton<AppdivConvertor>();
             services.AddScoped<GeneratedDocumentService>();
