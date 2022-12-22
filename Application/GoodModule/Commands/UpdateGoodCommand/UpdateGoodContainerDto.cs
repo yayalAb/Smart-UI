@@ -12,6 +12,10 @@ public class UpdateGoodContainerDto : IMapFrom<Container>
     public string Size { get; set; }
     public string Location { get; set; }
     public int? LocationPortId { get; set; }
+    public string GoodsDescription { get; set; }
+     public string WeightMeasurement { get; set; }
+    public string Currency { get; set; }
+
     public List<UpdateGoodDto> Goods { get; set; }
 
 }
