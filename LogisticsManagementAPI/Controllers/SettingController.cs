@@ -55,12 +55,9 @@ public class SettingController : ApiControllerBase
     [HttpPost]
     [Route("addCurrency")]
     public async Task<ActionResult> addCurrency(AddCurrencyRate command) {
-        try
-        {
+        try {
             return Ok(await Mediator.Send(command));
-        }
-        catch (GhionException ex)
-        {
+        } catch (GhionException ex) {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }
@@ -71,30 +68,30 @@ public class SettingController : ApiControllerBase
         try
         {
 
-            switch (gridName) {
-                case "User":
+            switch (gridName.ToLower()) {
+                case "user":
                     return Ok(await Mediator.Send(new UserListSearch {Word = word}));
-                case "Operation":
+                case "operation":
                     return Ok(await Mediator.Send(new SearchOperation {Word = word}));
-                case "ShippingAgent":
+                case "shippingAgent":
                     return Ok(await Mediator.Send(new SearchShippingagent {Word = word}));
-                case "Payment":
+                case "payment":
                     return Ok(await Mediator.Send(new PaymentListSearch {Word = word}));
-                case "Driver":
+                case "driver":
                     return Ok(await Mediator.Send(new DriverListSearch {Word = word}));
-                case "Truck":
+                case "truck":
                     return Ok(await Mediator.Send(new TruckListSearch {Word = word}));
-                case "Port":
+                case "port":
                     return Ok(await Mediator.Send(new PortListSearch {Word = word}));
-                case "Company":
+                case "company":
                     return Ok(await Mediator.Send(new CompanyListSearch {Word = word}));
-                case "GetPass":
+                case "getpass":
                     return Ok(await Mediator.Send(new TruckAssignmentListSearch {Word = word}));
-                case "UserGroup":
+                case "usergroup":
                     return Ok(await Mediator.Send(new UserGroupListSearch {Word = word}));
-                case "Lookup":
+                case "lookup":
                     return Ok(await Mediator.Send(new LookupListSearch {Word = word}));
-                case "Documentation":
+                case "documentation":
                     return Ok(await Mediator.Send(new DocumentationListSearch {Word = word}));
                 default:
                     return AppdiveResponse.Response(this, CustomResponse.NotFound("Grid not found"));

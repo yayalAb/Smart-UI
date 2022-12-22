@@ -14,11 +14,11 @@ namespace Application.SettingModule.Command.CreateTodayCurrencyRate {
 
         public string Currency { get; init; }
         public double Rate { get; init; }
+        public DateTime Date {get; set;}
 
     }
 
-    public class AddCurrencyRateHandler : IRequestHandler<AddCurrencyRate, CustomResponse>
-    {
+    public class AddCurrencyRateHandler : IRequestHandler<AddCurrencyRate, CustomResponse> {
         private readonly IAppDbContext _context;
         private readonly CurrencyConversionService _currencyService;
 
@@ -28,11 +28,27 @@ namespace Application.SettingModule.Command.CreateTodayCurrencyRate {
             _currencyService = currencyService;
         }
 
-        public async Task<CustomResponse> Handle(AddCurrencyRate request, CancellationToken cancellationToken)
-        {
-            _context.Units.Add(new Domain.Entities.CurrencyConversion{ Currency = request.Currency, Rate = request.Rate});
-            await _context.SaveChangesAsync(cancellationToken);
-            return CustomResponse.Succeeded("Currency rate saved");
+        public async Task<CustomResponse> Handle(AddCurrencyRate request, CancellationToken cancellationToken) {
+
+            var currency = await _context.Units.Where(u => u.Currency == request.Currency && u.Date.Date == request.Date.Date).FirstOrDefaultAsync();
+
+            if(currency != null){
+                currency.Rate = request.Rate;
+                await _context.SaveChangesAsync(cancellationToken);
+                return CustomResponse.Succeeded("Currency rate updated");
+            }else{
+
+                _context.Units.Add(new Domain.Entities.CurrencyConversion{
+                    Currency = request.Currency,
+                    Rate = request.Rate,
+                    Date = request.Date.Date
+                });
+
+                await _context.SaveChangesAsync(cancellationToken);
+                return CustomResponse.Succeeded("Currency rate saved");
+
+            }
+
         }
         
     }
