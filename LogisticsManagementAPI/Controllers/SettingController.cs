@@ -8,6 +8,7 @@ using Application.LookUp.Query.GetAllLookups;
 using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.PaymentModule.Queries.GetPaymentList;
 using Application.PortModule.Queries.GetAllPortsQuery;
+using Application.SettingModule.Command.CreateTodayCurrencyRate;
 using Application.SettingModule.Command.UpdateSettingCommand;
 using Application.SettingModule.Queries.DefaultCompany;
 using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
@@ -44,6 +45,19 @@ public class SettingController : ApiControllerBase
         try
         {
             return Ok(await Mediator.Send(new GetDefaultCompany()));
+        }
+        catch (GhionException ex)
+        {
+            return AppdiveResponse.Response(this, ex.Response);
+        }
+    }
+
+    [HttpPost]
+    [Route("addCurrency")]
+    public async Task<ActionResult> addCurrency(AddCurrencyRate command) {
+        try
+        {
+            return Ok(await Mediator.Send(command));
         }
         catch (GhionException ex)
         {
