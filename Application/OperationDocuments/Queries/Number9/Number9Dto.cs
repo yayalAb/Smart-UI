@@ -10,6 +10,7 @@ public class Number9Dto
     public N9CompanyDto company { get; set; }
     public N9OperationDto operation { get; set; }
     public N9PaymentDto doPayment { get; set; }
+    public ICollection<N9ContainerDto> container { get; set; }
     public ICollection<N9GoodDto> goods { get; set; }
 
 }

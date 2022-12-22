@@ -32,7 +32,7 @@ public class CreatePaymentCommandValidator : AbstractValidator<Number9>
 
     private bool BeOfType(string Type)
     {
-        return Type.ToLower() == "import" || Type.ToLower() == "transfer";
+        return Type.ToLower() == "unstaffed" || Type.ToLower() == "container";
     }
 
 }
