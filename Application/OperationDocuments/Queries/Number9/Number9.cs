@@ -29,7 +29,12 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     private readonly DefaultCompanyService _defaultCompanyService;
 
 
-    public Number9Handler(IAppDbContext context, OperationEventHandler operationEvent, DefaultCompanyService defaultCompanyService, IMapper mapper) {
+    public Number9Handler(
+        IAppDbContext context, 
+        OperationEventHandler operationEvent, 
+        DefaultCompanyService defaultCompanyService, 
+        IMapper mapper
+    ) {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
@@ -39,12 +44,11 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     public async Task<Number9Dto> Handle(Number9 request, CancellationToken cancellationToken) {
 
         var executionStrategy = _context.database.CreateExecutionStrategy();
-        return await executionStrategy.ExecuteAsync(async () =>
-        {
-            using (var transaction = _context.database.BeginTransaction())
-            {
-                try
-                {
+        return await executionStrategy.ExecuteAsync(async () => {
+
+            using (var transaction = _context.database.BeginTransaction()) {
+                
+                try {
                     var operation = _context.Operations.Where(d => d.Id == request.OperationId)
                                 .Include(o => o.Company)
                                 .Include(o => o.Containers)
@@ -83,11 +87,10 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                                         CodeNIF = o.Company.CodeNIF
                                     },
                                     Goods = (o.Goods != null && request.Type == "unstaffed") ? _mapper.Map<ICollection<N9GoodDto>>(o.Goods) : null,
-                                    Containers = (o.Containers != null && request.Type == "contained") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
+                                    Containers = (o.Containers != null && request.Type == "container") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
                                 }).First();
 
-                    if (operation == null)
-                    {
+                    if (operation == null) {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
 
