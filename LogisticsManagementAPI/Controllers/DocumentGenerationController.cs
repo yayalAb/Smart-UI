@@ -11,10 +11,19 @@ public class DocumentGenerationController : ApiControllerBase
 {
     [HttpPost]
     [Route("Number1")]
-    public async Task<ActionResult> generateNumber1([FromBody] GenerateNumber1Query query)
+    public async Task<ActionResult> generateNumber1([FromBody] GenerateDocRequest request)
     {
         try
         {
+            var query = new GenerateNumber1Query
+            {
+                OperationId = request.OperationId,
+                NameOnPermitId = request.NameOnPermitId,
+                DestinationPortId = request.DestinationPortId,
+                ContainerIds = request.ContainerIds,
+                GoodIds = request.GoodIds,
+                isPrintOnly = false
+            };
             return Ok(await Mediator.Send(query));
         }
         catch (GhionException ex)
@@ -38,18 +47,18 @@ public class DocumentGenerationController : ApiControllerBase
 
     }
 
-    //  [HttpGet]
-    // [Route("GeneratedDocumentsList")]
-    // public async Task<ActionResult> generatedDocs([FromQuery] GetAllGeneratedDocumentsQuery query)
-    // {
-    //     try
-    //     {
-    //         return Ok(await Mediator.Send(query));
-    //     }
-    //     catch (GhionException ex)
-    //     {
-    //         return AppdiveResponse.Response(this, ex.Response);
-    //     }
+    [HttpGet]
+    [Route("GeneratedDocumentsList")]
+    public async Task<ActionResult> generatedDocs([FromQuery] GetAllGeneratedDocumentsQuery query)
+    {
+        try
+        {
+            return Ok(await Mediator.Send(query));
+        }
+        catch (GhionException ex)
+        {
+            return AppdiveResponse.Response(this, ex.Response);
+        }
 
     // }
 

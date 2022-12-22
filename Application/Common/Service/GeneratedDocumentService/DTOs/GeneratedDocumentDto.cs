@@ -1,4 +1,5 @@
 using Application.Common.Mappings;
+using Application.OperationDocuments.Queries;
 using Domain.Entities;
 
 namespace Application.Common.Service;
@@ -9,6 +10,6 @@ public class GeneratedDocumentDto : IMapFrom<GeneratedDocument>
     public Operation Operation { get; set; }
     public Port DestinationPort { get; set; }
     public ContactPerson ContactPerson { get; set; }
-    public ICollection<Container> Containers { get; set; }
-    public ICollection<GeneratedDocumentsGoodsDto> GeneratedDocumentsGoods { get; set; }
+    public List<Container> Containers { get; set; }
+    public List<DocGoodDto> Goods { get; set; }
 }

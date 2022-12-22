@@ -1,4 +1,4 @@
-namespace Application.OperationDocuments.Number9Transfer
+namespace Application.OperationDocuments.Queries.Number9Transfer
 {
     public class GoodWithQuantityDto
     {

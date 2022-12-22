@@ -8,7 +8,7 @@ namespace Application.OperationDocuments.Queries.Number4;
 
 public class Number4Dto
 {
-    public Company company { get; set; }
+    public Company? company { get; set; }
     public ContactPersonDto nameOnPermit { get; set; }
     public Operation operation { get; set; }
     public ICollection<ContainerDto> containers { get; set; }
