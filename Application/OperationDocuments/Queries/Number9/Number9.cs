@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Application.Common;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -14,8 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.Number9;
 
-public record Number9 : IRequest<Number9Dto>
-{
+public record Number9 : IRequest<Number9Dto> {
     public int OperationId { get; init; }
     public string Type { get; init; }
     public int ContactPersonId { get; init; }
@@ -27,7 +25,6 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     private readonly IMapper _mapper;
     private readonly OperationEventHandler _operationEvent;
     private readonly DefaultCompanyService _defaultCompanyService;
-
 
     public Number9Handler(
         IAppDbContext context, 
@@ -86,8 +83,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                                         TinNumber = o.Company.TinNumber,
                                         CodeNIF = o.Company.CodeNIF
                                     },
-                                    Goods = (o.Goods != null && request.Type == "unstaffed") ? _mapper.Map<ICollection<N9GoodDto>>(o.Goods) : null,
-                                    Containers = (o.Containers != null && request.Type == "container") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
+                                    Goods = (o.Goods != null && request.Type.ToLower() == "unstaff") ? _mapper.Map<ICollection<N9GoodDto>>(o.Goods) : null,
+                                    Containers = (o.Containers != null && request.Type.ToLower() == "container") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
                                 }).First();
 
                     if (operation == null) {
