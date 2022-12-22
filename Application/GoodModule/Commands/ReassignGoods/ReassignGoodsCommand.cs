@@ -253,7 +253,6 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                                 container.Quantity += gd.Quantity;
                                 container.GrossWeight += AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container.WeightMeasurement);
-                                container.TotalPrice += AppdivConvertor.CurrencyConversion(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency);
                                 container.TotalPrice += (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container.Currency, selectedGood.Created);
 
                             }
