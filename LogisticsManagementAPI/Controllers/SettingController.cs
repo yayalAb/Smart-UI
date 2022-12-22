@@ -65,8 +65,7 @@ public class SettingController : ApiControllerBase
     [HttpGet("gridSearch/{gridName}/{word}")]
     public async Task<ActionResult> gridSearch(string gridName, string word)
     {
-        try
-        {
+        try {
 
             switch (gridName.ToLower()) {
                 case "user":
