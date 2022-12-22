@@ -30,6 +30,7 @@ namespace Application.Common.Interfaces
         DbSet<BankInformation> BankInformation {get; set;}
         DbSet<GeneratedDocument> GeneratedDocuments {get; set;}
         DbSet<GeneratedDocumentGood> GeneratedDocumentsGoods { get; set; }
+        DbSet<CurrencyConversion> Units { get; set; }
 
 
         Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);

@@ -46,7 +46,7 @@ namespace Infrastructure.Persistence
         public virtual DbSet<BankInformation> BankInformation {get; set;} = null!;
         public virtual DbSet<GeneratedDocument> GeneratedDocuments { get; set; } = null!;
         public virtual DbSet<GeneratedDocumentGood> GeneratedDocumentsGoods { get; set; } = null!;
-       
+        public virtual DbSet<CurrencyConversion> Units { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder builder)
