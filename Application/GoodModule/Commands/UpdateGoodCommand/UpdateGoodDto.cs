@@ -10,7 +10,6 @@ public class UpdateGoodDto : IMapFrom<Good> {
     public float Weight { get; set; }
     public string WeightUnit { get; set; }
     public int Quantity { get; set; }
-    public int RemainingQuantity { get; set; }
     public string Type { get; set; } = null!;
     public string Location { get; set; }
     public string? ChasisNumber { get; set; }
@@ -20,4 +19,5 @@ public class UpdateGoodDto : IMapFrom<Good> {
     public string Unit { get; set; }
     public float UnitPrice { get; set; }
     public float? CBM { get; set; }
+    
 }

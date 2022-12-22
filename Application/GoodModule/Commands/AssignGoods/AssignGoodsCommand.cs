@@ -56,16 +56,23 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                 {
                     try
                     {
-                        List<Good> goods = _mapper.Map<List<Good>>(request.Goods);
-                        goods.ForEach(good =>
-                        {
-                            good.OperationId = request.OperationId;
-                            good.RemainingQuantity = good.Quantity;
-                        });
 
-                        if (goods.Any(good => good.Location == null))
+                        List<Good> goods = _mapper.Map<List<Good>>(request.Goods);
+                        if (goods != null && goods.Count != 0)
                         {
-                            throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
+
+                            goods.ForEach(good =>
+                            {
+                                good.OperationId = request.OperationId;
+                                good.RemainingQuantity = good.Quantity;
+                            });
+
+                            if (goods.Any(good => good.Location == null))
+                            {
+                                throw new GhionException(CustomResponse.BadRequest("location of goods can not be null if container is not provided"));
+                            }
+                            await _context.AddRangeAsync(goods);
+                            await _context.SaveChangesAsync(cancellationToken);
                         }
 
                         if (request.Containers != null)
@@ -73,15 +80,15 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                             List<string> sh_codes = new List<string>();
                             List<Container> containers = _mapper.Map<List<Container>>(request.Containers);
-                            containers.ForEach(container =>
+                            foreach (var container in containers)
                             {
 
                                 container.OperationId = request.OperationId;
                                 container.Article = 1;
                                 container.Quantity = container.Goods.Count;
-                                container.WeightMeasurement = WeightUnits.Default.name;
-                                container.Currency = Currency.Default.name;
-                                container.Goods.ToList().ForEach(async good =>
+                                container.WeightMeasurement = container.WeightMeasurement;
+                                container.Currency = container.Currency;
+                                foreach (var good in container.Goods)
                                 {
                                     good.OperationId = request.OperationId;
                                     good.ContainerId = container.Id;
@@ -91,12 +98,12 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     {
                                         sh_codes.Add(good.HSCode);
                                         container.Article += 1;
-                                        container.TotalPrice += (float) ( await _currencyService.convert(good.Unit, good.UnitPrice, container.Currency, DateTime.Today) * good.Quantity);
-                                        container.GrossWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
                                     }
-                                });
+                                    container.TotalPrice += (float)(await _currencyService.convert(good.Unit, good.UnitPrice, container.Currency, DateTime.Today) * good.Quantity);
+                                    container.GrossWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+                                }
 
-                            });
+                            }
                             await _context.Containers.AddRangeAsync(containers);
                             await _context.SaveChangesAsync(cancellationToken);
 
@@ -112,8 +119,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
 
                         }
 
-                        await _context.AddRangeAsync(goods);
-                        await _context.SaveChangesAsync(cancellationToken);
+
                         await transaction.CommitAsync();
                         return CustomResponse.Succeeded("goods  assigned successfully", 201);
 

@@ -1,3 +1,4 @@
+using System.Linq;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -81,11 +82,13 @@ public class GeneratedDocumentService
                 .Where(g => request.ContainerIds.ToList().Contains(g.Id)).ToList();
             if (containers.Count != request.ContainerIds.ToList().Count)
             {
-                var unfoundIds = request.ContainerIds.ToList()
-                        .Where(id => containers
-                            .Where(c => c.Id == id).Any()
-                        ).ToList();
-                throw new GhionException(CustomResponse.BadRequest($" containers with ids = {unfoundIds} are not found "));
+                // var unfoundIds = request.ContainerIds.ToList()
+                //         .Where(id => containers
+                //             .Where(c => c.Id == id).Any()
+                            
+                //         ).Select(id => id.ToString());
+                
+                throw new GhionException(CustomResponse.BadRequest($" one or more containers with the provided id is not found "));
             }
 
             var newGeneratedDoc = new GeneratedDocument
@@ -123,6 +126,7 @@ public class GeneratedDocumentService
         }
         return new GeneratedDocumentDto
         {
+            Id = doc.Id,
             LoadType = doc.LoadType,
             DocumentType = doc.DocumentType,
             Operation = doc. Operation,

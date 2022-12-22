@@ -22,9 +22,17 @@ public class CurrencyConversionService
 
     public async Task<CurrencyConversion> getCurrency(string currencyName, DateTime date) {
         
+        if(Currency.Default.name == currencyName){
+            return new CurrencyConversion {
+                Currency = currencyName,
+                Rate = Currency.Default.rate,
+                Date = DateTime.Now
+            };
+        }
+
         var unit = await _context.Units.Where(u => u.Currency == currencyName && u.Date == date.Date).FirstOrDefaultAsync();
         if(unit == null) {
-            throw new Exception($"currency {currencyName} for today not found!");
+            throw new GhionException(CustomResponse.NotFound( $"currency {currencyName} for today not found!"));
         }
         
         return unit;
