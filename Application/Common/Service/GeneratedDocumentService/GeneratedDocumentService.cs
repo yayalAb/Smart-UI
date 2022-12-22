@@ -34,7 +34,7 @@ public class GeneratedDocumentService
             var newGeneratedDoc = new GeneratedDocument
             {
                 LoadType = "good",
-                DocumentType = Enum.GetName(typeof(Documents), Documents.TransferNumber9)!,
+                DocumentType = Enum.GetName(typeof(Documents),request.documentType)!,
                 OperationId = request.OperationId,
                 DestinationPortId = request.DestinationPortId,
                 ContactPersonId = request.NameOnPermitId,
@@ -115,8 +115,8 @@ public class GeneratedDocumentService
                 .Include(gd => gd.ContactPerson)
                 .Include(gd => gd.Containers)
                 .Include(gd => gd.GeneratedDocumentsGoods)
+                    .ThenInclude(g => g.Good)
                 .Where(gd => gd.Id == id)
-                // .ProjectTo<GeneratedDocumentDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
         if(doc == null){
             throw new GhionException(CustomResponse.NotFound($"generatedDocument with id = {id} is not found"));
@@ -129,26 +129,28 @@ public class GeneratedDocumentService
             DestinationPort = doc.DestinationPort,
             ContactPerson = doc.ContactPerson,
             Containers = doc.Containers.ToList(),
-            Goods =  doc.GeneratedDocumentsGoods.Select(gdg => new DocGoodDto
-                    {
-                        Id = gdg.Good.Id,
-                        Description = gdg.Good.Description,
-                        HSCode = gdg.Good.HSCode,
-                        Manufacturer = gdg.Good.Manufacturer,
-                        Weight = (gdg.Good.Weight * gdg.Quantity) / gdg.Good.Quantity,// (total good weight * quantity for transfer9 /total good quantity)
-                        WeightUnit = gdg.Good.WeightUnit,
-                        Quantity = gdg.Quantity, // the selected quantity for transfer9
-                        InitialQuantity = gdg.Good.Quantity, // quanitity entere`
-                        RemainingQuantity = gdg.Good.RemainingQuantity,
-                        Type = gdg.Good.Type,
-                        Location = gdg.Good.Location,
-                        ChasisNumber = gdg.Good.ChasisNumber,
-                        EngineNumber = gdg.Good.EngineNumber,
-                        ModelCode = gdg.Good.ModelCode,
-                        Unit = gdg.Good.Unit,
-                        UnitPrice = gdg.Good.UnitPrice,
-                        CBM = gdg.Good.CBM
-                    }).ToList()
+            Goods = doc.GeneratedDocumentsGoods == null || doc.GeneratedDocumentsGoods.Count == 0
+                        ?new List<DocGoodDto>()
+                        : doc.GeneratedDocumentsGoods.Select(gdg => new DocGoodDto
+                                {
+                                    Id = gdg.Good.Id,
+                                    Description = gdg.Good.Description,
+                                    HSCode = gdg.Good.HSCode,
+                                    Manufacturer = gdg.Good.Manufacturer,
+                                    Weight = (gdg.Good.Weight * gdg.Quantity) / gdg.Good.Quantity,// (total good weight * quantity for transfer9 /total good quantity)
+                                    WeightUnit = gdg.Good.WeightUnit,
+                                    Quantity = gdg.Quantity, // the selected quantity for transfer9
+                                    InitialQuantity = gdg.Good.Quantity, // quanitity entere`
+                                    RemainingQuantity = gdg.Good.RemainingQuantity,
+                                    Type = gdg.Good.Type,
+                                    Location = gdg.Good.Location,
+                                    ChasisNumber = gdg.Good.ChasisNumber,
+                                    EngineNumber = gdg.Good.EngineNumber,
+                                    ModelCode = gdg.Good.ModelCode,
+                                    Unit = gdg.Good.Unit,
+                                    UnitPrice = gdg.Good.UnitPrice,
+                                    CBM = gdg.Good.CBM
+                                }).ToList()
 
         };
 

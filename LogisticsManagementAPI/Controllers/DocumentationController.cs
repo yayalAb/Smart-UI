@@ -10,12 +10,14 @@ using Application.DocumentationModule.Queries.GetDocumentationPaginatedList;
 using Application.OperationDocuments.Queries.CertificateOfOrigin;
 using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Gatepass;
+using Application.OperationDocuments.Queries.Number1;
 using Application.OperationDocuments.Queries.Number4;
 using Application.OperationDocuments.Queries.Number9;
 using Application.OperationDocuments.Queries.Number9Transfer;
 using Application.OperationDocuments.Queries.PackageList;
 using Application.OperationDocuments.Queries.T1Document;
 using Application.OperationDocuments.Queries.TruckWayBill;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
@@ -293,6 +295,39 @@ namespace WebApi.Controllers
             }
 
         }
+
+
+        [HttpGet("printDocument")]
+        public async Task<IActionResult> PrintDocument([FromQuery] int documentId, string documentType)
+        {
+
+            try
+            {
+                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.TransferNumber9)!.ToUpper())
+                {
+                    return Ok(await Mediator.Send(new GenerateTransferNumber9Query { isPrintOnly = true, GeneratedDocumentId = documentId }));
+                }
+                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.Number1)!.ToUpper())
+                {
+                    return Ok(await Mediator.Send(new GenerateNumber1Query { isPrintOnly = true, GeneratedDocumentId = documentId }));
+                }
+                if (documentType.ToUpper() == Enum.GetName(typeof(Documents), Documents.Number4)!.ToUpper())
+                {
+                    return Ok(await Mediator.Send(new Number4 { isPrintOnly = true, GeneratedDocumentId = documentId }));
+                }
+                throw new GhionException(CustomResponse.BadRequest("invalid document type"));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+            catch (Exception ex)
+            {
+                return AppdiveResponse.Response(this, CustomResponse.Failed(ex.Message));
+            }
+
+        }
+
 
     }
 }
