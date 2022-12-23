@@ -1,6 +1,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Common.Service;
 using Application.OperationFollowupModule;
 using Domain.Entities;
 using Domain.Enums;
@@ -41,7 +42,7 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
                     {
                         throw new GhionException(CustomResponse.BadRequest($"T1 must be approved before generating goods removal document "));
                     }
-                    List<TruckAssignmentDto> truckAssignments = new List<TruckAssignmentDto>();
+                    // fetch data from db
                     var operationData = await _context.Operations.Where(o => o.Id == request.OperationId)
                                                 .Include(o => o.PortOfLoading)
                                                 .Include(o => o.Company)
@@ -58,14 +59,11 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
                                                                                         : o.PortOfLoading.Country,
                                                     VoyageNumber = o.VoyageNumber
                                                 }!
-                                                ).FirstOrDefaultAsync();
-                    for (int i = 0; i < request.TruckAssignmentIds.Count; i++)
-                    {
-                        var ta = await _context.TruckAssignments.Where(ta => ta.Id == request.TruckAssignmentIds[i])
+                                                ).FirstOrDefaultAsync();    
+                    var truckAssignments = await _context.TruckAssignments.Where(ta => request.TruckAssignmentIds.Contains(ta.Id))
                                         .Include(ta => ta.Truck)
                                         .Include(ta => ta.Driver)
-                                        .Include(ta => ta.Containers)
-                                            .ThenInclude(c => c.Goods)
+                                        .Include(ta => ta.Containers)!
                                         .Include(ta => ta.Goods)
                                         .Select(ta => new TruckAssignmentDto
                                         {
@@ -81,14 +79,21 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
                                             ContainerNumbers = ta.Containers == null || ta.Containers.Count == 0
                                                                             ? null
                                                                             : ta.Containers.Select(c => c.ContianerNumber).ToList(),
-                                            Quantity = getQuantity(ta.Containers, ta.Goods),
+                                            Quantity = ta.Containers != null?
+                                                            string.Join(",", ta.Containers.GroupBy(c => c.Size).Select(grp => $"{grp.Count()}X{grp.Key}").ToList())
+                                                        :ta.Goods != null ?
+                                                            ta.Goods.Select(g => g.Quantity).Sum().ToString()
+                                                        :null,
+
+                                            // Quantity = getQuantity(ta.Containers, ta.Goods),
                                             Weight = getWeight(ta.Containers, ta.Goods),
                                             Description = getDescription(ta.Containers, ta.Goods)
 
-                                        }).FirstOrDefaultAsync();
-                        truckAssignments.Add(ta);
+                                        }).ToListAsync();
+                    var difference = truckAssignments.Count - request.TruckAssignmentIds.Count;
+                    if(difference != 0){
+                        throw new GhionException(CustomResponse.NotFound($"{difference} truck assignments with the provided id is not found"));
                     }
-
                     // update operation status and generate doc
                     var date = DateTime.Now;
                     var statusName = Enum.GetName(typeof(Status), Status.GoodsRemovalGenerated);
@@ -130,29 +135,28 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
         });
 
     }
-    private static string? getQuantity(ICollection<Container> containers, ICollection<Good> goods)
-    {
+    // private static string? getQuantity(ICollection<Container> containers, ICollection<Good> goods)
+    // {
 
-        if (containers != null)
-        {
-            List<string> quantitiyList = new List<string>();
-            var sizes = containers.Select(c => c.Size);
+    //     if (containers != null)
+    //     {
+    //         List<string> quantitiyList = new List<string>();
+    //         var sizes = containers.Select(c => c.Size);
+    //         foreach (var grp in sizes.GroupBy(i => i))
+    //         {
 
-            foreach (var grp in sizes.GroupBy(i => i))
-            {
+    //             quantitiyList.Add($"{grp.Count()}x{grp.Key}");
+    //         }
+    //         return string.Join(",", quantitiyList);
+    //     }
+    //     if (goods != null && goods.Count > 0)
+    //     {
+    //         return goods.Select(g => g.Quantity).Sum().ToString();
+    //     }
+    //     return null;
+    // }
 
-                quantitiyList.Add($"{grp.Count()}x{grp.Key}");
-            }
-            return string.Join(",", quantitiyList);
-        }
-        if (goods != null && goods.Count > 0)
-        {
-            return goods.Select(g => g.RemainingQuantity).Sum().ToString();
-        }
-        return null;
-    }
-
-    private static float? getWeight(ICollection<Container> containers, ICollection<Good> goods)
+    private static float? getWeight(ICollection<Container>? containers, ICollection<Good>? goods)
     {
         float weight = 0;
         if ((containers == null || containers.Count == 0) && (goods == null || goods.Count == 0))
@@ -161,11 +165,11 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
         }
         if (containers != null && containers.Count > 0)
         {
-            weight += containers.SelectMany(c => c.Goods).Select(g => g.Weight).Sum();
+           weight += containers.Select(c => AppdivConvertor.WeightConversion(c.WeightMeasurement,  c.GrossWeight)).Sum();
         }
         if (goods != null && goods.Count > 0)
         {
-            weight += goods.Select(g => g.Weight).Sum();
+            weight += goods.Select(g => AppdivConvertor.WeightConversion(g.WeightUnit,  g.Weight)).Sum();
         }
         return weight;
     }
@@ -174,7 +178,7 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
     {
         if (containers != null && containers.Count > 0)
         {
-            return containers.SelectMany(c => c.Goods).Select(g => g.Description);
+            return containers.Select(c => c.GoodsDescription)!;
         }
         if (goods != null && goods.Count > 0)
         {
