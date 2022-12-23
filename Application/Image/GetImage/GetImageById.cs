@@ -39,50 +39,28 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
             data = temp.Image;
         }
 
-        if (request.Type.ToLower() == "truck")
+        else if (request.Type.ToLower() == "truck")
         {
             var temp = await _context.Trucks.FindAsync(request.Id);
             if (temp == null)
             {
-                throw new GhionException(CustomResponse.NotFound("driver not found"));
+                throw new GhionException(CustomResponse.NotFound("truck not found"));
             }
             data = temp.Image;
         }
-
-        //cannot find image on user
-
-        // if(request.Type.ToLower() == "user"){
-        //     var temp = _identity.AllUsers().Where(u => u.Id == request.Id.ToString()).FirstOrDefault();
-        //     if(temp == null){
-        //         throw new GhionException(CustomResponse.NotFound("driver not found"));
-        //     }
-        //     data = temp.;
-        // }
-
-        // using (Stream input = http.Response.GetResponseStream())
-        // {
-        //     byte[] buffer = new byte[8192];
-        //     int bytesRead;
-        //     while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
-        //     {
-        //         output.Write(buffer, 0, bytesRead);
-        //     }
-        // }
-
-        // HttpResponseMessage response = new HttpResponseMessage();
-        // byte[] bytes = System.Convert.FromBase64String(data.Substring(data.IndexOf(',') + 1));
-
-        // response.Content = new ByteArrayContent(bytes);
-        // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
-        // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-        // return response;
-
-
-
-        // return data.Substring(data.IndexOf(',') + 1);
+        else if (request.Type.ToLower() == "shippingagent")
+        {
+            var temp = await _context.ShippingAgents.FindAsync(request.Id);
+            if (temp == null)
+            {
+                throw new GhionException(CustomResponse.NotFound("shipping agent not found"));
+            }
+            data = temp.Image;
+        }
+        else{
+            throw new GhionException(CustomResponse.BadRequest("invalid type"));
+        }
+      
         return data;
-
-        // return File(new Byte[2], "image/jpeg");
-
     }
 }

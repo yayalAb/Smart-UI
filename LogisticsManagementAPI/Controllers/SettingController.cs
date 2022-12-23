@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using Application.Common.Exceptions;
 using Application.Common.Models;
 using Application.CompanyModule.Queries.GetAllCompanyQuery;
@@ -55,10 +56,14 @@ public class SettingController : ApiControllerBase
 
     [HttpPost]
     [Route("addCurrency")]
-    public async Task<ActionResult> addCurrency(AddCurrencyRate command) {
-        try {
+    public async Task<ActionResult> addCurrency(AddCurrencyRate command)
+    {
+        try
+        {
             return Ok(await Mediator.Send(command));
-        } catch (GhionException ex) {
+        }
+        catch (GhionException ex)
+        {
             return AppdiveResponse.Response(this, ex.Response);
         }
     }
@@ -66,33 +71,35 @@ public class SettingController : ApiControllerBase
     [HttpGet("gridSearch/{gridName}/{word}")]
     public async Task<ActionResult> gridSearch(string gridName, string word)
     {
-        try {
+        try
+        {
 
-            switch (gridName.ToLower()) {
+            switch (gridName.ToLower())
+            {
                 case "user":
-                    return Ok(await Mediator.Send(new UserListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new UserListSearch { Word = word }));
                 case "operation":
-                    return Ok(await Mediator.Send(new SearchOperation {Word = word}));
+                    return Ok(await Mediator.Send(new SearchOperation { Word = word }));
                 case "shippingAgent":
-                    return Ok(await Mediator.Send(new SearchShippingagent {Word = word}));
+                    return Ok(await Mediator.Send(new SearchShippingagent { Word = word }));
                 case "payment":
-                    return Ok(await Mediator.Send(new PaymentListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new PaymentListSearch { Word = word }));
                 case "driver":
-                    return Ok(await Mediator.Send(new DriverListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new DriverListSearch { Word = word }));
                 case "truck":
-                    return Ok(await Mediator.Send(new TruckListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new TruckListSearch { Word = word }));
                 case "port":
-                    return Ok(await Mediator.Send(new PortListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new PortListSearch { Word = word }));
                 case "company":
-                    return Ok(await Mediator.Send(new CompanyListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new CompanyListSearch { Word = word }));
                 case "getpass":
-                    return Ok(await Mediator.Send(new TruckAssignmentListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new TruckAssignmentListSearch { Word = word }));
                 case "usergroup":
-                    return Ok(await Mediator.Send(new UserGroupListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new UserGroupListSearch { Word = word }));
                 case "lookup":
-                    return Ok(await Mediator.Send(new LookupListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new LookupListSearch { Word = word }));
                 case "documentation":
-                    return Ok(await Mediator.Send(new DocumentationListSearch {Word = word}));
+                    return Ok(await Mediator.Send(new DocumentationListSearch { Word = word }));
                 default:
                     return AppdiveResponse.Response(this, CustomResponse.NotFound("Grid not found"));
             }
@@ -107,28 +114,28 @@ public class SettingController : ApiControllerBase
     [HttpGet("image/{type}/{id}")]
     public async Task<ActionResult> getImage(string type, int id)
     {
-        // try
-        // {
+        try
+        {
 
-            
-            
-        // }
-        // catch (GhionException ex)
-        // {
-        //     return AppdiveResponse.Response(this, ex.Response);
-        // }
-        string data = await Mediator.Send(new GetImageById { Id = id, Type = type });
-        Response.Headers.Add("Content-Type", "image/jpeg");
-        return Ok(data);
-        // HttpResponseMessage response = new HttpResponseMessage();
-        // // byte[] bytes = System.Convert.FromBase64String(data);
-        // MemoryStream ms = new MemoryStream(System.Convert.FromBase64String(data));
+            string data = await Mediator.Send(new GetImageById { Id = id, Type = type });
+            if (data == null)
+            {
+                throw new GhionException(CustomResponse.NotFound("image is null"));
+            }
+            Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
+            data = regex.Replace(data, string.Empty);
 
-        // // response.Content = new ByteArrayContent(bytes);
-        // // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
-        // response.Content = new StreamContent(ms);
-        // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-        // return response;
+            var bytes = Convert.FromBase64String(data);
+            return File(bytes, "image/jpg");
+        }
+        catch (FormatException)
+        {
+            throw new GhionException(CustomResponse.NotFound("image data is invalid"));
+        }
+        catch (GhionException ex)
+        {
+            return AppdiveResponse.Response(this, ex.Response);
+        }
     }
 
 }
