@@ -9,6 +9,7 @@ using Application.OperationDocuments.Queries.Number9;
 using Application.OperationFollowupModule;
 using AutoMapper;
 using Domain.Common.PaymentTypes;
+using Domain.Common.Units;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -130,7 +131,12 @@ public class GenerateTransferNumber9QueryHandler : IRequestHandler<GenerateTrans
                         operation = operation,
                         doPayment = payment,
                         goods = doc.Goods,
-                        containers = _mapper.Map<List<ContainerDto>>(doc.Containers)
+                        containers = _mapper.Map<List<ContainerDto>>(doc.Containers),
+                        TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
+                        TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),
+                        TotalQuantity = doc.LoadType == "Container" ? doc.Containers.Count : doc.Goods.Count,
+                        WeightUnit = WeightUnits.Default.name,
+                        Currency = Currency.Default.name
                     };
                 }
                 catch (Exception)

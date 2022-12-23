@@ -12,5 +12,10 @@ public class Number9Dto
     public N9PaymentDto doPayment { get; set; }
     public ICollection<N9ContainerDto> container { get; set; }
     public ICollection<N9GoodDto> goods { get; set; }
+    public Double TotalWeight { get; set; }
+    public Double TotalPrice { get; set; }
+    public int TotalQuantity { get; set; }
+    public string WeightUnit {get; set;}
+    public string Currency {get; set;}
 
 }

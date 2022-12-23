@@ -5,6 +5,7 @@ using Application.Common.Models;
 using Application.OperationDocuments.Queries;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Common.Units;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,13 @@ public class GeneratedDocumentService
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly CurrencyConversionService _currencyConversionService;
 
-    public GeneratedDocumentService(IAppDbContext context, IMapper mapper)
+    public GeneratedDocumentService(IAppDbContext context, CurrencyConversionService currencyConversionService, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
+        _currencyConversionService = currencyConversionService;
     }
     public async Task<int> CreateGeneratedDocumentRecord(CreateGeneratedDocDto request, CancellationToken cancellationToken)
     {
@@ -114,6 +117,7 @@ public class GeneratedDocumentService
     {
         var doc = await _context.GeneratedDocuments
                 .Include(gd => gd.Operation)
+                .Include(gd => gd.Operation.PortOfLoading)
                 .Include(gd => gd.DestinationPort)
                 .Include(gd => gd.ContactPerson)
                 .Include(gd => gd.Containers)
@@ -135,8 +139,7 @@ public class GeneratedDocumentService
             Containers = doc.LoadType == "Unstaff" ? new List<Container>() : doc.Containers.ToList(),
             Goods = doc.GeneratedDocumentsGoods == null || doc.GeneratedDocumentsGoods.Count == 0
                         ?new List<DocGoodDto>()
-                        : doc.GeneratedDocumentsGoods.Select(gdg => new DocGoodDto
-                                {
+                        : doc.GeneratedDocumentsGoods.Select(gdg => new DocGoodDto {
                                     Id = gdg.Good.Id,
                                     Description = gdg.Good.Description,
                                     HSCode = gdg.Good.HSCode,
@@ -161,5 +164,23 @@ public class GeneratedDocumentService
 
     }
 
+    public async Task<double> ContainerCalculator<T>(string type, ICollection<T> containers){
+        double totalPrice = 0;
+        double totalWeight = 0;
+        foreach(var container in _mapper.Map<ICollection<Container>>(containers)){
+            totalPrice += await _currencyConversionService.convert(container.Currency, container.TotalPrice, Currency.Default.name, container.Created);
+            totalWeight += AppdivConvertor.WeightConversion(container.WeightMeasurement, container.GrossWeight);
+        }
+        return type == "price" ? totalPrice : totalWeight;
+    }
 
+    public async Task<double> GoodCalculator<T>(string type, ICollection<T> goods){
+        double totalPrice = 0;
+        double totalWeight = 0;
+        foreach(var good in _mapper.Map<ICollection<Good>>(goods)){
+            totalPrice += await _currencyConversionService.convert(good.Unit, (double) (good.UnitPrice * good.Quantity), Currency.Default.name, good.Created);
+            totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+        }
+        return type == "price" ? totalPrice : totalWeight;
+    }
 }

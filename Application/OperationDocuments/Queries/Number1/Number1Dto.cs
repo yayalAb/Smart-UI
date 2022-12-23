@@ -25,7 +25,11 @@ namespace Application.OperationDocuments.Queries.Number1
         public ICollection<No1ContainerDto> Containers { get; set; }
         public string? SourceLocation { get; set; }//??????????????
         public PortDto? DestinationLocation { get; set; }//??????????
-
+        public Double TotalWeight { get; set; }
+        public Double TotalPrice { get; set; }
+        public int TotalQuantity { get; set; }
+        public string WeightUnit {get; set;}
+        public string Currency {get; set;}
 
     }
 }

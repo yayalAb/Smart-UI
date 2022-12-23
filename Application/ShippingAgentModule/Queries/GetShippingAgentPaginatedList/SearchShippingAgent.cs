@@ -1,6 +1,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,26 +30,30 @@ public class SearchShippingagentHandler : IRequestHandler<SearchShippingagent, P
 
     public async Task<PaginatedList<ShippingAgentDto>> Handle(SearchShippingagent request, CancellationToken cancellationToken)
     {
-        var shippingAgents = await _context.ShippingAgents
-        .Include(t => t.Address)
-        .Where(s => (s.Address.Phone.Contains(request.Word)) ||
-            (s.CompanyName != null ? s.CompanyName.Contains(request.Word) : false) ||
-            (s.Address.Country.Contains(request.Word)) ||
-            (s.Address.Email.Contains(request.Word)) ||
-            (s.FullName.Contains(request.Word))
-        ).ToListAsync();
+        return await PaginatedList<ShippingAgentDto>.CreateAsync( _context.ShippingAgents
+                .Include(t => t.Address)
+                .Where(s => (s.Address.Phone.Contains(request.Word)) ||
+                    (s.CompanyName != null ? s.CompanyName.Contains(request.Word) : false) ||
+                    (s.Address.Country.Contains(request.Word)) ||
+                    (s.Address.Email.Contains(request.Word)) ||
+                    (s.FullName.Contains(request.Word))
+                )
+                .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider), 
+                pageCount: request.PageCount, 
+                pageSize: request.PageSize
+            );
         
-        var paginatedList = await PaginatedList<ShippingAgent>.CreateAsync(shippingAgents, pageCount: request.PageCount, pageSize: request.PageSize);
+        // var paginatedList = await PaginatedList<ShippingAgent>.CreateAsync(shippingAgents, pageCount: request.PageCount, pageSize: request.PageSize);
 
-        List<ShippingAgent> items = paginatedList.Items;
-        List<ShippingAgentDto> itemDtos = items.ToShippingAgentDto();
-        PaginatedList<ShippingAgentDto> paginatedShippingAgentDtos = new PaginatedList<ShippingAgentDto>(
-            items: itemDtos,
-            count: paginatedList.TotalCount,
-            pageCount: paginatedList.PageCount,
-            pageSize: paginatedList.PageCount
-        );
-        return paginatedShippingAgentDtos;
+        // List<ShippingAgent> items = paginatedList.Items;
+        // List<ShippingAgentDto> itemDtos = items.ToShippingAgentDto();
+        // PaginatedList<ShippingAgentDto> paginatedShippingAgentDtos = new PaginatedList<ShippingAgentDto>(
+        //     items: itemDtos,
+        //     count: paginatedList.TotalCount,
+        //     pageCount: paginatedList.PageCount,
+        //     pageSize: paginatedList.PageCount
+        // );
+        // return paginatedShippingAgentDtos;
 
     }
 

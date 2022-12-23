@@ -12,5 +12,10 @@ public class TransferNumber9Dto
     public N9OperationDto operation {get; set;}
     public N9PaymentDto? doPayment {get; set;}
     public List<DocGoodDto> goods {get; set;}
-    public List<ContainerDto> containers { get; set; } 
+    public List<ContainerDto> containers { get; set; }
+    public Double TotalWeight { get; set; }
+    public Double TotalPrice { get; set; }
+    public int TotalQuantity { get; set; }
+    public string WeightUnit {get; set;}
+    public string Currency {get; set;}
 }

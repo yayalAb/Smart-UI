@@ -1,10 +1,7 @@
 
 using Application.Common;
 using Application.Common.Service;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models;
-using Application.Common.Service;
 using Application.OperationDocuments.Queries.Number9Transfer;
 using Application.OperationFollowupModule;
 using Application.PortModule;
@@ -15,6 +12,8 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.OperationDocuments.Number9.N9Dtos;
+using Domain.Common.Units;
 
 namespace Application.OperationDocuments.Queries.Number1;
 
@@ -99,17 +98,23 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                         REGTax = doc.Operation.REGTax,
                         Goods = doc.Goods,
                         DestinationLocation = _mapper.Map<PortDto>(doc.DestinationPort),
-                        Containers = doc.Containers.Select(c => new No1ContainerDto
-                        {
-                            ContianerNumber = c.ContianerNumber,
-                            SealNumber = c.SealNumber
+                        Containers = _mapper.Map<ICollection<No1ContainerDto>>(doc.Containers),
+                        // doc.Containers.Select(c => new No1ContainerDto {
+                        //     ContianerNumber = c.ContianerNumber,
+                        //     SealNumber = c.SealNumber
 
-                        }).ToList(),
+                        // }).ToList(),
                         SourceLocation = doc.Operation.Localization,
+                        TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
+                        TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),
+                        TotalQuantity = doc.LoadType == "Container" ? doc.Containers.Count : doc.Goods.Count,
+                        WeightUnit = WeightUnits.Default.name,
+                        Currency = Currency.Default.name
                     };
                     //fetch do payment data if paid 
                     var payment = _context.Payments
                            .Where(c => c.OperationId == doc.Operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder)
+                           .ProjectTo<N9PaymentDto>(_mapper.ConfigurationProvider)
                            .FirstOrDefault();
                     if (payment != null)
                     {

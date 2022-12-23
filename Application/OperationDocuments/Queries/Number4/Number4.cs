@@ -110,13 +110,13 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         REGTax = doc.Operation.REGTax,
                         BillOfLoadingNumber = doc.Operation.BillOfLoadingNumber,
 
-                        PortOfLoading = new Port
-                        {
+                        PortOfLoading = new Port {
                             PortNumber = doc.Operation.PortOfLoading.PortNumber,
                             Country = doc.Operation.PortOfLoading.Country,
                             Region = doc.Operation.PortOfLoading.Region,
                             Vollume = doc.Operation.PortOfLoading.Vollume
-                        },
+                        }
+                        // _mapper.Map<N9PortOfLoadingDto>(doc.Operation.PortOfLoading) 
 
                     };
 
@@ -141,8 +141,8 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         containers = _mapper.Map<ICollection<ContainerDto>>(doc.Containers),
                         goods = doc.Goods,
                         doPayment = payment,
-                        TotalWeight = doc.LoadType == "Container" ? await ContainerCalculator("weight", doc.Containers) : await GoodCalculator("weight", doc.Goods),
-                        TotalPrice = doc.LoadType == "Container" ? await ContainerCalculator("price", doc.Containers) : await GoodCalculator("price", doc.Goods),
+                        TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
+                        TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),
                         TotalQuantity = doc.LoadType == "Container" ? doc.Containers.Count : doc.Goods.Count,
                         WeightUnit = WeightUnits.Default.name,
                         Currency = Currency.Default.name
@@ -161,24 +161,24 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
 
     }
 
-    public async Task<double> ContainerCalculator(string type, ICollection<Container> containers){
-        double totalPrice = 0;
-        double totalWeight = 0;
-        foreach(var container in containers){
-            totalPrice += await _currencyConversionService.convert(container.Currency, container.TotalPrice, Currency.Default.name, container.Created);
-            totalWeight += AppdivConvertor.WeightConversion(container.WeightMeasurement, container.GrossWeight);
-        }
-        return type == "price" ? totalPrice : totalWeight;
-    }
+    // public async Task<double> ContainerCalculator<T>(string type, ICollection<T> containers){
+    //     double totalPrice = 0;
+    //     double totalWeight = 0;
+    //     foreach(var container in _mapper.Map<ICollection<Container>>(containers)){
+    //         totalPrice += await _currencyConversionService.convert(container.Currency, container.TotalPrice, Currency.Default.name, container.Created);
+    //         totalWeight += AppdivConvertor.WeightConversion(container.WeightMeasurement, container.GrossWeight);
+    //     }
+    //     return type == "price" ? totalPrice : totalWeight;
+    // }
 
-    public async Task<double> GoodCalculator(string type, ICollection<DocGoodDto> goods){
-        double totalPrice = 0;
-        double totalWeight = 0;
-        foreach(var good in goods){
-            totalPrice += await _currencyConversionService.convert(good.Unit, (double) (good.UnitPrice * good.Quantity), Currency.Default.name, good.Created);
-            totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
-        }
-        return type == "price" ? totalPrice : totalWeight;
-    }
+    // public async Task<double> GoodCalculator<T>(string type, ICollection<T> goods){
+    //     double totalPrice = 0;
+    //     double totalWeight = 0;
+    //     foreach(var good in _mapper.Map<ICollection<Good>>(goods)){
+    //         totalPrice += await _currencyConversionService.convert(good.Unit, (double) (good.UnitPrice * good.Quantity), Currency.Default.name, good.Created);
+    //         totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+    //     }
+    //     return type == "price" ? totalPrice : totalWeight;
+    // }
 
 }

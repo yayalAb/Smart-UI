@@ -2,10 +2,12 @@ using Application.Common;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Common.Service;
 using Application.OperationDocuments.Number9.N9Dtos;
 using Application.OperationFollowupModule;
 using AutoMapper;
 using Domain.Common.PaymentTypes;
+using Domain.Common.Units;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -25,17 +27,20 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     private readonly IMapper _mapper;
     private readonly OperationEventHandler _operationEvent;
     private readonly DefaultCompanyService _defaultCompanyService;
+    private readonly GeneratedDocumentService _generatedDocumentService;
 
     public Number9Handler(
         IAppDbContext context, 
         OperationEventHandler operationEvent, 
         DefaultCompanyService defaultCompanyService, 
+        GeneratedDocumentService generatedDocumentService, 
         IMapper mapper
     ) {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
         _defaultCompanyService = defaultCompanyService;
+        _generatedDocumentService = generatedDocumentService;
     }
 
     public async Task<Number9Dto> Handle(Number9 request, CancellationToken cancellationToken) {
@@ -130,7 +135,12 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                         operation = operation,
                         goods = goods,
                         container = containers,
-                        doPayment = payment
+                        doPayment = payment,
+                        TotalWeight = request.Type == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("weight", (goods != null) ? goods : new List<N9GoodDto>()),
+                        TotalPrice = request.Type == "Container" ? await _generatedDocumentService.ContainerCalculator("price", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("price", goods != null ? goods : new List<N9GoodDto>()),
+                        TotalQuantity = request.Type == "Container" ? containers!.Count : goods!.Count,
+                        WeightUnit = WeightUnits.Default.name,
+                        Currency = Currency.Default.name
                     };
 
                 } catch (Exception) {
