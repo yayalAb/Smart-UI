@@ -15,13 +15,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.Number9;
 
-public record Number9 : IRequest<Number9Dto> {
+public record Number9 : IRequest<Number9Dto>
+{
     public int OperationId { get; init; }
     public string Type { get; init; }
     public int ContactPersonId { get; init; }
 }
 
-public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
+public class Number9Handler : IRequestHandler<Number9, Number9Dto>
+{
 
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
@@ -30,12 +32,13 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
     private readonly GeneratedDocumentService _generatedDocumentService;
 
     public Number9Handler(
-        IAppDbContext context, 
-        OperationEventHandler operationEvent, 
-        DefaultCompanyService defaultCompanyService, 
-        GeneratedDocumentService generatedDocumentService, 
+        IAppDbContext context,
+        OperationEventHandler operationEvent,
+        DefaultCompanyService defaultCompanyService,
+        GeneratedDocumentService generatedDocumentService,
         IMapper mapper
-    ) {
+    )
+    {
         _context = context;
         _mapper = mapper;
         _operationEvent = operationEvent;
@@ -43,21 +46,30 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
         _generatedDocumentService = generatedDocumentService;
     }
 
-    public async Task<Number9Dto> Handle(Number9 request, CancellationToken cancellationToken) {
+    public async Task<Number9Dto> Handle(Number9 request, CancellationToken cancellationToken)
+    {
+
+        var change = false;
+
+
 
         var executionStrategy = _context.database.CreateExecutionStrategy();
-        return await executionStrategy.ExecuteAsync(async () => {
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
 
-            using (var transaction = _context.database.BeginTransaction()) {
-                
-                try {
+            using (var transaction = _context.database.BeginTransaction())
+            {
+
+                try
+                {
                     var operation = _context.Operations.Where(d => d.Id == request.OperationId)
                                 .Include(o => o.Company)
                                 .Include(o => o.Containers)
                                 .Include(o => o.Goods)
                                 .Include(o => o.PortOfLoading)
                                 .Include(o => o.Company.ContactPeople)
-                                .Select(o => new N9OperationDto {
+                                .Select(o => new N9OperationDto
+                                {
                                     Id = o.Id,
                                     ShippingLine = o.ShippingLine,
                                     GoodsDescription = o.GoodsDescription,
@@ -69,7 +81,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                                     EstimatedTimeOfArrival = o.EstimatedTimeOfArrival,
                                     VoyageNumber = o.VoyageNumber,
                                     OperationNumber = o.OperationNumber,
-                                    PortOfLoading = new N9PortOfLoadingDto {
+                                    PortOfLoading = new N9PortOfLoadingDto
+                                    {
                                         PortNumber = o.PortOfLoading.PortNumber,
                                         Country = o.PortOfLoading.Country,
                                         Region = o.PortOfLoading.Region,
@@ -93,7 +106,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                                     Containers = (o.Containers != null && request.Type.ToLower() == "container") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
                                 }).First();
 
-                    if (operation == null) {
+                    if (operation == null)
+                    {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
 
@@ -109,18 +123,21 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                     operation.Goods = null;
                     operation.Containers = null;
 
-                    var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).Select(p => new N9PaymentDto {
+                    var payment = _context.Payments.Where(c => c.OperationId == request.OperationId && c.Name == ShippingAgentPaymentType.DeliveryOrder).Select(p => new N9PaymentDto
+                    {
                         PaymentDate = p.PaymentDate,
                         DONumber = p.DONumber
                     }).FirstOrDefault();
 
                     var companySetting = await _defaultCompanyService.GetDefaultCompanyAsync();
 
-                    if (payment == null) {
+                    if (payment == null)
+                    {
                         throw new GhionException(CustomResponse.NotFound(" Delivery Order Payment for the operation not found!"));
                     }
 
-                    await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus {
+                    change = await _operationEvent.DocumentGenerationEventAsync(cancellationToken, new OperationStatus
+                    {
                         GeneratedDocumentName = Enum.GetName(typeof(Documents), Documents.ImportNumber9),
                         GeneratedDate = DateTime.Now,
                         IsApproved = false,
@@ -128,7 +145,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                     }, Enum.GetName(typeof(Status), Status.ImportNumber9Generated));
                     await transaction.CommitAsync();
 
-                    return new Number9Dto {
+                    return new Number9Dto
+                    {
                         defaultCompanyCodeNIF = companySetting.DefaultCompany.CodeNIF,
                         defaultCompanyName = companySetting.DefaultCompany.Name,
                         company = company,
@@ -143,10 +161,16 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto> {
                         Currency = Currency.Default.name
                     };
 
-                } catch (Exception) {
-                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    if (change)
+                    {
+                        await transaction.RollbackAsync();
+                    }
                     throw;
                 }
+
             }
         });
 

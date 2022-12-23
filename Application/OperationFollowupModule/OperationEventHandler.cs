@@ -30,21 +30,18 @@ public class OperationEventHandler
             await _context.SaveChangesAsync(cancellationToken);
 
             var operation = await _context.Operations.FindAsync(status.OperationId);
-            if (operation == null)
-            {
+            if (operation == null) {
                 throw new GhionException(CustomResponse.NotFound($"operation with id {status.OperationId} is not found while generating document "));
             }
             // change status of the operation
             operation.Status = statusName;
             _context.Operations.Update(operation);
             await _context.SaveChangesAsync(cancellationToken);
+            return true;
 
-
+        }else{
+            return false;
         }
-
-        return true;
-
-
 
     }
 

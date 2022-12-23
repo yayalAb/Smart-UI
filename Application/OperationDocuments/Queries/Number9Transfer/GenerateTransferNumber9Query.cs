@@ -141,7 +141,9 @@ public class GenerateTransferNumber9QueryHandler : IRequestHandler<GenerateTrans
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync();
+                    if(!request.isPrintOnly){
+                        await transaction.RollbackAsync();
+                    }
                     throw;
                 }
             }
