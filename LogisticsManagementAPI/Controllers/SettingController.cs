@@ -116,34 +116,26 @@ public class SettingController : ApiControllerBase
     {
         try
         {
-         
+
             string data = await Mediator.Send(new GetImageById { Id = id, Type = type });
-            if(data == null){
+            if (data == null)
+            {
                 throw new GhionException(CustomResponse.NotFound("image is null"));
             }
             Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
             data = regex.Replace(data, string.Empty);
-           
+
             var bytes = Convert.FromBase64String(data);
             return File(bytes, "image/jpg");
         }
-        catch(FormatException){
-           throw new GhionException(CustomResponse.NotFound("image data is invalid"));
+        catch (FormatException)
+        {
+            throw new GhionException(CustomResponse.NotFound("image data is invalid"));
         }
         catch (GhionException ex)
         {
             return AppdiveResponse.Response(this, ex.Response);
         }
-
-        // HttpResponseMessage response = new HttpResponseMessage();
-        // // byte[] bytes = System.Convert.FromBase64String(data);
-        // MemoryStream ms = new MemoryStream(System.Convert.FromBase64String(data));
-
-        // // response.Content = new ByteArrayContent(bytes);
-        // // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
-        // response.Content = new StreamContent(ms);
-        // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-        // return response;
     }
 
 }
