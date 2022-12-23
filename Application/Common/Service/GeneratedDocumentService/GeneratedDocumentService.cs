@@ -132,7 +132,7 @@ public class GeneratedDocumentService
             Operation = doc. Operation,
             DestinationPort = doc.DestinationPort,
             ContactPerson = doc.ContactPerson,
-            Containers = doc.Containers.ToList(),
+            Containers = doc.LoadType == "Unstaff" ? new List<Container>() : doc.Containers.ToList(),
             Goods = doc.GeneratedDocumentsGoods == null || doc.GeneratedDocumentsGoods.Count == 0
                         ?new List<DocGoodDto>()
                         : doc.GeneratedDocumentsGoods.Select(gdg => new DocGoodDto
@@ -153,7 +153,8 @@ public class GeneratedDocumentService
                                     ModelCode = gdg.Good.ModelCode,
                                     Unit = gdg.Good.Unit,
                                     UnitPrice = gdg.Good.UnitPrice,
-                                    CBM = gdg.Good.CBM
+                                    CBM = gdg.Good.CBM,
+                                    Created = gdg.Good.Created
                                 }).ToList()
 
         };

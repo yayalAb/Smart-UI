@@ -23,5 +23,6 @@ public class DocGoodDto : IMapFrom<Good>
     public string? Unit { get; set; }
     public float? UnitPrice { get; set; }
     public float? CBM { get; set; }
+    public DateTime Created {get; set;}
     //////
 }

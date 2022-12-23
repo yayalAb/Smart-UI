@@ -5,11 +5,14 @@ using Application.Common.Models;
 using Application.Common.Service;
 using Application.CompanyModule.Queries;
 using Application.ContainerModule;
+using Application.OperationDocuments.Number9.N9Dtos;
 using Application.OperationDocuments.Queries.Number9Transfer;
 using Application.OperationFollowupModule;
 using Application.PortModule;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Common.PaymentTypes;
+using Domain.Common.Units;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -17,8 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.Number4;
 
-public record Number4 : IRequest<Number4Dto>
-{
+public record Number4 : IRequest<Number4Dto> {
     public int? OperationId { get; set; }
     public int? NameOnPermitId { get; set; }
     public int? DestinationPortId { get; set; }
@@ -35,13 +37,20 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
     private readonly IAppDbContext _context;
     private readonly OperationEventHandler _operationEvent;
     private readonly GeneratedDocumentService _generatedDocumentService;
+    private readonly CurrencyConversionService _currencyConversionService;
     private readonly IMapper _mapper;
 
-    public Number4Handler(IAppDbContext context, OperationEventHandler operationEvent, GeneratedDocumentService generatedDocumentService, IMapper mapper)
-    {
+    public Number4Handler(
+        IAppDbContext context, 
+        OperationEventHandler operationEvent, 
+        GeneratedDocumentService generatedDocumentService, 
+        CurrencyConversionService currencyConversionService, 
+        IMapper mapper
+    ) {
         _context = context;
         _operationEvent = operationEvent;
         _generatedDocumentService = generatedDocumentService;
+        _currencyConversionService = currencyConversionService;
         _mapper = mapper;
     }
 
@@ -79,8 +88,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     // fetch no.4 document 
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
 
-                    var operation = new Operation
-                    {
+                    var operation = new Operation {
                         Id = doc.Operation.Id,
                         Consignee = doc.Operation.Consignee,
                         BillNumber = doc.Operation.BillNumber,
@@ -120,17 +128,24 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     // {
                     //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
                     // }
-                    var payment = _context.Payments.Where(c => c.OperationId == operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder).FirstOrDefault();
+                    var payment = _context.Payments
+                        .Where(c => c.OperationId == operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder)
+                        .ProjectTo<N9PaymentDto>(_mapper.ConfigurationProvider)
+                        .FirstOrDefault();
 
-                    var data = new Number4Dto
-                    {
+                    var data = new Number4Dto {
                         destinationPort = _mapper.Map<PortDto>(doc.DestinationPort),
                         company = null,//TODO: 
                         nameOnPermit = _mapper.Map<ContactPersonDto>(doc.ContactPerson),
                         operation = operation,
                         containers = _mapper.Map<ICollection<ContainerDto>>(doc.Containers),
                         goods = doc.Goods,
-                        doPayment = payment
+                        doPayment = payment,
+                        TotalWeight = doc.LoadType == "Container" ? await ContainerCalculator("weight", doc.Containers) : await GoodCalculator("weight", doc.Goods),
+                        TotalPrice = doc.LoadType == "Container" ? await ContainerCalculator("price", doc.Containers) : await GoodCalculator("price", doc.Goods),
+                        TotalQuantity = doc.LoadType == "Container" ? doc.Containers.Count : doc.Goods.Count,
+                        WeightUnit = WeightUnits.Default.name,
+                        Currency = Currency.Default.name
                     };
                     await transaction.CommitAsync();
                     return data;
@@ -145,4 +160,25 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
 
 
     }
+
+    public async Task<double> ContainerCalculator(string type, ICollection<Container> containers){
+        double totalPrice = 0;
+        double totalWeight = 0;
+        foreach(var container in containers){
+            totalPrice += await _currencyConversionService.convert(container.Currency, container.TotalPrice, Currency.Default.name, container.Created);
+            totalWeight += AppdivConvertor.WeightConversion(container.WeightMeasurement, container.GrossWeight);
+        }
+        return type == "price" ? totalPrice : totalWeight;
+    }
+
+    public async Task<double> GoodCalculator(string type, ICollection<DocGoodDto> goods){
+        double totalPrice = 0;
+        double totalWeight = 0;
+        foreach(var good in goods){
+            totalPrice += await _currencyConversionService.convert(good.Unit, (double) (good.UnitPrice * good.Quantity), Currency.Default.name, good.Created);
+            totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+        }
+        return type == "price" ? totalPrice : totalWeight;
+    }
+
 }
