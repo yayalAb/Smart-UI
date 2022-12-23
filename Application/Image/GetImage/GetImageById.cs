@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+using System.Text;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -23,7 +25,7 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
         _context = context;
     }
 
-    public async Task</*HttpResponseMessage*/ string> Handle(GetImageById request, CancellationToken cancellationToken)
+    public async Task<string> Handle(GetImageById request, CancellationToken cancellationToken)
     {
 
         string data = "";
@@ -57,14 +59,27 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
         //     data = temp.;
         // }
 
+        // using (Stream input = http.Response.GetResponseStream())
+        // {
+        //     byte[] buffer = new byte[8192];
+        //     int bytesRead;
+        //     while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
+        //     {
+        //         output.Write(buffer, 0, bytesRead);
+        //     }
+        // }
+
         // HttpResponseMessage response = new HttpResponseMessage();
-        // byte[] bytes = System.Convert.FromBase64String(data);
+        // byte[] bytes = System.Convert.FromBase64String(data.Substring(data.IndexOf(',') + 1));
 
         // response.Content = new ByteArrayContent(bytes);
         // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
         // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
         // return response;
 
+
+
+        // return data.Substring(data.IndexOf(',') + 1);
         return data;
 
         // return File(new Byte[2], "image/jpeg");

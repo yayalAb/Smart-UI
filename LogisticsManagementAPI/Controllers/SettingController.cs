@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Application.Common.Exceptions;
 using Application.Common.Models;
 using Application.CompanyModule.Queries.GetAllCompanyQuery;
@@ -106,14 +107,28 @@ public class SettingController : ApiControllerBase
     [HttpGet("image/{type}/{id}")]
     public async Task<ActionResult> getImage(string type, int id)
     {
-        try
-        {
-            return Ok(await Mediator.Send(new GetImageById { Id = id, Type = type }));
-        }
-        catch (GhionException ex)
-        {
-            return AppdiveResponse.Response(this, ex.Response);
-        }
+        // try
+        // {
+
+            
+            
+        // }
+        // catch (GhionException ex)
+        // {
+        //     return AppdiveResponse.Response(this, ex.Response);
+        // }
+        string data = await Mediator.Send(new GetImageById { Id = id, Type = type });
+        Response.Headers.Add("Content-Type", "image/jpeg");
+        return Ok(data);
+        // HttpResponseMessage response = new HttpResponseMessage();
+        // // byte[] bytes = System.Convert.FromBase64String(data);
+        // MemoryStream ms = new MemoryStream(System.Convert.FromBase64String(data));
+
+        // // response.Content = new ByteArrayContent(bytes);
+        // // response.Content.LoadIntoBufferAsync(bytes.Length).Wait();
+        // response.Content = new StreamContent(ms);
+        // response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+        // return response;
     }
 
 }
