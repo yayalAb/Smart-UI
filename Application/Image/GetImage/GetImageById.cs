@@ -39,16 +39,27 @@ public class GetImageByIdHandler : IRequestHandler<GetImageById, string>
             data = temp.Image;
         }
 
-        if (request.Type.ToLower() == "truck")
+        else if (request.Type.ToLower() == "truck")
         {
             var temp = await _context.Trucks.FindAsync(request.Id);
             if (temp == null)
             {
-                throw new GhionException(CustomResponse.NotFound("driver not found"));
+                throw new GhionException(CustomResponse.NotFound("truck not found"));
             }
             data = temp.Image;
         }
-
+        else if (request.Type.ToLower() == "shippingagent")
+        {
+            var temp = await _context.ShippingAgents.FindAsync(request.Id);
+            if (temp == null)
+            {
+                throw new GhionException(CustomResponse.NotFound("shipping agent not found"));
+            }
+            data = temp.Image;
+        }
+        else{
+            throw new GhionException(CustomResponse.BadRequest("invalid type"));
+        }
         //cannot find image on user
 
         // if(request.Type.ToLower() == "user"){
