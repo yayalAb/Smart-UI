@@ -40,8 +40,7 @@ public class UpdateSettingHandler : IRequestHandler<UpdateSetting, CustomRespons
 
         var setting = await _context.Settings.FindAsync(request.Id);
 
-        if (setting == null)
-        {
+        if (setting == null) {
             throw new GhionException(CustomResponse.Failed("setting not found!"));
         }
 

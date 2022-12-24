@@ -79,6 +79,7 @@ namespace Application.Common.Mappings
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
             CreateMap<SettingDto, Setting>().ReverseMap();
             CreateMap<AddressUpdateCommand, Address>().ReverseMap();
+            CreateMap<AddressUpdateDto, Address>().ReverseMap();
             CreateMap<BankInformationUpdateDto, BankInformation>().ReverseMap();
             CreateMap<AllDocDto, CommercialInvoiceDto2>();
             CreateMap<AllDocDto, PackingListDto>();

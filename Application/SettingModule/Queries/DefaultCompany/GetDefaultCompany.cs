@@ -68,6 +68,7 @@ public class GetDefaultCompanyHandler : IRequestHandler<GetDefaultCompany, Setti
                         AccountNumber = b.AccountNumber,
                         SwiftCode = b.SwiftCode,
                         BankAddress = b.BankAddress,
+                        CurrencyType = b.CurrencyType,
                         CompanyId = b.CompanyId
                     }).ToList()
                 },
