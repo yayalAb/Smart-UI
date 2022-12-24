@@ -51,8 +51,6 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
 
         var change = false;
 
-
-
         var executionStrategy = _context.database.CreateExecutionStrategy();
         return await executionStrategy.ExecuteAsync(async () =>
         {
@@ -102,8 +100,35 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         TinNumber = o.Company.TinNumber,
                                         CodeNIF = o.Company.CodeNIF
                                     },
-                                    Goods = (o.Goods != null && request.Type.ToLower() == "unstaff") ? _mapper.Map<ICollection<N9GoodDto>>(o.Goods) : null,
-                                    Containers = (o.Containers != null && request.Type.ToLower() == "container") ? _mapper.Map<ICollection<N9ContainerDto>>(o.Containers) : null
+                                    Goods = (o.Goods != null && request.Type.ToLower() == "unstaff") ? 
+                                        o.Goods.Select(g => new N9GoodDto {
+                                            Description = g.Description,
+                                            HSCode = g.HSCode,
+                                            Weight = g.Weight,
+                                            Quantity = g.Quantity,
+                                            RemainingQuantity = g.RemainingQuantity,
+                                            Unit = g.Unit,
+                                            UnitPrice = g.UnitPrice,
+                                            CBM = g.CBM
+                                        }).ToList() : new List<N9GoodDto>(), 
+                                    Containers = (o.Containers != null && request.Type.ToLower() == "container") ? 
+                                        o.Containers.Select(c => new N9ContainerDto {
+                                            Id = c.Id,
+                                            ContianerNumber = c.ContianerNumber,
+                                            GoodsDescription = c.GoodsDescription,
+                                            SealNumber = c.SealNumber,
+                                            Location = c.Location,
+                                            Article = c.Article,
+                                            Size = c.Size,
+                                            GrossWeight = c.GrossWeight,
+                                            WeightMeasurement = c.WeightMeasurement,
+                                            Quantity = c.Quantity,
+                                            TotalPrice = c.TotalPrice,
+                                            Currency = c.Currency,
+                                            LocationPortId = c.LocationPortId,
+                                            OperationId = c.OperationId,
+                                            GeneratedDocumentId = c.GeneratedDocumentId
+                                        }).ToList() : new List<N9ContainerDto>()
                                 }).First();
 
                     if (operation == null)
@@ -154,8 +179,8 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                         goods = goods,
                         container = containers,
                         doPayment = payment,
-                        TotalWeight = request.Type == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("weight", (goods != null) ? goods : new List<N9GoodDto>()),
-                        TotalPrice = request.Type == "Container" ? await _generatedDocumentService.ContainerCalculator("price", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("price", goods != null ? goods : new List<N9GoodDto>()),
+                        TotalWeight = request.Type.ToLower() == "container" ? await _generatedDocumentService.ContainerCalculator("weight", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("weight", (goods != null) ? goods : new List<N9GoodDto>()),
+                        TotalPrice = request.Type.ToLower() == "container" ? await _generatedDocumentService.ContainerCalculator("price", containers != null ? containers : new List<N9ContainerDto>()) : await _generatedDocumentService.GoodCalculator<N9GoodDto>("price", goods != null ? goods : new List<N9GoodDto>()),
                         TotalQuantity = request.Type == "Container" ? containers!.Count : goods!.Count,
                         WeightUnit = WeightUnits.Default.name,
                         Currency = Currency.Default.name

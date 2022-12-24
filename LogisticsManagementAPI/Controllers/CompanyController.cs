@@ -8,6 +8,7 @@ using Application.CompanyModule.Queries.GetCompanyBankInformation;
 using Application.CompanyModule.Queries.GetCompanyQuery;
 using Application.ContactPersonModule.Queries;
 using Application.DriverModule.Queries.GetCompanyLookup;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 

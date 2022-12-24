@@ -12,6 +12,7 @@ using Application.DocumentationModule.Commands.UpdateDocumentation;
 using Application.GoodModule;
 using Application.GoodModule.Commands.AssignGoodsCommand;
 using Application.GoodModule.Commands.UpdateGoodCommand;
+using Application.OperationDocuments.Number9.N9Dtos;
 using Application.OperationDocuments.Queries;
 using Application.OperationDocuments.Queries.CommercialInvoice;
 using Application.OperationDocuments.Queries.Common;
@@ -74,6 +75,7 @@ namespace Application.Common.Mappings
             CreateMap<UpdateGoodDto, Good>().ReverseMap();
             CreateMap<CreateTruckCommand, Truck>();
             CreateMap<Good, DocGoodDto>().ReverseMap();
+            CreateMap<N9GoodDto, Good>().ReverseMap();
             CreateMap<UpdateGoodContainerDto, Container>().ReverseMap();
             CreateMap<UpdateGoodDto, Good>().ReverseMap();
             CreateMap<CompanyUpdateDto, Company>().ReverseMap();
