@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FluentValidation;
 
 namespace Application.TruckModule.Commands.CreateTruckCommand
@@ -22,6 +23,27 @@ namespace Application.TruckModule.Commands.CreateTruckCommand
             RuleFor(u => u.PlateNumber)
                 .NotNull()
                 .NotEmpty();
+            RuleFor(u => u.Image)
+              .Must(BeValidBase64String).WithMessage("image is not in the correct base64string format");
+        }
+        private bool BeValidBase64String(string? base64String)
+        {
+            if (base64String == null)
+            {
+                return true;
+            }
+            try
+            {
+                Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
+                base64String = regex.Replace(base64String, string.Empty);
+
+                Convert.FromBase64String(base64String);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 
