@@ -31,21 +31,17 @@ public class GetShippingAgentPaginatedListQueryHandler : IRequestHandler<GetShip
     {
         return await PaginatedList<ShippingAgentDto>.CreateAsync(
                 _context.ShippingAgents
-                    .Include(t => t.Address)
-                    .ProjectTo<ShippingAgentDto>(_mapper.ConfigurationProvider), pageCount: request.PageCount, pageSize: request.PageSize
+                    .Include(t => t.Address).Select(s => new ShippingAgentDto {
+                        Id = s.Id,
+                        FullName = s.FullName,
+                        CompanyName = s.CompanyName,
+                        Email = s.Address.Email,
+                        Phone = s.Address.Phone,
+                        Country = s.Address.Country
+                    }), 
+                    pageCount: request.PageCount, 
+                    pageSize: request.PageSize
             );
-        // var lookups = await PaginatedList<LookupDto>.CreateAsync(_context.Lookups.Where(l => l.Key != "key").ProjectTo<LookupDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
-        // var paginatedList = await PaginatedList<ShippingAgent>.CreateAsync(shippingAgents, pageCount: request.PageCount, pageSize: request.PageSize);
-
-        // List<ShippingAgent> items = paginatedList.Items;
-        // List<ShippingAgentDto> itemDtos = items.ToShippingAgentDto();
-        // PaginatedList<ShippingAgentDto> paginatedShippingAgentDtos = new PaginatedList<ShippingAgentDto>(
-        //     items: itemDtos,
-        //     count: paginatedList.TotalCount,
-        //     pageCount: paginatedList.PageCount,
-        //     pageSize: paginatedList.PageCount
-        // );
-        // return paginatedShippingAgentDtos;
 
     }
 
