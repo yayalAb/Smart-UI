@@ -2,6 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.LookUp.Commands.UpdateLookup
@@ -11,6 +12,7 @@ namespace Application.LookUp.Commands.UpdateLookup
         public int Id { get; set; }
         public string Key { get; init; }
         public string Value { get; init; }
+        public byte? IsParent { get; init; } = 0!;
     }
     public class UpdateLookupCommandHandler : IRequestHandler<UpdateLookupCommand, CustomResponse>
     {
@@ -30,7 +32,18 @@ namespace Application.LookUp.Commands.UpdateLookup
             };
             existingLookup.Key = request.Key;
             existingLookup.Value = request.Value;
+            existingLookup.IsParent = request.IsParent ?? 0;
             _context.Lookups.Update(existingLookup);
+
+            if (request.IsParent == 1)
+            {
+                _context.Lookups.Add(new Lookup() {
+                    Key = "key",
+                    Value = request.Value,
+                    IsParent = 1
+                });
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
             return CustomResponse.Succeeded("Lookup Updated Successfully!");
 
