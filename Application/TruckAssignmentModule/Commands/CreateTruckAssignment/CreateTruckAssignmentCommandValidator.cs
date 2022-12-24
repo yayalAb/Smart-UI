@@ -34,13 +34,15 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             RuleFor(u => u.DriverId)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeFoundInDriversTable).WithMessage("driver with the provided id is not found");
-            ;
+                .Must(BeFoundInDriversTable).WithMessage("driver with the provided id is not found")
+                .Must(BeUnassignedDriver).WithMessage("driver is already assigned for another truck assignment ; release the driver before assigning again");
+            
             RuleFor(u => u.TruckId)
                 .NotNull()
                 .NotEmpty()
-                .Must(BeFoundInTrucksTable).WithMessage("truck with the provided id is not found");
-
+                .Must(BeFoundInTrucksTable).WithMessage("truck with the provided id is not found")
+                .Must(BeUnassignedTruck).WithMessage("truck is already assigned for another truck assignment ; release the truck before assigning again");
+            
             RuleFor(u => u.SourceLocation)
                 .NotNull()
                 .NotEmpty();
@@ -64,6 +66,16 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
 
         }
 
+        private bool BeUnassignedDriver(int driverId)
+        {
+            var driver = _context.Drivers.Find(driverId);
+            return !driver!.IsAssigned;
+        }
+        private bool BeUnassignedTruck(int truckId)
+        {
+            var truck = _context.Trucks.Find(truckId);
+            return !truck!.IsAssigned;
+        }
         private bool BeValidGatepassType(string gatepassType)
         {
             return Enum.IsDefined(typeof(GatepassType), gatepassType.ToUpper());

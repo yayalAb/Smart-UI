@@ -15,11 +15,18 @@ namespace Application.PaymentModule.Commands.CreatePayment
 
             _context = context;
 
+
             RuleFor(s => s.Type)
                  .NotNull()
                  .NotEmpty()
                  .Must(BeOfType)
                  .WithMessage("invalid payment type!");
+            When(s => s.Type == ShippingAgentPaymentType.Name, () =>
+            {
+               RuleFor(s => s.ShippingAgentId)
+                    .NotNull().WithMessage("shipping agent id cannot be null if payment type is shipping agent ")
+                    .Must(BeFoundInShippingAgentTable).WithMessage("shipping agent with the provided id is not found");
+            });
             RuleFor(s => s.Name)
                  .NotNull()
                  .NotEmpty()
@@ -45,6 +52,13 @@ namespace Application.PaymentModule.Commands.CreatePayment
                  .Must(BeRegisteredShippingAgentId).WithMessage("shipping agent with the provided id is not found");
 
         }
+
+        private bool BeFoundInShippingAgentTable(int? shippingAgentId)
+        {
+            return shippingAgentId == null || _context.ShippingAgents.Find(shippingAgentId) != null;
+        }
+
+
         private bool BeRegisteredOperationId(int operationId)
         {
             return _context.Operations.Find(operationId) != null;
