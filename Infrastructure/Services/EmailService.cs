@@ -1,9 +1,11 @@
 ﻿
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace Infrastructure.Services
@@ -12,10 +14,12 @@ namespace Infrastructure.Services
     {
 
         private readonly IAppDbContext _context;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IAppDbContext context)
+        public EmailService(IAppDbContext context , ILogger<EmailService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
 
@@ -29,7 +33,16 @@ namespace Infrastructure.Services
                 throw new Exception("email configuration not found");
             }
             var emailMessage = CreateEmailMessage(mailRequest, emailConfig);
+            try
+            {
+                
             await Send(emailMessage, emailConfig);
+            }
+            catch 
+            {
+                
+                throw new GhionException(CustomResponse.Failed("server time out while connecting to smtp server for sending email, check server configuration and ports"));
+            }
 
         }
 
@@ -61,7 +74,6 @@ namespace Infrastructure.Services
                 }
                 catch
                 {
-
                     throw;
                 }
                 finally

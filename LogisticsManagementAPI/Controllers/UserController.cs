@@ -34,6 +34,8 @@ namespace WebApi.Controllers
         [CustomAuthorizeAttribute("User","Add")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
+            try
+            {
             var response = await Mediator.Send(command);
             var responseObj = new
             {
@@ -41,6 +43,13 @@ namespace WebApi.Controllers
             };
 
             return StatusCode(StatusCodes.Status201Created, responseObj);
+                
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+           
 
         }
         // POST api/<UserController>

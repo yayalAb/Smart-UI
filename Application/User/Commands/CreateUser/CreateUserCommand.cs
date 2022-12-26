@@ -52,7 +52,7 @@ namespace Application.User.Commands.CreateUser
                            _context.Addresses.Add(new_address);
                            await _context.SaveChangesAsync(cancellationToken);
 
-                           // TODO: GENERATE USER PASS AND SEND IT BY EMAIL
+                           // GENERATE USER PASS AND SEND IT BY EMAIL
 
                            var response = await _identityService.createUser(request.FullName, request.UserName, request.Address.Email, request.State, new_address.Id, request.UserGroupId);
 
