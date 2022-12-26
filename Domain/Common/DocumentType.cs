@@ -39,7 +39,8 @@ public class DocumentationType
 {
     public static string[] Types = {
         Enum.GetName(typeof(Documents), Documents.GoodsRemoval),
-        Enum.GetName(typeof(Documents), Documents.GatePass),
+        Enum.GetName(typeof(Documents), Documents.EntranceGatePass),
+        Enum.GetName(typeof(Documents), Documents.ExitGatePass),
         Enum.GetName(typeof(Documents), Documents.Waybill),
         Enum.GetName(typeof(Documents), Documents.CommercialInvoice),
         Enum.GetName(typeof(Documents), Documents.PackageList),

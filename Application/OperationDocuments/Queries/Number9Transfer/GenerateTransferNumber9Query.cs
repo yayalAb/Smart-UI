@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.OperationDocuments.Queries.Number9Transfer;
 public record GenerateTransferNumber9Query : IRequest<TransferNumber9Dto>
 {
-    public int? OperationId { get; set; }
+    public int OperationId { get; set; }
     public int? NameOnPermitId { get; set; }
     public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
@@ -57,6 +57,11 @@ public class GenerateTransferNumber9QueryHandler : IRequestHandler<GenerateTrans
                     // save transferNO.9 doc for create
                     if (!request.isPrintOnly)
                     {
+                    //check condition before generating number1
+                    if (!await _operationEventHandler.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.EntranceGatePass)!))
+                    {
+                        throw new GhionException(CustomResponse.NotFound("Get pass should be generated and approved!"));
+                    }
                         var createDocRequest = new CreateGeneratedDocDto
                         {
                             OperationId = (int)request.OperationId!,

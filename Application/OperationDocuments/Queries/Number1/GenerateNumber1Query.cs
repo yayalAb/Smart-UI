@@ -14,12 +14,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Application.OperationDocuments.Number9.N9Dtos;
 using Domain.Common.Units;
+using Application.Common.Exceptions;
+using Application.Common.Models;
 
 namespace Application.OperationDocuments.Queries.Number1;
 
 public record GenerateNumber1Query : IRequest<Number1Dto>
 {
-    public int? OperationId { get; init; }
+    public int OperationId { get; init; }
     public int? NameOnPermitId { get; set; }
     public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
@@ -55,9 +57,16 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
             {
                 try
                 {
-                  // save No.1 doc for create
+
+                    // save No.1 doc for create
                     if (!request.isPrintOnly)
                     {
+                        //check condition before generating number1
+                        if (!await _operationEvent.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.EntranceGatePass)!))
+                        {
+                            throw new GhionException(CustomResponse.NotFound("Get pass should be generated and approved!"));
+                        }
+
                         var createDocRequest = new CreateGeneratedDocDto
                         {
                             OperationId = (int)request.OperationId!,

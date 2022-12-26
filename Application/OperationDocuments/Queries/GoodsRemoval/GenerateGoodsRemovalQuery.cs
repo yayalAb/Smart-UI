@@ -135,26 +135,6 @@ public class GenerateGoodsRemovalQueryHandler : IRequestHandler<GenerateGoodsRem
         });
 
     }
-    // private static string? getQuantity(ICollection<Container> containers, ICollection<Good> goods)
-    // {
-
-    //     if (containers != null)
-    //     {
-    //         List<string> quantitiyList = new List<string>();
-    //         var sizes = containers.Select(c => c.Size);
-    //         foreach (var grp in sizes.GroupBy(i => i))
-    //         {
-
-    //             quantitiyList.Add($"{grp.Count()}x{grp.Key}");
-    //         }
-    //         return string.Join(",", quantitiyList);
-    //     }
-    //     if (goods != null && goods.Count > 0)
-    //     {
-    //         return goods.Select(g => g.Quantity).Sum().ToString();
-    //     }
-    //     return null;
-    // }
 
     private static float? getWeight(ICollection<Container>? containers, ICollection<Good>? goods)
     {

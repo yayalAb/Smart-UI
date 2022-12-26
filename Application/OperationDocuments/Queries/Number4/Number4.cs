@@ -20,8 +20,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.OperationDocuments.Queries.Number4;
 
-public record Number4 : IRequest<Number4Dto> {
-    public int? OperationId { get; set; }
+public record Number4 : IRequest<Number4Dto>
+{
+    public int OperationId { get; set; }
     public int? NameOnPermitId { get; set; }
     public int? DestinationPortId { get; set; }
     public IEnumerable<int>? ContainerIds { get; set; }
@@ -41,12 +42,13 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
     private readonly IMapper _mapper;
 
     public Number4Handler(
-        IAppDbContext context, 
-        OperationEventHandler operationEvent, 
-        GeneratedDocumentService generatedDocumentService, 
-        CurrencyConversionService currencyConversionService, 
+        IAppDbContext context,
+        OperationEventHandler operationEvent,
+        GeneratedDocumentService generatedDocumentService,
+        CurrencyConversionService currencyConversionService,
         IMapper mapper
-    ) {
+    )
+    {
         _context = context;
         _operationEvent = operationEvent;
         _generatedDocumentService = generatedDocumentService;
@@ -85,10 +87,16 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                             OperationId = (int)request.OperationId
                         }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
                     }
+                    //check condition before generating number4
+                    if (!await _operationEvent.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.EntranceGatePass)!))
+                    {
+                        throw new GhionException(CustomResponse.NotFound("Get pass should be generated and approved!"));
+                    }
                     // fetch no.4 document 
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
 
-                    var operation = new Operation {
+                    var operation = new Operation
+                    {
                         Id = doc.Operation.Id,
                         Consignee = doc.Operation.Consignee,
                         BillNumber = doc.Operation.BillNumber,
@@ -110,7 +118,8 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         REGTax = doc.Operation.REGTax,
                         BillOfLoadingNumber = doc.Operation.BillOfLoadingNumber,
 
-                        PortOfLoading = new Port {
+                        PortOfLoading = new Port
+                        {
                             PortNumber = doc.Operation.PortOfLoading.PortNumber,
                             Country = doc.Operation.PortOfLoading.Country,
                             Region = doc.Operation.PortOfLoading.Region,
@@ -124,16 +133,14 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     {
                         throw new GhionException(CustomResponse.NotFound("Operation Not found!"));
                     }
-                    // else if (!await _operationEvent.IsDocumentGenerated(request.OperationId, Enum.GetName(typeof(Documents), Documents.GatePass)!))
-                    // {
-                    //     throw new GhionException(CustomResponse.NotFound("Get pass should be generated!"));
-                    // }
+
                     var payment = _context.Payments
                         .Where(c => c.OperationId == operation.Id && c.Name == ShippingAgentPaymentType.DeliveryOrder)
                         .ProjectTo<N9PaymentDto>(_mapper.ConfigurationProvider)
                         .FirstOrDefault();
 
-                    var data = new Number4Dto {
+                    var data = new Number4Dto
+                    {
                         destinationPort = _mapper.Map<PortDto>(doc.DestinationPort),
                         company = null,//TODO: 
                         nameOnPermit = _mapper.Map<ContactPersonDto>(doc.ContactPerson),

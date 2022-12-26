@@ -45,9 +45,9 @@ public class GenerateTransferNumber9QueryValidator: AbstractValidator<GenerateTr
         return nameOnPermitId == null || _context.ContactPeople.Find(nameOnPermitId) != null;
     }
 
-    private bool BeFoundInOperations(int? operationId)
+    private bool BeFoundInOperations(int operationId)
     {
-        return operationId == null || _context.Operations.Find(operationId) != null;
+        return _context.Operations.Find(operationId) != null;
     }
     private bool BeFoundInPortTable(int? portId)
     {

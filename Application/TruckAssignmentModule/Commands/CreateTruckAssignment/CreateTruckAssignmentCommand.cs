@@ -173,8 +173,8 @@ namespace Application.TruckAssignmentModule.Commands.CreateTruckAssignment
             // {
             //     throw new GhionException(CustomResponse.BadRequest($"Import number9 must be approved before generating gatepass document"));
             // }
-
-            var DocumentName = Enum.GetName(typeof(Documents), Documents.GatePass);
+          
+            var DocumentName = (type == Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated)) ? Enum.GetName(typeof(Documents), Documents.EntranceGatePass):Enum.GetName(typeof(Documents), Documents.ExitGatePass);
             var statusName = (type == Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated)) ? Enum.GetName(typeof(Status), Status.EntranceGatePassGenerated) : Enum.GetName(typeof(Status), Status.ExitGatePassGenerated);
             var newOperationStatus = new OperationStatus {
                 GeneratedDocumentName = DocumentName!,
