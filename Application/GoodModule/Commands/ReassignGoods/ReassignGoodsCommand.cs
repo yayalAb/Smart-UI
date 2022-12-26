@@ -39,6 +39,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
         {
             _identityService = identityService;
             _currencyService = currencyService;
+            _context = context;
             _logger = logger;
             _mapper = mapper;
         }

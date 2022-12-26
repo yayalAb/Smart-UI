@@ -52,12 +52,9 @@ namespace WebApi.Controllers
         public async Task<ActionResult> GetTruckAssignmentByOperationId([FromQuery] GetTruckAssignmentsByOperationIdQuery query)
         {
 
-            try
-            {
+            try {
                 return Ok(await Mediator.Send(query));
-            }
-            catch (GhionException ex)
-            {
+            } catch (GhionException ex) {
                 return AppdiveResponse.Response(this, ex.Response);
             }
 
