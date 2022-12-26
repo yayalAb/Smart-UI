@@ -11,6 +11,7 @@ using Application.DriverModule.Queries.GetCompanyLookup;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -18,6 +19,7 @@ namespace WebApi.Controllers
     {
         [HttpPost]
         [Route("create")]
+        [CustomAuthorizeAttribute("Company", "Add")]
         public async Task<ActionResult> create([FromBody] CreateCompanyCommand command)
 
         {
@@ -33,6 +35,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [CustomAuthorizeAttribute("Company", "Update")]
         public async Task<ActionResult> update([FromBody] UpdateCompanyCommand command)
         {
 
@@ -48,6 +51,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Company", "ReadSingle")]
         public async Task<ActionResult> view(int id)
         {
             try
@@ -74,6 +78,8 @@ namespace WebApi.Controllers
             }
         }
         [HttpGet]
+        [CustomAuthorizeAttribute("Company", "ReadAll")]
+        // [Authorize]
         public async Task<ActionResult> list([FromQuery] GetAllCompanies command)
         {
             try
@@ -87,6 +93,7 @@ namespace WebApi.Controllers
         }
         [HttpGet]
         [Route("nameOnPermit/{companyId}")]
+        [CustomAuthorizeAttribute("Company", "ReadSingle")]
         public async Task<ActionResult> nameOnPermits(int companyId)
         {
             try
@@ -100,6 +107,7 @@ namespace WebApi.Controllers
         }
         [HttpGet]
         [Route("bankInformation/{companyId}")]
+        [CustomAuthorizeAttribute("Company", "ReadSingle")]
         public async Task<ActionResult> bankInformation(int companyId)
         {
             try
@@ -112,6 +120,7 @@ namespace WebApi.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Company", "Delete")]
         public async Task<ActionResult> delete(int id)
         {
             try

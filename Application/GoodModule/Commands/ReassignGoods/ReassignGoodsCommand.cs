@@ -155,6 +155,7 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                         });
 
                                         selectedGood.RemainingQuantity = remained;
+                                        selectedGood.Quantity = remained;
                                         selectedGood.Weight -= calculated_weight;
 
                                     } else {
@@ -172,13 +173,15 @@ namespace Application.GoodModule.Commands.AssignGoodsCommand
                                     {
                                         temp_container.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, temp_container.WeightMeasurement);
                                         temp_container.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), temp_container.Currency, selectedGood.Created);
-                                        temp_container.Quantity -= 1;
+                                        if (remained > 0)
+                                            temp_container.Quantity -= 1;
                                     }
                                     else
                                     {
                                         container_to_be_updated.GrossWeight -= AppdivConvertor.WeightConversion(selectedGood.WeightUnit, calculated_weight, container_to_be_updated.WeightMeasurement);
                                         container_to_be_updated.TotalPrice -= (float) await _currencyService.convert(selectedGood.Unit, (selectedGood.UnitPrice * gd.Quantity), container_to_be_updated.Currency, selectedGood.Created);
-                                        container_to_be_updated.Quantity -= 1;
+                                        if (remained > 0)
+                                            container_to_be_updated.Quantity -= 1;
                                         containers_tobe_updated.Add(container_to_be_updated);
                                     }
 

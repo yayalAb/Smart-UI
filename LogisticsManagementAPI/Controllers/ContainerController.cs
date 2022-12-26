@@ -22,6 +22,7 @@ namespace WebApi.Controllers
 
         // POST api/<ContainerController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Container", "Add")]
         public async Task<IActionResult> CreateContainer([FromBody] CreateContainerCommand command)
         {
 
@@ -42,6 +43,8 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("single")]
+        [CustomAuthorizeAttribute("Container", "Add")]
+
         public async Task<IActionResult> CreateSingle([FromBody] CreateSingleContainer command)
         {
 
@@ -62,6 +65,8 @@ namespace WebApi.Controllers
 
         // PUT api/<ContainerController>/
         [HttpPut]
+        [CustomAuthorizeAttribute("Container", "Update")]
+
         public async Task<IActionResult> UpdateContainer([FromForm] UpdateContainerCommand command)
         {
 
@@ -82,6 +87,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [CustomAuthorizeAttribute("Container","ReadAll")]
+        
         public async Task<ActionResult> ContainerList([FromQuery] GetAllContainers command)
         {
             try
@@ -95,6 +101,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("ByOperation/{OperationId}")]
+        [CustomAuthorizeAttribute("Container", "ReadAll")]
+
         public async Task<ActionResult> ContainerListByOperation(int OperationId)
         {
             try {
@@ -107,6 +115,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("ForDocument/{OperationId}")]
+        [CustomAuthorizeAttribute("Container", "ReadAll")]
+
         public async Task<ActionResult> ContainerListForDocument(int OperationId)
         {
             try
@@ -121,6 +131,8 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Bylocation")]
+        [CustomAuthorizeAttribute("Container", "ReadAll")]
+
         public async Task<ActionResult> ContainerListByLocation([FromQuery] GetContainersByLocationQuery query)
         {
             try
@@ -135,6 +147,8 @@ namespace WebApi.Controllers
 
 
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Container", "ReadSingle")]
+
         public async Task<ActionResult> GetContainer(int id)
         {
             try
@@ -148,6 +162,8 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Container", "Delete")]
+
         public async Task<ActionResult> delete(int id)
         {
             try
