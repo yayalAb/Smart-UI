@@ -15,5 +15,6 @@ namespace Application.Common.Interfaces
         Task<Result> UpdateUser(string id, string fullName, string userName, string email, byte status, int groupId);
         IQueryable<IApplicationUser> AllUsers();
         Task<Result> DeleteUser(string userId);
+        int GetUserGroupId(string userId);
     }
 }

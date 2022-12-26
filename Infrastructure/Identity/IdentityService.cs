@@ -49,7 +49,9 @@ namespace Infrastructure.Identity
 
             return user.UserName;
         }
-
+        public int GetUserGroupId(string userId){
+            return  _userManager.Users.First(u => u.Id == userId).UserGroupId;
+        }
         public async Task<(Result, string)> createUser(string fullName, string userName, string email, byte state, int addressId, int groupId)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
@@ -183,7 +185,7 @@ namespace Infrastructure.Identity
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(30),
+                expires: DateTime.UtcNow.AddDays(1),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(
                     key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),

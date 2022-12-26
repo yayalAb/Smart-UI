@@ -11,6 +11,7 @@ using Application.ContainerModule.Queries.GetContainerQuery;
 using Application.ContainerModule.Queries.GetContainersByLocationQueryQuery;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -80,6 +81,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("Container","ReadAll")]
         public async Task<ActionResult> ContainerList([FromQuery] GetAllContainers command)
         {
             try
