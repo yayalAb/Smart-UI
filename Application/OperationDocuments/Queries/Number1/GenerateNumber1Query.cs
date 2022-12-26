@@ -96,14 +96,10 @@ public class GenerateNumber1QueryHandler : IRequestHandler<GenerateNumber1Query,
                         VoyageNumber = doc.Operation.VoyageNumber,
                         CountryOfOrigin = doc.Operation.CountryOfOrigin,
                         REGTax = doc.Operation.REGTax,
-                        Goods = doc.Goods,
+                        Goods = doc.Goods.Count > 0 ? doc.Goods : null,
                         DestinationLocation = _mapper.Map<PortDto>(doc.DestinationPort),
-                        Containers = _mapper.Map<ICollection<No1ContainerDto>>(doc.Containers),
-                        // doc.Containers.Select(c => new No1ContainerDto {
-                        //     ContianerNumber = c.ContianerNumber,
-                        //     SealNumber = c.SealNumber
+                        Containers = doc.Containers.Count > 0 ? _mapper.Map<ICollection<No1ContainerDto>>(doc.Containers) : null,
 
-                        // }).ToList(),
                         SourceLocation = doc.Operation.Localization,
                         TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
                         TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),

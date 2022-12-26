@@ -12,10 +12,10 @@ public class Number4Dto
     public Company? company { get; set; }
     public ContactPersonDto nameOnPermit { get; set; }
     public Operation operation { get; set; }
-    public ICollection<ContainerDto> containers { get; set; }
+    public ICollection<ContainerDto>? containers { get; set; }
     public N9PaymentDto? doPayment { get; set; }
     public PortDto destinationPort { get; set; }
-    public ICollection<DocGoodDto> goods { get; set; }
+    public ICollection<DocGoodDto>? goods { get; set; }
     public Double TotalWeight { get; set; }
     public Double TotalPrice { get; set; }
     public int TotalQuantity { get; set; }

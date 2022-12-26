@@ -123,15 +123,14 @@ public class GenerateTransferNumber9QueryHandler : IRequestHandler<GenerateTrans
                             }).FirstOrDefault();
                     var companySetting = await _defaultCompanyService.GetDefaultCompanyAsync();
                     await transaction.CommitAsync();
-                    return new TransferNumber9Dto
-                    {
+                    return new TransferNumber9Dto {
                         defaultCompanyCodeNIF = companySetting.DefaultCompany.CodeNIF,
                         defaultCompanyName = companySetting.DefaultCompany.Name,
                         company = new N9CompanyDto { ContactPerson = _mapper.Map<N9NameOnPermitDto>(contactPerson) },
                         operation = operation,
                         doPayment = payment,
-                        goods = doc.Goods,
-                        containers = _mapper.Map<List<ContainerDto>>(doc.Containers),
+                        goods = doc.Goods.Count > 0 ? doc.Goods : null,
+                        containers = doc.Containers.Count > 0 ? _mapper.Map<List<ContainerDto>>(doc.Containers) : null,
                         TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
                         TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),
                         TotalQuantity = doc.LoadType == "Container" ? doc.Containers.Count : doc.Goods.Count,

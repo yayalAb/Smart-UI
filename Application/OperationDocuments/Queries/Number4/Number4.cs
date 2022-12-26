@@ -138,8 +138,8 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                         company = null,//TODO: 
                         nameOnPermit = _mapper.Map<ContactPersonDto>(doc.ContactPerson),
                         operation = operation,
-                        containers = _mapper.Map<ICollection<ContainerDto>>(doc.Containers),
-                        goods = doc.Goods,
+                        containers = doc.Containers.Count > 0 ? _mapper.Map<ICollection<ContainerDto>>(doc.Containers) : null,
+                        goods = doc.Goods.Count > 0 ? doc.Goods : null,
                         doPayment = payment,
                         TotalWeight = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("weight", doc.Containers) : await _generatedDocumentService.GoodCalculator("weight", doc.Goods),
                         TotalPrice = doc.LoadType == "Container" ? await _generatedDocumentService.ContainerCalculator("price", doc.Containers) : await _generatedDocumentService.GoodCalculator("price", doc.Goods),
