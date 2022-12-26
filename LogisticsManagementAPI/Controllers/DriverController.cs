@@ -10,6 +10,7 @@ using Application.DriverModule.Queries.GetDriverQuery;
 using Application.DriverModule.Queries.GetUnassignedDrivers;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -19,6 +20,8 @@ namespace WebApi.Controllers
     {
 
         [HttpPost]
+        [CustomAuthorizeAttribute("Driver", "Add")]
+        
         public async Task<ActionResult> create([FromBody] CreateDriverCommand command)
         {
 
@@ -34,6 +37,8 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [CustomAuthorizeAttribute("Driver", "Update")]
+
         public async Task<ActionResult> change([FromBody] UpdateDriverCommand command)
         {
 
@@ -49,6 +54,8 @@ namespace WebApi.Controllers
         }
         [HttpPut]
         [Route("release/{id}")]
+        [CustomAuthorizeAttribute("Driver", "Update")]
+
         public async Task<ActionResult> release(int id)
         {
 
@@ -64,6 +71,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Driver", "ReadSingle")]
+
         public async Task<ActionResult> getDriver(int id)
         {
             try
@@ -78,6 +87,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("Driver", "ReadAll")]
+
         public async Task<ActionResult> get([FromQuery] GetAllDrivers command)
         {
             try
@@ -111,6 +122,8 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("unassigned")]
+        [CustomAuthorizeAttribute("Driver", "ReadAll")]
+
         public async Task<ActionResult> getUnassigned()
         {
             try
@@ -126,6 +139,8 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("dashboard")]
+        [CustomAuthorizeAttribute("Dashboard", "ReadAll")]
+
         public async Task<ActionResult> driversListDashboard([FromQuery] AllDrivers command)
         {
             try
@@ -141,6 +156,8 @@ namespace WebApi.Controllers
 
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Driver", "Delete")]
+
         public async Task<ActionResult> delete(int id)
         {
             try

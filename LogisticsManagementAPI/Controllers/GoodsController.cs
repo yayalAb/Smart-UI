@@ -9,6 +9,7 @@ using Application.GoodModule.Queries.GoodByContainer;
 using Application.GoodModule.Queries.UnstafedGoodByOperation;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,6 +21,8 @@ namespace WebApi.Controllers
         // POST api/<GoodsController>
         [HttpPost]
         [Route("assign")]
+        [CustomAuthorizeAttribute("assign_goods", "Add")]
+
         public async Task<IActionResult> AssignGoods([FromBody] AssignGoodsCommand command)
         {
 
@@ -36,6 +39,8 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("reassign")]
+        [CustomAuthorizeAttribute("reassign_goods", "Add")]
+
         public async Task<IActionResult> ReassignGoods([FromBody] ReassignGoodsCommand command)
         {
 
@@ -52,6 +57,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Bylocation")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
         public async Task<ActionResult> GoodListByLocation([FromQuery] GetGoodsByLocationQuery query)
         {
             try
@@ -65,6 +71,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("unstafed/{operationId}")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
+
         public async Task<ActionResult> Unstafed(int operationId)
         {
             try
@@ -78,6 +86,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("contained/{operationId}")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
+
         public async Task<ActionResult> Contained(int operationId)
         {
             try
@@ -91,6 +101,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("documentSelection/{operationId}")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
         public async Task<ActionResult> documentSelection(int operationId)
         {
             try
@@ -104,6 +115,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
+
         public async Task<ActionResult> GoodList([FromQuery] GetAllGoodQuery query)
         {
             try
@@ -117,6 +130,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("byContainer/{containerId}")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadAll")]
+
         public async Task<ActionResult> byContainer(int containerId)
         {
             try
@@ -130,6 +145,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{operationId}")]
+        [CustomAuthorizeAttribute("assign_goods", "ReadSingle")]
+
         public async Task<ActionResult> SingleGood(int operationId)
         {
             try
@@ -143,6 +160,8 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [CustomAuthorizeAttribute("assign_goods", "Update")]
+
         public async Task<ActionResult> update([FromBody] UpdateGoodCommand command)
         {
             try
@@ -155,6 +174,8 @@ namespace WebApi.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("assign_goods", "Delete")]
+
         public async Task<ActionResult> delete(int id)
         {
             try

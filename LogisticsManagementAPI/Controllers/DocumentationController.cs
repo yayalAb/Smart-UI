@@ -20,6 +20,7 @@ using Application.OperationDocuments.Queries.TruckWayBill;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,6 +31,8 @@ namespace WebApi.Controllers
     {
         // GET api/<DocumentationController>/
         [HttpGet]
+        [CustomAuthorizeAttribute("Documentation", "ReadAll")]
+
         public async Task<IActionResult> GetDocumentationList([FromQuery] GetDocumentationPaginatedListQuery query)
         {
             try
@@ -45,6 +48,8 @@ namespace WebApi.Controllers
 
         // POST api/<DocumentationController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Documentation", "Add")]
+
         public async Task<IActionResult> CreateDocumentation([FromBody] CreateDocumentationCommand command)
         {
 
@@ -60,6 +65,8 @@ namespace WebApi.Controllers
         }
         // PUT api/<DocumentationController>/5
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Documentation", "ReadSingle")]
+
         public async Task<IActionResult> GetDocumentationById(int id)
         {
 
@@ -76,6 +83,7 @@ namespace WebApi.Controllers
 
         // PUT api/<DocumentationController>/5
         [HttpPut]
+        [CustomAuthorizeAttribute("Documentation", "Update")]
         public async Task<IActionResult> UpdateDocumentation([FromBody] UpdateDocumentationCommand command)
         {
 
@@ -93,6 +101,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<DocumentationController>/5
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Documentation", "Delete")]
         public async Task<IActionResult> DeleteDocumentation(int id)
         {
 
@@ -108,6 +117,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("packageLists")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
         public async Task<IActionResult> GeneratePackageList([FromQuery] PackageList command)
         {
 
@@ -124,6 +134,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("certificateOfOrigin/{operationId}")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> GenerateCertificateOfOrigin(int operationId)
         {
 
@@ -140,6 +152,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("truckWayBill")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> GenerateTrackWayBill([FromQuery] TruckWayBill command)
         {
 
@@ -156,6 +170,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("t1/{operationId}")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> GenerateT1(int operationId)
         {
 
@@ -171,6 +187,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("CommercialInvoice")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> GenerateCommercialInvoice([FromQuery] CommercialInvoice command)
         {
 
@@ -187,6 +205,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("Number9")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> GenerateNumber9([FromQuery] Number9 command)
         {
 
@@ -202,6 +222,8 @@ namespace WebApi.Controllers
 
         }
         [HttpPost("TransferNumber9")]
+        [CustomAuthorizeAttribute("Print", "Add")]
+
         public async Task<IActionResult> GenerateTransferNumber9([FromBody] GenerateDocRequest request)
         {
 
@@ -226,6 +248,8 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("Number4")]
+        [CustomAuthorizeAttribute("Print", "Add")]
+
         public async Task<IActionResult> GenerateNumber4([FromBody] GenerateDocRequest request)
         {
 
@@ -252,6 +276,8 @@ namespace WebApi.Controllers
 
 
         [HttpGet("Gatepass/{truckAssignmentId}")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
         public async Task<IActionResult> PrintGatepass(int truckAssignmentId)
         {
 

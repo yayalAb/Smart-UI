@@ -9,12 +9,15 @@ using Application.OperationDocuments.Queries.Number9Transfer;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers;
 public class DocumentGenerationController : ApiControllerBase
 {
     [HttpPost]
     [Route("Number1")]
+        [CustomAuthorizeAttribute("Print", "Add")]
+
     public async Task<ActionResult> generateNumber1([FromBody] GenerateDocRequest request)
     {
         try
@@ -38,6 +41,8 @@ public class DocumentGenerationController : ApiControllerBase
     }
     [HttpGet]
     [Route("GoodsRemoval")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
+
     public async Task<ActionResult> generateGoodsRemoval([FromQuery] GenerateGoodsRemovalQuery query)
     {
         try
@@ -53,6 +58,8 @@ public class DocumentGenerationController : ApiControllerBase
 
     [HttpGet]
     [Route("GeneratedDocumentsList")]
+    [CustomAuthorizeAttribute("Print", "ReadAll")]
+
     public async Task<ActionResult> generatedDocs([FromQuery] GetAllGeneratedDocumentsQuery query)
     {
         try
@@ -67,6 +74,7 @@ public class DocumentGenerationController : ApiControllerBase
     }
 
         [HttpGet("printDocument")]
+        [CustomAuthorizeAttribute("Print", "ReadSingle")]
         public async Task<IActionResult> PrintDocument([FromQuery] int documentId, string documentType)
         {
 
