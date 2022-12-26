@@ -28,7 +28,7 @@ namespace WebApi.Controllers;
 public class SettingController : ApiControllerBase
 {
     [HttpPut]
-    [CustomAuthorizeAttribute("Setting","Update")]
+    [CustomAuthorizeAttribute("Settings","Update")]
     public async Task<ActionResult> update(UpdateSetting command)
     {
 
@@ -44,7 +44,7 @@ public class SettingController : ApiControllerBase
     }
 
     [HttpGet]
-    [CustomAuthorizeAttribute("Setting","ReadAll")]
+    [CustomAuthorizeAttribute("Settings","ReadAll")]
     public async Task<ActionResult> read()
     {
         try
