@@ -15,7 +15,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        [CustomAuthorizeAttribute("Truck_Assignment","Add")]
+        [CustomAuthorizeAttribute("get_pass","Add")]
         public async Task<ActionResult> create([FromBody] CreateTruckAssignmentCommand command)
         {
 
@@ -31,7 +31,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        [CustomAuthorizeAttribute("Truck_Assignment","Update")]
+        [CustomAuthorizeAttribute("get_pass","Update")]
         public async Task<ActionResult> update([FromBody] UpdateTruckAssignmentCommand command)
         {
 
@@ -48,7 +48,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("byOperation")]
-        [CustomAuthorizeAttribute("Truck_Assignment","ReadAll")]
+        [CustomAuthorizeAttribute("get_pass","ReadAll")]
         public async Task<ActionResult> GetTruckAssignmentByOperationId([FromQuery] GetTruckAssignmentsByOperationIdQuery query)
         {
 
@@ -63,7 +63,7 @@ namespace WebApi.Controllers
 
         }
         [HttpGet]
-        [CustomAuthorizeAttribute("Truck_Assignment","ReadAll")]
+        [CustomAuthorizeAttribute("get_pass","ReadAll")]
         public async Task<ActionResult> GetTruckAssignmentList([FromQuery] GetTruckAssignmentPaginatedListQuery query)
         {
 
@@ -78,7 +78,7 @@ namespace WebApi.Controllers
 
         }
         [HttpGet("{id}")]
-        [CustomAuthorizeAttribute("Truck_Assignment","ReadSingle")]
+        [CustomAuthorizeAttribute("get_pass","ReadSingle")]
         public async Task<ActionResult> GetTruckAssignmentById(int id)
         {
 
