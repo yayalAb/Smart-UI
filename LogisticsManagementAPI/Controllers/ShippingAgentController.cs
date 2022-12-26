@@ -7,6 +7,7 @@ using Application.ShippingAgentModule.Queries.GetShippingAgentPaginatedList;
 using Application.UserGroupModule.Queries.GetShippingAgentLookupQuery;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,9 +17,9 @@ namespace WebApi.Controllers
     {
         // GET api/<ShippingAgentController>/
         [HttpGet]
+        [CustomAuthorizeAttribute("Shipping_agent","ReadAll")]
         public async Task<IActionResult> Get([FromQuery] GetShippingAgentPaginatedListQuery query)
         {
-
             return Ok(await Mediator.Send(query));
         }
 
@@ -27,6 +28,7 @@ namespace WebApi.Controllers
 
         // GET api/<ShippingAgentController>/5
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Shipping_Agent","ReadSingle")]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -41,6 +43,7 @@ namespace WebApi.Controllers
 
         // POST api/<ShippingAgentController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Shipping_agent","Add")]
         public async Task<IActionResult> CreateShippingAgent([FromBody] CreateShippingAgentCommand command)
         {
             try
@@ -55,6 +58,7 @@ namespace WebApi.Controllers
 
         // PUT api/<ShippingAgentController>/
         [HttpPut()]
+        [CustomAuthorizeAttribute("Shipping_agent","Update")]
         public async Task<IActionResult> updateShippingAgent([FromBody] UpdateShippingAgentCommand command)
         {
             try
@@ -70,6 +74,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<ShippingAgentController>/5
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Shipping_agent","Delete")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -84,6 +89,7 @@ namespace WebApi.Controllers
         }
         [HttpGet]
         [Route("lookup")]
+        [CustomAuthorizeAttribute("Shipping_agent","ReadAll")]
         public async Task<IActionResult> LookUp()
         {
 

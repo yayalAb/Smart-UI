@@ -7,6 +7,7 @@ using Application.PortModule.Queries.GetPort;
 using Application.UserGroupModule.Queries.GetPortLookupQuery;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,7 @@ namespace WebApi.Controllers
 
         // POST api/<PortController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Port","Add")]
         public async Task<IActionResult> CreatePort([FromBody] CreatePortCommand command)
         {
 
@@ -32,6 +34,7 @@ namespace WebApi.Controllers
         }
         // PUT api/<PortController>/
         [HttpPut]
+        [CustomAuthorizeAttribute("Port","Update")]
         public async Task<IActionResult> UpdatePort([FromBody] UpdatePortCommand command)
         {
             try
@@ -46,6 +49,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("Port","ReadAll")]
         public async Task<ActionResult> get([FromQuery] GetAllPorts command)
         {
             try
@@ -59,6 +63,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Port","ReadSingle")]
         public async Task<ActionResult> getPort(int id)
         {
             try
@@ -72,6 +77,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Port","Delete")]
         public async Task<ActionResult> delete(int id)
         {
             try

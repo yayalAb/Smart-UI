@@ -21,12 +21,14 @@ using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers;
 
 public class SettingController : ApiControllerBase
 {
     [HttpPut]
+    [CustomAuthorizeAttribute("Setting","Update")]
     public async Task<ActionResult> update(UpdateSetting command)
     {
 
@@ -42,6 +44,7 @@ public class SettingController : ApiControllerBase
     }
 
     [HttpGet]
+    [CustomAuthorizeAttribute("Setting","ReadAll")]
     public async Task<ActionResult> read()
     {
         try
@@ -56,6 +59,7 @@ public class SettingController : ApiControllerBase
 
     [HttpPost]
     [Route("addCurrency")]
+    [CustomAuthorizeAttribute("Currency_Convertor","Add")]
     public async Task<ActionResult> addCurrency(AddCurrencyRate command)
     {
         try

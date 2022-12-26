@@ -9,6 +9,7 @@ using Application.TruckModule.Queries.GetUnassignedTrucks;
 using Application.UserGroupModule.Queries.GetTruckLookupQuery;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
+        [CustomAuthorizeAttribute("Truck","Add")]
         public async Task<ActionResult> create([FromBody] CreateTruckCommand command)
         {
 
@@ -35,6 +37,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("release/{id}")]
+        [CustomAuthorizeAttribute("Truck","Update")]
         public async Task<ActionResult> Release(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [CustomAuthorizeAttribute("Truck","Update")]
         public async Task<ActionResult> update([FromBody] UpdateTruckCommand command)
         {
             try
@@ -61,6 +65,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Truck","ReadSingle")]
         public async Task<ActionResult> get(int id)
         {
             try
@@ -74,6 +79,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("Truck","ReadAll")]
         public async Task<ActionResult> getAll([FromQuery] GetAllTrucks command)
         {
             try
@@ -88,6 +94,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("unassigned")]
+        [CustomAuthorizeAttribute("Truck","ReadAll")]
         public async Task<ActionResult> getUnassigned()
         {
             try
@@ -102,6 +109,7 @@ namespace WebApi.Controllers
 
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Truck","Delete")]
         public async Task<ActionResult> deleteTruck(int id)
         {
             try
@@ -117,6 +125,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("lookup")]
+        [CustomAuthorizeAttribute("Truck","ReadAll")]
         public async Task<IActionResult> LookUp()
         {
 

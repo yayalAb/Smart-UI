@@ -12,6 +12,7 @@ using Application.User.Queries.GetUserQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -30,6 +31,7 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("create")]
+        [CustomAuthorizeAttribute("User","Add")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             var response = await Mediator.Send(command);
@@ -44,6 +46,7 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("forgot-password")]
+        [CustomAuthorizeAttribute("User","Update")]
         public async Task<IActionResult> ForgootPassword([FromBody] ForgotPasswordCommand command)
         {
             try
@@ -59,6 +62,7 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("reset-password")]
+        [CustomAuthorizeAttribute("User","Update")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             try
@@ -74,6 +78,7 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("change-password")]
+        [CustomAuthorizeAttribute("User","Update")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
 
@@ -91,7 +96,8 @@ namespace WebApi.Controllers
         // POST api/<UserController>
         [HttpPost]
         [Route("logout")]
-        public async Task<IActionResult> ChangePassword([FromBody] LogoutCommand command)
+        [CustomAuthorizeAttribute("User","Update")]
+        public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
         {
             try
             {
@@ -105,6 +111,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
+        [CustomAuthorizeAttribute("User","Update")]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUser command)
         {
             try
@@ -118,6 +125,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("User","ReadAll")]
         public async Task<ActionResult> list([FromQuery] GetAllUsers command)
         {
             try
@@ -131,6 +139,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("single")]
+        [CustomAuthorizeAttribute("User","ReadSingle")]
         public async Task<ActionResult> single([FromQuery] GetUser command)
         {
             try
@@ -145,6 +154,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("User","Delete")]
         public async Task<IActionResult> deleteUser(string id)
         {
             try

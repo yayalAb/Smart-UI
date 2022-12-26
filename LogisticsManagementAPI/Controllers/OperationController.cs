@@ -16,6 +16,7 @@ using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.OperationModule.Queries.OperationDashboard;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,6 +38,7 @@ namespace WebApi.Controllers
 
         // GET api/<OperationController>/5
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Operation","ReadSingle")]
         public async Task<IActionResult> Get(int id)
         {
 
@@ -54,6 +56,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Operation","Add")]
         public async Task<IActionResult> CreateOperation([FromBody] CreateOperationCommand command)
         {
 
@@ -71,6 +74,7 @@ namespace WebApi.Controllers
         // POST api/<OperationController>
         [HttpPost]
         [Route("dispatchECD")]
+        [CustomAuthorizeAttribute("Operation","Update")]
         public async Task<IActionResult> DispatchECD([FromBody] DsipatchECDCommand command)
         {
 
@@ -87,6 +91,7 @@ namespace WebApi.Controllers
 
         // POST api/<OperationController>
         [HttpPut]
+        [CustomAuthorizeAttribute("Operation","Update")]
         public async Task<IActionResult> UpdateOperation([FromBody] UpdateOperationCommand command)
         {
 
@@ -103,6 +108,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("SNumberUpdate")]
+        [CustomAuthorizeAttribute("Operation","Update")]
         public async Task<IActionResult> snumberUpdate([FromQuery] SetSNumber command)
         {
 
@@ -124,6 +130,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<OperationController>/5
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Operation","Delete")]
         public async Task<IActionResult> DeleteOperation(int id)
         {
             try
@@ -155,6 +162,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("status/{OperationId}")]
+        [CustomAuthorizeAttribute("Operation_Followup","ReadAll")]
         public async Task<IActionResult> singleStatus(int OperationId)
         {
             try
@@ -174,6 +182,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("SingleStatus/{id}")]
+        [CustomAuthorizeAttribute("Operation_Followup","ReadSingle")]
         public async Task<IActionResult> SingleStatus(int id)
         {
 
@@ -194,6 +203,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("status/{operationId}")]
+        [CustomAuthorizeAttribute("Operation_Followup","Update")]
         public async Task<IActionResult> updateStatus(int operationId)
         {
 
@@ -214,6 +224,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Dashboard/operationCount")]
+        [CustomAuthorizeAttribute("Dashboard","ReadAll")]
         public async Task<IActionResult> operationCount()
         {
 
@@ -234,6 +245,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("Dashboard/opeartionList")]
+        [CustomAuthorizeAttribute("Dashboard","ReadAll")]
         public async Task<IActionResult> opeartionList([FromQuery] DashboardOperationList command) {
 
             try {
@@ -247,6 +259,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("Dashboard/graph/{year}")]
+        [CustomAuthorizeAttribute("Dashboard","ReadAll")]
         public async Task<IActionResult> operationGrph(int year)
         {
 

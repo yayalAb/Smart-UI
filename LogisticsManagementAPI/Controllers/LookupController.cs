@@ -8,6 +8,7 @@ using Application.LookUp.Query.GetByIdQuery;
 using Application.LookUp.Query.GetByKey;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -17,6 +18,7 @@ namespace WebApi.Controllers
 
         // POST api/<LookupController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Lookup","Add")]
         public async Task<IActionResult> createLookup([FromBody] CreateLookupCommand command)
         {
 
@@ -33,6 +35,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("category")]
+        [CustomAuthorizeAttribute("Lookup","Add")]
         public async Task<IActionResult> createLookupKey(CreateLookUpKey command)
         {
 
@@ -49,6 +52,7 @@ namespace WebApi.Controllers
 
         // PUT api/<LookupController>/5
         [HttpPut]
+        [CustomAuthorizeAttribute("Lookup","Update")]
         public async Task<IActionResult> Put([FromBody] UpdateLookupCommand command)
         {
 
@@ -66,6 +70,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<LookupController>/5
         [HttpDelete]
+        [CustomAuthorizeAttribute("Lookup","Delete")]
         public async Task<IActionResult> Delete(DeleteLookupCommand command)
         {
 
@@ -79,6 +84,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("one/{id}")]
+        [CustomAuthorizeAttribute("Lookup","ReadSingle")]
         public async Task<ActionResult> getById(int id)
         {
             try
@@ -107,6 +113,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorizeAttribute("Lookup","ReadAll")]
         public async Task<ActionResult> getAll([FromQuery] GetAllLookups command)
         {
             try

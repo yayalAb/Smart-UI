@@ -10,6 +10,7 @@ using Application.PaymentModule.Queries.GetPaymentList;
 using Application.PaymentModule.Queries.TotalPayments;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebApi.Controllers
 
         // GET api/<PaymentController>/
         [HttpGet]
+        [CustomAuthorizeAttribute("Payment","ReadAll")]
         public async Task<IActionResult> Get([FromQuery] GetPaymentListQuery query)
         {
 
@@ -35,6 +37,7 @@ namespace WebApi.Controllers
 
         // GET api/<PaymentController>/5
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Payment","ReadSingle")]
         public async Task<IActionResult> Get(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("Dashboard")]
+        [CustomAuthorizeAttribute("Dashboard","ReadAll")]
         public async Task<IActionResult> TotalPayment()
         {
             try
@@ -61,6 +65,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("ByOperation/{operationId}")]
+        [CustomAuthorizeAttribute("Payment","ReadAll")]
         public async Task<IActionResult> paymentByOperation(int operationId)
         {
             try
@@ -79,6 +84,7 @@ namespace WebApi.Controllers
 
         // POST api/<PaymentController>
         [HttpPost]
+        [CustomAuthorizeAttribute("Payment","Add")]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
         {
 
@@ -96,6 +102,7 @@ namespace WebApi.Controllers
 
         // PUT api/<PaymentController>/
         [HttpPut]
+        [CustomAuthorizeAttribute("Payment","Update")]
         public async Task<IActionResult> UpdatePayment([FromBody] UpdatePymentCommand command)
         {
             try
@@ -112,6 +119,7 @@ namespace WebApi.Controllers
 
         // DELETE api/<PaymentController>/5
         [HttpDelete("{id}")]
+        [CustomAuthorizeAttribute("Payment","Delete")]
         public async Task<IActionResult> Delete(int id)
         {
             try

@@ -5,6 +5,7 @@ using Application.TruckAssignmentModule.Queries;
 using Application.TruckAssignmentModule.Queries.GetTruckAssignmentPaginatedList;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
+using WebApi.Services;
 
 namespace WebApi.Controllers
 {
@@ -14,6 +15,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
+        [CustomAuthorizeAttribute("Truck_Assignment","Add")]
         public async Task<ActionResult> create([FromBody] CreateTruckAssignmentCommand command)
         {
 
@@ -27,7 +29,9 @@ namespace WebApi.Controllers
             }
 
         }
+
         [HttpPut]
+        [CustomAuthorizeAttribute("Truck_Assignment","Update")]
         public async Task<ActionResult> update([FromBody] UpdateTruckAssignmentCommand command)
         {
 
@@ -41,8 +45,10 @@ namespace WebApi.Controllers
             }
 
         }
+
         [HttpGet]
         [Route("byOperation")]
+        [CustomAuthorizeAttribute("Truck_Assignment","ReadAll")]
         public async Task<ActionResult> GetTruckAssignmentByOperationId([FromQuery] GetTruckAssignmentsByOperationIdQuery query)
         {
 
@@ -57,6 +63,7 @@ namespace WebApi.Controllers
 
         }
         [HttpGet]
+        [CustomAuthorizeAttribute("Truck_Assignment","ReadAll")]
         public async Task<ActionResult> GetTruckAssignmentList([FromQuery] GetTruckAssignmentPaginatedListQuery query)
         {
 
@@ -71,6 +78,7 @@ namespace WebApi.Controllers
 
         }
         [HttpGet("{id}")]
+        [CustomAuthorizeAttribute("Truck_Assignment","ReadSingle")]
         public async Task<ActionResult> GetTruckAssignmentById(int id)
         {
 
