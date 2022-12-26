@@ -101,10 +101,12 @@ public class Number9Handler : IRequestHandler<Number9, Number9Dto>
                                         CodeNIF = o.Company.CodeNIF
                                     },
                                     Goods = (o.Goods != null && request.Type.ToLower() == "unstaff") ? 
-                                        o.Goods.Select(g => new N9GoodDto {
+                                        o.Goods.Where(g => g.Type == request.Type).Select(g => new N9GoodDto {
                                             Description = g.Description,
                                             HSCode = g.HSCode,
                                             Weight = g.Weight,
+                                            WeightUnit = g.WeightUnit,
+                                            Type = g.Type,
                                             Quantity = g.Quantity,
                                             RemainingQuantity = g.RemainingQuantity,
                                             Unit = g.Unit,

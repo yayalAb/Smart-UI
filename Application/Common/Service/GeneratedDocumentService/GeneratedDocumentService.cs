@@ -179,7 +179,11 @@ public class GeneratedDocumentService
         double totalWeight = 0;
         foreach(var good in _mapper.Map<ICollection<Good>>(goods)){
             totalPrice += await _currencyConversionService.convert(good.Unit, (double) (good.UnitPrice * good.Quantity), Currency.Default.name, good.Created);
-            totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+            try{
+                totalWeight += AppdivConvertor.WeightConversion(good.WeightUnit, good.Weight);
+            }catch(Exception ex){
+
+            }
         }
         return type == "price" ? totalPrice : totalWeight;
     }
