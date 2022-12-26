@@ -68,6 +68,11 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                     // save No.4 doc for create
                     if (!request.isPrintOnly)
                     {
+                        //check condition before generating number4
+                        if (!await _operationEvent.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.EntranceGatePass)!))
+                        {
+                            throw new GhionException(CustomResponse.NotFound("Get pass should be generated and approved!"));
+                        }
                         var createDocRequest = new CreateGeneratedDocDto
                         {
                             OperationId = (int)request.OperationId!,
@@ -87,11 +92,7 @@ public class Number4Handler : IRequestHandler<Number4, Number4Dto>
                             OperationId = (int)request.OperationId
                         }, Enum.GetName(typeof(Status), Status.Number4Generated)!);
                     }
-                    //check condition before generating number4
-                    if (!await _operationEvent.IsDocumentApproved(request.OperationId, Enum.GetName(typeof(Documents), Documents.EntranceGatePass)!))
-                    {
-                        throw new GhionException(CustomResponse.NotFound("Get pass should be generated and approved!"));
-                    }
+
                     // fetch no.4 document 
                     var doc = await _generatedDocumentService.fetchGeneratedDocument((int)request.GeneratedDocumentId!, cancellationToken);
 
