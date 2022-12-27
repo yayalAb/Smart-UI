@@ -6,11 +6,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.ContactPersonModule.Queries;
-public record GetContactPeopleByCompanyIdQuery : IRequest<ICollection<ContactPersonDto>>
+public record GetContactPeopleByCompanyIdQuery : IRequest<ICollection<ContactPersonLookupDto>>
 {
     public int CompanyId { get; set; }
 }
-public class GetContactPeopleByCompanyIdQueryHandler : IRequestHandler<GetContactPeopleByCompanyIdQuery, ICollection<ContactPersonDto>>
+public class GetContactPeopleByCompanyIdQueryHandler : IRequestHandler<GetContactPeopleByCompanyIdQuery, ICollection<ContactPersonLookupDto>>
 {
     private readonly IAppDbContext _context;
     private readonly IMapper _mapper;
@@ -20,10 +20,10 @@ public class GetContactPeopleByCompanyIdQueryHandler : IRequestHandler<GetContac
         _context = context;
         _mapper = mapper;
     }
-    public async Task<ICollection<ContactPersonDto>> Handle(GetContactPeopleByCompanyIdQuery request, CancellationToken cancellationToken)
+    public async Task<ICollection<ContactPersonLookupDto>> Handle(GetContactPeopleByCompanyIdQuery request, CancellationToken cancellationToken)
     {
         return await _context.ContactPeople
         .Where(cp => cp.CompanyId == request.CompanyId)
-        .ProjectTo<ContactPersonDto>(_mapper.ConfigurationProvider).ToListAsync();
+        .ProjectTo<ContactPersonLookupDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 }
