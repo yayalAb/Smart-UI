@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 using Application.Common.Exceptions;
 using Application.Common.Models;
 using Application.OperationDocuments.SNumberUpdate;
@@ -14,6 +15,7 @@ using Application.OperationModule.Queries.GetOperationList;
 using Application.OperationModule.Queries.GetOperationLookup;
 using Application.OperationModule.Queries.GetOperationPaginatedList;
 using Application.OperationModule.Queries.OperationDashboard;
+using Application.OperationModule.Queries.oprationDetail;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 using WebApi.Services;
@@ -34,7 +36,21 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(query));
         }
 
+        [HttpGet("detail/{id}")]
+        [CustomAuthorizeAttribute("Operation","ReadSingle")]
+        public async Task<IActionResult> GetDetail(int id)
+        {
 
+            try
+            {
+                return Ok(await Mediator.Send(new oprationDetail { Id = id }));
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+
+        }
 
         // GET api/<OperationController>/5
         [HttpGet("{id}")]
@@ -59,7 +75,6 @@ namespace WebApi.Controllers
         [CustomAuthorizeAttribute("Operation","Add")]
         public async Task<IActionResult> CreateOperation([FromBody] CreateOperationCommand command)
         {
-
             try
             {
                 return Ok(await Mediator.Send(command));
