@@ -8,11 +8,10 @@ public class Company : BaseAuditableEntity
     {
         Operations = new HashSet<Operation>();
         BankInformation = new HashSet<BankInformation>();
-
     }
-    public string? Name { get; set; }
-    public string? TinNumber { get; set; }
-    public string? CodeNIF { get; set; }
+    public string? Name { get; set; }=null;
+    public string? TinNumber { get; set; }=null;
+    public string? CodeNIF { get; set; }=null;
     // public int ContactPersonId { get; set; }
     public int AddressId { get; set; }
 

@@ -13,12 +13,12 @@ namespace Application.CompanyModule.Commands.CreateCompanyCommand;
 public record CreateCompanyCommand : IRequest<CustomResponse>
 {
 
-    public string Name { get; init; } = null!;
-    public string TinNumber { get; init; } = null!;
-    public string CodeNIF { get; init; } = null!;
+    public string? Name { get; init; } = null!;
+    public string? TinNumber { get; init; } = null!;
+    public string? CodeNIF { get; init; } = null!;
     public ICollection<ContactPersonCreateCommand>? ContactPeople { get; init; }
     public AddressDto address { get; init; } = null!;
-    public ICollection<BankInformationDto> BankInformation { get; init; } = null!;
+    public ICollection<BankInformationDto>? BankInformation { get; init; } = null!;
 
 }
 
