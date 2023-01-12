@@ -73,14 +73,4 @@ public class AuthorizeActionFilter : IAuthorizationFilter
 
 
     }
-
-
-
-
-
-    // if (!isAuthorized)
-    // {
-    //     context.Result = new ForbidResult();
-    // }
-
 }

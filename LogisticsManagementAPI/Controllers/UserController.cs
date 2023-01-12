@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using System.Security.Claims;
+using Application.Common.Exceptions;
 using Application.User.Commands.AuthenticateUser;
 using Application.User.Commands.ChangePassword;
 using Application.User.Commands.CreateUser;
@@ -18,6 +19,13 @@ namespace WebApi.Controllers
 {
     public class UserController : ApiControllerBase
     {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         // POST api/<UserController>
         [HttpPost]
         [Route("login")]
@@ -177,6 +185,55 @@ namespace WebApi.Controllers
             }
 
         }
+        [HttpGet("Auth")]
+        public async Task<ActionResult> isAuth()
+        {
+          string UserId =_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email); 
+         
+          if(UserId?.Length>0){
+             var authValue = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"];
+              try
+            {
+                return Ok(authValue);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+          }
+            try
+            {  
+               return Ok(UserId);
+            }
+            catch (GhionException ex)
+            {
+                return AppdiveResponse.Response(this, ex.Response);
+            }
+        }
+
+    //     [HttpGet("Auth")]
+    // //    [CustomAuthorizeAttribute("User","ReadSingle")]
+    //     public async Task<ActionResult> isAuth([FromQuery] GetAllUsers command)
+    //     { 
+    //         string UserId =_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
+    //          var authValue = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"];
+    //           if(UserId?.Length>0){
+    //                 try
+    //                     {
+    //                         return Ok(await Mediator.Send(command));
+    //                     }
+    //                     catch (GhionException ex)
+    //                     {
+    //                         return AppdiveResponse.Response(this, ex.Response);
+    //                     }
+    //            }
+    //            else{
+    //                 return Ok(authValue);
+    //             }
+          
+    //        }
+
+        
 
     }
 }
