@@ -11,10 +11,6 @@ public class Truck : BaseAuditableEntity
     public float? Capacity { get; set; }
     public string? Image { get; set; }
     public bool IsAssigned { get; set; } = false;
-
-
-
-
     //has many
     public ICollection<TruckAssignment> TruckAssignments { get; set; }
 

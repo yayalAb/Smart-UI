@@ -161,6 +161,7 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("lookup")]
+         [CustomAuthorizeAttribute("Lookup","ReadAll")]
         public async Task<IActionResult> LookUp()
         {
 

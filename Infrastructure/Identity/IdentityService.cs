@@ -186,6 +186,7 @@ namespace Infrastructure.Identity
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
+                // AddDays(1),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(
                     key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
