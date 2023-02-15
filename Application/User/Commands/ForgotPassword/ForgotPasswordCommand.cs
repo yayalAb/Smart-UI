@@ -16,13 +16,13 @@ namespace Application.User.Commands.ForgotPassword
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, CustomResponse>
     {
         private readonly IIdentityService _identityService;
-        private readonly IEmailService _emailService;
+        // private readonly IEmailService _emailService;
         private readonly ILogger<ForgotPasswordCommandHandler> _logger;
 
-        public ForgotPasswordCommandHandler(IIdentityService identityService, IEmailService emailService, ILogger<ForgotPasswordCommandHandler> logger)
+        public ForgotPasswordCommandHandler(IIdentityService identityService, ILogger<ForgotPasswordCommandHandler> logger)
         {
             _identityService = identityService;
-            _emailService = emailService;
+            // _emailService = emailService;
             _logger = logger;
         }
         public async Task<CustomResponse> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
@@ -52,7 +52,7 @@ namespace Application.User.Commands.ForgotPassword
             };
             try
             {
-                await _emailService.SendEmailAsync(mailrequest);
+                // await _emailService.SendEmailAsync(mailrequest);
             }
             catch (Exception)
             {

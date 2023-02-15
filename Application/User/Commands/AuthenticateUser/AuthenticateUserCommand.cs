@@ -22,15 +22,13 @@ namespace Application.User.Commands.AuthenticateUser
         private readonly IAppDbContext _context;
         private readonly ILogger<AuthenticateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
-        private readonly IEmailService emailService;
-
-        public AuthenticateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<AuthenticateUserCommandHandler> logger, IMapper mapper, IEmailService emailService)
+        
+        public AuthenticateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<AuthenticateUserCommandHandler> logger, IMapper mapper)
         {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _mapper = mapper;
-            this.emailService = emailService;
         }
         public async Task<LoginResponse> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {

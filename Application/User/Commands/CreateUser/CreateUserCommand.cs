@@ -26,15 +26,15 @@ namespace Application.User.Commands.CreateUser
         private readonly IAppDbContext _context;
         private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
+        // private readonly IEmailService _emailService;
 
-        public CreateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<CreateUserCommandHandler> logger, IMapper mapper, IEmailService emailService)
+        public CreateUserCommandHandler(IIdentityService identityService, IAppDbContext context, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
         {
             _identityService = identityService;
             _context = context;
             _logger = logger;
             _mapper = mapper;
-            _emailService = emailService;
+            // _emailService = emailService;
         }
         public async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
@@ -67,7 +67,7 @@ namespace Application.User.Commands.CreateUser
                                Body = emailContent,
                                ToEmail = request.Address.Email,
                            };
-                           await _emailService.SendEmailAsync(mailrequest);
+                        //    await _emailService.SendEmailAsync(mailrequest);
                            await _context.database.CommitTransactionAsync();
                            return true;
 
