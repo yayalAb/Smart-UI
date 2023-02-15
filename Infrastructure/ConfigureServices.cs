@@ -2,7 +2,6 @@
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -49,9 +48,7 @@ namespace Infrastructure
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<AuditableEntitySaveChangesInterceptor>();
             services.AddScoped<AppDbContextInitializer>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IFileUploadService, FileUploadService>();
-            services.AddScoped<INumberService, NumberService>();
+
 
             // auth config
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>

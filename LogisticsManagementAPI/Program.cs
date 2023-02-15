@@ -9,23 +9,6 @@ using WebApi.Services;
 using BackgroundService = WebApi.Services.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-//-- serilog config
-// var Logger = new LoggerConfiguration()
-//     .ReadFrom.Configuration(builder.Configuration)
-//     .CreateLogger();
-
-// builder.Logging.ClearProviders();
-//builder.Logging.ClearProviders();
-// builder.Logging.AddSerilog(Logger);  
-
-// builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
-//     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-//-----//
-
 builder.Services.AddSwaggerGen(options =>
 {
 

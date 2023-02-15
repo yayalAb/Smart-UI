@@ -25,10 +25,10 @@ namespace Application.Common.Behaviours
         {
 
             var tokenString = _currentUserService.tokenString();
-            if (_context.Blacklists.Any(b => b.tokenString == tokenString))
-            {
-                throw new ForbiddenAccessException();
-            }
+            // if (_context.Blacklists.Any(b => b.tokenString == tokenString))
+            // {
+            //     throw new ForbiddenAccessException();
+            // }
 
 
             return await next();

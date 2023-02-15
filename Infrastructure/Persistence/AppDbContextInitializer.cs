@@ -1,13 +1,11 @@
-﻿using Domain.Common.DestinationTypes;
-using Domain.Common.DocumentType;
-using Domain.Common.PaymentTypes;
+﻿
 using Domain.Common.Units;
 using Domain.Entities;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using static Domain.Common.DocumentType.DocumentType;
+
 
 namespace Infrastructure.Persistence
 {
@@ -157,240 +155,18 @@ namespace Infrastructure.Persistence
 
         public async Task TrySeedLookup()
         {
+            // foreach(var type in WeightUnits.Units) {
+            //     if(!allLookups.Any(l => (l.Key == "WeightUnit" && l.Value == type))) {
+            //         lookupKeyList.Add(new Lookup {
+            //                             Key = "WeightUnit",
+            //                             Value = type
+            //                         });
+            //     }
+            // }
 
-            var allLookups = await _context.Lookups.ToListAsync();
+            // _context.Lookups.AddRange(lookupKeyList);
+            // await _context.SaveChangesAsync();
 
-            List<Lookup> lookupKeyList = new List<Lookup>();
-            
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Payment"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "Payment"
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "Payment" && l.Value == ShippingAgentPaymentType.Name))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "Payment",
-                    Value = ShippingAgentPaymentType.Name
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "Payment" && l.Value == TerminalPortPaymentType.Name))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "Payment",
-                    Value = TerminalPortPaymentType.Name
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Document"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "Document"
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Documentation"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "Documentation"
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "DestinationType"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "DestinationType"
-                });
-            }
-
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "Currency"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "Currency"
-                });
-            }
-            
-            if(!allLookups.Any(l => (l.Key == "key" && l.Value == "WeightUnit"))) {
-                lookupKeyList.Add(new Lookup {
-                    Key = "key",
-                    Value = "WeightUnit"
-                });
-            }
-
-            foreach(var type in DocumentType.Types){
-                if(!allLookups.Any(l => (l.Key == "Document" && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                                         Key = "Document",
-                                         Value = type
-                                     });
-                }
-            }
-
-            foreach(var type in DocumentationType.Types){
-                if(!allLookups.Any(l => (l.Key == "Documentation" && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                                        Key = "Documentation",
-                                        Value = type
-                                    });
-                }
-            }
-
-            foreach(var type in DestinationType.Types){
-                if(!allLookups.Any(l => (l.Key == "DestinationType" && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                                        Key = "DestinationType",
-                                        Value = type
-                                    });
-                }
-            }
-
-            foreach(var type in WeightUnits.Units) {
-                if(!allLookups.Any(l => (l.Key == "WeightUnit" && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                                        Key = "WeightUnit",
-                                        Value = type
-                                    });
-                }
-            }
-
-            foreach(var type in Currency.Currencies) {
-                if(!allLookups.Any(l => (l.Key == "Currency" && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                                            Key = "Currency",
-                                            Value = type
-                                        });
-                }
-            }
-
-            foreach(var type in ShippingAgentPaymentType.Types) {
-                if(!allLookups.Any(l => (l.Key == ShippingAgentPaymentType.Name && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup { 
-                            Key = ShippingAgentPaymentType.Name, 
-                            Value = type 
-                        });
-                }
-            }
-
-            foreach(var type in TerminalPortPaymentType.Types) {
-                if(!allLookups.Any(l => (l.Key == TerminalPortPaymentType.Name && l.Value == type))) {
-                    lookupKeyList.Add(new Lookup {
-                            Key = TerminalPortPaymentType.Name,
-                            Value = type
-                        });
-                }
-            }
-
-            _context.Lookups.AddRange(lookupKeyList);
-            await _context.SaveChangesAsync();
-
-        }
-
-        public async Task TrySeedSettings()
-        {
-
-            if (_context.Settings.Any())
-            {
-                return;
-            }
-
-            var executionStrategy = _context.database.CreateExecutionStrategy();
-            await executionStrategy.ExecuteAsync(async () =>
-            {
-                using (var transaction = _context.database.BeginTransaction())
-                {
-                    try
-                    {
-
-                        var addressInfo = new Address
-                        {
-                            Email = "ghioninternationalfzco@gmail.com",
-                            Phone = "+25321353730",
-                            Region = "EAST AFRIC",
-                            City = "Djibouti",
-                            Subcity = "Djibouti",
-                            Country = "REPUBLIC DE DJIBOUTI",
-                            POBOX = "0000"
-                        };
-                        _context.Addresses.Add(addressInfo);
-                        await _context.SaveChangesAsync();
-                        var defaultCompany = new Company
-                        {
-                            Name = "Ghion International",
-                            TinNumber = "111",
-                            CodeNIF = "code_nif",
-                            // ContactPersonId = contactPerson.Id,
-                            AddressId = addressInfo.Id,
-                        };
-                        _context.Companies.Add(defaultCompany);
-                        await _context.SaveChangesAsync();
-
-                        var contactPerson = new ContactPerson
-                        {
-                            Name = "Abnet Kebede",
-                            Email = "ab@absoft.net",
-                            Phone = "0987654321",
-                            TinNumber = "3478568",
-                            Country = "DEMOCRATIC REPUBLIC OF ETHIOPIA",
-                            City = "ADDIS ABABA",
-                            CompanyId = defaultCompany.Id
-
-                        };
-                        _context.ContactPeople.Add(contactPerson);
-                        await _context.SaveChangesAsync();
-
-
-
-
-
-                        var bankInfo = new BankInformation
-                        {
-                            AccountHolderName = "GHION INTERNATIONAL DJIBUTI",
-                            BankName = "CAC INTERNATIONAL BANK",
-                            AccountNumber = "1003499041",
-                            SwiftCode = "CACDDJJD",
-                            BankAddress = "DJIBOUTI, REPUBLIC DE DJIBOUTI",
-                            CompanyId = defaultCompany.Id,
-                            CurrencyType = "USD"
-                        };
-
-                        _context.BankInformation.Add(bankInfo);
-                        await _context.SaveChangesAsync();
-
-                        var setting = new Setting
-                        {
-                            Email = "tihitnatsegaye7@gmail.com",
-                            Password = "tiucpqdxigzogxco",
-                            Port = 456,
-                            Host = "smtp.gmail.com",
-                            Protocol = "SMTP",
-                            Username = "tihitnatsegaye7@gmail.com",
-                            CompanyId = defaultCompany.Id
-                        };
-
-                        _context.Settings.Add(setting);
-                        await _context.SaveChangesAsync();
-
-                        transaction.Commit();
-
-                    }
-                    catch (System.Exception)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-
-                }
-            });
-
-        }
-
-        public async Task removeLookups()
-        {
-            string[] types = { "Payment", "Document", "Documentation", "DestinationType" };
-            var key_list = _context.Lookups.Where(l => (l.Key == "key" && types.Contains(l.Value)) || types.Contains(l.Key) || l.Key == ShippingAgentPaymentType.Name || l.Key == TerminalPortPaymentType.Name || ShippingAgentPaymentType.Types.Contains(l.Key) || TerminalPortPaymentType.Types.Contains(l.Key)).ToList();
-            _context.RemoveRange(key_list);
-            await _context.SaveChangesAsync();
         }
     }
 }

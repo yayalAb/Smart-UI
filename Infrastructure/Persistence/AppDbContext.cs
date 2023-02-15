@@ -27,28 +27,11 @@ namespace Infrastructure.Persistence
 
         public DbSet<UserGroup> UserGroups => Set<UserGroup>();
         public virtual DbSet<Address> Addresses { get; set; } = null!;
-        public virtual DbSet<Company> Companies { get; set; } = null!;
+        
+         public virtual DbSet<Blacklist> Blacklists { get; set; } = null!;
         public virtual DbSet<ContactPerson> ContactPeople { get; set; } = null!;
-        public virtual DbSet<Container> Containers { get; set; } = null!;
-        public virtual DbSet<Documentation> Documentations { get; set; } = null!;
-        public virtual DbSet<Driver> Drivers { get; set; } = null!;
-        public virtual DbSet<Good> Goods { get; set; } = null!;
         public virtual DbSet<Lookup> Lookups { get; set; } = null!;
-        public virtual DbSet<Operation> Operations { get; set; } = null!;
-        public virtual DbSet<OperationStatus> OperationStatuses { get; set; } = null!;
-        public virtual DbSet<Payment> Payments { get; set; } = null!;
-        public virtual DbSet<Port> Ports { get; set; } = null!;
-        public virtual DbSet<ShippingAgent> ShippingAgents { get; set; } = null!;
-        public virtual DbSet<Truck> Trucks { get; set; } = null!;
-        public virtual DbSet<TruckAssignment> TruckAssignments { get; set; } = null!;
-        public virtual DbSet<Setting> Settings {get; set;} = null!;
-        public virtual DbSet<Blacklist> Blacklists {get; set;} = null!;
-        public virtual DbSet<BankInformation> BankInformation {get; set;} = null!;
-        public virtual DbSet<GeneratedDocument> GeneratedDocuments { get; set; } = null!;
-        public virtual DbSet<GeneratedDocumentGood> GeneratedDocumentsGoods { get; set; } = null!;
-        public virtual DbSet<CurrencyConversion> Units { get; set; } = null!;
-
-
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -65,7 +48,6 @@ namespace Infrastructure.Persistence
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _mediator.DispatchDomainEvents(this);
-
 
             return await base.SaveChangesAsync(cancellationToken);
         }

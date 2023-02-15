@@ -61,8 +61,8 @@ public class BackgroundService : IHostedService
         using (var scope = _scopeFactory.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-            var expiredTokens = context.Blacklists.Where(b => b.ExpireDate < DateTime.Now).ToList();
-            context.Blacklists.RemoveRange(expiredTokens);
+            // var expiredTokens = context.Blacklists.Where(b => b.ExpireDate < DateTime.Now).ToList();
+            // context.Blacklists.RemoveRange(expiredTokens);
             await context.SaveChangesAsync(default);
 
         }
