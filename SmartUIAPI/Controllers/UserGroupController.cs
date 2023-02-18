@@ -7,9 +7,9 @@ using Application.UserGroupModule.Queries.GetUserGroupById;
 using Application.UserGroupModule.Queries.GetUserGroupPaginatedList;
 using Application.UserGroupModule.Queries.UserGroupLookup;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
+using SmartUIAPI.Models;
 
-namespace WebApi.Controllers
+namespace SmartUIAPI.Controllers
 {
 
     public class UserGroupController : ApiControllerBase

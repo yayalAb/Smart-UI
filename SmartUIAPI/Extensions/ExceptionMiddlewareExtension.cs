@@ -1,6 +1,6 @@
-﻿using WebApi.Middlewares;
+﻿using SmartUIAPI.Middlewares;
 
-namespace WebApi.Extensions
+namespace SmartUIAPI.Extensions
 {
     public static class ExceptionMiddlewareExtension
     {

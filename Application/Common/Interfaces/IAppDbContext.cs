@@ -13,8 +13,9 @@ namespace Application.Common.Interfaces
         DbSet<Address> Addresses { get; set; }
         DbSet<Blacklist> Blacklists { get; set; }
         DbSet<Lookup> Lookups { get; set; }
-        
-        
+        DbSet<TabsModel> Tabs{ get; set; }
+        DbSet<ProjectModel> Projects { get; set; }
+ 
         Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 

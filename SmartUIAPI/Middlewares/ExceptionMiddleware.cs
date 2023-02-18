@@ -1,9 +1,9 @@
 ﻿using Application.Common.Exceptions;
 using System.Net;
 using System.Security.Authentication;
-using WebApi.Models;
+using SmartUIAPI.Models;
 
-namespace WebApi.Middlewares
+namespace SmartUIAPI.Middlewares
 {
     public class ExceptionMiddleware
     {

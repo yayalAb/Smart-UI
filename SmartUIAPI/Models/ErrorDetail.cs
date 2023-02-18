@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace WebApi.Models
+namespace SmartUIAPI.Models
 {
     public class ErrorDetail
     {

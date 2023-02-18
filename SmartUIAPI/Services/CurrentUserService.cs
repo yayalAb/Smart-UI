@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
-namespace WebApi.Services
+namespace SmartUIAPI.Services
 {
     public class CurrentUserService : ICurrentUserService
     {

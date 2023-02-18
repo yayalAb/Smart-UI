@@ -12,10 +12,10 @@ using Application.User.Queries.GetAllUsersQuery;
 using Application.User.Queries.GetUserQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
-using WebApi.Services;
+using SmartUIAPI.Models;
+using SmartUIAPI.Services;
 
-namespace WebApi.Controllers
+namespace SmartUIAPI.Controllers
 {
     public class UserController : ApiControllerBase
     {

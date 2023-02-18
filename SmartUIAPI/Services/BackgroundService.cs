@@ -1,6 +1,6 @@
 using Application.Common.Interfaces;
 
-namespace WebApi.Services;
+namespace SmartUIAPI.Services;
 public class BackgroundService : IHostedService
 {
     private readonly IServiceScopeFactory _scopeFactory;

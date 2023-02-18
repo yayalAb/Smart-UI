@@ -1,7 +1,7 @@
 using Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Models;
+namespace SmartUIAPI.Models;
 
 public class AppdiveResponse
 {

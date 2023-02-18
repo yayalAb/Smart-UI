@@ -7,10 +7,10 @@ using Application.LookUp.Query.GetAllLookups;
 using Application.LookUp.Query.GetByIdQuery;
 using Application.LookUp.Query.GetByKey;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
-using WebApi.Services;
+using SmartUIAPI.Models;
+using SmartUIAPI.Services;
 
-namespace WebApi.Controllers
+namespace SmartUIAPI.Controllers
 {
 
     public class LookupController : ApiControllerBase

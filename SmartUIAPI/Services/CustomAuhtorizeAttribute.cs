@@ -4,7 +4,7 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace WebApi.Services;
+namespace SmartUIAPI.Services;
 public class CustomAuthorizeAttribute : TypeFilterAttribute
 {
     public CustomAuthorizeAttribute(string ControllerName, string ControllerAction)

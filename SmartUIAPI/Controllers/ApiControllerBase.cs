@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace WebApi.Controllers
+namespace SmartUIAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

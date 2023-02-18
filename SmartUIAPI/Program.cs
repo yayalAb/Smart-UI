@@ -4,9 +4,9 @@ using Infrastructure;
 using Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using WebApi.Extensions;
-using WebApi.Services;
-using BackgroundService = WebApi.Services.BackgroundService;
+using SmartUIAPI.Extensions;
+using SmartUIAPI.Services;
+using BackgroundService = SmartUIAPI.Services.BackgroundService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen(options =>

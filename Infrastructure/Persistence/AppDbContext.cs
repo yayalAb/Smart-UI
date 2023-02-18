@@ -31,6 +31,8 @@ namespace Infrastructure.Persistence
          public virtual DbSet<Blacklist> Blacklists { get; set; } = null!;
         public virtual DbSet<ContactPerson> ContactPeople { get; set; } = null!;
         public virtual DbSet<Lookup> Lookups { get; set; } = null!;
+        public virtual   DbSet<TabsModel> Tabs{ get; set; } = null!;
+        public virtual DbSet<ProjectModel> Projects { get; set; } = null!;
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
