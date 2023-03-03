@@ -33,11 +33,16 @@ namespace Infrastructure.Persistence
         public virtual DbSet<Lookup> Lookups { get; set; } = null!;
         public virtual   DbSet<TabsModel> Tabs{ get; set; } = null!;
         public virtual DbSet<ProjectModel> Projects { get; set; } = null!;
+        public virtual DbSet<ComponentModel> Components { get; set; } = null!;
+        public virtual DbSet<feildsModel> feilds { get; set; } = null!;
+        public virtual DbSet<ButtonModel> buttons { get; set; } = null!;
+       
+
+        
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
 
             base.OnModelCreating(builder);
         }

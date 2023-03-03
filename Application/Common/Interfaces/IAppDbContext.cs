@@ -15,6 +15,10 @@ namespace Application.Common.Interfaces
         DbSet<Lookup> Lookups { get; set; }
         DbSet<TabsModel> Tabs{ get; set; }
         DbSet<ProjectModel> Projects { get; set; }
+        DbSet<ComponentModel> Components { get; set; }
+        DbSet<feildsModel> feilds { get; set; }
+        DbSet<ButtonModel> buttons { get; set; }
+        
  
         Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

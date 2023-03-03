@@ -1,4 +1,6 @@
 ﻿using Application.AddressModule.Commands.AddressUpdateCommand;
+using Application.Component.Commands.createComponent;
+using Application.Project.Query;
 using Application.UserGroupModule.Commands;
 using AutoMapper;
 using Domain.Entities;
@@ -19,8 +21,14 @@ namespace Application.Common.Mappings
 
             CreateMap<UserRoleDto, AppUserRole>();
             CreateMap<FetchUserRoleDto, AppUserRole>();
+            CreateMap<ProjectModel,ProjectsDto>();
+            CreateMap<feildsDto,feildsModel>();
+
            
             CreateMap<AddressUpdateCommand, Address>().ReverseMap();
+            CreateMap<CreateComponentCommand, ComponentModel>().ReverseMap();
+
+             
 
 
             var mapFromType = typeof(IMapFrom<>);
