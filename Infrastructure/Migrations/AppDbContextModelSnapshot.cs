@@ -145,6 +145,115 @@ namespace Infrastructure.Migrations
                     b.ToTable("Blacklists");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ButtonFeilds", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("buttonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("buttonName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("buttonType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("className")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("eventName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("buttonId");
+
+                    b.ToTable("ButtonFeilds");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ButtonModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ComponetName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("buttons");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ComponentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ComponetName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FormgroupName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("NoOfFeildsInRow")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Components");
+                });
+
             modelBuilder.Entity("Domain.Entities.ContactPerson", b =>
                 {
                     b.Property<int>("Id")
@@ -193,6 +302,64 @@ namespace Infrastructure.Migrations
                     b.ToTable("ContactPeople");
                 });
 
+            modelBuilder.Entity("Domain.Entities.feildsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("className")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("elementType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("feildType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("formControlName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("labelName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("maxLength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("minLength")
+                        .HasColumnType("int");
+
+                    b.Property<string>("validators")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.ToTable("feilds");
+                });
+
             modelBuilder.Entity("Domain.Entities.Lookup", b =>
                 {
                     b.Property<int>("Id")
@@ -239,6 +406,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModified")
@@ -540,6 +711,28 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.ButtonFeilds", b =>
+                {
+                    b.HasOne("Domain.Entities.ButtonModel", "button")
+                        .WithMany("buttonData")
+                        .HasForeignKey("buttonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("button");
+                });
+
+            modelBuilder.Entity("Domain.Entities.feildsModel", b =>
+                {
+                    b.HasOne("Domain.Entities.ComponentModel", "Component")
+                        .WithMany("Filds")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
+                });
+
             modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.HasOne("Domain.Entities.Address", "Address")
@@ -604,6 +797,16 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ButtonModel", b =>
+                {
+                    b.Navigation("buttonData");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ComponentModel", b =>
+                {
+                    b.Navigation("Filds");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserGroup", b =>
