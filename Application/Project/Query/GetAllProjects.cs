@@ -9,25 +9,22 @@ namespace Application.Project.Query.GetAllProjects;
 
 public record GetAllProjects : IRequest<PaginatedList<ProjectsDto>>
 {
-  
-    public record GetAllProjectsQuery : IRequest<List<ProjectsDto>>
-    {
-    }
-    public class GetAllUserGroupsCommandHandler : IRequestHandler<GetAllProjectsQuery, List<ProjectsDto>>
-    {
-        private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
+    public int? PageCount { set; get; } = 1!;
+    public int? PageSize { get; set; } = 10!;
+}
+public class GetAllProjectsHandler : IRequestHandler<GetAllProjects, PaginatedList<ProjectsDto>>
+{
+    private readonly IAppDbContext _context;
+    private readonly IMapper _mapper;
 
-        public GetAllUserGroupsCommandHandler(IAppDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-        public async Task<List<ProjectsDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
-        {
-            return await _context.UserGroups
-                .Include(ug => ug.UserRoles)
-                .ProjectTo<ProjectsDto>(_mapper.ConfigurationProvider).ToListAsync();
-        }
+    public GetAllProjectsHandler(IAppDbContext context , IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
+    public async Task<PaginatedList<ProjectsDto>> Handle(GetAllProjects request, CancellationToken cancellationToken)
+    {
+        return await PaginatedList<ProjectsDto>
+        .CreateAsync(_context.Projects.ProjectTo<ProjectsDto>(_mapper.ConfigurationProvider), request.PageCount ?? 1, request.PageSize ?? 10);
     }
 }
