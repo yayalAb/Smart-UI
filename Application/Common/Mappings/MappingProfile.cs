@@ -1,11 +1,12 @@
 ﻿using Application.AddressModule.Commands.AddressUpdateCommand;
+using Application.Button.Commands.CreateButtonCommand;
+using Application.Button.Queries.GetAllButtons;
 using Application.Component.Commands.createComponent;
 using Application.Project.Query;
 using Application.UserGroupModule.Commands;
 using AutoMapper;
 using Domain.Entities;
 using System.Reflection;
-
 
 namespace Application.Common.Mappings
 {
@@ -23,10 +24,12 @@ namespace Application.Common.Mappings
             CreateMap<FetchUserRoleDto, AppUserRole>();
             CreateMap<ProjectModel,ProjectsDto>();
             CreateMap<feildsDto,feildsModel>();
-
+            CreateMap<ButtonFeildsDto,ButtonFeilds>();
+            CreateMap<GetButtonDto,ButtonModel>();
            
             CreateMap<AddressUpdateCommand, Address>().ReverseMap();
             CreateMap<CreateComponentCommand, ComponentModel>().ReverseMap();
+            CreateMap<CreateButtonCommand, ButtonModel>().ReverseMap();
 
              
 
@@ -43,7 +46,6 @@ namespace Application.Common.Mappings
 
             foreach (var type in types)
             {
-
                 var instance = Activator.CreateInstance(type);
 
                 var methodInfo = type.GetMethod(mappingMethodName);
