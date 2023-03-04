@@ -18,8 +18,6 @@ namespace Application.Common.Interfaces
         DbSet<ComponentModel> Components { get; set; }
         DbSet<feildsModel> feilds { get; set; }
         DbSet<ButtonModel> buttons { get; set; }
-        
- 
         Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
